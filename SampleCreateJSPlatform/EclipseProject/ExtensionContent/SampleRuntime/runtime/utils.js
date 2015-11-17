@@ -18,7 +18,7 @@
 
 function CreateShape(parentMC,resourceManager,charId,ObjectId,placeAfter,transform)
 {
-	var pathContainer = new createjs.Container();
+	var pathContainer = new pixiflash.Container();
 	pathContainer.id = parseInt(ObjectId);
 	for(var k =0;k<resourceManager.m_data.DOMDocument.Shape.length;k++)
 	{
@@ -27,7 +27,7 @@ function CreateShape(parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
 			for(var j=0;j<resourceManager.m_data.DOMDocument.Shape[k].path.length;j++)
 			{
 				var clr,clrOpacity;
-				var shape1 = new createjs.Shape();		
+				var shape1 = new pixiflash.Shape();
 
 				if(resourceManager.m_data.DOMDocument.Shape[k].path[j].pathType == "Fill")
 				{
@@ -40,13 +40,13 @@ function CreateShape(parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
                         var b = parseInt(clr.substring(5, 7), 16);
 
                         var colStr = 'rgba(' + r + ',' + g + ',' + b + ',' + resourceManager.m_data.DOMDocument.Shape[k].path[j].colorOpacity + ')';
-                        shape1.graphics.beginFill(colStr);
+                        shape1.graphics.f(colStr);
 					}
 					if(resourceManager.m_data.DOMDocument.Shape[k].path[j].image)
 					{ 
 						var patternArray = resourceManager.m_data.DOMDocument.Shape[k].path[j].image.patternTransform.split(",");						
 						var p =0;
-						var mat = new createjs.Matrix2D(patternArray[p],patternArray[p+1],patternArray[p+1],patternArray[p+3],patternArray[p+4],patternArray[p+5]);
+						var mat = new PIXI.Matrix(patternArray[p],patternArray[p+1],patternArray[p+1],patternArray[p+3],patternArray[p+4],patternArray[p+5]);
 						var image = new Image();
 						image.src = resourceManager.m_data.DOMDocument.Shape[k].path[j].image.bitmapPath;						
 						shape1.graphics.beginBitmapFill(image,"no-repeat",mat);						
@@ -94,7 +94,7 @@ function CreateShape(parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
 					{ 
 						var patternArray = resourceManager.m_data.DOMDocument.Shape[k].path[j].image.patternTransform.split(",");
 						var p =0;
-						var mat = new createjs.Matrix2D(patternArray[p],patternArray[p+1],patternArray[p+1],patternArray[p+3],patternArray[p+4],patternArray[p+5]);
+						var mat = new PIXI.Matrix(patternArray[p],patternArray[p+1],patternArray[p+1],patternArray[p+3],patternArray[p+4],patternArray[p+5]);
 						var image = new Image();
 						image.src = resourceManager.m_data.DOMDocument.Shape[k].path[j].image.bitmapPath;
 						shape1.graphics.beginBitmapStroke(image,"no-repeat").beginStroke().setStrokeStyle(data.DOMDocument.Shape[k].path[j].strokeWidth,resourceManager.m_data.DOMDocument.Shape[k].path[j].strokeLinecap,resourceManager.m_data.DOMDocument.Shape[k].path[j].strokeLinejoin);
@@ -121,11 +121,11 @@ function CreateShape(parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
 				{
 
 					if(pathParts[i] == "M")
-					shape1.graphics.moveTo(pathParts[i+1],pathParts[i+2]);
+					shape1.graphics.moveTo(Number(pathParts[i+1]),Number(pathParts[i+2]));
 					if(pathParts[i] == "Q")
-					shape1.graphics.quadraticCurveTo(pathParts[i+1],pathParts[i+2],pathParts[i+3],pathParts[i+4]);
+					shape1.graphics.quadraticCurveTo(Number(pathParts[i+1]),Number(pathParts[i+2]),Number(pathParts[i+3]),Number(pathParts[i+4]));
 					if(pathParts[i] == "L")
-					shape1.graphics.lineTo(pathParts[i+1],pathParts[i+2]);
+					shape1.graphics.lineTo(Number(pathParts[i+1]),Number(pathParts[i+2]));
 				}
 
 			/*	if(resourceManager.m_data.DOMDocument.Shape[k].path[j].colorOpacity)
@@ -143,14 +143,21 @@ function CreateShape(parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
 			
 	var transformArray = transform.split(",");
 	var scaleX,scaleY,rotation,skewX,skewY;
-	var TransformMat = new createjs.Matrix2D(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5])
-	scaleX = Math.sqrt((transformArray[0]*transformArray[0])+ (transformArray[1]*transformArray[1]));
-	scaleY = Math.sqrt((transformArray[2]*transformArray[2]) + (transformArray[3]*transformArray[3]));
-	skewX = Math.atan2(-(transformArray[2]), transformArray[3]);
-	skewY = Math.atan2(transformArray[1], transformArray[0]);			
+	var ta0 = Number(transformArray[0]),
+			ta1 = Number(transformArray[1]),
+			ta2 = Number(transformArray[2]),
+			ta3 = Number(transformArray[3]),
+			ta4 = Number(transformArray[4]),
+			ta5 = Number(transformArray[5]);
+	var TransformMat = new PIXI.Matrix(ta0,ta1,ta2,ta3,ta4,ta5)
+	scaleX = Math.sqrt((ta0*ta0)+ (ta1*ta1));
+	scaleY = Math.sqrt((ta2*ta2) + (ta3*ta3));
+	skewX = Math.atan2(-(ta2), ta3);
+	skewY = Math.atan2(ta1, ta0);
 	skewX = skewX * (180*7/22);
 	skewY=skewY *(180*7/22);
-	pathContainer.setTransform(transformArray[4],transformArray[5],scaleX,scaleY,0,skewX,skewY);
+	pathContainer.setTransform(ta4,ta5,scaleX,scaleY,0,skewX,skewY);
+
 	if(parentMC != undefined)
 	{				
 		if(placeAfter != 0)
@@ -167,50 +174,62 @@ function CreateShape(parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
 		else
 		{
 			parentMC.addChild(pathContainer);
-		}				
+		}
 		while(parentMC != null && parentMC.mode != undefined)
 		{
-			parentMC.getStage();	 
+			// jibo (mlb) - not sure what the purpose of this getter method is here
+			//parentMC.getStage();
 			parentMC = parentMC.parent;
 		}				 
-			 
-        if (parentMC)
-        {
-		    parentMC.update();
-        }
+
+		// jibo (mlb) - since we add the pathContainer to the parentMC, this should be sufficient for pixijs to render the object.  no need for the parentMC.update call
+		//if (parentMC)
+		//{
+		//	parentMC.update();
+		//}
 	}
-	else
-	{
-		stage.addChildAt(pathContainer);	
-		stage.update();				
-	}
+	// jibo (mlb) - the stage variable seems to be unreferenced in the rest of the file. not sure if this is unnecessary code.
+	//else
+	//{
+	//	stage.addChildAt(pathContainer);
+	//	stage.update();
+	//}
 }
 
 
 
 function CreateBitmap(parentMC,resourceManager,charId,ObjectId,placeAfter,transform)
 {
-for(var b =0;b<resourceManager.m_data.DOMDocument.Bitmaps.length;b++)
+	for(var b =0;b<resourceManager.m_data.DOMDocument.Bitmaps.length;b++)
 	{
 		if(resourceManager.m_data.DOMDocument.Bitmaps[b].charid == charId)
 		{
 		var path = resourceManager.m_data.DOMDocument.Bitmaps[b].bitmapPath;
-		var bitmap = new createjs.Bitmap(path);
+
+		var bitmap = new pixiflash.Bitmap(PIXI.Texture.fromImage(path));
+
 		bitmap.id = parseInt(ObjectId);
 		}
 		
 	}
 	var transformArray = transform.split(",");
 	var scaleX,scaleY,rotation,skewX,skewY;
-	var TransformMat = new createjs.Matrix2D(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5])
-	scaleX = Math.sqrt((transformArray[0]*transformArray[0])+ (transformArray[1]*transformArray[1]));
-	scaleY = Math.sqrt((transformArray[2]*transformArray[2]) + (transformArray[3]*transformArray[3]));
-	skewX = Math.atan2(-(transformArray[2]), transformArray[3]);
-	skewY = Math.atan2(transformArray[1], transformArray[0]);			
+	var ta0 = Number(transformArray[0]),
+			ta1 = Number(transformArray[1]),
+			ta2 = Number(transformArray[2]),
+			ta3 = Number(transformArray[3]),
+			ta4 = Number(transformArray[4]),
+			ta5 = Number(transformArray[5]);
+	var TransformMat = new PIXI.Matrix(ta0,ta1,ta2,ta3,ta4,ta5)
+	scaleX = Math.sqrt((ta0*ta0)+ (ta1*ta1));
+	scaleY = Math.sqrt((ta2*ta2) + (ta3*ta3));
+	skewX = Math.atan2(-(ta2), ta3);
+	skewY = Math.atan2(ta1, ta0);
 	skewX = skewX * (180*7/22);
 	skewY=skewY *(180*7/22);
-	bitmap.setTransform(transformArray[4],transformArray[5],scaleX,scaleY,0,skewX,skewY);
-	
+	bitmap.setTransform(ta4,ta5,scaleX,scaleY,0,skewX,skewY);
+
+
 	if(parentMC != undefined)
 	{				
 		if(placeAfter != 0)
@@ -230,24 +249,27 @@ for(var b =0;b<resourceManager.m_data.DOMDocument.Bitmaps.length;b++)
 		}				
 		while(parentMC.mode != undefined)
 		{
-			parentMC.getStage();	 
+			// jibo (mlb) - not sure what the purpose of this getter method is here
+			//parentMC.getStage();
 			parentMC = parentMC.parent;
-		}				 
-			 
-		parentMC.update();
+		}
+
+		// jibo (mlb) - since we add the pathContainer to the parentMC, this should be sufficient for pixijs to render the object.  no need for the parentMC.update call
+		//parentMC.update();
 	}
-	else
-	{
-		stage.addChildAt(bitmap);	
-		stage.update();				
-	}
+	// jibo (mlb) - the stage variable seems to be unreferenced in the rest of the file. not sure if this is unnecessary code.
+	//else
+	//{
+	//	stage.addChildAt(bitmap);
+	//	stage.update();
+	//}
 }
 
 
 
 function CreateText(parentMC,resourceManager,charId,ObjectId,placeAfter,transform)
 {
-for(var b =0;b<resourceManager.m_data.DOMDocument.Text.length;b++)
+	for(var b =0;b<resourceManager.m_data.DOMDocument.Text.length;b++)
 	{
 		if(resourceManager.m_data.DOMDocument.Text[b].charid == charId)
 		{
@@ -256,21 +278,28 @@ for(var b =0;b<resourceManager.m_data.DOMDocument.Text.length;b++)
 		
 		var font = resourceManager.m_data.DOMDocument.Text[b].font;
 		var fontColor = resourceManager.m_data.DOMDocument.Text[b].color;
-		var textOutput = new createjs.Text(txt,font,fontColor);
+
+		var textOutput = new pixiflash.Text(txt, font, fontColor);
 		textOutput.id = parseInt(ObjectId);
 		}
 		
 	}
 	var transformArray = transform.split(",");
 	var scaleX,scaleY,rotation,skewX,skewY;
-	var TransformMat = new createjs.Matrix2D(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5])
-	scaleX = Math.sqrt((transformArray[0]*transformArray[0])+ (transformArray[1]*transformArray[1]));
-	scaleY = Math.sqrt((transformArray[2]*transformArray[2]) + (transformArray[3]*transformArray[3]));
-	skewX = Math.atan2(-(transformArray[2]), transformArray[3]);
-	skewY = Math.atan2(transformArray[1], transformArray[0]);			
+	var ta0 = Number(transformArray[0]),
+			ta1 = Number(transformArray[1]),
+			ta2 = Number(transformArray[2]),
+			ta3 = Number(transformArray[3]),
+			ta4 = Number(transformArray[4]),
+			ta5 = Number(transformArray[5]);
+	var TransformMat = new PIXI.Matrix(ta0,ta1,ta2,ta3,ta4,ta5)
+	scaleX = Math.sqrt((ta0*ta0)+ (ta1*ta1));
+	scaleY = Math.sqrt((ta2*ta2) + (ta3*ta3));
+	skewX = Math.atan2(-(ta2), ta3);
+	skewY = Math.atan2(ta1, ta0);
 	skewX = skewX * (180*7/22);
 	skewY=skewY *(180*7/22);
-	textOutput.setTransform(transformArray[4],transformArray[5],scaleX,scaleY,0,skewX,skewY);
+	textOutput.setTransform(ta4,ta5,scaleX,scaleY,0,skewX,skewY);
 	
 	if(parentMC != undefined)
 	{				
@@ -291,15 +320,18 @@ for(var b =0;b<resourceManager.m_data.DOMDocument.Text.length;b++)
 		}				
 		while(parentMC.mode != undefined)
 		{
-			parentMC.getStage();	 
+			// jibo (mlb) - not sure what the purpose of this getter method is here
+			//parentMC.getStage();
 			parentMC = parentMC.parent;
 		}				 
 			 
-		parentMC.update();
+		// jibo (mlb) - since we add the pathContainer to the parentMC, this should be sufficient for pixijs to render the object.  no need for the parentMC.update call
+		//parentMC.update();
 	}
-	else
-	{
-		stage.addChildAt(textOutput);	
-		stage.update();				
-	}
+	// jibo (mlb) - the stage variable seems to be unreferenced in the rest of the file. not sure if this is unnecessary code.
+	//else
+	//{
+	//	stage.addChildAt(bitmap);
+	//	stage.update();
+	//}
 }

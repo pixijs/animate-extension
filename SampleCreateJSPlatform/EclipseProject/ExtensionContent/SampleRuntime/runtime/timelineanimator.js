@@ -33,15 +33,24 @@ var TimelineAnimator = function(targetMovieClip, timeline , transform)
 		var transformData =  this.m_transform;
 		var transformArray = transformData.split(",");
 		var scaleX,scaleY,rotation,skewX,skewY;
-		var TransformMat = new createjs.Matrix2D(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5])
-		scaleX = Math.sqrt((transformArray[0]*transformArray[0])+ (transformArray[1]*transformArray[1]));
-		scaleY = Math.sqrt((transformArray[2]*transformArray[2]) + (transformArray[3]*transformArray[3]));
-		skewX = Math.atan2(-(transformArray[2]), transformArray[3]);
-		skewY = Math.atan2(transformArray[1], transformArray[0]);
+
+		var ta0 = Number(transformArray[0]),
+			ta1 = Number(transformArray[1]),
+			ta2 = Number(transformArray[2]),
+			ta3 = Number(transformArray[3]),
+			ta4 = Number(transformArray[4]),
+			ta5 = Number(transformArray[5]);
+
+		var TransformMat = new PIXI.Matrix(ta0,ta1,ta2,ta3,ta4,ta5)
+		scaleX = Math.sqrt((ta0*ta0)+ (ta1*ta1));
+		scaleY = Math.sqrt((ta2*ta2) + (ta3*ta3));
+		skewX = Math.atan2(-(ta2), ta3);
+		skewY = Math.atan2(ta1, ta0);
 		skewX = skewX * (180*7/22);
 		skewY=skewY *(180*7/22);
-		this.m_targetMC.setTransform(transformArray[4],transformArray[5],scaleX,scaleY,0,skewX,skewY);
-	}	
+		this.m_targetMC.setTransform(ta4,ta5,scaleX,scaleY,0,skewX,skewY);
+
+	}
 	this.m_children = [];
 	
 	//@TODO - String Constants
@@ -212,8 +221,9 @@ PlaceObjectCommand.prototype.execute = function(timelineAnimator, resourceManage
 		{
 			
 			//Create a createjs MC
-			var childMC = new createjs.MovieClip();
-			childMC.id = parseInt(this.m_objectID);	
+			var childMC = new pixiflash.MovieClip();
+
+			childMC.id = parseInt(this.m_objectID);
 			
 			
             		
@@ -263,11 +273,18 @@ MoveObjectCommand.prototype.execute = function(timelineAnimator, resourceManager
 	var transform =  this.m_transform;
 	var transformArray = transform.split(",");
 	var scaleX,scaleY,rotation,skewX,skewY;
-	var TransformMat = new createjs.Matrix2D(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5])
-	scaleX = Math.sqrt((transformArray[0]*transformArray[0])+ (transformArray[1]*transformArray[1]));
-	scaleY = Math.sqrt((transformArray[2]*transformArray[2]) + (transformArray[3]*transformArray[3]));
-	skewX = Math.atan2(-(transformArray[2]), transformArray[3]);
-	skewY = Math.atan2(transformArray[1], transformArray[0]);
+	var ta0 = Number(transformArray[0]),
+			ta1 = Number(transformArray[1]),
+			ta2 = Number(transformArray[2]),
+			ta3 = Number(transformArray[3]),
+			ta4 = Number(transformArray[4]),
+			ta5 = Number(transformArray[5]);
+
+	var TransformMat = new PIXI.Matrix(ta0,ta1,ta2,ta3,ta4,ta5)
+	scaleX = Math.sqrt((ta0*ta0)+ (ta1*ta1));
+	scaleY = Math.sqrt((ta2*ta2) + (ta3*ta3));
+	skewX = Math.atan2(-(ta2), ta3);
+	skewY = Math.atan2(ta1, ta0);
 	skewX = skewX * (180*7/22);
 	skewY=skewY *(180*7/22);
 	if(parentMC != undefined)
@@ -279,9 +296,10 @@ MoveObjectCommand.prototype.execute = function(timelineAnimator, resourceManager
 			if(parentMC.children[index].id == parseInt(this.m_objectID))
 			{
 				var child = parentMC.getChildAt(index);
-				console.log(child.getMatrix());
-				child.setTransform(transformArray[4],transformArray[5],scaleX,scaleY,0,skewX,skewY);								
-				console.log(child.getMatrix());
+				console.log(child.position);
+				child.setTransform(ta4,ta5,scaleX,scaleY,0,skewX,skewY);
+
+				console.log(child.position);
 				break;
 			}				
 		}		
@@ -358,7 +376,6 @@ RemoveObjectCommand.prototype.execute = function(timelineAnimator, resourceManag
 //UpdateVisbilityCommand Class
 var UpdateVisibilityCommand = function(objectID,visibility) 
 {
-	
 	this.m_objectID = objectID;	
 	this.m_visibilty = visibility;
 	console.log(this.m_visibilty);

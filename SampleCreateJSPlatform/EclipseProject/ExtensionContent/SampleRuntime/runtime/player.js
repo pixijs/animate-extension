@@ -21,11 +21,14 @@ var rootAnimator = undefined;
 var cbk = undefined;
 var interval = 1000/24;
 var gStage = undefined;
+var gRenderer = undefined;
 
-function init(stage, jsonOutputFile, fps)
+function init(stage, renderer, jsonOutputFile, fps)
 {
 	console.log("CreateJS animation demo");	
 	gStage = stage;
+	gRenderer = renderer;
+
 	interval = 1000 / fps;
 	//TODO - Wait for load for everything else
 	//Load the json
@@ -66,7 +69,7 @@ function loop()
 {
 
 	rootAnimator.play(resourceManager);
-	gStage.update();
+	gRenderer.render(gStage);
 	//TODO - handle movie clip transforms
 	cbk = setTimeout(loop, interval);
 }	
