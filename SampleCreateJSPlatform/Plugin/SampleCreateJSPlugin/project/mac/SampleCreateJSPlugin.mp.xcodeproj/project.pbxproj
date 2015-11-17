@@ -38,6 +38,7 @@
 		"8af5fe69-f0db-3e01-a117-1799a08ecc35" /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */; };
 		"8ed2c99a-79c7-3e25-a978-d21041af1b50" /* JSONNode_Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "7aa76593-b10f-3f2e-bbea-7a3e63e1a65b" /* JSONNode_Mutex.cpp */; };
 		"8f71b0ac-f77e-35e0-8ba3-eafefe65d054" /* internalJSONNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "a47eaabc-0062-3299-b91c-06037678b948" /* internalJSONNode.cpp */; };
+		9A0112641BFB99D200E546CC /* include in Resources */ = {isa = PBXBuildFile; fileRef = 9A0112631BFB99D200E546CC /* include */; };
 		"9a4a5e32-90e2-3a86-be56-054e9f4842dd" /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */; };
 		"a3dd5fb5-163b-33cf-83f9-75486dca0771" /* JSONWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "9af15e97-f1a1-37db-bcf9-fba2786df1c4" /* JSONWriter.cpp */; };
 		"a605f5ea-9b2f-3782-aca6-f5a8c586b668" /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "242250eb-c22a-31fb-b531-b0b9cb9b75e8" /* ApplicationServices.framework */; };
@@ -87,6 +88,7 @@
 		"7aa76593-b10f-3f2e-bbea-7a3e63e1a65b" /* JSONNode_Mutex.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONNode_Mutex.cpp; sourceTree = "<group>"; };
 		"7bfcfcd8-dedc-3680-b9e1-95891cdfa343" /* libjson.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = libjson.cpp; sourceTree = "<group>"; };
 		"960c8d89-d632-3678-815d-49888c76392b" /* JSONPreparse.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONPreparse.cpp; sourceTree = "<group>"; };
+		9A0112631BFB99D200E546CC /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../include; sourceTree = "<group>"; };
 		"9af15e97-f1a1-37db-bcf9-fba2786df1c4" /* JSONWriter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONWriter.cpp; sourceTree = "<group>"; };
 		"9bbfd7be-ac57-384d-984e-1afc2e0ed3b2" /* JSONIterators.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONIterators.cpp; sourceTree = "<group>"; };
 		"9f0688c3-3f04-3a69-a219-c79da92040db" /* Main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Main.cpp; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 		F5D357220948E8C4008C36CA = {
 			isa = PBXGroup;
 			children = (
+				9A0112631BFB99D200E546CC /* include */,
 				F5977F0909B7D3970058A43E /* SampleCreateJSPlugin.xcconfigs */,
 				F5D3576909491A7D008C36CA /* Frameworks */,
 				811C721C097349F9007B1073 /* Libraries */,
@@ -340,6 +343,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A0112641BFB99D200E546CC /* include in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
