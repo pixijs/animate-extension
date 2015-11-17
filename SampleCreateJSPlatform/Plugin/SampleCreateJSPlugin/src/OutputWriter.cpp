@@ -55,46 +55,50 @@ namespace CreateJS
 
     static const FCM::Float GRADIENT_VECTOR_CONSTANT = 16384.0;
 
-    static const char* htmlOutput = 
+    static const char* htmlOutput =
         "<!DOCTYPE html>\r\n \
         <html>\r\n \
-        <head> \r\n\
-            <script src=\"%s/cjs/createjs-2013.12.12.min.js\"></script> \r\n\
-            <script src=\"%s/cjs/movieclip-0.7.1.min.js\"></script> \r\n\
-            <script src=\"%s/cjs/easeljs-0.7.0.min.js\"></script> \r\n\
-            <script src=\"%s/cjs/tweenjs-0.5.1.min.js\"></script> \r\n\
-            <script src=\"%s/cjs/preloadjs-0.4.1.min.js\"></script> \r\n\
-           \r\n\
-            <script src=\"%s/dist/jquery-1.10.2.min.js\"></script> \r\n\
-            <script src=\"%s/runtime/resourcemanager.js\"></script> \r\n \
-            <script src=\"%s/runtime/utils.js\"></script>     \r\n\
-            <script src=\"%s/runtime/timelineanimator.js\"></script>    \r\n\
-            <script src=\"%s/runtime/player.js\"></script>     \r\n\
-            \r\n\
-            <script type=\"text/javascript\"> \r\n\
-            \r\n\
-            var loader = new createjs.LoadQueue(false); \r\n\
-            loader.addEventListener(\"complete\", handleComplete); \r\n\
-            loader.loadManifest(\"./%s/images/B.png\"); \r\n\
-            function handleComplete() \r\n\
-                { \r\n\
-                $(document).ready(function() { \r\n\
+            <head> \r\n\
+                <script src=\"%s/cjs/pixi.js\"></script> \r\n\
+                <script src=\"%s/cjs/tweenjs-0.6.1.min.js\"></script> <!-- required for pixiflash's movieclip as described in the movieclip class documentation --> \r\n\
+                <script src=\"%s/cjs/pixi-flash.js\"></script> \r\n\
                 \r\n\
+                <script src=\"%s/dist/jquery-1.10.2.min.js\"></script> \r\n\
                 \r\n\
-                    var canvas = document.getElementById(\"canvas\"); \r\n\
-                    var stage = new createjs.Stage(canvas);         \r\n\
-                    //pass FPS and use that in the player \r\n\
-                    init(stage, \"%s\", %d);             \r\n\
-                }); \r\n\
-                } \r\n\
-            </script> \r\n\
-        </head> \r\n\
-        \r\n\
-        <body> \r\n\
-            <canvas id=\"canvas\" width=\"%d\" height=\"%d\" style=\"background-color:#%06X\"> \r\n\
+                <script src=\"%s/runtime/resourcemanager.js\"></script> \r\n\
+                <script src=\"%s/runtime/utils.js\"></script> \r\n\
+                <script src=\"%s/runtime/timelineanimator.js\"></script> \r\n\
+                <script src=\"%s/runtime/player.js\"></script> \r\n\
+                \r\n\
+                <script type=\"text/javascript\"> \r\n\
+                    \r\n\
+                    var loader = PIXI.loader; \r\n\
+                    loader.add('Bpic', \"./%s/images/B.png\"); \r\n\
+                    loader.once(\"complete\", handleComplete); \r\n\
+                    loader.load(); \r\n\
+                    function handleComplete() \r\n\
+                    { \r\n\
+                        $(document).ready(function() { \r\n\
+                            \r\n\
+                            var canvas = document.getElementById(\"canvas\"); \r\n\
+                            var stage = new pixiflash.Container(); \r\n\
+                            var renderer = new PIXI.autoDetectRenderer(canvas.width, canvas.height, { \r\n\
+                            view: document.getElementById(\"canvas\"), \r\n\
+                            antialias: true \r\n\
+                        }); \r\n\
+                            \r\n\
+                            //pass FPS and use that in the player \r\n\
+                            init(stage, renderer, \"%s\", %d); \r\n\
+                        }); \r\n\
+                    } \r\n\
+                </script> \r\n\
+            </head>\r\n\
+            \r\n\
+            <body> \r\n\
+                <canvas id=\"canvas\" width=\"%d\" height=\"%d\" style=\"background-color:#%06X\"> \r\n\
                 alternate content \r\n\
-            </canvas> \r\n\
-        </body> \r\n\
+                </canvas> \r\n\
+            </body> \r\n\
         </html>";
 
 
@@ -140,8 +144,6 @@ namespace CreateJS
 
         backColor = (background.red << 16) | (background.green << 8) | (background.blue);
         sprintf(m_HTMLOutput, htmlOutput, 
-            RUNTIME_FOLDER_NAME, 
-            RUNTIME_FOLDER_NAME, 
             RUNTIME_FOLDER_NAME,
             RUNTIME_FOLDER_NAME,
             RUNTIME_FOLDER_NAME,
