@@ -2,4 +2,6 @@ To get setup, please follow the instructions outlined from adobe's documentation
 
 This will enable you to build the project itself and see the plugin exposed from the Adobe Flash program.  
 
-Note: some project / file names may be changed due to not wanting to produce a plugin named "SamplePlugin".
+Note: 
+- some project / file names may be changed due to not wanting to produce a plugin named "SamplePlugin".
+- the certificate password is: password
