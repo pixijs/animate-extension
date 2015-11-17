@@ -1,2 +1,9 @@
-.DS_Store
-.gitignore~
+*.DS_Store
+*~
+.idea/
+SampleCreateJSPlatform/.metadata/
+SampleCreateJSPlatform/EclipseProject/ExtensionContent/plugin/lib/mac/
+SampleCreateJSPlatform/Plugin/SampleCreateJSPlugin/lib/
+SampleCreateJSPlatform/Plugin/SampleCreateJSPlugin/project/mac/SampleCreateJSPlugin.mp.xcodeproj
+SampleCreateJSPlatform/Plugin/SampleCreateJSPlugin/project/mac/build/
+SampleCreateJSPlatform/RemoteSystemsTempFiles/
