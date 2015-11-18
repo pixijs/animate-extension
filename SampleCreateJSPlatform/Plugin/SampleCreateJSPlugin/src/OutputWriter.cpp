@@ -63,35 +63,11 @@ namespace CreateJS
                 <script src=\"%s/cjs/tweenjs-0.6.1.min.js\"></script> <!-- required for pixiflash's movieclip as described in the movieclip class documentation --> \r\n\
                 <script src=\"%s/cjs/pixi-flash.js\"></script> \r\n\
                 \r\n\
-                <script src=\"%s/dist/jquery-1.10.2.min.js\"></script> \r\n\
-                \r\n\
                 <script src=\"%s/runtime/resourcemanager.js\"></script> \r\n\
                 <script src=\"%s/runtime/utils.js\"></script> \r\n\
                 <script src=\"%s/runtime/timelineanimator.js\"></script> \r\n\
                 <script src=\"%s/runtime/player.js\"></script> \r\n\
                 \r\n\
-                <script type=\"text/javascript\"> \r\n\
-                    \r\n\
-                    var loader = PIXI.loader; \r\n\
-                    loader.add('Bpic', \"./%s/images/B.png\"); \r\n\
-                    loader.once(\"complete\", handleComplete); \r\n\
-                    loader.load(); \r\n\
-                    function handleComplete() \r\n\
-                    { \r\n\
-                        $(document).ready(function() { \r\n\
-                            \r\n\
-                            var canvas = document.getElementById(\"canvas\"); \r\n\
-                            var stage = new pixiflash.Container(); \r\n\
-                            var renderer = new PIXI.autoDetectRenderer(canvas.width, canvas.height, { \r\n\
-                            view: document.getElementById(\"canvas\"), \r\n\
-                            antialias: true \r\n\
-                        }); \r\n\
-                            \r\n\
-                            //pass FPS and use that in the player \r\n\
-                            init(stage, renderer, \"%s\", %d); \r\n\
-                        }); \r\n\
-                    } \r\n\
-                </script> \r\n\
             </head>\r\n\
             \r\n\
             <body> \r\n\
@@ -99,6 +75,26 @@ namespace CreateJS
                 alternate content \r\n\
                 </canvas> \r\n\
             </body> \r\n\
+            \r\n\
+            <script type=\"text/javascript\"> \r\n\
+                \r\n\
+                var loader = PIXI.loader; \r\n\
+                loader.add('Bpic', \"./%s/images/B.png\"); \r\n\
+                loader.add('pixijs_flash_publish_json', \"./%s\"); \r\n\
+                loader.once(\"complete\", handleComplete); \r\n\
+                loader.load(); \r\n\
+                function handleComplete(loader, args) { \r\n\
+                    var canvas = document.getElementById(\"canvas\"); \r\n\
+                    var stage = new pixiflash.Container(); \r\n\
+                    var renderer = new PIXI.autoDetectRenderer(canvas.width, canvas.height, { \r\n\
+                        view: document.getElementById(\"canvas\"), \r\n\
+                        antialias: true \r\n\
+                    }); \r\n\
+                    \r\n\
+                    //pass FPS and use that in the player \r\n\
+                    init(stage, renderer, args.pixijs_flash_publish_json.data, %d); \r\n\
+                } \r\n\
+            </script> \r\n\
         </html>";
 
 
@@ -151,9 +147,10 @@ namespace CreateJS
             RUNTIME_FOLDER_NAME,
             RUNTIME_FOLDER_NAME,
             RUNTIME_FOLDER_NAME,
+            stageWidth, stageHeight, backColor,
             RUNTIME_FOLDER_NAME,
-            RUNTIME_FOLDER_NAME,
-            m_outputJSONFileName.c_str(), fps, stageWidth, stageHeight, backColor);
+            m_outputJSONFileName.c_str(),
+            fps);
 
         return FCM_SUCCESS;
     }

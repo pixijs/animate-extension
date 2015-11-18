@@ -23,24 +23,19 @@ var interval = 1000/24;
 var gStage = undefined;
 var gRenderer = undefined;
 
-function init(stage, renderer, jsonOutputFile, fps)
+function init(stage, renderer, jsonData, fps)
 {
 	console.log("CreateJS animation demo");	
 	gStage = stage;
 	gRenderer = renderer;
 
 	interval = 1000 / fps;
-	//TODO - Wait for load for everything else
-	//Load the json
-	$.get(jsonOutputFile, function(json) {
-		data = json;
-		console.log(data);
-		resourceManager = new ResourceManager(data);
-		reset(stage);
-		
-		play();
-	});
-}		
+	console.log(jsonData);
+	resourceManager = new ResourceManager(jsonData);
+	reset(stage);
+
+	play();
+}
 	
 function play() 
 {
