@@ -26,20 +26,25 @@
 #ifndef _PLUGIN_CONFIGURATION_H_
 #define _PLUGIN_CONFIGURATION_H_
 
-#define PUBLISHER_NAME						"Jibo"
-#define PUBLISHER_UNIVERSAL_NAME			"JiboPublisher"
+#include "FCMTypes.h"
+
+#define PUBLISHER_NAME						"JiboPixiJSPlugin"
+#define PUBLISHER_UNIVERSAL_NAME			"JiboPixiJSPlugin"
 
 /* The value of the PUBLISH_SETTINGS_UI_ID has to be the HTML extension ID used for Publish settings dialog*/
 #define PUBLISH_SETTINGS_UI_ID				"JiboPixiJSPlugin.PublishSettings"
 
 #define DOCTYPE_NAME						"JiboPixiJSPlugin"
 #define DOCTYPE_UNIVERSAL_NAME				"JiboPixiJSPlugin"
-#define DOCTYPE_DESCRIPTION					"This document can be used to author content for sample runtime"
+
+/* This string must be localized for various locales and stored in the "res" in their respective lang folder. */
+#define DOCTYPE_DESCRIPTION					"This document can be used to author content for Jibo PixiJS."
 
 /* The value of RUNTIME_FOLDER_NAME must be the name of the runtime folder present in EclipseProject/ExtensionContent. */
-#define RUNTIME_FOLDER_NAME                 "SampleRuntime"
+#define RUNTIME_ROOT_FOLDER_NAME            "SampleRuntime"
 
-namespace CreateJS
+
+namespace JiboPixiJS
 {
     // {d30f8a0d-8234-44e1-9e30-ee48b415be9d}
     const FCM::FCMCLSID CLSID_DocType =
@@ -49,7 +54,7 @@ namespace CreateJS
     const FCM::FCMCLSID CLSID_FeatureMatrix =
         {0xafeccca4, 0x7b79, 0x47e4, {0xaa, 0x19, 0xd5, 0xe6, 0x46, 0xd4, 0x7f, 0xbe}};
 
-	    // {8f6f8054-505f-472a-b602-f78cfc350563}
+    // {8f6f8054-505f-472a-b602-f78cfc350563}
     const FCM::FCMCLSID CLSID_Publisher =
         {0x8f6f8054, 0x505f, 0x472a, {0xb6, 0x02, 0xf7, 0x8c, 0xfc, 0x35, 0x05, 0x63}};
 

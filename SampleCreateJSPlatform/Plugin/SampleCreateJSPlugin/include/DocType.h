@@ -42,7 +42,7 @@
 using namespace FCM;
 using namespace DocType;
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     class CDocType;
     class FeatureMatrix;
@@ -61,7 +61,7 @@ namespace CreateJS
 
 /* -------------------------------------------------- Structs / Unions */
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     typedef std::map<std::string, Value*> StrValueMap;
     typedef std::map<std::string, Property*> StrPropertyMap;
@@ -71,7 +71,7 @@ namespace CreateJS
 
 /* -------------------------------------------------- Class Decl */
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     class CDocType : public DocType::IDocType, public FCM::FCMObjectBase
     {
@@ -150,6 +150,8 @@ namespace CreateJS
         Feature* mCurrentFeature;
 
         Property* mCurrentProperty;
+
+        FCM::U_Int32 m_appVersion;
 
         bool m_bInited;
         

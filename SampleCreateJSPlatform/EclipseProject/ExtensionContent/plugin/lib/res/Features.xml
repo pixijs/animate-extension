@@ -2,7 +2,7 @@
 	<Feature name="Stroke" supported="true">
 		<Property name="Style" default="Solid" supported="true">
 			<Value name="Solid" supported="true"/>
-			<Value name="Hairline" supported="true"/>
+			<Value name="Hairline" supported="false"/>
 			<Value name="Dashed" supported="false"/>
 			<Value name="Dotted" supported="false"/>
 			<Value name="Ragged" supported="false"/>
@@ -22,7 +22,7 @@
 			<Value name="NoFill" supported="true"/>
 			<Value name="SolidFill" supported="true"/>
 			<Value name="LinearGradientFill" supported="true"/>
-			<Value name="RadialGradientFill" supported="false"/>
+			<Value name="RadialGradientFill" supported="true"/>
 			<Value name="BitmapFill" supported="true"/>
 		</Property>
 		<Property name="GradientFlow" default="Extend" supported="true">
@@ -32,7 +32,7 @@
 		</Property>
 		<Property name="LinearRGB" default="false" supported="true"/>
 	</Feature>
-	<Feature name="Text" supported="true">
+	<Feature name="Text" supported="false" minVersion="15.0.0.173">
 		<Property name="TextType" default="DynamicText" supported="true">
 			<Value name="StaticText" supported="false"/>
 			<Value name="DynamicText" supported="true"/>
@@ -101,7 +101,7 @@
 			<Value name="None" supported="true"/>
 			<Value name="Brightness" supported="false"/>
 			<Value name="Tint" supported="false"/>
-			<Value name="Alpha" supported="false"/> 
+			<Value name="Alpha" supported="true"/> 
 			<Value name="Advanced" supported="false"/>
 		</Property>
 		<Property name="Render" default="Original" supported="true">
@@ -119,7 +119,7 @@
 		</Property>
 	</Feature>
 	<Feature name="Filters" supported="false"/>
-	<Feature name="DropShadowFilter" supported="true">
+	<Feature name="DropShadowFilter" supported="false">
 		<Property name="Quality" default="Low" supported="true"/>
 		<Property name="Angle" default ="0.785" supported="true"/>  !--- measured in radians ----!
 		<Property name="Distance" default = "0" supported="true"/>
@@ -127,22 +127,22 @@
 		<Property name="Inner" default = "false" supported="true"/>
 		<Property name="HideObject" default = "false" supported="true"/>	
 	</Feature>
-	<Feature name="GlowFilter" supported="true">
+	<Feature name="GlowFilter" supported="false">
 		<Property name="Quality" default="Low" supported="true"/>
 		<Property name="Knockout" default = "false" supported="true"/>
 		<Property name="Inner" default = "false" supported="true"/>
 	</Feature>
-	<Feature name="BlurFilter" supported="true"/>
-	<Feature name="BevelFilter" supported="true"/>
-	<Feature name="GradientGlowFilter" supported="true"/>
-	<Feature name="GradientBevelFilter" supported="true"/>
-	<Feature name="AdjustColorFilter" supported="true"/>
+	<Feature name="BlurFilter" supported="false"/>
+	<Feature name="BevelFilter" supported="false"/>
+	<Feature name="GradientGlowFilter" supported="false"/>
+	<Feature name="GradientBevelFilter" supported="false"/>
+	<Feature name="AdjustColorFilter" supported="false"/>
 	<Feature name="Compiler" supported="false"/>
 	<Feature name="Video" supported="false"/>
 	<Feature name="FrameScript" supported="false"/>
 	<Feature name="RuntimeSharedLibraries" supported="false"/>
 	<Feature name="Accessibility" supported="false"/>
-	<Feature name="Sound" supported="true">
+	<Feature name="Sound" supported="false">
 		<Property name="Effect" supported="true"/>
 		<Property name="Sync" default="Event" supported="true">
 			<Value name="Event" supported="true"/>
@@ -173,7 +173,7 @@
 	<Feature name="ActionScript" supported="false">
 	</Feature>
 	<Feature name="Layer" supported="true">
-		<Property name="MaskLayer" supported="false"/>
+		<Property name="MaskLayer" supported="true"/>
 		<Property name="GuideLayer" supported="true"/>
 	</Feature>
 	<Feature name="ClassicTween" supported="true">

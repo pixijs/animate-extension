@@ -54,7 +54,7 @@ struct ServerConfigParam
 
 /* -------------------------------------------------- Class Decl */
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     class HTTPServer
     {

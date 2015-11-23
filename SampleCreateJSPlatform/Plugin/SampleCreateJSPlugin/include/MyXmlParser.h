@@ -33,7 +33,7 @@
 
 using namespace xercesc;
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     class FeatureMatrix;
 }
@@ -50,12 +50,12 @@ namespace CreateJS
 
 /* -------------------------------------------------- Class Decl */
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     class FeatureDocumentHandler : public DocumentHandler 
     {
     public:
-        FeatureDocumentHandler(CreateJS::FeatureMatrix *pFeatureMat);
+        FeatureDocumentHandler(JiboPixiJS::FeatureMatrix *pFeatureMat);
         
         virtual void characters(const XMLCh* const chars, const XMLSize_t length) {}
         virtual void startDocument() {}
@@ -68,7 +68,7 @@ namespace CreateJS
         virtual void endElement(const XMLCh* const name);
 
     private:
-        CreateJS::FeatureMatrix *m_pFeatureMat;
+        JiboPixiJS::FeatureMatrix *m_pFeatureMat;
     };
 }
 

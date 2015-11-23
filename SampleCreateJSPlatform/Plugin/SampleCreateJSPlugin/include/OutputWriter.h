@@ -26,21 +26,23 @@
 #define OUTPUT_WRITER_H_
 
 #include "IOutputWriter.h"
+#include "Utils.h"
 #include <string>
+#include <vector>
 #include <map>
 
 /* -------------------------------------------------- Forward Decl */
 
 class JSONNode;
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     class ITimelineWriter;
 }
 
 /* -------------------------------------------------- Enums */
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     enum StrokeStyleType
     {
@@ -58,7 +60,7 @@ namespace CreateJS
 
 /* -------------------------------------------------- Structs / Unions */
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     struct SOLID_STROKE_STYLE
     {
@@ -78,12 +80,18 @@ namespace CreateJS
             SOLID_STROKE_STYLE solidStrokeStyle;
         };
     };
+
+    struct MaskInfo
+    {
+        FCM::U_Int32 objectId;
+        FCM::U_Int32 maskTillObjectId;
+    };
 }
 
 
 /* -------------------------------------------------- Class Decl */
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     class JSONOutputWriter : public IOutputWriter
     {
@@ -205,19 +213,40 @@ namespace CreateJS
             const std::string& libPathName,
             DOM::LibraryItem::PIMediaItem pMediaItem);
 
-        // Define text
-        virtual FCM::Result DefineText(
+        // Start of a classic text definition
+        virtual FCM::Result StartDefineClassicText(
             FCM::U_Int32 resId, 
-            const std::string& name, 
-            const DOM::Utils::COLOR& color,
-            const std::string& displayText, 
-            DOM::FrameElement::PIClassicText pTextItem);
+            const DOM::FrameElement::AA_MODE_PROP& aaModeProp,
+            const std::string& displayText,
+            const TEXT_BEHAVIOUR& textBehaviour);
+
+        // Start paragraph
+        virtual FCM::Result StartDefineParagraph(
+            FCM::U_Int32 startIndex,
+            FCM::U_Int32 length,
+            const DOM::FrameElement::PARAGRAPH_STYLE& paragraphStyle);
+
+        // Start text run
+        virtual FCM::Result StartDefineTextRun(
+            FCM::U_Int32 startIndex,
+            FCM::U_Int32 length,
+            const TEXT_STYLE& textStyle);
+
+        // End of a text run
+        virtual FCM::Result EndDefineTextRun();
+
+        // End of a paragraph
+        virtual FCM::Result EndDefineParagraph();
+
+        // End of a classic text definition
+        virtual FCM::Result EndDefineClassicText();
 
         virtual FCM::Result DefineSound(
             FCM::U_Int32 resId, 
             const std::string& libPathName,
             DOM::LibraryItem::PIMediaItem pMediaItem);
-        JSONOutputWriter(FCM::PIFCMCallback pCallback);
+
+        JSONOutputWriter(FCM::PIFCMCallback pCallback, bool minify, DataPrecision dataPrecision);
 
         virtual ~JSONOutputWriter();
 
@@ -257,6 +286,14 @@ namespace CreateJS
 
         JSONNode*   m_pathElem;
 
+        JSONNode*  m_pTextElem;
+
+        JSONNode*  m_pTextParaArray;
+
+        JSONNode*  m_pTextPara;
+
+        JSONNode*  m_pTextRunArray;
+
         JSONNode*   m_gradientColor;
 
         JSONNode*   m_stopPointArray;
@@ -290,6 +327,10 @@ namespace CreateJS
         FCM::Boolean m_imageFolderCreated;
         
         FCM::Boolean m_soundFolderCreated;
+
+        FCM::Boolean m_minify;
+
+        DataPrecision m_dataPrecision;
     };
 
 
@@ -302,7 +343,16 @@ namespace CreateJS
             FCM::U_Int32 objectId,
             FCM::U_Int32 placeAfterObjectId,
             const DOM::Utils::MATRIX2D* pMatrix,
-            FCM::PIFCMUnknown pUnknown = NULL);
+            const DOM::Utils::RECT* pRect = NULL);
+
+        virtual FCM::Result PlaceObject(
+            FCM::U_Int32 resId,
+            FCM::U_Int32 objectId,
+            FCM::U_Int32 placeAfterObjectId,
+            const DOM::Utils::MATRIX2D* pMatrix,
+            FCM::Boolean loop,
+            FCM::PIFCMUnknown pUnknown);
+
         virtual FCM::Result PlaceObject(
             FCM::U_Int32 resId,
             FCM::U_Int32 objectId,
@@ -347,13 +397,23 @@ namespace CreateJS
 
         virtual FCM::Result SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType);
 
-        JSONTimelineWriter(FCM::PIFCMCallback pCallback);
+        JSONTimelineWriter(FCM::PIFCMCallback pCallback, DataPrecision dataPrecision);
 
         virtual ~JSONTimelineWriter();
 
         const JSONNode* GetRoot();
 
         void Finish(FCM::U_Int32 resId, FCM::StringRep16 pName);
+
+
+    private:
+
+        FCM::Result DeferUpdateMasks();
+
+        FCM::Result DeferUpdateMask(
+            FCM::U_Int32 objectId,
+            FCM::U_Int32 maskTillObjectId);
+
 
     private:
 
@@ -365,7 +425,13 @@ namespace CreateJS
 
         JSONNode* m_pFrameElement;
 
+        std::vector<MaskInfo> maskInfoList;
+
         FCM::PIFCMCallback m_pCallback;
+
+        FCM::U_Int32 m_FrameCount;
+
+        DataPrecision m_dataPrecision;
     };
 };
 
