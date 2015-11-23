@@ -426,7 +426,6 @@ UpdateColorTransformCommand.prototype.execute = function(timelineAnimator, resou
 		{
 			if(parentMC.children[index].id == parseInt(this.m_objectID))
 			{
-				//debugger;
 				var child = parentMC.getChildAt(index);
 				var matrix = this.m_colorMatrix.split(',', 7);
 				child.alpha = matrix[6]; //currently only alpha
