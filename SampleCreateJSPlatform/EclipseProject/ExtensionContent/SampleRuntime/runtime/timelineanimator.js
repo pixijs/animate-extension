@@ -168,6 +168,10 @@ TimelineAnimator.prototype.play = function(resourceManager)
 			    command = new UpdateVisibilityCommand(cmdData.objectId, cmdData.visibility);
 			    commandList.push(command);
 			break;
+			case "UpdateColorTransform":
+				command = new UpdateColorTransformCommand(cmdData.objectId , cmdData.colorMatrix);
+				commandList.push(command);
+			break;
 		}
 	}
 
@@ -404,4 +408,30 @@ UpdateVisibilityCommand.prototype.execute = function(timelineAnimator, resourceM
 			}				
 		}		
 	}	
+}
+
+var UpdateColorTransformCommand = function (objectID, colorMatrix)
+{
+	this.m_objectID = objectID;
+	this.m_colorMatrix = colorMatrix;
+};
+
+UpdateColorTransformCommand.prototype.execute = function(timelineAnimator, resourceManager)
+{
+	console.log("UpdateColorTransformCommand execute");
+	var parentMC = timelineAnimator.m_targetMC;
+	if(parentMC != undefined)
+	{
+		for(var index=0; index < parentMC.children.length; index++)
+		{
+			if(parentMC.children[index].id == parseInt(this.m_objectID))
+			{
+				//debugger;
+				var child = parentMC.getChildAt(index);
+				var matrix = this.m_colorMatrix.split(',', 7);
+				child.alpha = matrix[6]; //currently only alpha
+				break;
+			}
+		}
+	}
 }
