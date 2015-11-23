@@ -92,11 +92,11 @@
 		"9af15e97-f1a1-37db-bcf9-fba2786df1c4" /* JSONWriter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONWriter.cpp; sourceTree = "<group>"; };
 		"9bbfd7be-ac57-384d-984e-1afc2e0ed3b2" /* JSONIterators.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONIterators.cpp; sourceTree = "<group>"; };
 		"9f0688c3-3f04-3a69-a219-c79da92040db" /* Main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Main.cpp; sourceTree = "<group>"; };
-		F540544A0950B01B00D1FC3F /* SampleCreateJSPlugin.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SampleCreateJSPlugin.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		F540544A0950B01B00D1FC3F /* JiboPixiJSPlugin.fcm.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JiboPixiJSPlugin.fcm.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5977F0C09B7D3B80058A43E /* project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = project.xcconfig; sourceTree = "<group>"; };
 		F5977F0F09B7D4150058A43E /* project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = project_debug.xcconfig; sourceTree = "<group>"; };
 		F5977F1109B7D41E0058A43E /* project_release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = project_release.xcconfig; sourceTree = "<group>"; };
-		F5D357480948EC91008C36CA /* SampleCreateJSPlugin.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SampleCreateJSPlugin.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5D357480948EC91008C36CA /* JiboPixiJSPlugin.fcm.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JiboPixiJSPlugin.fcm.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		"a2b84e18-8788-39bf-9148-f0dbf764f142" /* Publisher.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Publisher.cpp; sourceTree = "<group>"; };
 		"a47eaabc-0062-3299-b91c-06037678b948" /* internalJSONNode.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = internalJSONNode.cpp; sourceTree = "<group>"; };
 		"b99462ab-58d9-3727-aa4b-b3246166a611" /* OutputWriter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = OutputWriter.cpp; sourceTree = "<group>"; };
@@ -206,8 +206,8 @@
 		F5D357400948EBCB008C36CA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F540544A0950B01B00D1FC3F /* SampleCreateJSPlugin.plugin */,
-				F5D357480948EC91008C36CA /* SampleCreateJSPlugin.plugin */,
+				F540544A0950B01B00D1FC3F /* JiboPixiJSPlugin.fcm.plugin */,
+				F5D357480948EC91008C36CA /* JiboPixiJSPlugin.fcm.plugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -291,7 +291,7 @@
 			);
 			name = SampleCreateJSPlugin.Debug;
 			productName = Debug;
-			productReference = F540544A0950B01B00D1FC3F /* SampleCreateJSPlugin.plugin */;
+			productReference = F540544A0950B01B00D1FC3F /* JiboPixiJSPlugin.fcm.plugin */;
 			productType = "com.apple.product-type.bundle";
 		};
 		"6df6e65a-e184-31e8-ab40-d210674741f0" /* SampleCreateJSPlugin.Release */ = {
@@ -310,7 +310,7 @@
 			);
 			name = SampleCreateJSPlugin.Release;
 			productName = Release;
-			productReference = F5D357480948EC91008C36CA /* SampleCreateJSPlugin.plugin */;
+			productReference = F5D357480948EC91008C36CA /* JiboPixiJSPlugin.fcm.plugin */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -472,6 +472,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F5977F0F09B7D4150058A43E /* project_debug.xcconfig */;
 			buildSettings = {
+				DVA_BUNDLE_IDENTIFIER = JiboPixiJSPlugin.fcm.plugin;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"../mac-xcode",
@@ -487,6 +488,7 @@
 					../../include,
 				);
 				LIBRARY_SEARCH_PATHS = "../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+				PRODUCT_NAME = JiboPixiJSPlugin;
 			};
 			name = Default;
 		};
@@ -516,6 +518,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F5977F1109B7D41E0058A43E /* project_release.xcconfig */;
 			buildSettings = {
+				DVA_BUNDLE_IDENTIFIER = JiboPixiJSPlugin.fcm.plugin;
+				DVA_PRODUCT_NAME = "Jibo PixiJS Plugin";
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"../mac-xcode",
@@ -531,6 +535,7 @@
 					../../include,
 				);
 				LIBRARY_SEARCH_PATHS = "../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+				PRODUCT_NAME = JiboPixiJSPlugin;
 			};
 			name = Default;
 		};

@@ -76,7 +76,7 @@
 #include <algorithm>
 #include "PluginConfiguration.h"
 
-namespace CreateJS
+namespace JiboPixiJS
 {
 
     /* ----------------------------------------------------- CPublisher */
@@ -128,7 +128,7 @@ namespace CreateJS
 
         Init();
 
-        pCalloc = CreateJS::Utils::GetCallocService(GetCallback());
+        pCalloc = JiboPixiJS::Utils::GetCallocService(GetCallback());
         ASSERT(pCalloc.m_Ptr != NULL);
 
         res = pFlaDocument->GetTypeId(guid);
@@ -191,8 +191,41 @@ namespace CreateJS
         FCM::FCMListPtr pTimelineList;
         FCM::U_Int32 timelineCount;
 
+        // Read the minify option from the publish settings
+        {
+            std::string str;
+            m_minify = true;
+            Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_MINIFY_KEY, str);
+            if (!str.empty())
+            {
+                m_minify = Utils::ToBool(str);
+            }
+        }
+
+        // Read the precision option from the publish settings
+        DataPrecision precision = PRECISION_3;
+        {
+            std::string str;
+
+            Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_COMPACT_DATA_KEY, str);
+            if (!str.empty())
+            {
+                bool isCompactData = Utils::ToBool(str);
+                if (isCompactData)
+                {
+                    Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_COMPACT_DATA_OPT_KEY, str);
+                    precision = Utils::ToPrecision(str);
+                }
+                else
+                {
+                    // User does not want to compact data. Use highest precision.
+                    precision = PRECISION_6;
+                }
+            }
+        }
+
         // Create a output writer
-        std::auto_ptr<IOutputWriter> pOutputWriter(new JSONOutputWriter(GetCallback()));
+        std::auto_ptr<IOutputWriter> pOutputWriter(new JSONOutputWriter(GetCallback(), m_minify, precision));
         if (pOutputWriter.get() == NULL)
         {
             return FCM_MEM_NOT_AVAILABLE;
@@ -213,7 +246,7 @@ namespace CreateJS
         }
 
         (static_cast<TimelineBuilderFactory*>(pTimelineBuilderFactory.m_Ptr))->Init(
-            pOutputWriter.get());
+            pOutputWriter.get(), precision);
 
         ResourcePalette* pResPalette = static_cast<ResourcePalette*>(m_pResourcePalette.m_Ptr);
         pResPalette->Clear();
@@ -352,6 +385,9 @@ namespace CreateJS
             res = pOutputWriter->EndOutput();
             ASSERT(FCM_SUCCESS_CODE(res));
         }
+        
+        // Stop preview
+        StopPreview();
 
 #ifdef USE_RUNTIME
 
@@ -365,7 +401,7 @@ namespace CreateJS
 #endif
         if (IsPreviewNeeded(pDictConfig))
         {
-            ShowPreview(outFile);
+            StartPreview(outFile);
         }
 
 #endif
@@ -395,102 +431,79 @@ namespace CreateJS
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
         FCM::AutoPtr<FCM::IFCMCalloc> pCalloc;
 
-        pCalloc = CreateJS::Utils::GetCallocService(GetCallback());
+        pCalloc = JiboPixiJS::Utils::GetCallocService(GetCallback());
         ASSERT(pCalloc.m_Ptr != NULL);
 
         // Read the output file name from the publish settings
-        ReadString(pDictPublishSettings, (FCM::StringRep8)"out_file", outFile);
+        Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_OUT_FILE_KEY, outFile);
         if (outFile.empty())
         {
             FCM::StringRep16 path;
+            std::string filePath;
+            std::string parent;
+            std::string ext;
 
             res = pFlaDocument->GetPath(&path);
             ASSERT(FCM_SUCCESS_CODE(res));
 
             if (path)
             {
-                std::string parent;
-                std::string ext;
-                std::string filePath = Utils::ToString(path, GetCallback());
-
+                filePath = Utils::ToString(path, GetCallback());
                 Utils::GetFileNameWithoutExtension(filePath, outFile);
-
-                if (pTimeline)
-                {
-                    FCM::StringRep16 pSceneName;
-                    std::string sceneName;
-
-                    res = pTimeline->GetName(&pSceneName);
-                    ASSERT(FCM_SUCCESS_CODE(res));
-
-                    sceneName = Utils::ToString(pSceneName, GetCallback());
-
-                    outFile += "_";
-                    outFile += sceneName;
-                }
-
-                outFile += ".";
-                outFile += OUTPUT_FILE_EXTENSION;
-
-                Utils::GetFileExtension(filePath, ext);
-                
-                // Convert the extension to lower case and then compare
-                std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-                if (ext.compare("xfl") == 0)
-                {
-                    std::string immParent;
-                    Utils::GetParent(filePath, immParent);
-                    Utils::GetParent(immParent, parent);
-                }
-                else
-                {
-                    // FLA
-                    Utils::GetParent(filePath, parent);
-                }
-
-                // Extract the extension and append output file extension.
-                outFile = parent + outFile;
-
-                pCalloc->Free(path);
-
-                res = FCM_SUCCESS;
             }
             else
             {
-                res = FCM_INVALID_PARAM;
+                res = Utils::GetAppTempDir(GetCallback(), filePath);
+                if (!FCM_SUCCESS_CODE(res))
+                {
+                    return FCM_INVALID_PARAM;
+                }
+                outFile = "Untitled";
+                outFile += Utils::ToString(rand() % 65536);
+                filePath += "Untitled.fla";
             }
+
+            if (pTimeline)
+            {
+                FCM::StringRep16 pSceneName;
+                std::string sceneName;
+
+                res = pTimeline->GetName(&pSceneName);
+                ASSERT(FCM_SUCCESS_CODE(res));
+
+                sceneName = Utils::ToString(pSceneName, GetCallback());
+
+                outFile += "_";
+                outFile += sceneName;
+            }
+
+            outFile += ".";
+            outFile += OUTPUT_FILE_EXTENSION;
+
+            Utils::GetFileExtension(filePath, ext);
+                
+            // Convert the extension to lower case and then compare
+            std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+            if (ext.compare("xfl") == 0)
+            {
+                std::string immParent;
+                Utils::GetParent(filePath, immParent);
+                Utils::GetParent(immParent, parent);
+            }
+            else
+            {
+                // FLA
+                Utils::GetParent(filePath, parent);
+            }
+
+            // Extract the extension and append output file extension.
+            outFile = parent + outFile;
+
+            pCalloc->Free(path);
+
         }
 
         return res;
-    }
-
-
-    bool CPublisher::ReadString(
-        const FCM::PIFCMDictionary pDict,
-        FCM::StringRep8 key, 
-        std::string &retString)
-    {
-        FCM::U_Int32 valueLen;
-        FCM::FCMDictRecTypeID type;
-
-        FCM::Result res = pDict->GetInfo(key, type, valueLen);
-        if (FCM_FAILURE_CODE(res))
-        {
-            return false;
-        }
-
-        FCM::StringRep8 strValue = new char[valueLen];
-        res = pDict->Get(key, type, (FCM::PVoid)strValue, valueLen);
-        if (FCM_FAILURE_CODE(res))
-        {
-            delete [] strValue;
-            return false;
-        }
-
-        retString = strValue;
-
-        delete [] strValue;
-        return true;
     }
 
 
@@ -500,7 +513,7 @@ namespace CreateJS
         std::string previewNeeded;
         FCM::Boolean res;
 
-        found = ReadString(pDictConfig, (FCM::StringRep8)kPublishSettingsKey_PreviewNeeded, previewNeeded);
+        found = Utils::ReadString(pDictConfig, (FCM::StringRep8)kPublishSettingsKey_PreviewNeeded, previewNeeded);
 
         res = true;
         if (found)
@@ -516,9 +529,29 @@ namespace CreateJS
         }
         return res;
     }
+    
+    FCM::Result CPublisher::StopPreview()
+    {
+        FCM::Result res = FCM_SUCCESS;
+        
+#ifdef USE_HTTP_SERVER
+
+        HTTPServer* server;
+        
+        server = HTTPServer::GetInstance();
+        if (server)
+        {
+            // Stop the web server just in case it is running
+            server->Stop();
+        }
+        
+#endif // USE_HTTP_SERVER
+        
+        return res;
+    }
 
 
-    FCM::Result CPublisher::ShowPreview(const std::string& outFile)
+    FCM::Result CPublisher::StartPreview(const std::string& outFile)
     {
         FCM::Result res = FCM_SUCCESS;
 
@@ -532,11 +565,6 @@ namespace CreateJS
         Utils::GetFileName(outFile, fileName);
 
         server = HTTPServer::GetInstance();
-        if (server)
-        {
-            // Stop the web server just in case it is running
-            server->Stop();
-        }
 
         int numTries = 0;
         while (numTries < MAX_RETRY_ATTEMPT)
@@ -710,11 +738,55 @@ namespace CreateJS
         Utils::GetParent(sourceFolder, sourceFolder);
 
         // First let us remove the existing runtime folder (if any)
-        Utils::Remove(outputFolder + RUNTIME_FOLDER_NAME, GetCallback());
+        Utils::Remove(outputFolder + RUNTIME_ROOT_FOLDER_NAME, GetCallback());
 
+        // Jibo (mlb) -- the following code is copied from the SVG Animator plugin example from adobe.
+        // The project structure is much different than the createJS example which is what we copied from originally.
+        // Eventually the project structure will likely be much different but this may be a good reference for how the SVG Animator did things.
+        #if 0
+            if (m_minify)
+            {
+                // Copy the minified runtime
+                std::string srcFolder = sourceFolder + RUNTIME_ROOT_FOLDER_NAME + "/" + 
+                    RUNTIME_COMMON_SUBFOLDER_NAME + "/";
+
+                std::string srcFilePath = srcFolder + RUNTIME_MINIFIED_FILE_NAME;
+                std::string dstFileFolder = outputFolder + RUNTIME_ROOT_FOLDER_NAME + "/";
+
+                Utils::CreateDir(dstFileFolder, GetCallback());
+
+                dstFileFolder += RUNTIME_COMMON_SUBFOLDER_NAME;
+                dstFileFolder += "/";
+                Utils::CreateDir(dstFileFolder, GetCallback());
+
+                std::string dstFilePath = dstFileFolder + RUNTIME_MINIFIED_FILE_NAME;
+
+                res = Utils::CopyAFile(srcFilePath, dstFilePath, GetCallback());
+
+                // Copy the snap.svg library
+                srcFilePath = srcFolder + THIRD_PARTY_SUBFOLDER_NAME + "/" + SNAP_SVG_SUBFOLDER_NAME + "/" + 
+                    SNAP_SVG_MINIFIED_LIB_FILE_NAME;
+
+                dstFileFolder = dstFileFolder + THIRD_PARTY_SUBFOLDER_NAME + "/";
+                Utils::CreateDir(dstFileFolder, GetCallback());
+
+                dstFileFolder = dstFileFolder + SNAP_SVG_SUBFOLDER_NAME + "/";
+                Utils::CreateDir(dstFileFolder, GetCallback());
+
+                dstFilePath = dstFileFolder + SNAP_SVG_MINIFIED_LIB_FILE_NAME;
+                res = Utils::CopyAFile(srcFilePath, dstFilePath, GetCallback());
+            }
+            else
+            {
+                // Copy the runtime folder
+                res = Utils::CopyDir(sourceFolder + RUNTIME_ROOT_FOLDER_NAME, outputFolder, GetCallback());
+            }
+        #endif
+
+        // Jibo (mlb) - the following is how the createJS adobe example did things. we may want to investigate the minifying functionality at some point in the future.
         // Copy the runtime folder
-        res = Utils::CopyDir(sourceFolder + RUNTIME_FOLDER_NAME, outputFolder, GetCallback());
-
+        res = Utils::CopyDir(sourceFolder + RUNTIME_ROOT_FOLDER_NAME, outputFolder, GetCallback());
+        
         return res;
     }
 
@@ -872,78 +944,116 @@ namespace CreateJS
 
     FCM::Result ResourcePalette::AddClassicText(FCM::U_Int32 resourceId, DOM::FrameElement::PIClassicText pClassicText)
     {
-        DOM::AutoPtr<DOM::FrameElement::IClassicText> pTextItem;
-        FCMListPtr pParagraphsList;
-        FCM::StringRep16 textDisplay;
-        FCM::U_Int32 count = 0;
-        FCM::U_Int16 fontSize;
-        std::string fName; 
-        std::string displayText; 
-        DOM::Utils::COLOR fontColor;
         FCM::Result res;
-     
-        LOG(("[DefineClassicText] ResId: %d\n", resourceId));
+        DOM::AutoPtr<DOM::FrameElement::IClassicText> pTextItem;
+        FCM::StringRep16 textDisplay;
+        std::string displayText;
+        TEXT_BEHAVIOUR textBehaviour;
+        FCMListPtr pParagraphsList;
+        DOM::AutoPtr<DOM::FrameElement::ITextBehaviour> pTextBehaviour;
+        DOM::FrameElement::AA_MODE_PROP aaModeProp;
+        FCM::U_Int32 paraCount;
 
-        m_resourceList.push_back(resourceId);
+        ASSERT(pClassicText);
 
         pTextItem = pClassicText;
-        AutoPtr<DOM::FrameElement::ITextBehaviour> textBehaviour;
-        pTextItem->GetTextBehaviour(textBehaviour.m_Ptr);
-        AutoPtr<DOM::FrameElement::IDynamicTextBehaviour> dynamicTextBehaviour = textBehaviour.m_Ptr;
 
-        if(dynamicTextBehaviour)
+        res = pTextItem->GetText(&textDisplay);
+        ASSERT(FCM_SUCCESS_CODE(res));
+        displayText = Utils::ToString(textDisplay, GetCallback());
+
+        res = pTextItem->GetAntiAliasModeProp(aaModeProp);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        res = pTextItem->GetTextBehaviour(pTextBehaviour.m_Ptr);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        res = GetTextBehaviour(pTextBehaviour, textBehaviour);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        // Start define text
+        res = m_pOutputWriter->StartDefineClassicText(resourceId, aaModeProp, displayText, textBehaviour);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        res = pTextItem->GetParagraphs(pParagraphsList.m_Ptr);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        res = pParagraphsList->Count(paraCount);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        for (FCM::U_Int32 para = 0; para < paraCount; para++)
         {
-            pTextItem->GetParagraphs(pParagraphsList.m_Ptr);
-            res = pParagraphsList->Count(count);
-            ASSERT(FCM_SUCCESS_CODE(res));
-
-            res = pTextItem->GetText(&textDisplay);
-            ASSERT(FCM_SUCCESS_CODE(res));
-            displayText = Utils::ToString(textDisplay, GetCallback());
-
-            // Free the textDisplay
-            FCM::AutoPtr<FCM::IFCMUnknown> pUnkCalloc;
-            res = GetCallback()->GetService(SRVCID_Core_Memory, pUnkCalloc.m_Ptr);
-            AutoPtr<FCM::IFCMCalloc> callocService = pUnkCalloc;
-
-            callocService->Free((FCM::PVoid)textDisplay);
-        }
-    
-        for (FCM::U_Int32 pIndex = 0; pIndex < count; pIndex++)
-        {
-            AutoPtr<DOM::FrameElement::IParagraph> pParagraph = pParagraphsList[pIndex];
+            AutoPtr<DOM::FrameElement::IParagraph> pParagraph = pParagraphsList[para];
 
             if (pParagraph)
             {
                 FCMListPtr pTextRunList;
-                pParagraph->GetTextRuns(pTextRunList.m_Ptr);
+                FCM::U_Int32 runCount;
+                FCM::U_Int32 paraStartIndex;
+                FCM::U_Int32 paraLength;
+                DOM::FrameElement::PARAGRAPH_STYLE paragraphStyle;
 
-                FCM::U_Int32 trCount;
-                pTextRunList->Count(trCount);
+                // Start Paragraph - startIndex, length, paragraphStyle
+                res = pParagraph->GetStartIndex(paraStartIndex);
+                ASSERT(FCM_SUCCESS_CODE(res));
 
-                for (FCM::U_Int32 trIndex = 0; trIndex < trCount; trIndex++)
+                res = pParagraph->GetLength(paraLength);
+                ASSERT(FCM_SUCCESS_CODE(res));
+
+                paragraphStyle.structSize = sizeof(DOM::FrameElement::PARAGRAPH_STYLE);
+                res = pParagraph->GetParagraphStyle(paragraphStyle);
+                ASSERT(FCM_SUCCESS_CODE(res));
+
+                res = m_pOutputWriter->StartDefineParagraph(paraStartIndex, paraLength, paragraphStyle);
+                ASSERT(FCM_SUCCESS_CODE(res));
+
+                res = pParagraph->GetTextRuns(pTextRunList.m_Ptr);
+                ASSERT(FCM_SUCCESS_CODE(res));
+
+                res = pTextRunList->Count(runCount);
+                ASSERT(FCM_SUCCESS_CODE(res));
+
+                for (FCM::U_Int32 trIndex = 0; trIndex < runCount; trIndex++)
                 {
+                    FCM::U_Int32 runStartIndex;
+                    FCM::U_Int32 runLength;
                     AutoPtr<DOM::FrameElement::ITextRun> pTextRun = pTextRunList[trIndex];
-                    AutoPtr<DOM::FrameElement::ITextStyle> trStyle;
+                    AutoPtr<DOM::FrameElement::ITextStyle> runStyle;
+                    TEXT_STYLE textStyle;
 
-                    pTextRun->GetTextStyle(trStyle.m_Ptr);
-                    
-                    res = trStyle->GetFontSize(fontSize);
+                    // Start text run - startIndex, length, textStyle
+                    res = pTextRun->GetStartIndex(runStartIndex);
                     ASSERT(FCM_SUCCESS_CODE(res));
 
-                    res = trStyle->GetFontColor(fontColor);
+                    res = pTextRun->GetLength(runLength);
                     ASSERT(FCM_SUCCESS_CODE(res));
 
-                    // Form font info in required format
-                    GetFontInfo(trStyle, fName, fontSize);
+                    res = pTextRun->GetTextStyle(runStyle.m_Ptr);
+                    ASSERT(FCM_SUCCESS_CODE(res));
+
+                    // Extract text style 
+                    res = GetTextStyle(runStyle, textStyle);
+                    ASSERT(FCM_SUCCESS_CODE(res));
+
+                    res = m_pOutputWriter->StartDefineTextRun(runStartIndex, runLength, textStyle);
+                    ASSERT(FCM_SUCCESS_CODE(res));
+
+                    // End text run
+                    res = m_pOutputWriter->EndDefineTextRun();
+                    ASSERT(FCM_SUCCESS_CODE(res));
                 }
+
+                // End Paragraph
+                res = m_pOutputWriter->EndDefineParagraph();
+                ASSERT(FCM_SUCCESS_CODE(res));
             }
         }
-    
-        //Define Text Element
-        res = m_pOutputWriter->DefineText(resourceId, fName, fontColor,displayText,pTextItem);
 
-        return FCM_SUCCESS;
+        // End define text
+        res = m_pOutputWriter->EndDefineClassicText();
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        return res;
     }
 
 
@@ -1574,44 +1684,153 @@ namespace CreateJS
     }
 
 
-    FCM::Result ResourcePalette::GetFontInfo(DOM::FrameElement::ITextStyle* pTextStyleItem, std::string& name, FCM::U_Int16 fontSize)
+    FCM::Result ResourcePalette::GetTextStyle(DOM::FrameElement::ITextStyle* pTextStyleItem, TEXT_STYLE& textStyle)
     {
         FCM::StringRep16 pFontName;
+        FCM::StringRep16 pLink;
+        FCM::StringRep16 pLinkTarget;
         FCM::StringRep8 pFontStyle;
         FCM::Result res;
-        std::string str;
-        std::string sizeStr;
-        std::string styleStr;
+
+        res = pTextStyleItem->GetBaseLineShiftStyle(textStyle.baseLineShiftStyle);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        res = pTextStyleItem->GetFontColor(textStyle.fontColor);
+        ASSERT(FCM_SUCCESS_CODE(res));
 
         res = pTextStyleItem->GetFontName(&pFontName);
+        ASSERT(FCM_SUCCESS_CODE(res));
+        textStyle.fontName = Utils::ToString(pFontName, GetCallback());
+
+        res = pTextStyleItem->GetFontSize(textStyle.fontSize);
         ASSERT(FCM_SUCCESS_CODE(res));
 
         res = pTextStyleItem->GetFontStyle(&pFontStyle);
         ASSERT(FCM_SUCCESS_CODE(res));
+        textStyle.fontStyle = Utils::ToString(pFontStyle);
 
-        styleStr = pFontStyle;
-        if(styleStr == "BoldItalicStyle")
-            styleStr = "italic bold";
-        else if(styleStr == "BoldStyle")
-            styleStr = "bold";
-        else if(styleStr == "ItalicStyle")
-            styleStr = "italic";
-        else if(styleStr == "RegularStyle")
-            styleStr = "";
+        res = pTextStyleItem->GetLetterSpacing(textStyle.letterSpacing);
+        ASSERT(FCM_SUCCESS_CODE(res));
 
-        sizeStr = Utils::ToString(fontSize);
-        str = Utils::ToString(pFontName,GetCallback());
-        name = styleStr+" "+sizeStr + "px" + " " + "'" + str + "'" ;
+        res = pTextStyleItem->GetLink(&pLink);
+        ASSERT(FCM_SUCCESS_CODE(res));
+        textStyle.link = Utils::ToString(pLink, GetCallback());
 
-        // Free the name and style
+        res = pTextStyleItem->GetLinkTarget(&pLinkTarget);
+        ASSERT(FCM_SUCCESS_CODE(res));
+        textStyle.linkTarget = Utils::ToString(pLinkTarget, GetCallback());
+
+        res = pTextStyleItem->IsAutoKernEnabled(textStyle.autoKern);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        res = pTextStyleItem->IsRotated(textStyle.rotated);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        // Cleanup
         FCM::AutoPtr<FCM::IFCMUnknown> pUnkCalloc;
         res = GetCallback()->GetService(SRVCID_Core_Memory, pUnkCalloc.m_Ptr);
         AutoPtr<FCM::IFCMCalloc> callocService  = pUnkCalloc;
 
         callocService->Free((FCM::PVoid)pFontName);
         callocService->Free((FCM::PVoid)pFontStyle);
-
+        callocService->Free((FCM::PVoid)pLink);
+        callocService->Free((FCM::PVoid)pLinkTarget);
+        
         return res;
+    }
+
+
+    FCM::Result ResourcePalette::GetTextBehaviour(DOM::FrameElement::ITextBehaviour* pTextBehaviour, TEXT_BEHAVIOUR& textBehaviour)
+    {
+        FCM::Result res;
+        FCM::AutoPtr<DOM::FrameElement::IStaticTextBehaviour> staticTextBehaviour;
+        FCM::AutoPtr<DOM::FrameElement::IModifiableTextBehaviour> modifiableTextBehaviour;
+        FCM::AutoPtr<DOM::FrameElement::IDynamicTextBehaviour> dynamicTextBehaviour;
+        FCM::AutoPtr<DOM::FrameElement::IInputTextBehaviour> inputTextBehaviour;
+
+        ASSERT(pTextBehaviour);
+
+        res = pTextBehaviour->IsSelectable(textBehaviour.selectable);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        staticTextBehaviour = pTextBehaviour;
+        if (staticTextBehaviour)
+        {
+            // Static text
+            textBehaviour.type = 0;
+
+            res = staticTextBehaviour->GetFlow(textBehaviour.u.staticText.flow);
+            ASSERT(FCM_SUCCESS_CODE(res));
+
+            res = staticTextBehaviour->GetOrientationMode(textBehaviour.u.staticText.orientationMode);
+            ASSERT(FCM_SUCCESS_CODE(res));
+
+            textBehaviour.name = "";
+        }
+        else
+        {
+            modifiableTextBehaviour = pTextBehaviour;
+            if (modifiableTextBehaviour)
+            {
+                FCM::StringRep16 pInstanceName;
+                DOM::FrameElement::LineMode lineMode;
+                FCM::Boolean renderAsHTML;
+                FCM::Boolean borderDrawn;
+                FCM::Boolean scrollable;
+
+                res = modifiableTextBehaviour->GetInstanceName(&pInstanceName);
+                ASSERT(FCM_SUCCESS_CODE(res));
+                textBehaviour.name = Utils::ToString(pInstanceName, GetCallback());
+
+                res = modifiableTextBehaviour->GetLineMode(lineMode);
+                ASSERT(FCM_SUCCESS_CODE(res));
+
+                res = modifiableTextBehaviour->GetRenderAsHtml(renderAsHTML);
+                ASSERT(FCM_SUCCESS_CODE(res));
+
+                res = modifiableTextBehaviour->IsBorderDrawn(borderDrawn);
+                ASSERT(FCM_SUCCESS_CODE(res));
+
+                res = modifiableTextBehaviour->IsScrollable(scrollable);
+                ASSERT(FCM_SUCCESS_CODE(res));
+
+                dynamicTextBehaviour = pTextBehaviour;
+                if (dynamicTextBehaviour)
+                {
+                    textBehaviour.type = 1;
+
+                    textBehaviour.u.dynamicText.borderDrawn = borderDrawn;
+                    textBehaviour.u.dynamicText.lineMode = lineMode;
+                    textBehaviour.u.dynamicText.renderAsHtml = renderAsHTML;
+                    textBehaviour.u.dynamicText.scrollable = scrollable;
+                }
+                else
+                {
+                    inputTextBehaviour = pTextBehaviour;
+                    if (inputTextBehaviour)
+                    {
+                        textBehaviour.type = 2;
+                    
+                        textBehaviour.u.inputText.borderDrawn = borderDrawn;
+                        textBehaviour.u.inputText.lineMode = lineMode;
+                        textBehaviour.u.inputText.renderAsHtml = renderAsHTML;
+                        textBehaviour.u.inputText.scrollable = scrollable;
+                        
+                        res = inputTextBehaviour->IsLineModePassword(textBehaviour.u.inputText.password);
+                        ASSERT(FCM_SUCCESS_CODE(res));
+                    }
+                }
+
+                // Cleanup
+                FCM::AutoPtr<FCM::IFCMUnknown> pUnkCalloc;
+                res = GetCallback()->GetService(SRVCID_Core_Memory, pUnkCalloc.m_Ptr);
+                AutoPtr<FCM::IFCMCalloc> callocService  = pUnkCalloc;
+
+                callocService->Free((FCM::PVoid)pInstanceName);
+            }
+        }
+
+        return FCM_SUCCESS;
     }
 
 
@@ -1646,25 +1865,24 @@ namespace CreateJS
         LOG(("[AddClassicText] ObjId: %d ResId: %d PlaceAfter: %d\n", 
             objectId, pClassicTextInfo->resourceId, pClassicTextInfo->placeAfterObjectId));
         
-        //To get the bounding rect of the text
-        if(pClassicTextInfo->structSize >= sizeof(DISPLAY_OBJECT_INFO_2))
+        ASSERT(pClassicTextInfo->structSize >= sizeof(DISPLAY_OBJECT_INFO_2))
+
+        DOM::Utils::RECT* pRect = NULL;
+        DISPLAY_OBJECT_INFO_2 *ptr = static_cast<DISPLAY_OBJECT_INFO_2*>(pClassicTextInfo);
+        if(ptr)
         {
-            DOM::Utils::RECT rect;
-            DISPLAY_OBJECT_INFO_2 *ptr = static_cast<DISPLAY_OBJECT_INFO_2*>(pClassicTextInfo);
-            if(ptr)
-            {
-                rect = ptr->bounds;
-                // This rect object gives the bound of the text filed.
-                // This will have to be transformed using the pClassicTextInfo->matrix
-                // to map it to its parent's co-orinate space to render it.
-            }
+            pRect = &ptr->bounds;
+            // This rect object gives the bound of the text field.
+            // This will have to be transformed using the pClassicTextInfo->matrix
+            // to map it to its parent's co-orinate space to render it.
         }
         
         res = m_pTimelineWriter->PlaceObject(
             pClassicTextInfo->resourceId, 
             objectId, 
             pClassicTextInfo->placeAfterObjectId, 
-            &pClassicTextInfo->matrix);
+            &pClassicTextInfo->matrix,
+            pRect);
 
         return res;
     }
@@ -1699,28 +1917,12 @@ namespace CreateJS
         LOG(("[AddMovieClip] ObjId: %d ResId: %d PlaceAfter: %d\n", 
             objectId, pMovieClipInfo->resourceId, pMovieClipInfo->placeAfterObjectId));
 
-        AutoPtr<DOM::FrameElement::IButton> pButton = pMovieClip;
-        if(pButton.m_Ptr)
-        {
-            DOM::FrameElement::ButtonTrackMode trackMode;
-            pButton->GetTrackingMode(trackMode);
-            if(trackMode == DOM::FrameElement::TRACK_AS_BUTTON)
-            {
-                LOG(("[AddMovieClip] ObjId: %d, is a button with TrackingMode set to TRACK_AS_BUTTON\n",
-                     objectId));
-                
-            }else
-            {
-                LOG(("[AddMovieClip] ObjId: %d, is a button with TrackingMode set to TRACK_AS_MENU_ITEM\n",
-                     objectId));
-            }
-        }
-        
         res = m_pTimelineWriter->PlaceObject(
             pMovieClipInfo->resourceId, 
             objectId, 
             pMovieClipInfo->placeAfterObjectId, 
             &pMovieClipInfo->matrix,
+            true,
             pUnknown);
 
         return res;
@@ -1740,7 +1942,9 @@ namespace CreateJS
             pGraphicInfo->resourceId, 
             objectId, 
             pGraphicInfo->placeAfterObjectId, 
-            &pGraphicInfo->matrix);
+            &pGraphicInfo->matrix,
+            false,
+            NULL);
 
         return res;
     }
@@ -1951,13 +2155,13 @@ namespace CreateJS
     {
     }
 
-    void TimelineBuilder::Init(IOutputWriter* pOutputWriter)
+    void TimelineBuilder::Init(IOutputWriter* pOutputWriter, DataPrecision precision)
     {
         m_pOutputWriter = pOutputWriter;
 
         m_pOutputWriter->StartDefineTimeline();
 
-        m_pTimelineWriter = new JSONTimelineWriter(GetCallback());
+        m_pTimelineWriter = new JSONTimelineWriter(GetCallback(), precision);
         ASSERT(m_pTimelineWriter);
     }
 
@@ -1977,14 +2181,15 @@ namespace CreateJS
 
         TimelineBuilder* pTimeline = static_cast<TimelineBuilder*>(pTimelineBuilder);
         
-        pTimeline->Init(m_pOutputWriter);
+        pTimeline->Init(m_pOutputWriter, m_dataPrecision);
 
         return res;
     }
 
-    void TimelineBuilderFactory::Init(IOutputWriter* pOutputWriter)
+    void TimelineBuilderFactory::Init(IOutputWriter* pOutputWriter, DataPrecision dataPrecision)
     {
         m_pOutputWriter = pOutputWriter;
+        m_dataPrecision = dataPrecision;
     }
 
     FCM::Result RegisterPublisher(PIFCMDictionary pPlugins, FCM::FCMCLSID docId)

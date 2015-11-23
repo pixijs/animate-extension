@@ -44,7 +44,7 @@
 #include "Windows.h"
 #endif
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     static const std::string moveTo = "M";
     static const std::string lineTo = "L";
@@ -132,23 +132,23 @@ namespace CreateJS
     {
         FCM::U_Int32 backColor;
 
-        m_HTMLOutput = new char[strlen(htmlOutput) + FILENAME_MAX + (11 * strlen(RUNTIME_FOLDER_NAME)) + 50];
+        m_HTMLOutput = new char[strlen(htmlOutput) + FILENAME_MAX + (11 * strlen(RUNTIME_ROOT_FOLDER_NAME)) + 50];
         if (m_HTMLOutput == NULL)
         {
             return FCM_MEM_NOT_AVAILABLE;
         }
 
         backColor = (background.red << 16) | (background.green << 8) | (background.blue);
-        sprintf(m_HTMLOutput, htmlOutput, 
-            RUNTIME_FOLDER_NAME,
-            RUNTIME_FOLDER_NAME,
-            RUNTIME_FOLDER_NAME,
-            RUNTIME_FOLDER_NAME,
-            RUNTIME_FOLDER_NAME,
-            RUNTIME_FOLDER_NAME,
-            RUNTIME_FOLDER_NAME,
+        sprintf(m_HTMLOutput, htmlOutput,
+            RUNTIME_ROOT_FOLDER_NAME,
+            RUNTIME_ROOT_FOLDER_NAME,
+            RUNTIME_ROOT_FOLDER_NAME,
+            RUNTIME_ROOT_FOLDER_NAME,
+            RUNTIME_ROOT_FOLDER_NAME,
+            RUNTIME_ROOT_FOLDER_NAME,
+            RUNTIME_ROOT_FOLDER_NAME,
             stageWidth, stageHeight, backColor,
-            RUNTIME_FOLDER_NAME,
+            RUNTIME_ROOT_FOLDER_NAME,
             m_outputJSONFileName.c_str(),
             fps);
 
@@ -171,7 +171,23 @@ namespace CreateJS
         JSONNode firstNode(JSON_NODE);
         firstNode.push_back(*m_pRootNode);
 
+        // Jibo (mlb) - disablign the minified stuff for right now.
+        #if 0
+            if (m_minify)
+            {
+                // Minify JSON
+                file << firstNode.write();
+            }
+            else
+            {
+                // Pretty printing of JSON
+                file << firstNode.write_formatted();
+            }
+        #endif
+        
+        // Pretty printing of JSON
         file << firstNode.write_formatted();
+        
         file.close();
 
         // Write the HTML file (overwrite file if it already exists)
@@ -223,7 +239,7 @@ namespace CreateJS
     // Marks the end of a shape
     FCM::Result JSONOutputWriter::EndDefineShape(FCM::U_Int32 resId)
     {
-        m_shapeElem->push_back(JSONNode(("charid"), CreateJS::Utils::ToString(resId)));
+        m_shapeElem->push_back(JSONNode(("charid"), JiboPixiJS::Utils::ToString(resId)));
         m_shapeElem->push_back(*m_pathArray);
 
         m_pShapeArray->push_back(*m_shapeElem);
@@ -251,7 +267,7 @@ namespace CreateJS
     FCM::Result JSONOutputWriter::DefineSolidFillStyle(const DOM::Utils::COLOR& color)
     {
         std::string colorStr = Utils::ToString(color);
-        std::string colorOpacityStr = CreateJS::Utils::ToString((double)(color.alpha / 255.0));
+        std::string colorOpacityStr = JiboPixiJS::Utils::ToString((float)(color.alpha / 255.0), m_dataPrecision);
 
         m_pathElem->push_back(JSONNode("color", colorStr.c_str()));
         m_pathElem->push_back(JSONNode("colorOpacity", colorOpacityStr.c_str()));
@@ -277,8 +293,8 @@ namespace CreateJS
 
         bitmapElem.set_name("image");
         
-        bitmapElem.push_back(JSONNode(("height"), CreateJS::Utils::ToString(height)));
-        bitmapElem.push_back(JSONNode(("width"), CreateJS::Utils::ToString(width)));
+        bitmapElem.push_back(JSONNode(("height"), JiboPixiJS::Utils::ToString(height)));
+        bitmapElem.push_back(JSONNode(("width"), JiboPixiJS::Utils::ToString(width)));
 
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
         std::string bitmapRelPath;
@@ -319,7 +335,7 @@ namespace CreateJS
             res = bitmapExportService->ExportToFile(pMediaItem, pFilePath, 100);
             ASSERT(FCM_SUCCESS_CODE(res));
 
-            pCalloc = CreateJS::Utils::GetCallocService(m_pCallback);
+            pCalloc = JiboPixiJS::Utils::GetCallocService(m_pCallback);
             ASSERT(pCalloc.m_Ptr != NULL);
 
             pCalloc->Free(pFilePath);
@@ -334,7 +350,7 @@ namespace CreateJS
         matrix1.d /= 20.0;
 
         bitmapElem.push_back(JSONNode(("patternUnits"), "userSpaceOnUse"));
-        bitmapElem.push_back(JSONNode(("patternTransform"), Utils::ToString(matrix1).c_str()));
+        bitmapElem.push_back(JSONNode(("patternTransform"), Utils::ToString(matrix1, m_dataPrecision).c_str()));
 
         m_pathElem->push_back(bitmapElem);
 
@@ -357,15 +373,15 @@ namespace CreateJS
         point.y = 0;
         Utils::TransformPoint(matrix, point, point);
 
-        m_gradientColor->push_back(JSONNode("x1", Utils::ToString((double) (point.x))));
-        m_gradientColor->push_back(JSONNode("y1", Utils::ToString((double) (point.y))));
+        m_gradientColor->push_back(JSONNode("x1", Utils::ToString(point.x, m_dataPrecision)));
+        m_gradientColor->push_back(JSONNode("y1", Utils::ToString(point.y, m_dataPrecision)));
 
         point.x = GRADIENT_VECTOR_CONSTANT / 20;
         point.y = 0;
         Utils::TransformPoint(matrix, point, point);
 
-        m_gradientColor->push_back(JSONNode("x2", Utils::ToString((double) (point.x))));
-        m_gradientColor->push_back(JSONNode("y2", Utils::ToString((double) (point.y))));
+        m_gradientColor->push_back(JSONNode("x2", Utils::ToString(point.x, m_dataPrecision)));
+        m_gradientColor->push_back(JSONNode("y2", Utils::ToString(point.y, m_dataPrecision)));
 
         m_gradientColor->push_back(JSONNode("spreadMethod", Utils::ToString(spread)));
 
@@ -386,9 +402,9 @@ namespace CreateJS
         
         offset = (float)((colorPoint.pos * 100) / 255.0);
 
-        stopEntry.push_back(JSONNode("offset", Utils::ToString((double) offset)));
+        stopEntry.push_back(JSONNode("offset", Utils::ToString(offset, m_dataPrecision)));
         stopEntry.push_back(JSONNode("stopColor", Utils::ToString(colorPoint.color)));
-        stopEntry.push_back(JSONNode("stopOpacity", Utils::ToString((double)(colorPoint.color.alpha / 255.0))));
+        stopEntry.push_back(JSONNode("stopOpacity", Utils::ToString((colorPoint.color.alpha / 255.0), m_dataPrecision)));
 
         m_stopPointArray->push_back(stopEntry);
 
@@ -436,15 +452,15 @@ namespace CreateJS
         FCM::Float r = sqrt(xd * xd + yd * yd);
 
         FCM::Float angle = atan2(yd, xd);
-        double focusPointRatio = focalPoint / 255.0;
-        double fx = -r * focusPointRatio * cos(angle);
-        double fy = -r * focusPointRatio * sin(angle);
+        float focusPointRatio = focalPoint / (float)255.0;
+        float fx = -r * focusPointRatio * cos(angle);
+        float fy = -r * focusPointRatio * sin(angle);
 
         m_gradientColor->push_back(JSONNode("cx", "0"));
         m_gradientColor->push_back(JSONNode("cy", "0"));
-        m_gradientColor->push_back(JSONNode("r", Utils::ToString((double) r)));
-        m_gradientColor->push_back(JSONNode("fx", Utils::ToString((double) fx)));
-        m_gradientColor->push_back(JSONNode("fy", Utils::ToString((double) fy)));
+        m_gradientColor->push_back(JSONNode("r", Utils::ToString((float) r, m_dataPrecision)));
+        m_gradientColor->push_back(JSONNode("fx", Utils::ToString((float) fx, m_dataPrecision)));
+        m_gradientColor->push_back(JSONNode("fy", Utils::ToString((float) fy, m_dataPrecision)));
 
         FCM::Float scaleFactor = (GRADIENT_VECTOR_CONSTANT / 20) / r;
         DOM::Utils::MATRIX2D matrix1 = {};
@@ -455,7 +471,7 @@ namespace CreateJS
         matrix1.tx = matrix.tx;
         matrix1.ty = matrix.ty;
 
-        m_gradientColor->push_back(JSONNode("gradientTransform", Utils::ToString(matrix1)));
+        m_gradientColor->push_back(JSONNode("gradientTransform", Utils::ToString(matrix1, m_dataPrecision)));
         m_gradientColor->push_back(JSONNode("spreadMethod", Utils::ToString(spread)));
 
         m_stopPointArray = new JSONNode(JSON_ARRAY);
@@ -493,16 +509,16 @@ namespace CreateJS
         {
             if (segment.segmentType == DOM::Utils::LINE_SEGMENT)
             {
-                m_pathCmdStr.append(CreateJS::Utils::ToString((double)(segment.line.endPoint1.x)));
+                m_pathCmdStr.append(JiboPixiJS::Utils::ToString((double)(segment.line.endPoint1.x), m_dataPrecision));
                 m_pathCmdStr.append(space);
-                m_pathCmdStr.append(CreateJS::Utils::ToString((double)(segment.line.endPoint1.y)));
+                m_pathCmdStr.append(JiboPixiJS::Utils::ToString((double)(segment.line.endPoint1.y), m_dataPrecision));
                 m_pathCmdStr.append(space);
             }
             else
             {
-                m_pathCmdStr.append(CreateJS::Utils::ToString((double)(segment.quadBezierCurve.anchor1.x)));
+                m_pathCmdStr.append(JiboPixiJS::Utils::ToString((double)(segment.quadBezierCurve.anchor1.x), m_dataPrecision));
                 m_pathCmdStr.append(space);
-                m_pathCmdStr.append(CreateJS::Utils::ToString((double)(segment.quadBezierCurve.anchor1.y)));
+                m_pathCmdStr.append(JiboPixiJS::Utils::ToString((double)(segment.quadBezierCurve.anchor1.y), m_dataPrecision));
                 m_pathCmdStr.append(space);
             }
             m_firstSegment = false;
@@ -512,22 +528,22 @@ namespace CreateJS
         {
             m_pathCmdStr.append(lineTo);
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(CreateJS::Utils::ToString((double)(segment.line.endPoint2.x)));
+            m_pathCmdStr.append(JiboPixiJS::Utils::ToString((double)(segment.line.endPoint2.x), m_dataPrecision));
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(CreateJS::Utils::ToString((double)(segment.line.endPoint2.y)));
+            m_pathCmdStr.append(JiboPixiJS::Utils::ToString((double)(segment.line.endPoint2.y), m_dataPrecision));
             m_pathCmdStr.append(space);
         }
         else
         {
             m_pathCmdStr.append(bezierCurveTo);
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(CreateJS::Utils::ToString((double)(segment.quadBezierCurve.control.x)));
+            m_pathCmdStr.append(JiboPixiJS::Utils::ToString((double)(segment.quadBezierCurve.control.x), m_dataPrecision));
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(CreateJS::Utils::ToString((double)(segment.quadBezierCurve.control.y)));
+            m_pathCmdStr.append(JiboPixiJS::Utils::ToString((double)(segment.quadBezierCurve.control.y), m_dataPrecision));
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(CreateJS::Utils::ToString((double)(segment.quadBezierCurve.anchor2.x)));
+            m_pathCmdStr.append(JiboPixiJS::Utils::ToString((double)(segment.quadBezierCurve.anchor2.x), m_dataPrecision));
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(CreateJS::Utils::ToString((double)(segment.quadBezierCurve.anchor2.y)));
+            m_pathCmdStr.append(JiboPixiJS::Utils::ToString((double)(segment.quadBezierCurve.anchor2.y), m_dataPrecision));
             m_pathCmdStr.append(space);
         }
 
@@ -611,7 +627,8 @@ namespace CreateJS
 
         if (m_strokeStyle.type == SOLID_STROKE_STYLE_TYPE)
         {
-            m_pathElem->push_back(JSONNode("strokeWidth", CreateJS::Utils::ToString((double)m_strokeStyle.solidStrokeStyle.thickness).c_str()));
+            m_pathElem->push_back(JSONNode("strokeWidth", 
+                JiboPixiJS::Utils::ToString((double)m_strokeStyle.solidStrokeStyle.thickness, m_dataPrecision).c_str()));
             m_pathElem->push_back(JSONNode("fill", "none"));
             m_pathElem->push_back(JSONNode("strokeLinecap", Utils::ToString(m_strokeStyle.solidStrokeStyle.capStyle.type).c_str()));
             m_pathElem->push_back(JSONNode("strokeLinejoin", Utils::ToString(m_strokeStyle.solidStrokeStyle.joinStyle.type).c_str()));
@@ -620,7 +637,8 @@ namespace CreateJS
             {
                 m_pathElem->push_back(JSONNode(
                     "stroke-miterlimit", 
-                    CreateJS::Utils::ToString((double)m_strokeStyle.solidStrokeStyle.joinStyle.miterJoinProp.miterLimit).c_str()));
+                    JiboPixiJS::Utils::ToString((double)m_strokeStyle.solidStrokeStyle.joinStyle.miterJoinProp.miterLimit,
+                        m_dataPrecision).c_str()));
             }
             m_pathElem->push_back(JSONNode("pathType", "Stroke"));
         }
@@ -675,9 +693,9 @@ namespace CreateJS
 
         bitmapElem.set_name("image");
         
-        bitmapElem.push_back(JSONNode(("charid"), CreateJS::Utils::ToString(resId)));
-        bitmapElem.push_back(JSONNode(("height"), CreateJS::Utils::ToString(height)));
-        bitmapElem.push_back(JSONNode(("width"), CreateJS::Utils::ToString(width)));
+        bitmapElem.push_back(JSONNode(("charid"), JiboPixiJS::Utils::ToString(resId)));
+        bitmapElem.push_back(JSONNode(("height"), JiboPixiJS::Utils::ToString(height)));
+        bitmapElem.push_back(JSONNode(("width"), JiboPixiJS::Utils::ToString(width)));
 
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
         std::string bitmapRelPath;
@@ -718,7 +736,7 @@ namespace CreateJS
             res = bitmapExportService->ExportToFile(pMediaItem, pFilePath, 100);
             ASSERT(FCM_SUCCESS_CODE(res));
 
-            pCalloc = CreateJS::Utils::GetCallocService(m_pCallback);
+            pCalloc = JiboPixiJS::Utils::GetCallocService(m_pCallback);
             ASSERT(pCalloc.m_Ptr != NULL);
 
             pCalloc->Free(pFilePath);
@@ -731,42 +749,170 @@ namespace CreateJS
         return FCM_SUCCESS;
     }
 
-    FCM::Result JSONOutputWriter::DefineText(
-            FCM::U_Int32 resId, 
-            const std::string& name, 
-            const DOM::Utils::COLOR& color, 
-            const std::string& displayText, 
-            DOM::FrameElement::PIClassicText pTextItem)
+
+    FCM::Result JSONOutputWriter::StartDefineClassicText(
+        FCM::U_Int32 resId, 
+        const DOM::FrameElement::AA_MODE_PROP& aaModeProp,
+        const std::string& displayText,
+        const TEXT_BEHAVIOUR& textBehaviour)
     {
-        std::string txt = displayText;
-        std::string colorStr = Utils::ToString(color);
-        std::string find = "\r";
-        std::string replace = "\\r";
-        std::string::size_type i =0;
-        JSONNode textElem(JSON_NODE);
+        JSONNode aaMode(JSON_NODE);
+        JSONNode behaviour(JSON_NODE);
 
-        while (true) {
-            /* Locate the substring to replace. */
-            i = txt.find(find, i);
-           
-            if (i == std::string::npos) break;
-            /* Make the replacement. */
-            txt.replace(i, find.length(), replace);
+        m_pTextElem = new JSONNode(JSON_NODE);
+        ASSERT(m_pTextElem != NULL);
 
-            /* Advance index forward so the next iteration doesn't pick it up as well. */
-            i += replace.length();
+        m_pTextElem->set_name("text");
+        m_pTextElem->push_back(JSONNode(("charid"), JiboPixiJS::Utils::ToString(resId)));
+
+        aaMode.set_name("aaMode");
+        aaMode.push_back(JSONNode(("mode"), JiboPixiJS::Utils::ToString(aaModeProp.aaMode)));
+        if (aaModeProp.aaMode == DOM::FrameElement::ANTI_ALIAS_MODE_CUSTOM)
+        {
+            aaMode.push_back(JSONNode(("thickness"), 
+                JiboPixiJS::Utils::ToString(aaModeProp.customAAModeProp.aaThickness, m_dataPrecision)));
+            aaMode.push_back(JSONNode(("sharpness"), 
+                JiboPixiJS::Utils::ToString(aaModeProp.customAAModeProp.aaSharpness, m_dataPrecision)));
+        }
+        m_pTextElem->push_back(aaMode);
+        
+        m_pTextElem->push_back(JSONNode(("txt"), displayText));
+
+        behaviour.set_name("behaviour");
+
+        if (textBehaviour.type == 0)
+        {
+            // Static Text
+            behaviour.push_back(JSONNode(("type"), "Static"));
+            behaviour.push_back(JSONNode(("flow"), JiboPixiJS::Utils::ToString(textBehaviour.u.staticText.flow)));
+            behaviour.push_back(JSONNode(("orientation"), JiboPixiJS::Utils::ToString(textBehaviour.u.staticText.orientationMode)));
+        }
+        else if (textBehaviour.type == 1)
+        {
+            // Dynamic text
+            behaviour.push_back(JSONNode(("type"), "Dynamic"));
+            behaviour.push_back(JSONNode(("name"), textBehaviour.name));
+            behaviour.push_back(JSONNode(("isBorderDrawn"), textBehaviour.u.dynamicText.borderDrawn ? "true" : "false"));
+            behaviour.push_back(JSONNode(("lineMode"), JiboPixiJS::Utils::ToString(textBehaviour.u.dynamicText.lineMode)));
+            behaviour.push_back(JSONNode(("isRenderAsHTML"), textBehaviour.u.dynamicText.renderAsHtml ? "true" : "false"));
+            behaviour.push_back(JSONNode(("isScrollable"), textBehaviour.u.dynamicText.scrollable ? "true" : "false"));
+        }
+        else
+        {
+            // Input text
+            behaviour.push_back(JSONNode(("type"), "Input"));
+            behaviour.push_back(JSONNode(("name"), textBehaviour.name));
+            behaviour.push_back(JSONNode(("isBorderDrawn"), textBehaviour.u.inputText.borderDrawn ? "true" : "false"));
+            behaviour.push_back(JSONNode(("lineMode"), JiboPixiJS::Utils::ToString(textBehaviour.u.inputText.lineMode)));
+            behaviour.push_back(JSONNode(("isRenderAsHTML"), textBehaviour.u.inputText.renderAsHtml ? "true" : "false"));
+            behaviour.push_back(JSONNode(("isScrollable"), textBehaviour.u.inputText.scrollable ? "true" : "false"));
+            behaviour.push_back(JSONNode(("isPassword"), textBehaviour.u.inputText.password ? "true" : "false"));
         }
 
-        
-        textElem.push_back(JSONNode(("charid"), CreateJS::Utils::ToString(resId)));
-        textElem.push_back(JSONNode(("displayText"),txt ));
-        textElem.push_back(JSONNode(("font"),name));
-        textElem.push_back(JSONNode("color", colorStr.c_str()));
+        behaviour.push_back(JSONNode(("isSelectable"), textBehaviour.selectable  ? "true" : "false"));
 
-        m_pTextArray->push_back(textElem);
+        m_pTextElem->push_back(behaviour);
+
+        // Start a paragraph array
+        m_pTextParaArray = new JSONNode(JSON_ARRAY);
+        ASSERT(m_pTextParaArray != NULL);
+
+        m_pTextParaArray->set_name("paras");
 
         return FCM_SUCCESS;
     }
+
+
+    FCM::Result JSONOutputWriter::StartDefineParagraph(
+        FCM::U_Int32 startIndex,
+        FCM::U_Int32 length,
+        const DOM::FrameElement::PARAGRAPH_STYLE& paragraphStyle)
+    {
+        m_pTextPara = new JSONNode(JSON_NODE);
+        ASSERT(m_pTextPara != NULL);
+
+        m_pTextPara->push_back(JSONNode(("startIndex"), JiboPixiJS::Utils::ToString(startIndex)));
+        m_pTextPara->push_back(JSONNode(("length"), JiboPixiJS::Utils::ToString(length)));
+        m_pTextPara->push_back(JSONNode(("indent"), JiboPixiJS::Utils::ToString(paragraphStyle.indent)));
+        m_pTextPara->push_back(JSONNode(("leftMargin"), JiboPixiJS::Utils::ToString(paragraphStyle.leftMargin)));
+        m_pTextPara->push_back(JSONNode(("rightMargin"), JiboPixiJS::Utils::ToString(paragraphStyle.rightMargin)));
+        m_pTextPara->push_back(JSONNode(("linespacing"), JiboPixiJS::Utils::ToString(paragraphStyle.lineSpacing)));
+        m_pTextPara->push_back(JSONNode(("alignment"), JiboPixiJS::Utils::ToString(paragraphStyle.alignment)));
+
+        m_pTextRunArray = new JSONNode(JSON_ARRAY);
+        ASSERT(m_pTextRunArray != NULL);
+
+        m_pTextRunArray->set_name("textRun");
+
+        return FCM_SUCCESS;
+    }
+
+
+    FCM::Result JSONOutputWriter::StartDefineTextRun(
+        FCM::U_Int32 startIndex,
+        FCM::U_Int32 length,
+        const TEXT_STYLE& textStyle)
+    {
+        JSONNode textRun(JSON_NODE);
+        JSONNode style(JSON_NODE);
+
+        textRun.push_back(JSONNode(("startIndex"), JiboPixiJS::Utils::ToString(startIndex)));
+        textRun.push_back(JSONNode(("length"), JiboPixiJS::Utils::ToString(length)));
+
+        style.set_name("style");
+        style.push_back(JSONNode("fontName", textStyle.fontName));
+        style.push_back(JSONNode("fontSize", JiboPixiJS::Utils::ToString(textStyle.fontSize)));
+        style.push_back(JSONNode("fontColor", JiboPixiJS::Utils::ToString(textStyle.fontColor)));
+        style.push_back(JSONNode("fontStyle", textStyle.fontStyle));
+        style.push_back(JSONNode("letterSpacing", JiboPixiJS::Utils::ToString(textStyle.letterSpacing)));
+        style.push_back(JSONNode("isRotated", textStyle.rotated ? "true" : "false"));
+        style.push_back(JSONNode("isAutoKern", textStyle.autoKern ? "true" : "false"));
+        style.push_back(JSONNode("baseLineShiftStyle", JiboPixiJS::Utils::ToString(textStyle.baseLineShiftStyle)));
+        style.push_back(JSONNode("link", textStyle.link));
+        style.push_back(JSONNode("linkTarget", textStyle.linkTarget));
+
+        textRun.push_back(style);
+        m_pTextRunArray->push_back(textRun);
+
+        return FCM_SUCCESS;
+    }
+
+
+    FCM::Result JSONOutputWriter::EndDefineTextRun()
+    {
+        return FCM_SUCCESS;
+    }
+
+
+    FCM::Result JSONOutputWriter::EndDefineParagraph()
+    {
+        m_pTextPara->push_back(*m_pTextRunArray);
+        delete m_pTextRunArray;
+        m_pTextRunArray = NULL;
+
+        m_pTextParaArray->push_back(*m_pTextPara);
+        delete m_pTextPara;
+        m_pTextPara = NULL;
+
+        return FCM_SUCCESS;
+    }
+
+
+    FCM::Result JSONOutputWriter::EndDefineClassicText()
+    {
+        m_pTextElem->push_back(*m_pTextParaArray);
+
+        delete m_pTextParaArray;
+        m_pTextParaArray = NULL;
+
+        m_pTextArray->push_back(*m_pTextElem);
+
+        delete m_pTextElem;
+        m_pTextElem = NULL;
+
+        return FCM_SUCCESS;
+    }
+
 
     FCM::Result JSONOutputWriter::DefineSound(
             FCM::U_Int32 resId, 
@@ -780,7 +926,7 @@ namespace CreateJS
         std::string name;
 
         soundElem.set_name("sound");
-        soundElem.push_back(JSONNode(("charid"), CreateJS::Utils::ToString(resId)));
+        soundElem.push_back(JSONNode(("charid"), JiboPixiJS::Utils::ToString(resId)));
         
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
         std::string soundRelPath;
@@ -814,7 +960,7 @@ namespace CreateJS
             FCM::StringRep16 pFilePath = Utils::ToString16(soundExportPath, m_pCallback);
             res = soundExportService->ExportToFile(pMediaItem, pFilePath);
             ASSERT(FCM_SUCCESS_CODE(res));
-            pCalloc = CreateJS::Utils::GetCallocService(m_pCallback);
+            pCalloc = JiboPixiJS::Utils::GetCallocService(m_pCallback);
             ASSERT(pCalloc.m_Ptr != NULL);
             pCalloc->Free(pFilePath);
         }
@@ -825,7 +971,10 @@ namespace CreateJS
         return FCM_SUCCESS;
     }
 
-    JSONOutputWriter::JSONOutputWriter(FCM::PIFCMCallback pCallback)
+    JSONOutputWriter::JSONOutputWriter(
+        FCM::PIFCMCallback pCallback, 
+        bool minify, 
+        DataPrecision dataPrecision)
         : m_pCallback(pCallback),
           m_shapeElem(NULL),
           m_pathArray(NULL),
@@ -835,7 +984,9 @@ namespace CreateJS
           m_imageFileNameLabel(0),
           m_soundFileNameLabel(0),
           m_imageFolderCreated(false),
-          m_soundFolderCreated(false)
+          m_soundFolderCreated(false),
+          m_minify(minify),
+          m_dataPrecision(dataPrecision)
     {
         m_pRootNode = new JSONNode(JSON_NODE);
         ASSERT(m_pRootNode);
@@ -882,7 +1033,13 @@ namespace CreateJS
     FCM::Result JSONOutputWriter::StartDefinePath()
     {
         m_pathCmdStr.append(moveTo);
-        m_pathCmdStr.append(space);
+
+        // Jibo (mlb) - disablign the minified stuff for right now.
+//        if (!m_minify)
+//        {
+            m_pathCmdStr.append(space);
+//        }
+
         m_firstSegment = true;
 
         return FCM_SUCCESS;
@@ -996,6 +1153,7 @@ namespace CreateJS
 
         m_imageMap.insert(std::pair<std::string, std::string>(libPathName, name));
     }
+
     /* -------------------------------------------------- JSONTimelineWriter */
 
     FCM::Result JSONTimelineWriter::PlaceObject(
@@ -1003,20 +1161,52 @@ namespace CreateJS
         FCM::U_Int32 objectId,
         FCM::U_Int32 placeAfterObjectId,
         const DOM::Utils::MATRIX2D* pMatrix,
-        FCM::PIFCMUnknown pUnknown /* = NULL*/)
+        const DOM::Utils::RECT* pRect /* = NULL */)
     {
         JSONNode commandElement(JSON_NODE);
 
         commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("charid", CreateJS::Utils::ToString(resId)));
-        commandElement.push_back(JSONNode("objectId", CreateJS::Utils::ToString(objectId)));
-        commandElement.push_back(JSONNode("placeAfter", CreateJS::Utils::ToString(placeAfterObjectId)));
+        commandElement.push_back(JSONNode("charid", JiboPixiJS::Utils::ToString(resId)));
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("placeAfter", JiboPixiJS::Utils::ToString(placeAfterObjectId)));
 
         if (pMatrix)
         {
-            commandElement.push_back(JSONNode("transformMatrix", Utils::ToString(*pMatrix).c_str()));
+            commandElement.push_back(JSONNode("transformMatrix", Utils::ToString(*pMatrix, m_dataPrecision).c_str()));
         }
 
+        if (pRect)
+        {
+            commandElement.push_back(JSONNode("bounds", Utils::ToString(*pRect, m_dataPrecision).c_str()));
+        }
+
+        m_pCommandArray->push_back(commandElement);
+
+        return FCM_SUCCESS;
+    }
+
+
+    FCM::Result JSONTimelineWriter::PlaceObject(
+        FCM::U_Int32 resId,
+        FCM::U_Int32 objectId,
+        FCM::U_Int32 placeAfterObjectId,
+        const DOM::Utils::MATRIX2D* pMatrix,
+        FCM::Boolean loop,
+        FCM::PIFCMUnknown pUnknown)
+    {
+        JSONNode commandElement(JSON_NODE);
+
+        commandElement.push_back(JSONNode("cmdType", "Place"));
+        commandElement.push_back(JSONNode("charid", JiboPixiJS::Utils::ToString(resId)));
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("placeAfter", JiboPixiJS::Utils::ToString(placeAfterObjectId)));
+
+        if (pMatrix)
+        {
+            commandElement.push_back(JSONNode("transformMatrix", Utils::ToString(*pMatrix, m_dataPrecision).c_str()));
+        }
+
+        commandElement.push_back(JSONNode("loop", loop ? "true" : "false"));
         m_pCommandArray->push_back(commandElement);
 
         return FCM_SUCCESS;
@@ -1034,8 +1224,8 @@ namespace CreateJS
         FCM::AutoPtr<DOM::FrameElement::ISound> pSound;
 
         commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("charid", CreateJS::Utils::ToString(resId)));
-        commandElement.push_back(JSONNode("objectId", CreateJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("charid", JiboPixiJS::Utils::ToString(resId)));
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
 
         pSound = pUnknown;
         if (pSound)
@@ -1051,15 +1241,15 @@ namespace CreateJS
             ASSERT(FCM_SUCCESS_CODE(res));
 
             commandElement.push_back(JSONNode("loopMode", 
-                CreateJS::Utils::ToString(lMode.loopMode)));
+                JiboPixiJS::Utils::ToString(lMode.loopMode)));
             commandElement.push_back(JSONNode("repeatCount", 
-                CreateJS::Utils::ToString(lMode.repeatCount)));
+                JiboPixiJS::Utils::ToString(lMode.repeatCount)));
 
             res = pSound->GetSyncMode(syncMode);
             ASSERT(FCM_SUCCESS_CODE(res));
 
             commandElement.push_back(JSONNode("syncMode", 
-                CreateJS::Utils::ToString(syncMode)));
+                JiboPixiJS::Utils::ToString(syncMode)));
 
             // We should not get SOUND_SYNC_STOP as for stop, "RemoveObject" command will
             // be generated by Exporter Service.
@@ -1069,9 +1259,9 @@ namespace CreateJS
             ASSERT(FCM_SUCCESS_CODE(res));
 
             commandElement.push_back(JSONNode("LimitInPos44", 
-                CreateJS::Utils::ToString(soundLimit.inPos44)));
+                JiboPixiJS::Utils::ToString(soundLimit.inPos44)));
             commandElement.push_back(JSONNode("LimitOutPos44", 
-                CreateJS::Utils::ToString(soundLimit.outPos44)));
+                JiboPixiJS::Utils::ToString(soundLimit.outPos44)));
         }
 
         m_pCommandArray->push_back(commandElement);
@@ -1086,7 +1276,7 @@ namespace CreateJS
         JSONNode commandElement(JSON_NODE);
 
         commandElement.push_back(JSONNode("cmdType", "Remove"));
-        commandElement.push_back(JSONNode("objectId", CreateJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
 
         m_pCommandArray->push_back(commandElement);
 
@@ -1101,8 +1291,8 @@ namespace CreateJS
         JSONNode commandElement(JSON_NODE);
 
         commandElement.push_back(JSONNode("cmdType", "UpdateZOrder"));
-        commandElement.push_back(JSONNode("objectId", CreateJS::Utils::ToString(objectId)));
-        commandElement.push_back(JSONNode("placeAfter", CreateJS::Utils::ToString(placeAfterObjectId)));
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("placeAfter", JiboPixiJS::Utils::ToString(placeAfterObjectId)));
 
         m_pCommandArray->push_back(commandElement);
 
@@ -1114,18 +1304,43 @@ namespace CreateJS
         FCM::U_Int32 objectId,
         FCM::U_Int32 maskTillObjectId)
     {
-        // Commenting out the function since the runtime
-        // does not support masking
-        /*
+        MaskInfo info;
+
+        info.maskTillObjectId = maskTillObjectId;
+        info.objectId = objectId;
+
+        maskInfoList.push_back(info);
+
+        return FCM_SUCCESS;
+    }
+
+    FCM::Result JSONTimelineWriter::DeferUpdateMask(
+        FCM::U_Int32 objectId,
+        FCM::U_Int32 maskTillObjectId)
+    {
         JSONNode commandElement(JSON_NODE);
 
         commandElement.push_back(JSONNode("cmdType", "UpdateMask"));
-        commandElement.push_back(JSONNode("objectId", CreateJS::Utils::ToString(objectId)));
-        commandElement.push_back(JSONNode("maskTill", CreateJS::Utils::ToString(maskTillObjectId)));
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("maskTill", JiboPixiJS::Utils::ToString(maskTillObjectId)));
 
         m_pCommandArray->push_back(commandElement);
-        */
         
+        return FCM_SUCCESS;
+    }
+
+    FCM::Result JSONTimelineWriter::DeferUpdateMasks()
+    {
+        JSONNode commandElement(JSON_NODE);
+
+        for (FCM::U_Int32 i = 0; i < maskInfoList.size(); i++)
+        {
+            MaskInfo& info = maskInfoList.at(i);
+            DeferUpdateMask(info.objectId, info.maskTillObjectId);
+        }
+        
+        maskInfoList.clear();
+
         return FCM_SUCCESS;
     }
 
@@ -1136,7 +1351,7 @@ namespace CreateJS
         JSONNode commandElement(JSON_NODE);
 
         commandElement.push_back(JSONNode("cmdType", "UpdateBlendMode"));
-        commandElement.push_back(JSONNode("objectId", CreateJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
         if(blendMode == 0)
             commandElement.push_back(JSONNode("blendMode","Normal"));
         else if(blendMode == 1)
@@ -1178,7 +1393,7 @@ namespace CreateJS
         JSONNode commandElement(JSON_NODE);
 
         commandElement.push_back(JSONNode("cmdType", "UpdateVisibility"));
-        commandElement.push_back(JSONNode("objectId", CreateJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
 
         if (visible)
         {
@@ -1202,7 +1417,7 @@ namespace CreateJS
         FCM::Result res;
         JSONNode commandElement(JSON_NODE);
         commandElement.push_back(JSONNode("cmdType", "UpdateFilter"));
-        commandElement.push_back(JSONNode("objectId", CreateJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
         FCM::AutoPtr<DOM::GraphicFilter::IDropShadowFilter> pDropShadowFilter = pFilter;
         FCM::AutoPtr<DOM::GraphicFilter::IBlurFilter> pBlurFilter = pFilter;
         FCM::AutoPtr<DOM::GraphicFilter::IGlowFilter> pGlowFilter = pFilter;
@@ -1240,19 +1455,23 @@ namespace CreateJS
 
             res = pDropShadowFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("angle", CreateJS::Utils::ToString((double)angle)));
+            commandElement.push_back(JSONNode("angle", 
+                JiboPixiJS::Utils::ToString((double)angle, m_dataPrecision)));
 
             res = pDropShadowFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX", CreateJS::Utils::ToString((double)blurX)));
+            commandElement.push_back(JSONNode("blurX", 
+                JiboPixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
 
             res = pDropShadowFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY", CreateJS::Utils::ToString((double)blurY)));
+            commandElement.push_back(JSONNode("blurY", 
+                JiboPixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
 
             res = pDropShadowFilter->GetDistance(distance);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("distance", CreateJS::Utils::ToString((double)distance)));
+            commandElement.push_back(JSONNode("distance", 
+                JiboPixiJS::Utils::ToString((double)distance, m_dataPrecision)));
 
             res = pDropShadowFilter->GetHideObject(hideObject);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1298,7 +1517,7 @@ namespace CreateJS
 
             res = pDropShadowFilter->GetStrength(strength);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("strength", CreateJS::Utils::ToString(strength)));
+            commandElement.push_back(JSONNode("strength", JiboPixiJS::Utils::ToString(strength)));
 
             res = pDropShadowFilter->GetShadowColor(color);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1328,11 +1547,13 @@ namespace CreateJS
 
             res = pBlurFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX", CreateJS::Utils::ToString((double)blurX)));
+            commandElement.push_back(JSONNode("blurX", 
+                JiboPixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
 
             res = pBlurFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY", CreateJS::Utils::ToString((double)blurY)));
+            commandElement.push_back(JSONNode("blurY", 
+                JiboPixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
 
             res = pBlurFilter->GetQuality(qualityType);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1370,11 +1591,13 @@ namespace CreateJS
 
             res = pGlowFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX", CreateJS::Utils::ToString((double)blurX)));
+            commandElement.push_back(JSONNode("blurX", 
+                JiboPixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
 
             res = pGlowFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY", CreateJS::Utils::ToString((double)blurY)));
+            commandElement.push_back(JSONNode("blurY", 
+                JiboPixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
 
             res = pGlowFilter->GetInnerShadow(innerShadow);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1409,7 +1632,7 @@ namespace CreateJS
 
             res = pGlowFilter->GetStrength(strength);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("strength", CreateJS::Utils::ToString(strength)));
+            commandElement.push_back(JSONNode("strength", JiboPixiJS::Utils::ToString(strength)));
 
             res = pGlowFilter->GetShadowColor(color);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1447,19 +1670,23 @@ namespace CreateJS
 
             res = pBevelFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("angle", CreateJS::Utils::ToString((double)angle)));
+            commandElement.push_back(JSONNode("angle", 
+                JiboPixiJS::Utils::ToString((double)angle, m_dataPrecision)));
 
             res = pBevelFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX", CreateJS::Utils::ToString((double)blurX)));
+            commandElement.push_back(JSONNode("blurX", 
+                JiboPixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
 
             res = pBevelFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY", CreateJS::Utils::ToString((double)blurY)));
+            commandElement.push_back(JSONNode("blurY", 
+                JiboPixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
 
             res = pBevelFilter->GetDistance(distance);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("distance", CreateJS::Utils::ToString((double)distance)));
+            commandElement.push_back(JSONNode("distance", 
+                JiboPixiJS::Utils::ToString((double)distance, m_dataPrecision)));
 
             res = pBevelFilter->GetHighlightColor(highlightColor);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1488,7 +1715,7 @@ namespace CreateJS
 
             res = pBevelFilter->GetStrength(strength);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("strength", CreateJS::Utils::ToString(strength)));
+            commandElement.push_back(JSONNode("strength", JiboPixiJS::Utils::ToString(strength)));
 
             res = pBevelFilter->GetShadowColor(color);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1532,19 +1759,23 @@ namespace CreateJS
 
             res = pGradientGlowFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("angle", CreateJS::Utils::ToString((double)angle)));
+            commandElement.push_back(JSONNode("angle", 
+                JiboPixiJS::Utils::ToString((double)angle, m_dataPrecision)));
 
             res = pGradientGlowFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX", CreateJS::Utils::ToString((double)blurX)));
+            commandElement.push_back(JSONNode("blurX", 
+                JiboPixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
 
             res = pGradientGlowFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY", CreateJS::Utils::ToString((double)blurY)));
+            commandElement.push_back(JSONNode("blurY", 
+                JiboPixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
 
             res = pGradientGlowFilter->GetDistance(distance);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("distance", CreateJS::Utils::ToString((double)distance)));
+            commandElement.push_back(JSONNode("distance", 
+                JiboPixiJS::Utils::ToString((double)distance, m_dataPrecision)));
 
             res = pGradientGlowFilter->GetKnockout(knockOut);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1568,7 +1799,7 @@ namespace CreateJS
 
             res = pGradientGlowFilter->GetStrength(strength);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("strength", CreateJS::Utils::ToString(strength)));
+            commandElement.push_back(JSONNode("strength", JiboPixiJS::Utils::ToString(strength)));
 
             res = pGradientGlowFilter->GetFilterType(filterType);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1606,9 +1837,10 @@ namespace CreateJS
 
                     offset = (float)((colorPoint.pos * 100) / 255.0);
 
-                    stopEntry.push_back(JSONNode("offset", Utils::ToString((double) offset)));
+                    stopEntry.push_back(JSONNode("offset", Utils::ToString((float) offset, m_dataPrecision)));
                     stopEntry.push_back(JSONNode("stopColor", Utils::ToString(colorPoint.color)));
-                    stopEntry.push_back(JSONNode("stopOpacity", Utils::ToString((double)(colorPoint.color.alpha / 255.0))));
+                    stopEntry.push_back(JSONNode("stopOpacity", 
+                        Utils::ToString((float)(colorPoint.color.alpha / 255.0), m_dataPrecision)));
                     stopPointArray->set_name("GradientStops");
                     stopPointArray->push_back(stopEntry);
                 }
@@ -1644,19 +1876,23 @@ namespace CreateJS
 
             res = pGradientBevelFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("angle", CreateJS::Utils::ToString((double)angle)));
+            commandElement.push_back(JSONNode("angle", 
+                JiboPixiJS::Utils::ToString((double)angle, m_dataPrecision)));
 
             res = pGradientBevelFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX", CreateJS::Utils::ToString((double)blurX)));
+            commandElement.push_back(JSONNode("blurX", 
+                JiboPixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
 
             res = pGradientBevelFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY", CreateJS::Utils::ToString((double)blurY)));
+            commandElement.push_back(JSONNode("blurY", 
+                JiboPixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
 
             res = pGradientBevelFilter->GetDistance(distance);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("distance", CreateJS::Utils::ToString((double)distance)));
+            commandElement.push_back(JSONNode("distance", 
+                JiboPixiJS::Utils::ToString((double)distance, m_dataPrecision)));
 
             res = pGradientBevelFilter->GetKnockout(knockOut);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1680,7 +1916,7 @@ namespace CreateJS
 
             res = pGradientBevelFilter->GetStrength(strength);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("strength", CreateJS::Utils::ToString(strength)));
+            commandElement.push_back(JSONNode("strength", JiboPixiJS::Utils::ToString(strength)));
 
             res = pGradientBevelFilter->GetFilterType(filterType);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -1718,9 +1954,11 @@ namespace CreateJS
 
                     offset = (float)((colorPoint.pos * 100) / 255.0);
 
-                    stopEntry.push_back(JSONNode("offset", Utils::ToString((double) offset)));
+                    stopEntry.push_back(JSONNode("offset", 
+                        Utils::ToString((float) offset, m_dataPrecision)));
                     stopEntry.push_back(JSONNode("stopColor", Utils::ToString(colorPoint.color)));
-                    stopEntry.push_back(JSONNode("stopOpacity", Utils::ToString((double)(colorPoint.color.alpha / 255.0))));
+                    stopEntry.push_back(JSONNode("stopOpacity", 
+                        Utils::ToString((float)(colorPoint.color.alpha / 255.0), m_dataPrecision)));
                     stopPointsArray->set_name("GradientStops");
                     stopPointsArray->push_back(stopEntry);
                 }
@@ -1752,19 +1990,23 @@ namespace CreateJS
 
             res = pAdjustColorFilter->GetBrightness(brightness);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("brightness", CreateJS::Utils::ToString((double)brightness)));
+            commandElement.push_back(JSONNode("brightness", 
+                JiboPixiJS::Utils::ToString((double)brightness, m_dataPrecision)));
 
             res = pAdjustColorFilter->GetContrast(contrast);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("contrast", CreateJS::Utils::ToString((double)contrast)));
+            commandElement.push_back(JSONNode("contrast", 
+                JiboPixiJS::Utils::ToString((double)contrast, m_dataPrecision)));
 
             res = pAdjustColorFilter->GetSaturation(saturation);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("saturation", CreateJS::Utils::ToString((double)saturation)));
+            commandElement.push_back(JSONNode("saturation", 
+                JiboPixiJS::Utils::ToString((double)saturation, m_dataPrecision)));
 
             res = pAdjustColorFilter->GetHue(hue);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("hue", CreateJS::Utils::ToString((double)hue)));
+            commandElement.push_back(JSONNode("hue", 
+                JiboPixiJS::Utils::ToString((double)hue, m_dataPrecision)));
         }
 
         m_pCommandArray->push_back(commandElement);
@@ -1781,8 +2023,8 @@ namespace CreateJS
         std::string transformMat;
 
         commandElement.push_back(JSONNode("cmdType", "Move"));
-        commandElement.push_back(JSONNode("objectId", CreateJS::Utils::ToString(objectId)));
-        transformMat = CreateJS::Utils::ToString(matrix);
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
+        transformMat = JiboPixiJS::Utils::ToString(matrix, m_dataPrecision);
         commandElement.push_back(JSONNode("transformMatrix", transformMat.c_str()));
 
         m_pCommandArray->push_back(commandElement);
@@ -1795,16 +2037,32 @@ namespace CreateJS
         FCM::U_Int32 objectId,
         const DOM::Utils::COLOR_MATRIX& colorMatrix)
     {
-        // add code to write the color transform 
+        JSONNode commandElement(JSON_NODE);
+        std::string colorMat;
+
+        commandElement.push_back(JSONNode("cmdType", "UpdateColorTransform"));
+        commandElement.push_back(JSONNode("objectId", JiboPixiJS::Utils::ToString(objectId)));
+        colorMat = JiboPixiJS::Utils::ToString(colorMatrix, m_dataPrecision);
+        commandElement.push_back(JSONNode("colorMatrix", colorMat.c_str()));
+
+        m_pCommandArray->push_back(commandElement);
+
         return FCM_SUCCESS;
     }
 
 
     FCM::Result JSONTimelineWriter::ShowFrame(FCM::U_Int32 frameNum)
     {
-        m_pFrameElement->push_back(JSONNode(("num"), CreateJS::Utils::ToString(frameNum)));
-        m_pFrameElement->push_back(*m_pCommandArray);
-        m_pFrameArray->push_back(*m_pFrameElement);
+        DeferUpdateMasks();
+
+        if (!m_pCommandArray->empty())
+        {
+            m_pFrameElement->push_back(JSONNode(("num"), JiboPixiJS::Utils::ToString(frameNum)));
+            m_pFrameElement->push_back(*m_pCommandArray);
+            m_pFrameArray->push_back(*m_pFrameElement);
+        }
+
+        m_FrameCount++;
 
         delete m_pCommandArray;
         delete m_pFrameElement;
@@ -1815,13 +2073,14 @@ namespace CreateJS
         m_pFrameElement = new JSONNode(JSON_NODE);
         ASSERT(m_pFrameElement);
 
-        
         return FCM_SUCCESS;
     }
 
 
     FCM::Result JSONTimelineWriter::AddFrameScript(FCM::CStringRep16 pScript, FCM::U_Int32 layerNum)
     {
+        // As frame script is not supported, let us disable it.
+#if 0
         std::string script = Utils::ToString(pScript, m_pCallback);
 
         std::string scriptWithLayerNumber = "script Layer" +  Utils::ToString(layerNum);
@@ -1847,6 +2106,7 @@ namespace CreateJS
         Utils::Trace(m_pCallback, "[AddFrameScript] (Layer: %d): %s\n", layerNum, script.c_str());
 
         m_pFrameElement->push_back(JSONNode(scriptWithLayerNumber,script));
+#endif
 
         return FCM_SUCCESS;
     }
@@ -1877,8 +2137,11 @@ namespace CreateJS
     }
 
 
-    JSONTimelineWriter::JSONTimelineWriter(FCM::PIFCMCallback pCallback) :
-        m_pCallback(pCallback)
+    JSONTimelineWriter::JSONTimelineWriter(
+        FCM::PIFCMCallback pCallback,
+        DataPrecision dataPrecision) :
+        m_pCallback(pCallback),
+        m_dataPrecision(dataPrecision)
     {
         m_pCommandArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pCommandArray);
@@ -1894,7 +2157,8 @@ namespace CreateJS
 
         m_pFrameElement = new JSONNode(JSON_NODE);
         ASSERT(m_pFrameElement);
-        //m_pCommandArray->set_name("Command");
+
+        m_FrameCount = 0;
     }
 
 
@@ -1922,8 +2186,12 @@ namespace CreateJS
         {
             m_pTimelineElement->push_back(
                 JSONNode(("charid"), 
-                CreateJS::Utils::ToString(resId)));
+                JiboPixiJS::Utils::ToString(resId)));
         }
+
+        m_pTimelineElement->push_back(
+                JSONNode(("frameCount"), 
+                JiboPixiJS::Utils::ToString(m_FrameCount)));
 
         m_pTimelineElement->push_back(*m_pFrameArray);
     }

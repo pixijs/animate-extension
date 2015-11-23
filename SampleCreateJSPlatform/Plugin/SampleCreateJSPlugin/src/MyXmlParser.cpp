@@ -22,11 +22,11 @@
 #include "DocType.h"
 #include <map>
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     typedef std::pair <std::string, std::string> Pair_Attrib;
 
-    FeatureDocumentHandler::FeatureDocumentHandler(CreateJS::FeatureMatrix *pFeatureMat) : 
+    FeatureDocumentHandler::FeatureDocumentHandler(JiboPixiJS::FeatureMatrix *pFeatureMat) : 
         DocumentHandler(), 
         m_pFeatureMat(pFeatureMat)
     {

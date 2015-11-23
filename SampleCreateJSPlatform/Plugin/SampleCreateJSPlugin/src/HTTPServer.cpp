@@ -21,7 +21,7 @@
 #include "HTTPServer.h"
 #include "Utils.h"
 
-namespace CreateJS
+namespace JiboPixiJS
 {
 
     /* -------------------------------------------------- Constants */

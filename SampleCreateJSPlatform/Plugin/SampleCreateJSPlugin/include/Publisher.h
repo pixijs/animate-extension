@@ -57,7 +57,7 @@ namespace Application
     }
 }
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     class CPublisher;
     class ResourcePalette;
@@ -98,7 +98,7 @@ namespace DOM
 
 /* -------------------------------------------------- Class Decl */
 
-namespace CreateJS
+namespace JiboPixiJS
 {
 
     class CPublisher : public IPublisher, public FCMObjectBase
@@ -129,11 +129,6 @@ namespace CreateJS
 
     private:
 
-        bool ReadString(
-            const FCM::PIFCMDictionary pDict, 
-            FCM::StringRep8 key, 
-            std::string& retString);
-
         FCM::Result GetOutputFileName(        
             DOM::PIFLADocument pFlaDocument, 
             DOM::PITimeline pITimeline, 
@@ -151,7 +146,9 @@ namespace CreateJS
 
         FCM::Result Init();
 
-        FCM::Result ShowPreview(const std::string& outFile);
+        FCM::Result StartPreview(const std::string& outFile);
+        
+        FCM::Result StopPreview();
 
         FCM::Result ExportLibraryItems(FCM::FCMListPtr pLibraryItemList);
 
@@ -161,6 +158,7 @@ namespace CreateJS
 
         AutoPtr<IFrameCommandGenerator> m_frameCmdGeneratorService;
         AutoPtr<IResourcePalette> m_pResourcePalette;
+        bool m_minify;
     };
 
 
@@ -239,13 +237,15 @@ namespace CreateJS
         FCM::Result ExportBitmapFillStyle(
             DOM::FillStyle::IBitmapFillStyle* pBitmapFillStyle);
 
-        FCM::Result GetFontInfo(DOM::FrameElement::ITextStyle* pTextStyleItem, std::string& name,FCM::U_Int16 fontSize);
+        FCM::Result GetTextStyle(DOM::FrameElement::ITextStyle* pTextStyleItem, TEXT_STYLE& textStyle);
 
         FCM::Result HasFancyStrokes(DOM::FrameElement::PIShape pShape, FCM::Boolean& hasFancy); 
 
         FCM::Result ConvertStrokeToFill(
             DOM::FrameElement::PIShape pShape,
             DOM::FrameElement::PIShape& pNewShape);
+
+        FCM::Result GetTextBehaviour(DOM::FrameElement::ITextBehaviour* pTextBehaviour, TEXT_BEHAVIOUR& textBehaviour);
 
     private:
 
@@ -338,7 +338,7 @@ namespace CreateJS
             FCM::StringRep16 pName,
             ITimelineWriter** ppTimelineWriter);
 
-        void Init(IOutputWriter* pOutputWriter);
+        void Init(IOutputWriter* pOutputWriter, DataPrecision precision);
 
     private:
 
@@ -364,11 +364,13 @@ namespace CreateJS
 
         ~TimelineBuilderFactory();
 
-        void Init(IOutputWriter* pOutputWriter);
+        void Init(IOutputWriter* pOutputWriter, DataPrecision dataPrecision);
 
     private:
 
         IOutputWriter* m_pOutputWriter;
+
+        DataPrecision m_dataPrecision;
     };
 
     FCM::Result RegisterPublisher(PIFCMDictionary pPlugins, FCM::FCMCLSID docId);

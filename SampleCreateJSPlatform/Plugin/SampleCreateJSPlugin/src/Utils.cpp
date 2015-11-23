@@ -16,6 +16,7 @@
 * from Adobe Systems Incorporated.
 **************************************************************************/
 
+#include "PluginConfiguration.h"
 #include "Utils.h"
 
 #ifdef _WINDOWS
@@ -24,6 +25,7 @@
 #endif
     #include "Windows.h"
     #include "ShellApi.h"
+    #include "ShlObj.h"
 #endif
 
 #ifdef __APPLE__
@@ -57,7 +59,7 @@
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #endif
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     static std::string comma = ",";
 }
@@ -68,7 +70,7 @@ namespace CreateJS
 
 /* -------------------------------------------------- Utils */
 
-namespace CreateJS
+namespace JiboPixiJS
 {
     FCM::AutoPtr<FCM::IFCMStringUtils> Utils::GetStringUtilsService(FCM::PIFCMCallback pCallback)
     {
@@ -190,19 +192,51 @@ namespace CreateJS
         std::string string = (const char*)pStr8;
         return string;
     }
-    
-    std::string Utils::ToString(const double& in)
+
+    void Utils::RemoveTrailingZeroes(char *str) 
+    {
+        char *ptr;
+
+        ptr = str + strlen(str) - 1;
+
+        while (*ptr == '0')
+        {
+            *ptr-- = '\0';
+        }
+
+        // If all digits after decimal are 0, remove point as well.
+        if (*ptr == '.') 
+        {        
+            *ptr = '\0';
+        }
+    }
+
+    std::string Utils::ToString(const double& in, int precision)
     {
         char buffer[32];
-        sprintf(buffer,"%.6f", in);
+
+        ASSERT(precision >= 1 && precision <= 6);
+        char* precisionFormat[] = {"%.1f", "%.2f", "%.3f", "%.4f", "%.5f", "%.6f"};
+
+        sprintf(buffer, precisionFormat[precision - 1], in);
+
+        RemoveTrailingZeroes(buffer);
+
         std::string str(buffer);
         return str;
     }
     
-    std::string Utils::ToString(const float& in)
+    std::string Utils::ToString(const float& in, int precision)
     {
         char buffer[32];
-        sprintf(buffer,"%.6f", in);
+
+        ASSERT(precision >= 1 && precision <= 6);
+        const char* precisionFormat[] = {"%.1f", "%.2f", "%.3f", "%.4f", "%.5f", "%.6f"};
+
+        sprintf(buffer, precisionFormat[precision - 1], in);
+
+        RemoveTrailingZeroes(buffer);
+
         std::string str(buffer);
         return str;
     }
@@ -223,21 +257,39 @@ namespace CreateJS
         return str;
     }
     
-    std::string Utils::ToString(const DOM::Utils::MATRIX2D& matrix)
+    std::string Utils::ToString(const DOM::Utils::MATRIX2D& matrix, FCM::U_Int8 precision)
     {
         std::string matrixString = "";
 
-        matrixString.append(ToString(matrix.a));
+        matrixString.append(ToString(matrix.a, precision));
         matrixString.append(comma);
-        matrixString.append(ToString(matrix.b));
+        matrixString.append(ToString(matrix.b, precision));
         matrixString.append(comma);
-        matrixString.append(ToString(matrix.c));
+        matrixString.append(ToString(matrix.c, precision));
         matrixString.append(comma);
-        matrixString.append(ToString(matrix.d));
+        matrixString.append(ToString(matrix.d, precision));
         matrixString.append(comma);
-        matrixString.append(ToString(matrix.tx));
+        matrixString.append(ToString(matrix.tx, precision));
         matrixString.append(comma);
-        matrixString.append(ToString(matrix.ty));
+        matrixString.append(ToString(matrix.ty, precision));
+
+        return matrixString;
+    }
+
+    std::string Utils::ToString(const DOM::Utils::COLOR_MATRIX& colorMatrix, FCM::U_Int8 precision)
+    {
+        std::string matrixString = "";
+
+        for (FCM::U_Int32 i = 0; i < 4; i++)
+        {
+            // Multiplicative factor
+            matrixString.append(ToString(colorMatrix.matrix[i][i], precision));
+            matrixString.append(comma);
+
+            // Additive factor
+            matrixString.append(ToString(colorMatrix.matrix[i][4], precision));
+            matrixString.append(comma);
+        }
 
         return matrixString;
     }
@@ -286,7 +338,179 @@ namespace CreateJS
         return str;
     }
 
+    std::string Utils::ToString(const DOM::FrameElement::AAMode& aaMode)
+    {
+        std::string str;
+
+        switch (aaMode)
+        {
+            case DOM::FrameElement::ANTI_ALIAS_MODE_DEVICE:
+                str = "device";
+                break;
+
+            case DOM::FrameElement::ANTI_ALIAS_MODE_BITMAP:
+                str = "bitmap";
+                break;
+           
+            case DOM::FrameElement::ANTI_ALIAS_MODE_STANDARD:
+                str = "standard";
+                break;
+           
+            case DOM::FrameElement::ANTI_ALIAS_MODE_ADVANCED:
+                str = "advanced";
+                break;
+
+            case DOM::FrameElement::ANTI_ALIAS_MODE_CUSTOM:
+                str = "custom";
+                break;
+
+            default:
+                ASSERT(0);
+                break;
+        }
+        return str;
+    }
+
+
+    std::string Utils::ToString(const DOM::FrameElement::OrientationMode& mode)
+    {
+        std::string str;
+
+        switch (mode)
+        {
+            case DOM::FrameElement::ORIENTATION_MODE_HORIZONTAL:
+                str = "horizontal";
+                break;
+
+            case DOM::FrameElement::ORIENTATION_MODE_VERTICAL:
+                str = "vertical";
+                break;
+           
+            default:
+                ASSERT(0);
+                break;
+        }
+        return str;
+    }
+
+    std::string Utils::ToString(const DOM::FrameElement::TextFlow& flow)
+    {
+        std::string str;
+
+        switch (flow)
+        {
+            case DOM::FrameElement::TEXT_FLOW_LEFT_TO_RIGHT:
+                str = "leftToRight";
+                break;
+
+            case DOM::FrameElement::TEXT_FLOW_RIGHT_TO_LEFT:
+                str = "rightToLeft";
+                break;
+
+            default:
+                ASSERT(0);
+                break;
+        }
+        return str;
+    }
+
+    std::string Utils::ToString(const DOM::FrameElement::LineMode& mode)
+    {
+        std::string str;
+
+        switch (mode)
+        {
+            case DOM::FrameElement::LINE_MODE_SINGLE:
+                str = "single";
+                break;
+
+            case DOM::FrameElement::LINE_MODE_MULTI:
+                str = "multi";
+                break;
+           
+            case DOM::FrameElement::LINE_MODE_MULTI_NO_WRAP:
+                str = "multiNoWrap";
+                break;
+           
+            default:
+                ASSERT(0);
+                break;
+        }
+        return str;
+    }
     
+
+    std::string Utils::ToString(const DOM::FrameElement::AlignMode& mode)
+    {
+        std::string str;
+
+        switch (mode)
+        {
+             case DOM::FrameElement::ALIGN_MODE_LEFT:
+                 str = "left";
+                 break;
+
+             case DOM::FrameElement::ALIGN_MODE_RIGHT:
+                 str = "right";
+                 break;
+
+             case DOM::FrameElement::ALIGN_MODE_CENTER:
+                 str = "center";
+                 break;
+
+             case DOM::FrameElement::ALIGN_MODE_JUSTIFY:
+                 str = "justify";
+                 break;
+
+             default:
+                 ASSERT(0);
+                 break;
+        }
+
+        return str;
+    }
+
+    std::string Utils::ToString(const DOM::FrameElement::BaseLineShiftStyle& lineShiftStyle)
+    {
+        std::string str;
+
+        switch (lineShiftStyle)
+        {
+             case DOM::FrameElement::BASE_LINE_SHIFT_STYLE_NORMAL:
+                 str = "normal";
+                 break;
+
+             case DOM::FrameElement::BASE_LINE_SHIFT_STYLE_SUPERSCRIPT:
+                 str = "superscript";
+                 break;
+
+             case DOM::FrameElement::BASE_LINE_SHIFT_STYLE_SUBSCRIPT:
+                 str = "subscript";
+                 break;
+
+             default:
+                 ASSERT(0);
+                 break;
+        }
+
+        return str;
+    }
+
+    std::string Utils::ToString(const DOM::Utils::RECT& rect, FCM::U_Int8 precision)
+    {
+        std::string rectString = "";
+
+        rectString.append(ToString(rect.topLeft.x, precision));
+        rectString.append(comma);
+        rectString.append(ToString(rect.topLeft.y, precision));
+        rectString.append(comma);
+        rectString.append(ToString(rect.bottomRight.x, precision));
+        rectString.append(comma);
+        rectString.append(ToString(rect.bottomRight.y, precision));
+
+        return rectString;
+    }
+
     FCM::StringRep16 Utils::ToString16(const std::string& str, FCM::PIFCMCallback pCallback)
     {
         FCM::StringRep16 pStrFeatureName = NULL;
@@ -296,6 +520,27 @@ namespace CreateJS
         return pStrFeatureName;
     }
 
+
+    // It is assumed that the versionStr is of the form "a.b.c.d".
+    FCM::U_Int32 Utils::ToVersion(const std::string& versionStr)
+    {
+        FCM::U_Int32 ver = 0;
+        FCM::S_Int32 shift = 24;
+        size_t pos = 0;
+
+        size_t nextPos = versionStr.find(".", pos);
+        while ((shift >= 0) && (nextPos != pos))
+        {
+            FCM::U_Int32 val = atoi(versionStr.substr(pos, nextPos).c_str());
+
+            ver = ver | (val << shift);
+            pos = nextPos + 1;
+            nextPos = versionStr.find(".", pos);
+            shift -= 8;
+        }
+
+        return ver;
+    }
 
     std::string Utils::ToString(const DOM::FillStyle::GradientSpread& spread)
     {
@@ -475,6 +720,51 @@ namespace CreateJS
         return FCM_GENERAL_ERROR;
 #endif
     }
+
+    FCM::Result Utils::GetAppTempDir(FCM::PIFCMCallback pCallback, std::string& path)
+    {
+#ifdef _WINDOWS
+
+        PWSTR pPath;
+        FCM::Result ret;
+
+        if (::SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &pPath) == S_OK) 
+        {
+            path = Utils::ToString((FCM::CStringRep16)pPath, pCallback);
+            path += "\\Temp\\";
+            path += PUBLISHER_NAME;
+            path += "\\";
+            ret = CreateDir(path, pCallback);
+        }
+        else
+        {
+            ret = FCM_GENERAL_ERROR;
+        }
+
+        return ret;
+
+#else
+        FCM::Result ret = FCM_GENERAL_ERROR;
+        
+        // TODO: We are here using a deprecated function and will have to modernize it.
+        char* name = tempnam(NULL, NULL);
+        if (name)
+        {
+            std::string fullPath;
+            fullPath = name;
+            delete name;
+            Utils::GetParent(fullPath, path);
+            path += PUBLISHER_NAME;
+            path += "/";
+            ret = CreateDir(path, pCallback);
+            ret = FCM_SUCCESS;
+        }
+        
+        return ret;
+
+#endif
+    }
+
     void Utils::OpenFStream(const std::string& outputFileName, std::fstream &file, std::ios_base::openmode mode, FCM::PIFCMCallback pCallback)
     {
  
@@ -505,10 +795,11 @@ namespace CreateJS
             char buffer[1024];
 
             va_start(args, fmt);
-            vsnprintf(buffer, 1024, fmt, args);
+            vsnprintf(buffer, 1023, fmt, args);
+            buffer[1023] = 0;
             va_end(args);
 
-            FCM::AutoPtr<FCM::IFCMCalloc> pCalloc = CreateJS::Utils::GetCallocService(pCallback);
+            FCM::AutoPtr<FCM::IFCMCalloc> pCalloc = JiboPixiJS::Utils::GetCallocService(pCallback);
             ASSERT(pCalloc.m_Ptr != NULL);
 
             FCM::StringRep16 outputString = Utils::ToString16(std::string(buffer), pCallback);
@@ -561,7 +852,9 @@ namespace CreateJS
         pCalloc->Free(folderStr);
 
 #else
-        remove(folder.c_str());
+        std::string delFolder = folder + "/";
+        std::string cmd = "rm -rf " + delFolder;
+        std::system(cmd.c_str());
 #endif
 
         return FCM_SUCCESS;
@@ -612,6 +905,97 @@ namespace CreateJS
         return FCM_SUCCESS;
     }
 
+
+    // Copies a source file to a destination folder. 
+    FCM::Result Utils::CopyAFile(const std::string& srcFile, const std::string& dstFolder, FCM::PIFCMCallback pCallback)
+    {
+#ifdef _WINDOWS
+
+        std::wstring srcWstr;
+        std::wstring dstWstr;
+
+        FCM::StringRep16 srcFileStr = Utils::ToString16(srcFile, pCallback);
+        srcWstr = srcFileStr;
+        srcWstr.append(1, '\0');
+
+        FCM::StringRep16 dstFolderStr = Utils::ToString16(dstFolder, pCallback);
+        dstWstr = dstFolderStr;
+        dstWstr.append(1, '\0');
+
+        ::CopyFile(srcWstr.c_str(), dstWstr.c_str(), false);
+
+        FCM::AutoPtr<FCM::IFCMCalloc> pCalloc = GetCallocService(pCallback);
+
+        pCalloc->Free(srcFileStr);
+        pCalloc->Free(dstFolderStr);
+
+
+#else
+
+        copyfile(srcFile.c_str(), dstFolder.c_str(), NULL, COPYFILE_ALL);
+#endif
+        return FCM_SUCCESS;
+    }
+
+
+    bool Utils::ReadString(
+        const FCM::PIFCMDictionary pDict,
+        FCM::StringRep8 key, 
+        std::string &retString)
+    {
+        FCM::U_Int32 valueLen;
+        FCM::FCMDictRecTypeID type;
+
+        FCM::Result res = pDict->GetInfo(key, type, valueLen);
+        if (FCM_FAILURE_CODE(res))
+        {
+            return false;
+        }
+
+        FCM::StringRep8 strValue = new char[valueLen];
+        res = pDict->Get(key, type, (FCM::PVoid)strValue, valueLen);
+        if (FCM_FAILURE_CODE(res))
+        {
+            delete [] strValue;
+            return false;
+        }
+
+        retString = strValue;
+
+        delete [] strValue;
+        return true;
+    }
+
+
+    bool Utils::ToBool(const std::string& str)
+    {
+        std::string tempStr = str;
+        std::transform(tempStr.begin(), tempStr.end(), tempStr.begin(), ::tolower);
+        if (tempStr == "true")
+            return true;
+        return false;
+    }
+
+    DataPrecision Utils::ToPrecision(const std::string& str)
+    {
+        DataPrecision precision;
+
+        std::string compactDataStr = str;
+        std::transform(compactDataStr.begin(), compactDataStr.end(), compactDataStr.begin(), ::tolower);
+
+        if (compactDataStr == "low")
+            precision = PRECISION_5;
+        else if (compactDataStr == "medium")
+            precision = PRECISION_4;
+        else if (compactDataStr == "high")
+            precision = PRECISION_3;
+        else if (compactDataStr == "veryhigh")
+            precision = PRECISION_2;
+        else
+            precision = PRECISION_6;
+
+        return precision;
+    }
 
 #ifdef USE_HTTP_SERVER
 
