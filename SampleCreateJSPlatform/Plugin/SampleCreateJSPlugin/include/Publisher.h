@@ -40,7 +40,8 @@
 #include "FrameElement/IClassicText.h"
 #include "FrameElement/ITextStyle.h"
 #include "Exporter/Service/IFrameCommandGenerator.h"
-#include "JSONOutputWriter.h"
+#include "Writers/JSONOutputWriter.h"
+#include "Writers/JSONTimelineWriter.h"
 #include "PluginConfiguration.h"
 
 /* -------------------------------------------------- Forward Decl */

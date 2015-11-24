@@ -32,13 +32,18 @@
 		681CC6011AF8BF5C0041AEC0 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = 681CC6001AF8BF5C0041AEC0 /* mongoose.c */; };
 		681CC6021AF8BF5C0041AEC0 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = 681CC6001AF8BF5C0041AEC0 /* mongoose.c */; };
 		"6df97df6-cdcc-3eec-8b67-b64cb2bd3741" /* JSONValidator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "3e78f8ad-c8d1-3e1d-9fba-a1af81089f89" /* JSONValidator.cpp */; };
-		"7115aecc-7578-3388-809f-adf2cea7fb87" /* JSONOutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "b99462ab-58d9-3727-aa4b-b3246166a611" /* JSONOutputWriter.cpp */; };
 		"80eccaa8-142f-385a-a04f-942a76afb0bf" /* JSONIterators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "9bbfd7be-ac57-384d-984e-1afc2e0ed3b2" /* JSONIterators.cpp */; };
 		"81e0cad2-705a-3d5e-a15a-311ce49f6b73" /* JSONNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "41c65d04-39ac-3a96-94e1-12f1abc61564" /* JSONNode.cpp */; };
 		"8af5fe69-f0db-3e01-a117-1799a08ecc35" /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */; };
 		"8ed2c99a-79c7-3e25-a978-d21041af1b50" /* JSONNode_Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "7aa76593-b10f-3f2e-bbea-7a3e63e1a65b" /* JSONNode_Mutex.cpp */; };
 		"8f71b0ac-f77e-35e0-8ba3-eafefe65d054" /* internalJSONNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "a47eaabc-0062-3299-b91c-06037678b948" /* internalJSONNode.cpp */; };
 		9A0112641BFB99D200E546CC /* include in Resources */ = {isa = PBXBuildFile; fileRef = 9A0112631BFB99D200E546CC /* include */; };
+		9AEE4A521C04BEB70019C03B /* ElectronOutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A4F1C04BEB70019C03B /* ElectronOutputWriter.cpp */; };
+		9AEE4A531C04BEB70019C03B /* ElectronOutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A4F1C04BEB70019C03B /* ElectronOutputWriter.cpp */; };
+		9AEE4A541C04BEB70019C03B /* JSONOutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A501C04BEB70019C03B /* JSONOutputWriter.cpp */; };
+		9AEE4A551C04BEB70019C03B /* JSONOutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A501C04BEB70019C03B /* JSONOutputWriter.cpp */; };
+		9AEE4A561C04BEB70019C03B /* JSONTimelineWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A511C04BEB70019C03B /* JSONTimelineWriter.cpp */; };
+		9AEE4A571C04BEB70019C03B /* JSONTimelineWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A511C04BEB70019C03B /* JSONTimelineWriter.cpp */; };
 		"9a4a5e32-90e2-3a86-be56-054e9f4842dd" /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */; };
 		"a3dd5fb5-163b-33cf-83f9-75486dca0771" /* JSONWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "9af15e97-f1a1-37db-bcf9-fba2786df1c4" /* JSONWriter.cpp */; };
 		"a605f5ea-9b2f-3782-aca6-f5a8c586b668" /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "242250eb-c22a-31fb-b531-b0b9cb9b75e8" /* ApplicationServices.framework */; };
@@ -61,7 +66,6 @@
 		"e3baba51-14f0-34cf-9a21-fc11518dd9b7" /* libxerces-c-3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = "51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.1.dylib */; };
 		"edc34217-9b25-3023-abd8-c258d3afcdcc" /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */; };
 		"eee6a0c3-402c-3020-a9fb-1487b7a25bf0" /* DocType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "37ac9b87-549b-3c4b-935a-8ff607750468" /* DocType.cpp */; };
-		"f466c7a9-7085-3e0a-b2da-1ec4a7340721" /* JSONOutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "b99462ab-58d9-3727-aa4b-b3246166a611" /* JSONOutputWriter.cpp */; };
 		"f77fdb47-d483-3c03-8a74-4c0138c180d6" /* MyXmlParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "41c6aa0c-3abc-3913-a79f-2072c1b28322" /* MyXmlParser.cpp */; };
 		"f7f31334-a317-32e3-a2ff-22b21f1da5e9" /* JSONAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "459c7060-1b49-3a88-86f6-61f76eb39315" /* JSONAllocator.cpp */; };
 /* End PBXBuildFile section */
@@ -89,6 +93,9 @@
 		"7bfcfcd8-dedc-3680-b9e1-95891cdfa343" /* libjson.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = libjson.cpp; sourceTree = "<group>"; };
 		"960c8d89-d632-3678-815d-49888c76392b" /* JSONPreparse.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONPreparse.cpp; sourceTree = "<group>"; };
 		9A0112631BFB99D200E546CC /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../include; sourceTree = "<group>"; };
+		9AEE4A4F1C04BEB70019C03B /* ElectronOutputWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronOutputWriter.cpp; sourceTree = "<group>"; };
+		9AEE4A501C04BEB70019C03B /* JSONOutputWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONOutputWriter.cpp; sourceTree = "<group>"; };
+		9AEE4A511C04BEB70019C03B /* JSONTimelineWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONTimelineWriter.cpp; sourceTree = "<group>"; };
 		"9af15e97-f1a1-37db-bcf9-fba2786df1c4" /* JSONWriter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONWriter.cpp; sourceTree = "<group>"; };
 		"9bbfd7be-ac57-384d-984e-1afc2e0ed3b2" /* JSONIterators.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONIterators.cpp; sourceTree = "<group>"; };
 		"9f0688c3-3f04-3a69-a219-c79da92040db" /* Main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Main.cpp; sourceTree = "<group>"; };
@@ -99,7 +106,6 @@
 		F5D357480948EC91008C36CA /* JiboPixiJSPlugin.fcm.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JiboPixiJSPlugin.fcm.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		"a2b84e18-8788-39bf-9148-f0dbf764f142" /* Publisher.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Publisher.cpp; sourceTree = "<group>"; };
 		"a47eaabc-0062-3299-b91c-06037678b948" /* internalJSONNode.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = internalJSONNode.cpp; sourceTree = "<group>"; };
-		"b99462ab-58d9-3727-aa4b-b3246166a611" /* JSONOutputWriter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONOutputWriter.cpp; sourceTree = "<group>"; };
 		"f3f52c21-85e0-3b05-9855-54fac0cf8db4" /* Foundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Foundation.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -143,12 +149,12 @@
 		"5d440201-ca36-32fd-882f-9a16c34ed966" /* src */ = {
 			isa = PBXGroup;
 			children = (
+				9AEE4A4E1C04BEB70019C03B /* Writers */,
 				681CC5F61AF8BE630041AEC0 /* HTTPServer.cpp */,
 				"9f0688c3-3f04-3a69-a219-c79da92040db" /* Main.cpp */,
 				"37ac9b87-549b-3c4b-935a-8ff607750468" /* DocType.cpp */,
 				"a2b84e18-8788-39bf-9148-f0dbf764f142" /* Publisher.cpp */,
 				"12cad407-b42b-3fd9-afb2-7703a0006994" /* Utils.cpp */,
-				"b99462ab-58d9-3727-aa4b-b3246166a611" /* JSONOutputWriter.cpp */,
 				"41c6aa0c-3abc-3913-a79f-2072c1b28322" /* MyXmlParser.cpp */,
 			);
 			name = src;
@@ -179,6 +185,16 @@
 			name = "Common/ThirdParty/xerces-c-3.1.1/Build/Mac/Release";
 			path = "../../../Common/ThirdParty/xerces-c-3.1.1/Build/Mac/Release";
 			sourceTree = SOURCE_ROOT;
+		};
+		9AEE4A4E1C04BEB70019C03B /* Writers */ = {
+			isa = PBXGroup;
+			children = (
+				9AEE4A4F1C04BEB70019C03B /* ElectronOutputWriter.cpp */,
+				9AEE4A501C04BEB70019C03B /* JSONOutputWriter.cpp */,
+				9AEE4A511C04BEB70019C03B /* JSONTimelineWriter.cpp */,
+			);
+			path = Writers;
+			sourceTree = "<group>";
 		};
 		F5977F0909B7D3970058A43E /* SampleCreateJSPlugin.xcconfigs */ = {
 			isa = PBXGroup;
@@ -413,21 +429,23 @@
 				"11b6ea6f-8dda-395a-b7d9-307f60c8da7e" /* DocType.cpp in Sources */,
 				"ac0a0f9d-96dd-3620-ace9-4e86f0332be8" /* Publisher.cpp in Sources */,
 				"b56f3c1f-3389-398f-9deb-68998a4a4751" /* Utils.cpp in Sources */,
-				"f466c7a9-7085-3e0a-b2da-1ec4a7340721" /* JSONOutputWriter.cpp in Sources */,
 				"6299172a-94f3-3e36-9b11-fbe824232c00" /* MyXmlParser.cpp in Sources */,
 				"8f71b0ac-f77e-35e0-8ba3-eafefe65d054" /* internalJSONNode.cpp in Sources */,
 				"c53ddf8a-bbbc-3dee-82ba-65a87c37db4e" /* JSONAllocator.cpp in Sources */,
+				9AEE4A561C04BEB70019C03B /* JSONTimelineWriter.cpp in Sources */,
 				681CC5F71AF8BE630041AEC0 /* HTTPServer.cpp in Sources */,
 				"bc7b98e1-a321-3015-9217-0f5c6f3cbfed" /* JSONChildren.cpp in Sources */,
 				"4ebc8a76-6e5e-38d1-bd1e-a44ac9b6cf09" /* JSONDebug.cpp in Sources */,
 				"80eccaa8-142f-385a-a04f-942a76afb0bf" /* JSONIterators.cpp in Sources */,
 				"a667ac45-a68a-3e4c-b8f0-e54bfac215bd" /* JSONMemory.cpp in Sources */,
 				"5a4158f3-d11a-3378-b5bb-b87611f2f747" /* JSONNode.cpp in Sources */,
+				9AEE4A541C04BEB70019C03B /* JSONOutputWriter.cpp in Sources */,
 				681CC6011AF8BF5C0041AEC0 /* mongoose.c in Sources */,
 				"8ed2c99a-79c7-3e25-a978-d21041af1b50" /* JSONNode_Mutex.cpp in Sources */,
 				"411a4dda-fc45-3eaf-a9da-35ee6f8160a6" /* JSONPreparse.cpp in Sources */,
 				"61759552-656a-34f8-864d-dee2b46bbc02" /* JSONStream.cpp in Sources */,
 				"6df97df6-cdcc-3eec-8b67-b64cb2bd3741" /* JSONValidator.cpp in Sources */,
+				9AEE4A521C04BEB70019C03B /* ElectronOutputWriter.cpp in Sources */,
 				"18fd347f-e3e6-39d6-871d-61dfdd6a372d" /* JSONWorker.cpp in Sources */,
 				"a3dd5fb5-163b-33cf-83f9-75486dca0771" /* JSONWriter.cpp in Sources */,
 				"35666a89-c77e-30b3-8294-49cb42bb3457" /* libjson.cpp in Sources */,
@@ -443,21 +461,23 @@
 				"eee6a0c3-402c-3020-a9fb-1487b7a25bf0" /* DocType.cpp in Sources */,
 				"c53b657e-d9cb-32ae-aafa-c9ecd389c492" /* Publisher.cpp in Sources */,
 				"12b2c04d-7e57-3257-95ec-c44ea79fff4b" /* Utils.cpp in Sources */,
-				"7115aecc-7578-3388-809f-adf2cea7fb87" /* JSONOutputWriter.cpp in Sources */,
 				"f77fdb47-d483-3c03-8a74-4c0138c180d6" /* MyXmlParser.cpp in Sources */,
 				"157ca6f8-2e54-371b-8649-bb34db8f2d63" /* internalJSONNode.cpp in Sources */,
 				"f7f31334-a317-32e3-a2ff-22b21f1da5e9" /* JSONAllocator.cpp in Sources */,
+				9AEE4A571C04BEB70019C03B /* JSONTimelineWriter.cpp in Sources */,
 				681CC5F81AF8BE630041AEC0 /* HTTPServer.cpp in Sources */,
 				"ac2e8f32-a38e-3738-ac31-7f1a20406449" /* JSONChildren.cpp in Sources */,
 				"d09e3c89-9e1e-31ad-a1e3-7b33bd5e56b5" /* JSONDebug.cpp in Sources */,
 				"1a74ed6f-1455-3f15-9f44-14bb8e20b635" /* JSONIterators.cpp in Sources */,
 				"cf030e3d-ea74-3c90-9ae4-541a93a2e770" /* JSONMemory.cpp in Sources */,
 				"81e0cad2-705a-3d5e-a15a-311ce49f6b73" /* JSONNode.cpp in Sources */,
+				9AEE4A551C04BEB70019C03B /* JSONOutputWriter.cpp in Sources */,
 				681CC6021AF8BF5C0041AEC0 /* mongoose.c in Sources */,
 				"da95733a-774c-306e-867b-6f491e3c38e4" /* JSONNode_Mutex.cpp in Sources */,
 				"60d764c0-8d8e-3118-8c39-d190f2851cab" /* JSONPreparse.cpp in Sources */,
 				"d26de6fc-3954-384c-a0cb-033a23fa21af" /* JSONStream.cpp in Sources */,
 				"d0219f86-b0bd-3e38-bbdb-78ef59a3c4b1" /* JSONValidator.cpp in Sources */,
+				9AEE4A531C04BEB70019C03B /* ElectronOutputWriter.cpp in Sources */,
 				"3d6b6be0-13dd-3221-921c-9cd8689e5891" /* JSONWorker.cpp in Sources */,
 				"12b2c354-21e2-31f5-b092-ac00777d4c80" /* JSONWriter.cpp in Sources */,
 				"24fed128-bfa3-35fe-9403-2c37eed95a7d" /* libjson.cpp in Sources */,

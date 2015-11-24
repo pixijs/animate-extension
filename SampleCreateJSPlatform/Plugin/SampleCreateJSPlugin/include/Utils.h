@@ -37,6 +37,7 @@
 #include "IFCMStringUtils.h"
 #include <iostream>
 #include <fstream>
+#include "StrokeStyle/ISolidStrokeStyle.h"
 
 /* -------------------------------------------------- Forward Decl */
 
@@ -44,6 +45,51 @@
     struct sockaddr_in;
 #endif // USE_HTTP_SERVER
 
+/* -------------------------------------------------- Enums */
+
+namespace JiboPixiJS
+{
+    enum StrokeStyleType
+    {
+        INVALID_STROKE_STYLE_TYPE,
+        SOLID_STROKE_STYLE_TYPE
+    };
+}
+
+/* -------------------------------------------------- Macros / Constants */
+
+#define IMAGE_FOLDER "images"
+#define SOUND_FOLDER "sounds"
+
+/* -------------------------------------------------- Structs / Unions */
+
+namespace JiboPixiJS
+{
+    struct SOLID_STROKE_STYLE
+    {
+        FCM::Double thickness;
+        DOM::StrokeStyle::JOIN_STYLE joinStyle;
+        DOM::StrokeStyle::CAP_STYLE capStyle;
+        DOM::Utils::ScaleType scaleType;
+        FCM::Boolean strokeHinting;
+    };
+    
+    struct STROKE_STYLE
+    {
+        StrokeStyleType type;
+        
+        union
+        {
+            SOLID_STROKE_STYLE solidStrokeStyle;
+        };
+    };
+    
+    struct MaskInfo
+    {
+        FCM::U_Int32 objectId;
+        FCM::U_Int32 maskTillObjectId;
+    };
+}
 
 /* -------------------------------------------------- Enums */
 
