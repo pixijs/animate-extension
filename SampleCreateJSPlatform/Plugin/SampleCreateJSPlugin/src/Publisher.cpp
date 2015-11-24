@@ -66,7 +66,7 @@
 #include "Utils/ILinearColorGradient.h"
 #include "Utils/IRadialColorGradient.h"
 
-#include "OutputWriter.h"
+#include "JSONOutputWriter.h"
 
 #include "Exporter/Service/IResourcePalette.h"
 #include "Exporter/Service/ITimelineBuilder2.h"

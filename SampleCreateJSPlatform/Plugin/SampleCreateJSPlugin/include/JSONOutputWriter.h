@@ -22,8 +22,8 @@
  * @brief This file contains declarations for a output writer.
  */
 
-#ifndef OUTPUT_WRITER_H_
-#define OUTPUT_WRITER_H_
+#ifndef JSON_OUTPUT_WRITER_H_
+#define JSON_OUTPUT_WRITER_H_
 
 #include "IOutputWriter.h"
 #include "Utils.h"

@@ -16,7 +16,7 @@
 * from Adobe Systems Incorporated.
 **************************************************************************/
 
-#include "OutputWriter.h"
+#include "JSONOutputWriter.h"
 #include "PluginConfiguration.h"
 
 #include <cstring>
