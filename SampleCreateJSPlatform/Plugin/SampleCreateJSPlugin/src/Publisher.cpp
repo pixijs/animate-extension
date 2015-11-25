@@ -67,6 +67,7 @@
 #include "Utils/IRadialColorGradient.h"
 
 #include "Writers/JSONOutputWriter.h"
+#include "Writers/ElectronOutputWriter.h"
 
 #include "Exporter/Service/IResourcePalette.h"
 #include "Exporter/Service/ITimelineBuilder2.h"
@@ -225,7 +226,8 @@ namespace JiboPixiJS
         }
 
         // Create a output writer
-        std::auto_ptr<IOutputWriter> pOutputWriter(new JSONOutputWriter(GetCallback(), m_minify, precision));
+//        std::auto_ptr<IOutputWriter> pOutputWriter(new JSONOutputWriter(GetCallback(), m_minify, precision));
+        std::auto_ptr<IOutputWriter> pOutputWriter(new ElectronOutputWriter(GetCallback(), m_minify, precision));
         if (pOutputWriter.get() == NULL)
         {
             return FCM_MEM_NOT_AVAILABLE;
