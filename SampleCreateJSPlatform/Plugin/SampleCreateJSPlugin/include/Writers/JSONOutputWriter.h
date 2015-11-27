@@ -58,4 +58,3 @@ namespace JiboPixiJS
 };
 
 #endif // OUTPUT_WRITER_H_
-

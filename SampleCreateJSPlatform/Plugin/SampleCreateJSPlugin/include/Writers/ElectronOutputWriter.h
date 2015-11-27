@@ -72,4 +72,3 @@ namespace JiboPixiJS
 };
 
 #endif // ELECTRON_OUTPUT_WRITER_H_
-
