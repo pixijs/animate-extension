@@ -20,7 +20,8 @@ PLUGIN_FILE=../Plugin/SampleCreateJSPlugin/lib/mac/${BUILD_TARGET}/JiboPixiJSPlu
 
 # the plugin file needs to be placed in the eclipse project directory so it can be exported to a zxp
 echo "Copy the plugin to the Eclipse Project directory";
-\cp -r ${PLUGIN_FILE} ../EclipseProject/ExtensionContent/plugin/lib/mac/JiboPixiJSPlugin.fcm.plugin
+rm -rf ../EclipseProject/ExtensionContent/plugin/lib/mac/JiboPixiJSPlugin.fcm.plugin
+cp -r ${PLUGIN_FILE} ../EclipseProject/ExtensionContent/plugin/lib/mac/JiboPixiJSPlugin.fcm.plugin
 
 # make sure the previous runs output has been cleared from the adobe flash extensions directory
 echo "Deleting the previously created zxp file and the unpacked contents";
