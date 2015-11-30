@@ -1,8 +1,6 @@
-
 *.DS_Store
 *~
 .idea/
-*.zxp
 SampleCreateJSPlatform/.metadata/
 SampleCreateJSPlatform/EclipseProject/ExtensionContent/plugin/lib/mac/
 SampleCreateJSPlatform/Plugin/SampleCreateJSPlugin/lib/
