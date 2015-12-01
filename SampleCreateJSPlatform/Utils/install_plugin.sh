@@ -27,17 +27,26 @@ cp -r ${PLUGIN_FILE} ../EclipseProject/ExtensionContent/plugin/lib/mac/JiboPixiJ
 echo "Deleting the previously created zxp file and the unpacked contents";
 rm -rf /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin/*
 
-# create a zxp file in the adobe flash extensions directory from the previously created plugin
+# create a staging folder and copy the /CSXS/manifest.xml file and the /ExtensionContent/ directory contents into it
+# this step is recommended by the PACKAGING AND SIGNING ADOBE EXTENSIONS TECHNICAL NOTE document. (http://wwwimages.adobe.com/content/dam/Adobe/en/devnet/creativesuite/pdfs/SigningTechNote_CC.pdf)
+# note: this document is not hosted on the same website as the ZXPSignCmd tool (http://labs.adobe.com/downloads/extensionbuilder3.html)
+echo "Setting up the staging folder for the ZXP file"
+STAGING_FOLDER="../EclipseProject/PluginStagingDirectory"
+rm -rf $STAGING_FOLDER
+mkdir -p $STAGING_FOLDER
+
+cp -R ../EclipseProject/.staged-extension/CSXS $STAGING_FOLDER/
+cp -R ../EclipseProject/ExtensionContent/* $STAGING_FOLDER
+
+# create the destination directory for where the plugin needs to be installed
+rm -rf /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin/*
 mkdir -p /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin
 
+# create a zxp file in the adobe flash extensions directory from the previously created plugin
 echo "Sign and create the ZXP file from the plugin";
-./ZXPSignCmd -sign ../EclipseProject /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin/JiboPixiJSPlugin.zxp ../certificate.p12 password
+./ZXPSignCmd -sign $STAGING_FOLDER /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin/JiboPixiJSPlugin.zxp ../certificate.p12 password
 
 # unpack the produced zxp file
 tar -xzvf /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin/JiboPixiJSPlugin.zxp -C /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin
-
-mv /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin/.staged-extension/* /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin 
-
-mv /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin/ExtensionContent/* /Library/Application\ Support/Adobe/CEP/extensions/JiboPixiJSPlugin 
 
 exit 0;
