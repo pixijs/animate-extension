@@ -18,7 +18,6 @@
 
 #include "Publisher.h"
 #include "Utils.h"
-#include "HTTPServer.h"
 #include "FlashFCMPublicIDs.h"
 
 #include "FrameElement/IShape.h"
@@ -227,7 +226,7 @@ namespace JiboPixiJS
 
         // Create a output writer
 //        std::auto_ptr<IOutputWriter> pOutputWriter(new JSONOutputWriter(GetCallback(), m_minify, precision));
-        std::auto_ptr<IOutputWriter> pOutputWriter(new ElectronOutputWriter(GetCallback(), m_minify, precision));
+        std::auto_ptr<OutputWriterBase> pOutputWriter(new ElectronOutputWriter(GetCallback(), m_minify, precision));
         if (pOutputWriter.get() == NULL)
         {
             return FCM_MEM_NOT_AVAILABLE;
@@ -389,21 +388,25 @@ namespace JiboPixiJS
         }
         
         // Stop preview
-        StopPreview();
+        pOutputWriter->StopPreview(outFile);
 
-#ifdef USE_RUNTIME
+        #ifdef USE_RUNTIME
 
-        // We are now going to copy the runtime from the zxp package to the output folder.
-        std::string outFolder;
+                // We are now going to copy the runtime from the zxp package to the output folder.
+                std::string outFolder;
+                
+                Utils::GetParent(outFile, outFolder);
+
+                CopyRuntime(outFolder);
+
+        #endif
         
-        Utils::GetParent(outFile, outFolder);
-
-        CopyRuntime(outFolder);
-
-#endif
+        // run the post publish step after the runtime folder is created but before a preview is potentially run
+        pOutputWriter->PostPublishStep(outFolder, GetCallback());
+        
         if (IsPreviewNeeded(pDictConfig))
         {
-            StartPreview(outFile);
+            pOutputWriter->StartPreview(outFile, GetCallback());
         }
 
 #endif
@@ -529,72 +532,6 @@ namespace JiboPixiJS
                 res = false;
             }
         }
-        return res;
-    }
-    
-    FCM::Result CPublisher::StopPreview()
-    {
-        FCM::Result res = FCM_SUCCESS;
-        
-#ifdef USE_HTTP_SERVER
-
-        HTTPServer* server;
-        
-        server = HTTPServer::GetInstance();
-        if (server)
-        {
-            // Stop the web server just in case it is running
-            server->Stop();
-        }
-        
-#endif // USE_HTTP_SERVER
-        
-        return res;
-    }
-
-
-    FCM::Result CPublisher::StartPreview(const std::string& outFile)
-    {
-        FCM::Result res = FCM_SUCCESS;
-
-#ifdef USE_HTTP_SERVER
-
-        // We are now about to start a web server
-        std::string fileName;
-        HTTPServer* server;
-        ServerConfigParam config;
-
-        Utils::GetFileName(outFile, fileName);
-
-        server = HTTPServer::GetInstance();
-
-        int numTries = 0;
-        while (numTries < MAX_RETRY_ATTEMPT)
-        {
-            // Configure the web server
-            config.port = Utils::GetUnusedLocalPort();
-            Utils::GetParent(outFile, config.root);
-            server->SetConfig(config);
-
-            // Start the web server
-            res = server->Start();
-            if (FCM_SUCCESS_CODE(res))
-            {
-                // Launch the browser
-                Utils::LaunchBrowser(fileName, config.port, GetCallback());
-                break;
-            }
-            numTries++;
-        }
-
-        if (numTries == MAX_RETRY_ATTEMPT)
-        {
-            Utils::Trace(GetCallback(), "Failed to start web server\n");
-            res = FCM_GENERAL_ERROR;
-        }
-
-#endif // USE_HTTP_SERVER
-
         return res;
     }
 

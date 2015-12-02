@@ -207,6 +207,50 @@ namespace JiboPixiJS
         return FCM_SUCCESS;
     }
     
+    FCM::Result ElectronOutputWriter::PostPublishStep(const std::string& outputFolder, FCM::PIFCMCallback pCallback)
+    {
+        #ifdef _WINDOWS
+            // currently this operation is not supported on windows!
+            Utils::Trace("Running npm install on your project directory is currently not supported under windows", pCallback);
+        #else
+            std::string str = "/usr/local/bin/node /usr/local/bin/npm install --prefix " + outputFolder;
+            FILE* file = popen(str.c_str(), "r");
+            pclose(file);
+        #endif // _WINDOWS
+        
+        return FCM_SUCCESS;
+    }
+    
+    FCM::Result ElectronOutputWriter::StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback)
+    {
+        #ifdef _WINDOWS
+            // currently this operation is not supported on windows!
+            Utils::Trace("Previewing an electron project is currently not supported under windows", pCallback);
+        #else
+            std::string parentDirectory = "";
+            Utils::GetParent(outFile, parentDirectory);
+            std::string str = "/usr/local/bin/node /usr/local/bin/electron " + parentDirectory + " &";
+            popen(str.c_str(), "r");
+        #endif // _WINDOWS
+
+        return FCM_SUCCESS;
+    }
+    
+    FCM::Result ElectronOutputWriter::StopPreview(const std::string& outFile)
+    {
+        #ifdef _WINDOWS
+            // currently this operation is not supported on windows!
+        #else
+            // shut down previously running versions of electron
+            std::string parentDirectory = "";
+            Utils::GetParent(outFile, parentDirectory);
+            std::string str = "kill $(ps aux | grep '\\<.*[e]lectron.*\\> '" + parentDirectory + "'' | awk '{print $2}')";
+            popen(str.c_str(), "r");
+        #endif // _WINDOWS
+        
+        return FCM_SUCCESS;
+    }
+    
     ElectronOutputWriter::ElectronOutputWriter(
                                        FCM::PIFCMCallback pCallback,
                                        bool minify,

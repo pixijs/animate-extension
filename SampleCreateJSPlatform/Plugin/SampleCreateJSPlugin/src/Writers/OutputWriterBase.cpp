@@ -986,6 +986,26 @@ namespace JiboPixiJS
         // No need to do anything
         return FCM_SUCCESS;
     }
+
+    
+    FCM::Result OutputWriterBase::PostPublishStep(const std::string& outputFolder, FCM::PIFCMCallback pCallback)
+    {
+        // No-op
+        return FCM_SUCCESS;
+    }
+    
+    FCM::Result OutputWriterBase::StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback)
+    {
+        // No-op
+        return FCM_SUCCESS;
+    }
+    
+    FCM::Result OutputWriterBase::StopPreview(const std::string& outFile)
+    {
+        // No-op
+        return FCM_SUCCESS;
+    }
+
     
     FCM::Result OutputWriterBase::CreateImageFileName(const std::string& libPathName, std::string& name)
     {

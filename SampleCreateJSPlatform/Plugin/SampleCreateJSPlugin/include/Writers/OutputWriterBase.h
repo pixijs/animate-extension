@@ -9,6 +9,8 @@
 #ifndef OUTPUT_WRITER_BASE_H_
 #define OUTPUT_WRITER_BASE_H_
 
+#include "Version.h"
+#include "FCMTypes.h"
 #include "IOutputWriter.h"
 #include "Utils.h"
 #include <string>
@@ -180,6 +182,15 @@ namespace JiboPixiJS
         
         // End of a path 
         virtual FCM::Result EndDefinePath();
+
+        // Perform operations after publishing from Adobe Flash
+        virtual FCM::Result PostPublishStep(const std::string& outputFolder, FCM::PIFCMCallback pCallback);
+        
+        // Start a preview for the output content for this writer
+        virtual FCM::Result StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback);
+        
+        // Stop a preview for the output content for this writer
+        virtual FCM::Result StopPreview(const std::string& outFile);
         
     private:
         
