@@ -229,7 +229,7 @@ namespace JiboPixiJS
         #else
             std::string parentDirectory = "";
             Utils::GetParent(outFile, parentDirectory);
-            std::string str = "/usr/local/bin/node /usr/local/bin/electron " + parentDirectory + " &";
+            std::string str = "/usr/local/bin/node /usr/local/bin/electron " + parentDirectory;
             popen(str.c_str(), "r");
         #endif // _WINDOWS
 
