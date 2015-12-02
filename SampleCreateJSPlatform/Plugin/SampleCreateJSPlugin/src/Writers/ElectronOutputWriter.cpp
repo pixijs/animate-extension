@@ -244,6 +244,11 @@ namespace JiboPixiJS
             // shut down previously running versions of electron
             std::string parentDirectory = "";
             Utils::GetParent(outFile, parentDirectory);
+            // ps aux find's everything that's running
+            // grep is searching for any process with the string 'electron' followed by the parent directory.
+            //   (excluding the grep process itself)
+            // awk is printing the second string returned by the grep (which is the pid)
+            // kill is operating over all pids returned in this way
             std::string str = "kill $(ps aux | grep '\\<.*[e]lectron.*\\> '" + parentDirectory + "'' | awk '{print $2}')";
             popen(str.c_str(), "r");
         #endif // _WINDOWS
