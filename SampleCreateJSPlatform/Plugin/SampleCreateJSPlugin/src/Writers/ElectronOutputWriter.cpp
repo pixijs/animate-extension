@@ -213,7 +213,7 @@ namespace JiboPixiJS
             // currently this operation is not supported on windows!
             Utils::Trace("Running npm install on your project directory is currently not supported under windows", pCallback);
         #else
-            std::string str = "/usr/local/bin/node /usr/local/bin/npm install --prefix " + outputFolder;
+            std::string str = "/usr/local/bin/node /usr/local/bin/npm install --prefix '" + outputFolder + "'";
             FILE* file = popen(str.c_str(), "r");
             pclose(file);
         #endif // _WINDOWS
@@ -229,7 +229,7 @@ namespace JiboPixiJS
         #else
             std::string parentDirectory = "";
             Utils::GetParent(outFile, parentDirectory);
-            std::string str = "/usr/local/bin/node /usr/local/bin/electron " + parentDirectory;
+            std::string str = "/usr/local/bin/node /usr/local/bin/electron '" + parentDirectory + "'";
             popen(str.c_str(), "r");
         #endif // _WINDOWS
 
