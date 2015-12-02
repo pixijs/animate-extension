@@ -33,6 +33,8 @@
 #include <vector>
 #include <map>
 
+#define MAX_RETRY_ATTEMPT               10
+
 /* -------------------------------------------------- Forward Decl */
 
 class JSONNode;
@@ -52,6 +54,12 @@ namespace JiboPixiJS
 
         // Marks the end of the Document
         virtual FCM::Result EndDocument() override;
+        
+        // Start a preview for the output content for this writer
+        virtual FCM::Result StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback) override;
+        
+        // Stop a preview for the output content for this writer
+        virtual FCM::Result StopPreview(const std::string& outFile) override;
 
         JSONOutputWriter(FCM::PIFCMCallback pCallback, bool minify, DataPrecision dataPrecision);
     };

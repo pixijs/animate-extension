@@ -18,6 +18,8 @@
 
 #include "Writers/JSONOutputWriter.h"
 #include "PluginConfiguration.h"
+#include "HTTPServer.h"
+#include "FCMPluginInterface.h"
 
 #include <cstring>
 #include <fstream>
@@ -120,6 +122,71 @@ namespace JiboPixiJS
         delete [] m_HTMLOutput;
 
         return FCM_SUCCESS;
+    }
+    
+    FCM::Result JSONOutputWriter::StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback)
+    {
+        FCM::Result res = FCM_SUCCESS;
+        
+#ifdef USE_HTTP_SERVER
+        
+        // We are now about to start a web server
+        std::string fileName;
+        HTTPServer* server;
+        ServerConfigParam config;
+        
+        Utils::GetFileName(outFile, fileName);
+        
+        server = HTTPServer::GetInstance();
+        
+        int numTries = 0;
+        while (numTries < MAX_RETRY_ATTEMPT)
+        {
+            // Configure the web server
+            config.port = Utils::GetUnusedLocalPort();
+            Utils::GetParent(outFile, config.root);
+            server->SetConfig(config);
+            
+            // Start the web server
+            res = server->Start();
+            if (FCM_SUCCESS_CODE(res))
+            {
+                // Launch the browser
+                Utils::LaunchBrowser(outFile, config.port, pCallback);
+                break;
+            }
+            numTries++;
+        }
+        
+        if (numTries == MAX_RETRY_ATTEMPT)
+        {
+            Utils::Trace(pCallback, "Failed to start web server\n");
+            res = FCM_GENERAL_ERROR;
+        }
+        
+#endif // USE_HTTP_SERVER
+        
+        return res;
+    }
+    
+    FCM::Result JSONOutputWriter::StopPreview(const std::string& outFile)
+    {
+        FCM::Result res = FCM_SUCCESS;
+        
+#ifdef USE_HTTP_SERVER
+        
+        HTTPServer* server;
+        
+        server = HTTPServer::GetInstance();
+        if (server)
+        {
+            // Stop the web server just in case it is running
+            server->Stop();
+        }
+        
+#endif // USE_HTTP_SERVER
+        
+        return res;
     }
 
     JSONOutputWriter::JSONOutputWriter(

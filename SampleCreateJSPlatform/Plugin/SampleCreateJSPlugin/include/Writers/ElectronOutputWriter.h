@@ -54,6 +54,14 @@ namespace JiboPixiJS
         // Marks the end of the Document
         virtual FCM::Result EndDocument() override;
 
+        virtual FCM::Result PostPublishStep(const std::string& outputFolder, FCM::PIFCMCallback pCallback) override;
+        
+        // Start a preview for the output content for this writer
+        virtual FCM::Result StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback) override;
+        
+        // Stop a preview for the output content for this writer
+        virtual FCM::Result StopPreview(const std::string& outFile) override;
+        
         ElectronOutputWriter(FCM::PIFCMCallback pCallback, bool minify, DataPrecision dataPrecision);
         
     private:

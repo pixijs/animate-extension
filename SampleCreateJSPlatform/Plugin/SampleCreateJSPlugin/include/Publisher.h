@@ -91,9 +91,6 @@ namespace DOM
     #define OUTPUT_FILE_EXTENSION       "html"
 #endif
 
-#define MAX_RETRY_ATTEMPT               10
-
-
 /* -------------------------------------------------- Structs / Unions */
 
 
@@ -146,11 +143,7 @@ namespace JiboPixiJS
         FCM::Boolean IsPreviewNeeded(const PIFCMDictionary pDictConfig);
 
         FCM::Result Init();
-
-        FCM::Result StartPreview(const std::string& outFile);
         
-        FCM::Result StopPreview();
-
         FCM::Result ExportLibraryItems(FCM::FCMListPtr pLibraryItemList);
 
         FCM::Result CopyRuntime(const std::string& outputFolder);
