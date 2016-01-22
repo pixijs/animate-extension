@@ -31,17 +31,13 @@ Add the entry `PlayerDebugMode` of type `"string"` with value set to `1` in the 
 
 ### Commands
 
-To build and install to Animate CC directly, run the script. This will rebuild the C++ code, copy the plugin go the Eclipse project and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/JiboPixiJSPlugin/`)
+To build and install to Animate CC directly, run the script. This will rebuild the C++ code, copy the plugin go the Eclipse project and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/PixiJSPlugin/`)
 
 ```bash
-cd SampleCreateJSPlatform/Utils/
-./install_plugin.sh debug
+./build.sh debug
 ```
 
-To build the ZXP extention for other people to install:
-
 ```bash
-cd SampleCreateJSPlatform/Utils/
-./build_plugin_standalone.sh release
+./build.sh release
 ```
 

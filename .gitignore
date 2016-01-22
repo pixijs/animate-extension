@@ -1,10 +1,9 @@
 *.DS_Store
 *~
 .idea/
-SampleCreateJSPlatform/.metadata/
-SampleCreateJSPlatform/Plugin/SampleCreateJSPlugin/lib/
-SampleCreateJSPlatform/Plugin/SampleCreateJSPlugin/project/mac/build/
-SampleCreateJSPlatform/RemoteSystemsTempFiles/
-SampleCreateJSPlatform/Plugin/SampleCreateJSPlugin/project/mac/SampleCreateJSPlugin.mp.xcodeproj/xcuserdata/
-SampleCreateJSPlatform/Plugin/SampleCreateJSPlugin/project/mac/SampleCreateJSPlugin.mp.xcodeproj/project.xcworkspace/xcuserdata/
-SampleCreateJSPlatform/EclipseProject/PluginStagingDirectory/
+dist/
+temp/
+src/PixiJSPlugin/lib/
+src/PixiJSPlugin/project/mac/build/
+src/PixiJSPlugin/project/mac/PixiJSPlugin.mp.xcodeproj/xcuserdata/
+src/PixiJSPlugin/project/mac/PixiJSPlugin.mp.xcodeproj/project.xcworkspace/xcuserdata/
