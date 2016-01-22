@@ -7,10 +7,10 @@
     <Filter Include="(metaproject files)\MP.include">
       <UniqueIdentifier>{8C250B9C-F3DC-76E4-64B8-93B70141BC86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Common/ThirdParty">
+    <Filter Include="ThirdParty">
       <UniqueIdentifier>{91BCCDFC-230F-D6B8-4BAF-96F3AD37459D}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source">
+    <Filter Include="ThirdParty\libjson_7.6.1/libjson/_internal/Source">
       <UniqueIdentifier>{A6511C25-0F00-D36F-ED11-92E5CEA62871}</UniqueIdentifier>
     </Filter>
     <Filter Include="PixiJSPlugin">
@@ -22,7 +22,7 @@
     <Filter Include="PixiJSPlugin\src">
       <UniqueIdentifier>{F50807DB-6135-EFB9-3F4D-ADBEAA47DE0D}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Common/ThirdParty\mongoose">
+    <Filter Include="ThirdParty\mongoose">
       <UniqueIdentifier>{6a3bc4be-e111-4dd8-9937-b9d1b78a7b7c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -51,26 +51,26 @@
     <ResourceCompile Include="PixiJSPlugin_version_64.rc">
       <Filter>PixiJSPlugin\project/win</Filter>
     </ResourceCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONWorker.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONWorker.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONValidator.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONValidator.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\libjson.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\libjson.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONChildren.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONChildren.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONWriter.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONWriter.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONAllocator.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONAllocator.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONStream.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONStream.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\DocType.cpp">
       <Filter>PixiJSPlugin\src</Filter>
@@ -81,29 +81,29 @@
     <ClCompile Include="..\..\src\Publisher.cpp">
       <Filter>PixiJSPlugin\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode_Mutex.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode_Mutex.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\internalJSONNode.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\internalJSONNode.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONPreparse.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONPreparse.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\MyXmlParser.cpp">
       <Filter>PixiJSPlugin\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONMemory.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONMemory.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Main.cpp">
       <Filter>PixiJSPlugin\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONIterators.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONIterators.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
     <ClCompile Include="PixiJSPlugin_mp_precomp_64.cpp">
       <Filter>PixiJSPlugin\project/win</Filter>
@@ -111,8 +111,8 @@
     <ClCompile Include="..\..\src\Utils.cpp">
       <Filter>PixiJSPlugin\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDebug.cpp">
-      <Filter>Common/ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDebug.cpp">
+      <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
     <CustomBuild Include="post_build.64.py">
       <Filter>PixiJSPlugin\project/win</Filter>
@@ -122,8 +122,8 @@
     <ClCompile Include="..\..\src\HTTPServer.cpp">
       <Filter>PixiJSPlugin\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\ThirdParty\mongoose\mongoose.c">
-      <Filter>Common/ThirdParty\mongoose</Filter>
+    <ClCompile Include="..\..\..\ThirdParty\mongoose\mongoose.c">
+      <Filter>ThirdParty\mongoose</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

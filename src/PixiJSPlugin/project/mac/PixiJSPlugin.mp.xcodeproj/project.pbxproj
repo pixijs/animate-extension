@@ -88,7 +88,7 @@
 		"50c17538-91dd-3883-a5bc-315c0739acf4" /* JSONDebug.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONDebug.cpp; sourceTree = "<group>"; };
 		"51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.1.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = "libxerces-c-3.1.dylib"; sourceTree = "<group>"; };
 		681CC5F61AF8BE630041AEC0 /* HTTPServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HTTPServer.cpp; sourceTree = "<group>"; };
-		681CC6001AF8BF5C0041AEC0 /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mongoose.c; path = ../../../Common/ThirdParty/mongoose/mongoose.c; sourceTree = "<group>"; };
+		681CC6001AF8BF5C0041AEC0 /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mongoose.c; path = ../../../ThirdParty/mongoose/mongoose.c; sourceTree = "<group>"; };
 		"72093546-f441-3bed-8ee2-78acd3cf688d" /* JSONStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONStream.cpp; sourceTree = "<group>"; };
 		"7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppKit.framework; sourceTree = "<group>"; };
 		"7aa76593-b10f-3f2e-bbea-7a3e63e1a65b" /* JSONNode_Mutex.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONNode_Mutex.cpp; sourceTree = "<group>"; };
@@ -164,29 +164,29 @@
 			path = ../../src;
 			sourceTree = SOURCE_ROOT;
 		};
-		681CC5FF1AF8BEF70041AEC0 /* Common/ThirdParty/mongoose */ = {
+		681CC5FF1AF8BEF70041AEC0 /* ThirdParty/mongoose */ = {
 			isa = PBXGroup;
 			children = (
 				681CC6001AF8BF5C0041AEC0 /* mongoose.c */,
 			);
-			name = Common/ThirdParty/mongoose;
+			name = ThirdParty/mongoose;
 			sourceTree = "<group>";
 		};
 		811C721C097349F9007B1073 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				"94f58f66-908b-3a77-857a-3508edde47ad" /* Common/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release */,
+				"94f58f66-908b-3a77-857a-3508edde47ad" /* ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
 		};
-		"94f58f66-908b-3a77-857a-3508edde47ad" /* Common/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release */ = {
+		"94f58f66-908b-3a77-857a-3508edde47ad" /* ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release */ = {
 			isa = PBXGroup;
 			children = (
 				"51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.1.dylib */,
 			);
-			name = "Common/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
-			path = "../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+			name = "ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+			path = "../../../ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
 			sourceTree = SOURCE_ROOT;
 		};
 		9AEE4A4E1C04BEB70019C03B /* Writers */ = {
@@ -235,9 +235,9 @@
 		F5D3574D0948ECCD008C36CA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				681CC5FF1AF8BEF70041AEC0 /* Common/ThirdParty/mongoose */,
+				681CC5FF1AF8BEF70041AEC0 /* ThirdParty/mongoose */,
 				"5d440201-ca36-32fd-882f-9a16c34ed966" /* src */,
-				"a27a8ef3-ba50-3980-a679-f6f6a9a13ebf" /* Common/ThirdParty/libjson_7.6.1/libjson/_internal/Source */,
+				"a27a8ef3-ba50-3980-a679-f6f6a9a13ebf" /* ThirdParty/libjson_7.6.1/libjson/_internal/Source */,
 				"4ccc0e26-5dcd-3c55-b674-92512b29d658" /* mac */,
 			);
 			name = Sources;
@@ -258,7 +258,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		"a27a8ef3-ba50-3980-a679-f6f6a9a13ebf" /* Common/ThirdParty/libjson_7.6.1/libjson/_internal/Source */ = {
+		"a27a8ef3-ba50-3980-a679-f6f6a9a13ebf" /* ThirdParty/libjson_7.6.1/libjson/_internal/Source */ = {
 			isa = PBXGroup;
 			children = (
 				"a47eaabc-0062-3299-b91c-06037678b948" /* internalJSONNode.cpp */,
@@ -276,8 +276,8 @@
 				"9af15e97-f1a1-37db-bcf9-fba2786df1c4" /* JSONWriter.cpp */,
 				"7bfcfcd8-dedc-3680-b9e1-95891cdfa343" /* libjson.cpp */,
 			);
-			name = Common/ThirdParty/libjson_7.6.1/libjson/_internal/Source;
-			path = ../../../Common/ThirdParty/libjson_7.6.1/libjson/_internal/Source;
+			name = ThirdParty/libjson_7.6.1/libjson/_internal/Source;
+			path = ../../../ThirdParty/libjson_7.6.1/libjson/_internal/Source;
 			sourceTree = SOURCE_ROOT;
 		};
 		"adf58979-2004-31c7-817d-0b8b57ad85ac" /* Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks */ = {
@@ -507,13 +507,13 @@
 					../../../SDK/app/include/common,
 					../../../SDK/app/include/interfaces,
 					../../../SDK/app/include/interfaces/DOM,
-					../../../Common/ThirdParty/mongoose,
-					../../../Common/ThirdParty/libjson_7.6.1/libjson,
-					"../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
+					../../../ThirdParty/mongoose,
+					../../../ThirdParty/libjson_7.6.1/libjson,
+					"../../../ThirdParty/xerces/mac/xerces-c-3.1.1/src",
 					../../../SDK/app/include/interfaces/Exporter,
 					../../include,
 				);
-				LIBRARY_SEARCH_PATHS = "../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+				LIBRARY_SEARCH_PATHS = "../../../ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
 				PRODUCT_NAME = PixiJSPlugin;
 			};
 			name = Default;
@@ -531,9 +531,9 @@
 					../../../SDK/app/include/common,
 					../../../SDK/app/include/interfaces,
 					../../../SDK/app/include/interfaces/DOM,
-					../../../Common/ThirdParty/mongoose,
-					../../../Common/ThirdParty/libjson_7.6.1/libjson,
-					"../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
+					../../../ThirdParty/mongoose,
+					../../../ThirdParty/libjson_7.6.1/libjson,
+					"../../../ThirdParty/xerces/mac/xerces-c-3.1.1/src",
 					../../../SDK/app/include/interfaces/Exporter,
 					../../include,
 				);
@@ -554,13 +554,13 @@
 					../../../SDK/app/include/common,
 					../../../SDK/app/include/interfaces,
 					../../../SDK/app/include/interfaces/DOM,
-					../../../Common/ThirdParty/mongoose,
-					../../../Common/ThirdParty/libjson_7.6.1/libjson,
-					"../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
+					../../../ThirdParty/mongoose,
+					../../../ThirdParty/libjson_7.6.1/libjson,
+					"../../../ThirdParty/xerces/mac/xerces-c-3.1.1/src",
 					../../../SDK/app/include/interfaces/Exporter,
 					../../include,
 				);
-				LIBRARY_SEARCH_PATHS = "../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+				LIBRARY_SEARCH_PATHS = "../../../ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
 				PRODUCT_NAME = PixiJSPlugin;
 			};
 			name = Default;
