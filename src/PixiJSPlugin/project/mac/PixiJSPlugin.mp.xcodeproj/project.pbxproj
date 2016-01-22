@@ -502,15 +502,15 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"../mac-xcode",
-					../../../../sdk/core/include/common,
-					../../../../sdk/core/include/interfaces,
-					../../../../sdk/app/include/common,
-					../../../../sdk/app/include/interfaces,
-					../../../../sdk/app/include/interfaces/DOM,
+					../../../SDK/core/include/common,
+					../../../SDK/core/include/interfaces,
+					../../../SDK/app/include/common,
+					../../../SDK/app/include/interfaces,
+					../../../SDK/app/include/interfaces/DOM,
 					../../../Common/ThirdParty/mongoose,
 					../../../Common/ThirdParty/libjson_7.6.1/libjson,
 					"../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
-					../../../../sdk/app/include/interfaces/Exporter,
+					../../../SDK/app/include/interfaces/Exporter,
 					../../include,
 				);
 				LIBRARY_SEARCH_PATHS = "../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
@@ -526,15 +526,15 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"../mac-xcode",
-					../../../../sdk/core/include/common,
-					../../../../sdk/core/include/interfaces,
-					../../../../sdk/app/include/common,
-					../../../../sdk/app/include/interfaces,
-					../../../../sdk/app/include/interfaces/DOM,
+					../../../SDK/core/include/common,
+					../../../SDK/core/include/interfaces,
+					../../../SDK/app/include/common,
+					../../../SDK/app/include/interfaces,
+					../../../SDK/app/include/interfaces/DOM,
 					../../../Common/ThirdParty/mongoose,
 					../../../Common/ThirdParty/libjson_7.6.1/libjson,
 					"../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
-					../../../../sdk/app/include/interfaces/Exporter,
+					../../../SDK/app/include/interfaces/Exporter,
 					../../include,
 				);
 			};
@@ -549,15 +549,15 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"../mac-xcode",
-					../../../../sdk/core/include/common,
-					../../../../sdk/core/include/interfaces,
-					../../../../sdk/app/include/common,
-					../../../../sdk/app/include/interfaces,
-					../../../../sdk/app/include/interfaces/DOM,
+					../../../SDK/core/include/common,
+					../../../SDK/core/include/interfaces,
+					../../../SDK/app/include/common,
+					../../../SDK/app/include/interfaces,
+					../../../SDK/app/include/interfaces/DOM,
 					../../../Common/ThirdParty/mongoose,
 					../../../Common/ThirdParty/libjson_7.6.1/libjson,
 					"../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
-					../../../../sdk/app/include/interfaces/Exporter,
+					../../../SDK/app/include/interfaces/Exporter,
 					../../include,
 				);
 				LIBRARY_SEARCH_PATHS = "../../../Common/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
