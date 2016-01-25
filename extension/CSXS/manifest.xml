@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<ExtensionManifest Version="4.0" ExtensionBundleId="com.jibo.PixiAnimate" ExtensionBundleVersion="1.0.0"
+<ExtensionManifest Version="6.0" ExtensionBundleId="com.jibo.PixiAnimate" ExtensionBundleVersion="1.0.0"
 		ExtensionBundleName="PixiAnimate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ExtensionList>
 		<Extension Id="PixiAnimate.PublishSettings" Version="1.0" />
@@ -14,22 +13,21 @@
 			<Locale Code="All" />
 		</LocaleList>
 		<RequiredRuntimeList>
-			<RequiredRuntime Name="CSXS" Version="4.0" />
-
+			<RequiredRuntime Name="CSXS" Version="6.0" />
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
 		<Extension Id="PixiAnimate.PublishSettings">
 			<DispatchInfo >
 				<Resources>
-				<MainPath>./index.html</MainPath>
+				<MainPath>./dialog/index.html</MainPath>
 				</Resources>
 				<Lifecycle>
 					<AutoVisible>true</AutoVisible>
 				</Lifecycle>
 				<UI>
 					<Type>ModalDialog</Type>
-					<Menu>PixiJS Publish Settings</Menu>
+					<Menu>PixiAnimate Publish Settings</Menu>
 					<Geometry>
 						<Size>
 							<Height>170</Height>
@@ -49,7 +47,7 @@
 				</Lifecycle>
 				<UI>
 					<Type>ModalDialog</Type>
-					<Menu>Jibo PixiJS</Menu>
+					<Menu>PixiAnimate</Menu>
 					<Geometry>
 						<Size>
 							<Height>200</Height>

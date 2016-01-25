@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+    <head>
+        <title>PixiAnimate Publish Settings</title>
+        <meta charset="utf-8">
+        <link id="colorThemeCSS" href="css/panel-light.css" rel="stylesheet" type="text/css">
+        <script src="js/CSInterface.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <p>
+                <label class="myLabel">Output File :</label>
+                <input type="text"  id="of">
+                <input id="OPShowOpenDialog" type="image" src="images/open.png" style="left:10px">
+                <br/>
+            </p>
+            <details open>
+                <summary>ADVANCED</summary>
+                <p>
+                    <input type="checkbox" id="HiddenLayer" checked>Include hidden layers<br>
+                    <input type="checkbox" id="Minify" checked>Minify<br>
+                    <input type="checkbox" id="CompactData" checked>Compact data</label>
+                    <select id="CompactDataOptions" class="myList">
+                        <option value = "Low">Low</option>
+                        <option value = "Medium">Medium</option>
+                        <option value = "High" selected>High</option>
+                        <option value = "VeryHigh">Very High</option>
+                    </select>
+                </p>
+            </details>
+            <button type="submit" id="publish">Publish</button>
+            <script src="js/main.js"></script>
+        </div>
+    </body>
+</html>

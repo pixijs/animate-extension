@@ -96,7 +96,7 @@ namespace PixiJS
     "{ \r\n\
         \"name\": \"adobe-flash-pixijs\", \r\n\
         \"version\": \"1.0.0\", \r\n\
-        \"description\": \"Exported Adobe Flash content using the PixiJS renderer.\", \r\n\
+        \"description\": \"Exported Adobe Flash content using the Pixi.js renderer.\", \r\n\
         \"main\": \"%s\", \r\n\
         \"scripts\": { \r\n\
             \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\" \r\n\
