@@ -31,13 +31,12 @@ Add the entry `PlayerDebugMode` of type `"string"` with value set to `1` in the 
 
 ### Commands
 
-To build and install to Animate CC directly, run the script. This will rebuild the C++ code, copy the plugin go the Eclipse project and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/PixiAnimate/`)
+To build and install to Animate CC directly, run the script. This will rebuild the C++ code, copy the plugin go the Eclipse project and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate/`)
 
 ```bash
-./build.sh debug
+gulp --debug
 ```
 
 ```bash
-./build.sh release
+gulp
 ```
-
