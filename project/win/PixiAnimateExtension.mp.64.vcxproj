@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>PixiAnimateExtension</ProjectName>
+    <ProjectName>PixiAnimate</ProjectName>
     <ProjectGuid>{4801AE5B-6706-3BBE-42E5-47D686CD8ED4}</ProjectGuid>
-    <RootNamespace>PixiAnimateExtension</RootNamespace>
+    <RootNamespace>PixiAnimate</RootNamespace>
     <SccLocalPath />
     <SccProjectName />
     <SccProvider />
@@ -44,12 +44,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\src\PixiAnimateExtension\lib\win\debug\64\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\src\PixiAnimate\lib\win\debug\64\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\obj\win\debug\64\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
     <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EmbedManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\src\PixiAnimateExtension\lib\win\release\64\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\src\PixiAnimate\lib\win\release\64\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\obj\win\release\64\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
@@ -78,7 +78,7 @@
     <ClCompile>
       <AdditionalOptions>/Zm300 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\..\src\SDK\core\include\common;..\..\src\SDK\core\include\interfaces;..\..\src\SDK\app\include\common;..\..\src\SDK\app\include\interfaces;..\..\src\SDK\app\include\interfaces\DOM;..\..\src\ThirdParty\mongoose;..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src;..\..\src\SDK\app\include\interfaces\Exporter;..\..\src\PixiAnimateExtension\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\src\SDK\core\include\common;..\..\src\SDK\core\include\interfaces;..\..\src\SDK\app\include\common;..\..\src\SDK\app\include\interfaces;..\..\src\SDK\app\include\interfaces\DOM;..\..\src\ThirdParty\mongoose;..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src;..\..\src\SDK\app\include\interfaces\Exporter;..\..\src\PixiAnimate\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;MSWindows;_WIN32_WINNT=0x600;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN_ENV;_CRT_SECURE_NO_WARNINGS;DEBUG=1;_DEBUG;USE_HTTP_SERVER;USE_RUNTIME;_ITERATOR_DEBUG_LEVEL=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
@@ -161,7 +161,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>.;..\..\src\SDK\core\include\common;..\..\src\SDK\core\include\interfaces;..\..\src\SDK\app\include\common;..\..\src\SDK\app\include\interfaces;..\..\src\SDK\app\include\interfaces\DOM;..\..\src\ThirdParty\mongoose;..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src;..\..\src\SDK\app\include\interfaces\Exporter;..\..\src\PixiAnimateExtension\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\src\SDK\core\include\common;..\..\src\SDK\core\include\interfaces;..\..\src\SDK\app\include\common;..\..\src\SDK\app\include\interfaces;..\..\src\SDK\app\include\interfaces\DOM;..\..\src\ThirdParty\mongoose;..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src;..\..\src\SDK\app\include\interfaces\Exporter;..\..\src\PixiAnimate\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;MSWindows;_WIN32_WINNT=0x600;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN_ENV;_CRT_SECURE_NO_WARNINGS;NDEBUG;_ITERATOR_DEBUG_LEVEL=0;USE_HTTP_SERVER;USE_RUNTIME;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
@@ -228,7 +228,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\PixiAnimateExtension.mp" />
+    <None Include="..\PixiAnimate.mp" />
     <None Include="..\..\..\..\..\..\..\ext\adobe\dvacore\project\dvaincludes.mp" />
     <None Include="..\..\..\..\..\..\..\ext\adobe\dvacore\project\dvabase.mp" />
     <None Include="..\..\..\..\..\..\..\ext\adobe\dvacore\project\dvaproduct.mp" />
@@ -238,7 +238,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ResourceCompile Include="PixiAnimateExtension_version_64.rc" />
+    <ResourceCompile Include="PixiAnimate_version_64.rc" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -253,23 +253,23 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\DocType.cpp" />
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\HTTPServer.cpp" />
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\OutputWriter.cpp" />
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\Publisher.cpp" />
+    <ClCompile Include="..\..\src\PixiAnimate\src\DocType.cpp" />
+    <ClCompile Include="..\..\src\PixiAnimate\src\HTTPServer.cpp" />
+    <ClCompile Include="..\..\src\PixiAnimate\src\OutputWriter.cpp" />
+    <ClCompile Include="..\..\src\PixiAnimate\src\Publisher.cpp" />
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode.cpp" />
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode_Mutex.cpp" />
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\internalJSONNode.cpp" />
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONPreparse.cpp" />
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\MyXmlParser.cpp" />
+    <ClCompile Include="..\..\src\PixiAnimate\src\MyXmlParser.cpp" />
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONMemory.cpp" />
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\Main.cpp" />
+    <ClCompile Include="..\..\src\PixiAnimate\src\Main.cpp" />
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONIterators.cpp" />
-    <ClCompile Include="PixiAnimateExtension_mp_precomp_64.cpp">
+    <ClCompile Include="PixiAnimate_mp_precomp_64.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\Utils.cpp" />
+    <ClCompile Include="..\..\src\PixiAnimate\src\Utils.cpp" />
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDebug.cpp" />
   </ItemGroup>
   <ItemGroup>

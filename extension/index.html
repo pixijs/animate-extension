@@ -160,7 +160,7 @@ function serializeUI()
 	event.scope = "APPLICATION";
 	event.type = "com.adobe.events.flash.extension.savestate";
     event.data = JSON.stringify(pubSettings);
-	event.extensionId = "PixiAnimateExtension.PublishSettings";
+	event.extensionId = "PixiAnimate.PublishSettings";
 	csInterface.dispatchEvent(event);
 
 	evalScript("fl.getDocumentDOM().publish();",publish_callback);
@@ -182,7 +182,7 @@ function onLoaded() {
 	event.scope = "APPLICATION";
 	event.type = "com.adobe.events.flash.extensionLoaded";
 	event.data = "Test Event";
-	event.extensionId = "PixiAnimateExtension.PublishSettings";
+	event.extensionId = "PixiAnimate.PublishSettings";
 	csInterface.dispatchEvent(event);
 }
     

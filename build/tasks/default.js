@@ -1,8 +1,8 @@
 module.exports = function(gulp, options, plugins) {
     gulp.task('default', function(done){
-        plugins.gutil.log("+----------------------------+".green);
-        plugins.gutil.log("|    PixiAnimateExtension    |".green);
-        plugins.gutil.log("+----------------------------+".green);
+        plugins.gutil.log("+-------------------+".green);
+        plugins.gutil.log("|    PixiAnimate    |".green);
+        plugins.gutil.log("+-------------------+".green);
         plugins.gutil.log("Mode: ".gray, (options.argv.debug ? "Debug" : "Release").yellow);
         plugins.sequence(
             'clean',

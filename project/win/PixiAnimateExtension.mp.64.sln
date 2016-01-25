@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 
 # Visual Studio 2012
 
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PixiAnimateExtension", "PixiAnimateExtension.mp.64.vcxproj", "{4801AE5B-6706-3BBE-42E5-47D686CD8ED4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PixiAnimate", "PixiAnimate.mp.64.vcxproj", "{4801AE5B-6706-3BBE-42E5-47D686CD8ED4}"
 
 EndProject
 

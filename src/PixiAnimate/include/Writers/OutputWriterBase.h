@@ -1,6 +1,6 @@
 //
 //  OutputWriterBase.hpp
-//  PixiAnimateExtension.mp
+//  PixiAnimate.mp
 //
 //  Created by Matt Bittarelli on 11/24/15.
 //

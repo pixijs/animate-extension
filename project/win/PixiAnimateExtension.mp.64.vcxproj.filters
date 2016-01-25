@@ -13,13 +13,13 @@
     <Filter Include="ThirdParty\libjson_7.6.1/libjson/_internal/Source">
       <UniqueIdentifier>{A6511C25-0F00-D36F-ED11-92E5CEA62871}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PixiAnimateExtension">
+    <Filter Include="PixiAnimate">
       <UniqueIdentifier>{12212D0A-DB66-8E26-2FF1-64B746E5A190}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PixiAnimateExtension\project/win">
+    <Filter Include="PixiAnimate\project/win">
       <UniqueIdentifier>{6DCFD5D1-3BCD-7CB7-872B-DDD0F22331B4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PixiAnimateExtension\src">
+    <Filter Include="PixiAnimate\src">
       <UniqueIdentifier>{F50807DB-6135-EFB9-3F4D-ADBEAA47DE0D}</UniqueIdentifier>
     </Filter>
     <Filter Include="ThirdParty\mongoose">
@@ -27,7 +27,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\PixiAnimateExtension.mp">
+    <None Include="..\PixiAnimate.mp">
       <Filter>(metaproject files)</Filter>
     </None>
     <None Include="..\..\..\..\..\..\..\ext\adobe\dvacore\project\dvaincludes.mp">
@@ -48,8 +48,8 @@
     <None Include="..\..\..\..\..\..\Flash\project\Flashbase.mp">
       <Filter>(metaproject files)\MP.include</Filter>
     </None>
-    <ResourceCompile Include="PixiAnimateExtension_version_64.rc">
-      <Filter>PixiAnimateExtension\project/win</Filter>
+    <ResourceCompile Include="PixiAnimate_version_64.rc">
+      <Filter>PixiAnimate\project/win</Filter>
     </ResourceCompile>
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONWorker.cpp">
       <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
@@ -72,14 +72,14 @@
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONStream.cpp">
       <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\DocType.cpp">
-      <Filter>PixiAnimateExtension\src</Filter>
+    <ClCompile Include="..\..\src\PixiAnimate\src\DocType.cpp">
+      <Filter>PixiAnimate\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\OutputWriter.cpp">
-      <Filter>PixiAnimateExtension\src</Filter>
+    <ClCompile Include="..\..\src\PixiAnimate\src\OutputWriter.cpp">
+      <Filter>PixiAnimate\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\Publisher.cpp">
-      <Filter>PixiAnimateExtension\src</Filter>
+    <ClCompile Include="..\..\src\PixiAnimate\src\Publisher.cpp">
+      <Filter>PixiAnimate\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode.cpp">
       <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
@@ -93,34 +93,34 @@
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONPreparse.cpp">
       <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\MyXmlParser.cpp">
-      <Filter>PixiAnimateExtension\src</Filter>
+    <ClCompile Include="..\..\src\PixiAnimate\src\MyXmlParser.cpp">
+      <Filter>PixiAnimate\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONMemory.cpp">
       <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\Main.cpp">
-      <Filter>PixiAnimateExtension\src</Filter>
+    <ClCompile Include="..\..\src\PixiAnimate\src\Main.cpp">
+      <Filter>PixiAnimate\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONIterators.cpp">
       <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
-    <ClCompile Include="PixiAnimateExtension_mp_precomp_64.cpp">
-      <Filter>PixiAnimateExtension\project/win</Filter>
+    <ClCompile Include="PixiAnimate_mp_precomp_64.cpp">
+      <Filter>PixiAnimate\project/win</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\Utils.cpp">
-      <Filter>PixiAnimateExtension\src</Filter>
+    <ClCompile Include="..\..\src\PixiAnimate\src\Utils.cpp">
+      <Filter>PixiAnimate\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDebug.cpp">
       <Filter>ThirdParty\libjson_7.6.1/libjson/_internal/Source</Filter>
     </ClCompile>
     <CustomBuild Include="post_build.64.py">
-      <Filter>PixiAnimateExtension\project/win</Filter>
+      <Filter>PixiAnimate\project/win</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\PixiAnimateExtension\src\HTTPServer.cpp">
-      <Filter>PixiAnimateExtension\src</Filter>
+    <ClCompile Include="..\..\src\PixiAnimate\src\HTTPServer.cpp">
+      <Filter>PixiAnimate\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ThirdParty\mongoose\mongoose.c">
       <Filter>ThirdParty\mongoose</Filter>

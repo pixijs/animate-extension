@@ -94,7 +94,7 @@
 		"7aa76593-b10f-3f2e-bbea-7a3e63e1a65b" /* JSONNode_Mutex.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONNode_Mutex.cpp; sourceTree = "<group>"; };
 		"7bfcfcd8-dedc-3680-b9e1-95891cdfa343" /* libjson.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = libjson.cpp; sourceTree = "<group>"; };
 		"960c8d89-d632-3678-815d-49888c76392b" /* JSONPreparse.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONPreparse.cpp; sourceTree = "<group>"; };
-		9A0112631BFB99D200E546CC /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../src/PixiAnimateExtension/include; sourceTree = "<group>"; };
+		9A0112631BFB99D200E546CC /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../src/PixiAnimate/include; sourceTree = "<group>"; };
 		9AEE4A4F1C04BEB70019C03B /* ElectronOutputWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronOutputWriter.cpp; sourceTree = "<group>"; };
 		9AEE4A501C04BEB70019C03B /* JSONOutputWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONOutputWriter.cpp; sourceTree = "<group>"; };
 		9AEE4A511C04BEB70019C03B /* JSONTimelineWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONTimelineWriter.cpp; sourceTree = "<group>"; };
@@ -102,11 +102,11 @@
 		"9af15e97-f1a1-37db-bcf9-fba2786df1c4" /* JSONWriter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONWriter.cpp; sourceTree = "<group>"; };
 		"9bbfd7be-ac57-384d-984e-1afc2e0ed3b2" /* JSONIterators.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONIterators.cpp; sourceTree = "<group>"; };
 		"9f0688c3-3f04-3a69-a219-c79da92040db" /* Main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Main.cpp; sourceTree = "<group>"; };
-		F540544A0950B01B00D1FC3F /* PixiAnimateExtension.fcm.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PixiAnimateExtension.fcm.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		F540544A0950B01B00D1FC3F /* PixiAnimate.fcm.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PixiAnimate.fcm.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5977F0C09B7D3B80058A43E /* project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = project.xcconfig; sourceTree = "<group>"; };
 		F5977F0F09B7D4150058A43E /* project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = project_debug.xcconfig; sourceTree = "<group>"; };
 		F5977F1109B7D41E0058A43E /* project_release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = project_release.xcconfig; sourceTree = "<group>"; };
-		F5D357480948EC91008C36CA /* PixiAnimateExtension.fcm.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PixiAnimateExtension.fcm.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5D357480948EC91008C36CA /* PixiAnimate.fcm.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PixiAnimate.fcm.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		"a2b84e18-8788-39bf-9148-f0dbf764f142" /* Publisher.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Publisher.cpp; sourceTree = "<group>"; };
 		"a47eaabc-0062-3299-b91c-06037678b948" /* internalJSONNode.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = internalJSONNode.cpp; sourceTree = "<group>"; };
 		"f3f52c21-85e0-3b05-9855-54fac0cf8db4" /* Foundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Foundation.framework; sourceTree = "<group>"; };
@@ -161,7 +161,7 @@
 				"41c6aa0c-3abc-3913-a79f-2072c1b28322" /* MyXmlParser.cpp */,
 			);
 			name = src;
-			path = ../../src/PixiAnimateExtension/src;
+			path = ../../src/PixiAnimate/src;
 			sourceTree = SOURCE_ROOT;
 		};
 		681CC5FF1AF8BEF70041AEC0 /* ThirdParty/mongoose */ = {
@@ -200,21 +200,21 @@
 			path = Writers;
 			sourceTree = "<group>";
 		};
-		F5977F0909B7D3970058A43E /* PixiAnimateExtension.xcconfigs */ = {
+		F5977F0909B7D3970058A43E /* PixiAnimate.xcconfigs */ = {
 			isa = PBXGroup;
 			children = (
 				F5977F0C09B7D3B80058A43E /* project.xcconfig */,
 				F5977F0F09B7D4150058A43E /* project_debug.xcconfig */,
 				F5977F1109B7D41E0058A43E /* project_release.xcconfig */,
 			);
-			path = PixiAnimateExtension.xcconfigs;
+			path = PixiAnimate.xcconfigs;
 			sourceTree = "<group>";
 		};
 		F5D357220948E8C4008C36CA = {
 			isa = PBXGroup;
 			children = (
 				9A0112631BFB99D200E546CC /* include */,
-				F5977F0909B7D3970058A43E /* PixiAnimateExtension.xcconfigs */,
+				F5977F0909B7D3970058A43E /* PixiAnimate.xcconfigs */,
 				F5D3576909491A7D008C36CA /* Frameworks */,
 				811C721C097349F9007B1073 /* Libraries */,
 				F5D3574E0948ECD5008C36CA /* Resources */,
@@ -226,8 +226,8 @@
 		F5D357400948EBCB008C36CA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F540544A0950B01B00D1FC3F /* PixiAnimateExtension.fcm.plugin */,
-				F5D357480948EC91008C36CA /* PixiAnimateExtension.fcm.plugin */,
+				F540544A0950B01B00D1FC3F /* PixiAnimate.fcm.plugin */,
+				F5D357480948EC91008C36CA /* PixiAnimate.fcm.plugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -295,9 +295,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		"4a8c50d8-6ecf-35c7-b187-7d012fe8e3c4" /* PixiAnimateExtension.Debug */ = {
+		"4a8c50d8-6ecf-35c7-b187-7d012fe8e3c4" /* PixiAnimate.Debug */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F54054480950B01B00D1FC3F /* Build configuration list for PBXNativeTarget "PixiAnimateExtension.Debug" */;
+			buildConfigurationList = F54054480950B01B00D1FC3F /* Build configuration list for PBXNativeTarget "PixiAnimate.Debug" */;
 			buildPhases = (
 				F540543D0950B01B00D1FC3F /* Resources */,
 				F540543E0950B01B00D1FC3F /* Sources */,
@@ -309,14 +309,14 @@
 			);
 			dependencies = (
 			);
-			name = PixiAnimateExtension.Debug;
+			name = PixiAnimate.Debug;
 			productName = Debug;
-			productReference = F540544A0950B01B00D1FC3F /* PixiAnimateExtension.fcm.plugin */;
+			productReference = F540544A0950B01B00D1FC3F /* PixiAnimate.fcm.plugin */;
 			productType = "com.apple.product-type.bundle";
 		};
-		"6df6e65a-e184-31e8-ab40-d210674741f0" /* PixiAnimateExtension.Release */ = {
+		"6df6e65a-e184-31e8-ab40-d210674741f0" /* PixiAnimate.Release */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F5D3574A0948EC91008C36CA /* Build configuration list for PBXNativeTarget "PixiAnimateExtension.Release" */;
+			buildConfigurationList = F5D3574A0948EC91008C36CA /* Build configuration list for PBXNativeTarget "PixiAnimate.Release" */;
 			buildPhases = (
 				F5D357440948EC91008C36CA /* Resources */,
 				F5D357450948EC91008C36CA /* Sources */,
@@ -328,9 +328,9 @@
 			);
 			dependencies = (
 			);
-			name = PixiAnimateExtension.Release;
+			name = PixiAnimate.Release;
 			productName = Release;
-			productReference = F5D357480948EC91008C36CA /* PixiAnimateExtension.fcm.plugin */;
+			productReference = F5D357480948EC91008C36CA /* PixiAnimate.fcm.plugin */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -340,7 +340,7 @@
 			isa = PBXProject;
 			attributes = {
 			};
-			buildConfigurationList = F5D357250948E8C4008C36CA /* Build configuration list for PBXProject "PixiAnimateExtension.mp" */;
+			buildConfigurationList = F5D357250948E8C4008C36CA /* Build configuration list for PBXProject "PixiAnimate.mp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -352,8 +352,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				"4a8c50d8-6ecf-35c7-b187-7d012fe8e3c4" /* PixiAnimateExtension.Debug */,
-				"6df6e65a-e184-31e8-ab40-d210674741f0" /* PixiAnimateExtension.Release */,
+				"4a8c50d8-6ecf-35c7-b187-7d012fe8e3c4" /* PixiAnimate.Debug */,
+				"6df6e65a-e184-31e8-ab40-d210674741f0" /* PixiAnimate.Release */,
 			);
 		};
 /* End PBXProject section */
@@ -498,7 +498,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F5977F0F09B7D4150058A43E /* project_debug.xcconfig */;
 			buildSettings = {
-				DVA_BUNDLE_IDENTIFIER = PixiAnimateExtension.fcm.plugin;
+				DVA_BUNDLE_IDENTIFIER = PixiAnimate.fcm.plugin;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"../mac-xcode",
@@ -511,10 +511,10 @@
 					../../src/ThirdParty/libjson_7.6.1/libjson,
 					"../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
 					../../src/SDK/app/include/interfaces/Exporter,
-					../../src/PixiAnimateExtension/include,
+					../../src/PixiAnimate/include,
 				);
 				LIBRARY_SEARCH_PATHS = "../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
-				PRODUCT_NAME = PixiAnimateExtension;
+				PRODUCT_NAME = PixiAnimate;
 			};
 			name = Default;
 		};
@@ -535,7 +535,7 @@
 					../../src/ThirdParty/libjson_7.6.1/libjson,
 					"../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
 					../../src/SDK/app/include/interfaces/Exporter,
-					../../src/PixiAnimateExtension/include,
+					../../src/PixiAnimate/include,
 				);
 			};
 			name = Default;
@@ -544,8 +544,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F5977F1109B7D41E0058A43E /* project_release.xcconfig */;
 			buildSettings = {
-				DVA_BUNDLE_IDENTIFIER = PixiAnimateExtension.fcm.plugin;
-				DVA_PRODUCT_NAME = "Jibo PixiJS Plugin";
+				DVA_BUNDLE_IDENTIFIER = PixiAnimate.fcm.plugin;
+				DVA_PRODUCT_NAME = "PixiAnimate Extension";
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"../mac-xcode",
@@ -558,17 +558,17 @@
 					../../src/ThirdParty/libjson_7.6.1/libjson,
 					"../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
 					../../src/SDK/app/include/interfaces/Exporter,
-					../../src/PixiAnimateExtension/include,
+					../../src/PixiAnimate/include,
 				);
 				LIBRARY_SEARCH_PATHS = "../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
-				PRODUCT_NAME = PixiAnimateExtension;
+				PRODUCT_NAME = PixiAnimate;
 			};
 			name = Default;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F54054480950B01B00D1FC3F /* Build configuration list for PBXNativeTarget "PixiAnimateExtension.Debug" */ = {
+		F54054480950B01B00D1FC3F /* Build configuration list for PBXNativeTarget "PixiAnimate.Debug" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F54054490950B01B00D1FC3F /* Default */,
@@ -576,7 +576,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		F5D357250948E8C4008C36CA /* Build configuration list for PBXProject "PixiAnimateExtension.mp" */ = {
+		F5D357250948E8C4008C36CA /* Build configuration list for PBXProject "PixiAnimate.mp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F5D357270948E8C4008C36CA /* Default */,
@@ -584,7 +584,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		F5D3574A0948EC91008C36CA /* Build configuration list for PBXNativeTarget "PixiAnimateExtension.Release" */ = {
+		F5D3574A0948EC91008C36CA /* Build configuration list for PBXNativeTarget "PixiAnimate.Release" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F5D3574B0948EC91008C36CA /* Default */,

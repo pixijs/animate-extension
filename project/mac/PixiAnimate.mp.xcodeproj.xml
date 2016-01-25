@@ -365,7 +365,7 @@
 			<key>name</key>
 			<string>src</string>
 			<key>path</key>
-			<string>../../src/PixiAnimateExtension/src</string>
+			<string>../../src/PixiAnimate/src</string>
 			<key>sourceTree</key>
 			<string>SOURCE_ROOT</string>
 		</dict>
@@ -676,7 +676,7 @@
 			<key>isa</key>
 			<string>PBXNativeTarget</string>
 			<key>name</key>
-			<string>PixiAnimateExtension.Debug</string>
+			<string>PixiAnimate.Debug</string>
 			<key>productName</key>
 			<string>Debug</string>
 			<key>productReference</key>
@@ -837,7 +837,7 @@
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>path</key>
-			<string>PixiAnimateExtension.plugin</string>
+			<string>PixiAnimate.plugin</string>
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
@@ -852,9 +852,9 @@
 			<key>isa</key>
 			<string>PBXGroup</string>
 			<key>name</key>
-			<string>PixiAnimateExtension.xcconfigs</string>
+			<string>PixiAnimate.xcconfigs</string>
 			<key>path</key>
-			<string>PixiAnimateExtension.xcconfigs</string>
+			<string>PixiAnimate.xcconfigs</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -1084,7 +1084,7 @@
 			<key>isa</key>
 			<string>PBXNativeTarget</string>
 			<key>name</key>
-			<string>PixiAnimateExtension.Release</string>
+			<string>PixiAnimate.Release</string>
 			<key>productName</key>
 			<string>Release</string>
 			<key>productReference</key>
@@ -1101,7 +1101,7 @@
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>path</key>
-			<string>PixiAnimateExtension.plugin</string>
+			<string>PixiAnimate.plugin</string>
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>

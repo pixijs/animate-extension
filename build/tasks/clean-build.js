@@ -3,7 +3,8 @@ module.exports = function(gulp, options, plugins) {
         return plugins.del([
             options.pluginTempDebug,
             options.pluginTempRelease,
-            'project/mac/build'
+            'project/mac/build',
+            'src/PixiAnimate/lib/mac'
         ]);
     });  
 };

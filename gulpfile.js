@@ -1,10 +1,10 @@
 var gulp = require('gulp');
 
 // The name of the project
-var name = 'PixiAnimateExtension';
+var name = 'PixiAnimate';
 
 // The bundle id for the extension
-var id = 'com.jibo.PixiAnimateExtension';
+var id = 'com.jibo.PixiAnimate';
 
 // Options for the load-gulp-tasks
 var options = {
@@ -19,14 +19,14 @@ var options = {
     projectContent: 'extension',
 
     // XCode project for building the plugin
-    xcodeproj: 'project/mac/' + name + '.mp.xcodeproj',
+    xcodeproj: 'project/mac/PixiAnimate.mp.xcodeproj',
 
     // Temporary build target
-    pluginTempDebug:'src/' + name + '/lib/mac/debug/' + name + '.fcm.plugin',
-    pluginTempRelease: 'src/' + name + '/lib/mac/release/' + name + '.fcm.plugin',
+    pluginTempDebug:'src/PixiAnimate/lib/mac/debug/PixiAnimate.fcm.plugin',
+    pluginTempRelease: 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin',
     
     // The target location for the plugin
-    pluginFile:  id + '/plugin/lib/mac/' + name + '.fcm.plugin',
+    pluginFile:  id + '/plugin/lib/mac/PixiAnimate.fcm.plugin',
     
     // Temporary staging folder
     bundleId: id,

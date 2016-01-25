@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6df6e65a-e184-31e8-ab40-d210674741f0"
-               BuildableName = "PixiAnimateExtension.fcm.plugin"
-               BlueprintName = "PixiAnimateExtension.Release"
-               ReferencedContainer = "container:PixiAnimateExtension.mp.xcodeproj">
+               BuildableName = "PixiAnimate.fcm.plugin"
+               BlueprintName = "PixiAnimate.Release"
+               ReferencedContainer = "container:PixiAnimate.mp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,9 +46,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6df6e65a-e184-31e8-ab40-d210674741f0"
-            BuildableName = "PixiAnimateExtension.fcm.plugin"
-            BlueprintName = "PixiAnimateExtension.Release"
-            ReferencedContainer = "container:PixiAnimateExtension.mp.xcodeproj">
+            BuildableName = "PixiAnimate.fcm.plugin"
+            BlueprintName = "PixiAnimate.Release"
+            ReferencedContainer = "container:PixiAnimate.mp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -64,9 +64,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6df6e65a-e184-31e8-ab40-d210674741f0"
-            BuildableName = "PixiAnimateExtension.fcm.plugin"
-            BlueprintName = "PixiAnimateExtension.Release"
-            ReferencedContainer = "container:PixiAnimateExtension.mp.xcodeproj">
+            BuildableName = "PixiAnimate.fcm.plugin"
+            BlueprintName = "PixiAnimate.Release"
+            ReferencedContainer = "container:PixiAnimate.mp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

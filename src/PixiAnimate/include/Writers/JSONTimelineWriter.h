@@ -1,6 +1,6 @@
 //
 //  JSONTimelineWriter.hpp
-//  PixiAnimateExtension.mp
+//  PixiAnimate.mp
 //
 //  Created by Matt Bittarelli on 11/23/15.
 //

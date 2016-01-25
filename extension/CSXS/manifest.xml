@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="4.0" ExtensionBundleId="com.jibo.PixiAnimateExtension" ExtensionBundleVersion="1.0.0"
+<ExtensionManifest Version="4.0" ExtensionBundleId="com.jibo.PixiAnimate" ExtensionBundleVersion="1.0.0"
 		ExtensionBundleName="PixiAnimate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ExtensionList>
-		<Extension Id="PixiAnimateExtension.PublishSettings" Version="1.0" />
-		<Extension Id="PixiAnimateExtension.Plugin" Version="1.0" />
+		<Extension Id="PixiAnimate.PublishSettings" Version="1.0" />
+		<Extension Id="PixiAnimate.Plugin" Version="1.0" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
@@ -19,7 +19,7 @@
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
-		<Extension Id="PixiAnimateExtension.PublishSettings">
+		<Extension Id="PixiAnimate.PublishSettings">
 			<DispatchInfo >
 				<Resources>
 				<MainPath>./index.html</MainPath>
@@ -39,7 +39,7 @@
 				</UI>
 			</DispatchInfo>
 		</Extension>
-		<Extension Id="PixiAnimateExtension.Plugin">
+		<Extension Id="PixiAnimate.Plugin">
 			<DispatchInfo >
 				<Resources>
 				<MainPath>./plugin/fcm.xml</MainPath>

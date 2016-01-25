@@ -24,11 +24,11 @@
 
     <PropertyGroup Label="Globals">
 
-        <ProjectName>PixiAnimateExtension</ProjectName>
+        <ProjectName>PixiAnimate</ProjectName>
 
         <ProjectGuid>{4801AE5B-6706-3BBE-42E5-47D686CD8ED4}</ProjectGuid>
 
-        <RootNamespace>PixiAnimateExtension</RootNamespace>
+        <RootNamespace>PixiAnimate</RootNamespace>
 
         <SccLocalPath />
 
@@ -90,7 +90,7 @@
 
         <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
 
-        <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\src\PixiAnimateExtension\lib\win\debug\64\</OutDir>
+        <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\src\PixiAnimate\lib\win\debug\64\</OutDir>
 
         <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\obj\win\debug\64\</IntDir>
 
@@ -100,7 +100,7 @@
 
         <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EmbedManifest>
 
-        <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\src\PixiAnimateExtension\lib\win\release\64\</OutDir>
+        <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\src\PixiAnimate\lib\win\release\64\</OutDir>
 
         <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\obj\win\release\64\</IntDir>
 
@@ -158,7 +158,7 @@
 
             <Optimization>Disabled</Optimization>
 
-            <AdditionalIncludeDirectories>.;..\..\src\SDK\core\include\common;..\..\src\SDK\core\include\interfaces;..\..\src\SDK\app\include\common;..\..\src\SDK\app\include\interfaces;..\..\src\SDK\app\include\interfaces\DOM;..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\src\ThirdParty\xerces-c-3.1.1\src;..\..\src\SDK\app\include\interfaces\Exporter;..\..\src\PixiAnimateExtension\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+            <AdditionalIncludeDirectories>.;..\..\src\SDK\core\include\common;..\..\src\SDK\core\include\interfaces;..\..\src\SDK\app\include\common;..\..\src\SDK\app\include\interfaces;..\..\src\SDK\app\include\interfaces\DOM;..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\src\ThirdParty\xerces-c-3.1.1\src;..\..\src\SDK\app\include\interfaces\Exporter;..\..\src\PixiAnimate\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 
             <PreprocessorDefinitions>BOOST_ALL_NO_LIB;BOOST_SYSTEM_NO_DEPRECATED;FLASHPRO_DVA_CUSTOM;BOOST_ALL_DYN_LINK;_WINDOWS;MSWindows;_WIN32_WINNT=0x600;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;DVA_MAJOR_DISPLAY_VERSION=2014;DVA_MINOR_DISPLAY_VERSION=0;DVA_PATCH_DISPLAY_VERSION=0;PRERELEASE;DVA_SUITE_VERSION=15;DVA_MAJOR_VERSION=15;DVA_MINOR_VERSION=0;DVA_PATCH_VERSION=0;DVA_PRODUCT_NAME=Adobe Flash CC;DVA_BUILD_YEAR=2015;WIN_ENV;_WINDOWS;_CRT_SECURE_NO_WARNINGS;DEBUG=1;_DEBUG;_ITERATOR_DEBUG_LEVEL=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 
@@ -324,7 +324,7 @@ python post_build.64.py -c $(ConfigurationName)</Command>
 
             <OmitFramePointers>true</OmitFramePointers>
 
-            <AdditionalIncludeDirectories>.;..\..\src\SDK\core\include\common;..\..\src\SDK\core\include\interfaces;..\..\src\SDK\app\include\common;..\..\src\SDK\app\include\interfaces;..\..\src\SDK\app\include\interfaces\DOM;..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\src\ThirdParty\xerces-c-3.1.1\src;..\..\src\SDK\app\include\interfaces\Exporter;..\..\src\PixiAnimateExtension\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+            <AdditionalIncludeDirectories>.;..\..\src\SDK\core\include\common;..\..\src\SDK\core\include\interfaces;..\..\src\SDK\app\include\common;..\..\src\SDK\app\include\interfaces;..\..\src\SDK\app\include\interfaces\DOM;..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\src\ThirdParty\xerces-c-3.1.1\src;..\..\src\SDK\app\include\interfaces\Exporter;..\..\src\PixiAnimate\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 
             <PreprocessorDefinitions>BOOST_ALL_NO_LIB;BOOST_SYSTEM_NO_DEPRECATED;FLASHPRO_DVA_CUSTOM;BOOST_ALL_DYN_LINK;_WINDOWS;MSWindows;_WIN32_WINNT=0x600;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;DVA_MAJOR_DISPLAY_VERSION=2014;DVA_MINOR_DISPLAY_VERSION=0;DVA_PATCH_DISPLAY_VERSION=0;PRERELEASE;DVA_SUITE_VERSION=15;DVA_MAJOR_VERSION=15;DVA_MINOR_VERSION=0;DVA_PATCH_VERSION=0;DVA_PRODUCT_NAME=Adobe Flash CC;DVA_BUILD_YEAR=2015;WIN_ENV;_WINDOWS;_CRT_SECURE_NO_WARNINGS;NDEBUG;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 
@@ -458,7 +458,7 @@ python post_build.64.py -c $(ConfigurationName)</Command>
 
     <ItemGroup>
 
-        <None Include="..\PixiAnimateExtension.mp" />
+        <None Include="..\PixiAnimate.mp" />
 
         <None Include="..\..\..\..\..\..\..\ext\adobe\dvacore\project\dvaincludes.mp" />
 
@@ -478,7 +478,7 @@ python post_build.64.py -c $(ConfigurationName)</Command>
 
     <ItemGroup>
 
-        <ResourceCompile Include="PixiAnimateExtension_version_64.rc" />
+        <ResourceCompile Include="PixiAnimate_version_64.rc" />
 
     </ItemGroup>
 
@@ -500,11 +500,11 @@ python post_build.64.py -c $(ConfigurationName)</Command>
 
         <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONStream.cpp" />
 
-        <ClCompile Include="..\..\src\PixiAnimateExtension\src\DocType.cpp" />
+        <ClCompile Include="..\..\src\PixiAnimate\src\DocType.cpp" />
 
-        <ClCompile Include="..\..\src\PixiAnimateExtension\src\OutputWriter.cpp" />
+        <ClCompile Include="..\..\src\PixiAnimate\src\OutputWriter.cpp" />
 
-        <ClCompile Include="..\..\src\PixiAnimateExtension\src\Publisher.cpp" />
+        <ClCompile Include="..\..\src\PixiAnimate\src\Publisher.cpp" />
 
         <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode.cpp" />
 
@@ -514,15 +514,15 @@ python post_build.64.py -c $(ConfigurationName)</Command>
 
         <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONPreparse.cpp" />
 
-        <ClCompile Include="..\..\src\PixiAnimateExtension\src\MyXmlParser.cpp" />
+        <ClCompile Include="..\..\src\PixiAnimate\src\MyXmlParser.cpp" />
 
         <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONMemory.cpp" />
 
-        <ClCompile Include="..\..\src\PixiAnimateExtension\src\Main.cpp" />
+        <ClCompile Include="..\..\src\PixiAnimate\src\Main.cpp" />
 
         <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONIterators.cpp" />
 
-        <ClCompile Include="PixiAnimateExtension_mp_precomp_64.cpp">
+        <ClCompile Include="PixiAnimate_mp_precomp_64.cpp">
 
             <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
 
@@ -530,7 +530,7 @@ python post_build.64.py -c $(ConfigurationName)</Command>
 
         </ClCompile>
 
-        <ClCompile Include="..\..\src\PixiAnimateExtension\src\Utils.cpp" />
+        <ClCompile Include="..\..\src\PixiAnimate\src\Utils.cpp" />
 
         <ClCompile Include="..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDebug.cpp" />
 

@@ -28,14 +28,14 @@
 
 #include "FCMTypes.h"
 
-#define PUBLISHER_NAME						"PixiAnimateExtension"
-#define PUBLISHER_UNIVERSAL_NAME			"PixiAnimateExtension"
+#define PUBLISHER_NAME						"PixiAnimate"
+#define PUBLISHER_UNIVERSAL_NAME			"PixiAnimate"
 
 /* The value of the PUBLISH_SETTINGS_UI_ID has to be the HTML extension ID used for Publish settings dialog*/
-#define PUBLISH_SETTINGS_UI_ID				"PixiAnimateExtension.PublishSettings"
+#define PUBLISH_SETTINGS_UI_ID				"PixiAnimate.PublishSettings"
 
-#define DOCTYPE_NAME						"PixiAnimateExtension"
-#define DOCTYPE_UNIVERSAL_NAME				"PixiAnimateExtension"
+#define DOCTYPE_NAME						"PixiAnimate"
+#define DOCTYPE_UNIVERSAL_NAME				"PixiAnimate"
 
 /* This string must be localized for various locales and stored in the "res" in their respective lang folder. */
 #define DOCTYPE_DESCRIPTION					"This document can be used to author content for Jibo PixiJS."
