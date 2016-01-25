@@ -1,4 +1,4 @@
-# Adobe Animate PixiJS Custom Platform Plugin
+# PixiAnimate Extension
 
 Creates a custom FLA document which support publishing to [PixiJS](http://pixijs.com) natively in Adobe Animate CC (formerly Flash CC 2015).
 
@@ -31,7 +31,7 @@ Add the entry `PlayerDebugMode` of type `"string"` with value set to `1` in the 
 
 ### Commands
 
-To build and install to Animate CC directly, run the script. This will rebuild the C++ code, copy the plugin go the Eclipse project and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/PixiJSPlugin/`)
+To build and install to Animate CC directly, run the script. This will rebuild the C++ code, copy the plugin go the Eclipse project and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/PixiAnimateExtension/`)
 
 ```bash
 ./build.sh debug

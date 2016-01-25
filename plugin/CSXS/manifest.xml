@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="4.0" ExtensionBundleId="com.jibo.PixiJSPlugin" ExtensionBundleVersion="1.0.0"
-		ExtensionBundleName="PixiJSPlugin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExtensionManifest Version="4.0" ExtensionBundleId="com.jibo.PixiAnimateExtension" ExtensionBundleVersion="1.0.0"
+		ExtensionBundleName="PixiAnimateExtension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ExtensionList>
-		<Extension Id="PixiJSPlugin.PublishSettings" Version="1.0" />
-		<Extension Id="PixiJSPlugin.Plugin" Version="1.0" />
+		<Extension Id="PixiAnimateExtension.PublishSettings" Version="1.0" />
+		<Extension Id="PixiAnimateExtension.Plugin" Version="1.0" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
@@ -19,7 +19,7 @@
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
-		<Extension Id="PixiJSPlugin.PublishSettings">
+		<Extension Id="PixiAnimateExtension.PublishSettings">
 			<DispatchInfo >
 				<Resources>
 				<MainPath>./index.html</MainPath>
@@ -39,7 +39,7 @@
 				</UI>
 			</DispatchInfo>
 		</Extension>
-		<Extension Id="PixiJSPlugin.Plugin">
+		<Extension Id="PixiAnimateExtension.Plugin">
 			<DispatchInfo >
 				<Resources>
 				<MainPath>./plugin/fcm.xml</MainPath>

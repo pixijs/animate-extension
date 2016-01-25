@@ -30,7 +30,7 @@ fi
 echo ;
 
 # build the xcode project to produce the plugin file
-xcodebuild -project $XCODEPROJ -scheme PixiJSPlugin.${BUILD_SCHEME} build > /dev/null
+xcodebuild -project $XCODEPROJ -scheme PixiAnimateExtension.${BUILD_SCHEME} build > /dev/null
 
 # the plugin file needs to be placed in the eclipse project directory so it can be exported to a zxp
 log "Copy the plugin to the Eclipse Project directory";

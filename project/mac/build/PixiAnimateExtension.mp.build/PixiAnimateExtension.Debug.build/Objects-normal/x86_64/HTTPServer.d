@@ -1,0 +1,31 @@
+dependencies: \
+  /Users/mattkarl/github/adobe-animate-pixijs-custom-platform-plugin/src/PixiAnimateExtension/src/HTTPServer.cpp \
+  ../../src/PixiAnimateExtension/include/HTTPServer.h \
+  /Users/mattkarl/github/adobe-animate-pixijs-custom-platform-plugin/src/ThirdParty/mongoose/mongoose.h \
+  ../../src/SDK/core/include/common/FCMErrors.h \
+  ../../src/SDK/core/include/common/FCMPreConfig.h \
+  ../../src/SDK/core/include/common/mac/FCMPreAlign_MAC.h \
+  ../../src/SDK/core/include/common/FCMPostConfig.h \
+  ../../src/SDK/core/include/common/mac/FCMPostAlign_MAC.h \
+  ../../src/SDK/core/include/common/FCMTypes.h \
+  ../../src/PixiAnimateExtension/include/Utils.h \
+  ../../src/SDK/core/include/common/FCMPluginInterface.h \
+  ../../src/SDK/core/include/common/FCMMacros.h \
+  ../../src/SDK/core/include/interfaces/IFCMCalloc.h \
+  ../../src/SDK/core/include/interfaces/IFCMUnknown.h \
+  ../../src/SDK/core/include/interfaces/IFCMCallback.h \
+  ../../src/SDK/core/include/interfaces/IFCMList.h \
+  ../../src/SDK/core/include/interfaces/IFCMClassFactory.h \
+  ../../src/SDK/core/include/interfaces/IFCMPluginDictionary.h \
+  ../../src/SDK/core/include/interfaces/IFCMDictionary.h \
+  ../../src/SDK/core/include/interfaces/IFCMNoAggregationUnknown.h \
+  ../../src/SDK/core/include/common/FCMPublicIDs.h \
+  ../../src/SDK/app/include/interfaces/DOM/Utils/DOMTypes.h \
+  ../../src/SDK/app/include/interfaces/DOM/FillStyle/IGradientFillStyle.h \
+  ../../src/SDK/app/include/interfaces/DOM/FrameElement/IClassicText.h \
+  ../../src/SDK/app/include/interfaces/DOM/FrameElement/IFrameDisplayElement.h \
+  ../../src/SDK/app/include/interfaces/DOM/FrameElement/IParagraph.h \
+  ../../src/SDK/app/include/interfaces/DOM/FrameElement/ITextStyle.h \
+  ../../src/SDK/app/include/interfaces/DOM/FrameElement/ITextBehaviour.h \
+  ../../src/SDK/core/include/interfaces/IFCMStringUtils.h \
+  ../../src/SDK/app/include/interfaces/DOM/StrokeStyle/ISolidStrokeStyle.h
