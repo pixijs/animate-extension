@@ -8,3 +8,4 @@ src/project/mac/build/
 src/project/mac/PixiAnimateExtension.mp.xcodeproj/xcuserdata/
 src/project/mac/PixiAnimateExtension.mp.xcodeproj/project.xcworkspace/xcuserdata/
 node_modules
+project/mac/build
