@@ -4,6 +4,6 @@
 dist/
 temp/
 src/PixiJSPlugin/lib/
-src/PixiJSPlugin/project/mac/build/
-src/PixiJSPlugin/project/mac/PixiJSPlugin.mp.xcodeproj/xcuserdata/
-src/PixiJSPlugin/project/mac/PixiJSPlugin.mp.xcodeproj/project.xcworkspace/xcuserdata/
+src/project/mac/build/
+src/project/mac/PixiJSPlugin.mp.xcodeproj/xcuserdata/
+src/project/mac/PixiJSPlugin.mp.xcodeproj/project.xcworkspace/xcuserdata/
