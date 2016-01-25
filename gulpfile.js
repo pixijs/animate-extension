@@ -1,16 +1,10 @@
 var gulp = require('gulp');
 
-// The name of the project
-var name = 'PixiAnimate';
-
-// The bundle id for the extension
-var id = 'com.jibo.PixiAnimate';
-
 // Options for the load-gulp-tasks
 var options = {
 
     // Name
-    name: name,
+    name: 'PixiAnimate',
 
     // Pattern for loading tasks
     pattern: ['build/tasks/*.js'],
@@ -26,17 +20,17 @@ var options = {
     pluginTempRelease: 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin',
     
     // The target location for the plugin
-    pluginFile:  id + '/plugin/lib/mac/PixiAnimate.fcm.plugin',
+    pluginFile: 'com.jibo.PixiAnimate/plugin/lib/mac/PixiAnimate.fcm.plugin',
     
     // Temporary staging folder
-    bundleId: id,
+    bundleId: 'com.jibo.PixiAnimate',
     
     // Local location to install the plugin for Adobe CEP
-    installFolder: '/Library/Application Support/Adobe/CEP/extensions/' + id,
+    installFolder: '/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate',
     
     // The name of the ZXP file
-    outputName: name + '.zxp',
-    outputFile: 'dist/' + name + '.zxp',
+    outputName: 'PixiAnimate.zxp',
+    outputFile: 'dist/PixiAnimate.zxp',
     
     // ZXP plugin packaging options
     packager: 'build/ZXPSignCmd',
