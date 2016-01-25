@@ -7,10 +7,11 @@ module.exports = function(gulp, options, plugins) {
         plugins.sequence(
             'clean',
             'stage',
+            'vendor-copy',
             'build',
             'move',
             'package',
-            'clean-temp',
+            'clean-stage',
             'uninstall',
             'pre-install',
             'install', 

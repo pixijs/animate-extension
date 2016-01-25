@@ -34,14 +34,14 @@ namespace PixiJS
         "<!DOCTYPE html>\r\n \
         <html>\r\n \
             <head> \r\n\
-                <script src=\"%s/vendor/pixi.js\"></script> \r\n\
-                <script src=\"%s/vendor/tweenjs-0.6.1.min.js\"></script> <!-- required for pixiflash's movieclip as described in the movieclip class documentation --> \r\n\
-                <script src=\"%s/vendor/pixi-flash.js\"></script> \r\n\
+                <script src=\"%s/vendor/pixi.min.js\"></script> \r\n\
+                <script src=\"%s/vendor/tweenjs-0.6.0.min.js\"></script> <!-- required for pixiflash's movieclip as described in the movieclip class documentation --> \r\n\
+                <script src=\"%s/vendor/pixi-flash.min.js\"></script> \r\n\
                 \r\n\
-                <script src=\"%s/runtime/html/resourcemanager.js\"></script> \r\n\
-                <script src=\"%s/runtime/html/utils.js\"></script> \r\n\
-                <script src=\"%s/runtime/html/timelineanimator.js\"></script> \r\n\
-                <script src=\"%s/runtime/html/player.js\"></script> \r\n\
+                <script src=\"%s/html/resourcemanager.js\"></script> \r\n\
+                <script src=\"%s/html/utils.js\"></script> \r\n\
+                <script src=\"%s/html/timelineanimator.js\"></script> \r\n\
+                <script src=\"%s/html/player.js\"></script> \r\n\
                 \r\n\
             </head>\r\n\
             \r\n\

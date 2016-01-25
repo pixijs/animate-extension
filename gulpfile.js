@@ -35,7 +35,15 @@ var options = {
     // ZXP plugin packaging options
     packager: 'build/ZXPSignCmd',
     packagerCert: 'build/certificate.p12',
-    packagerPass: 'password'
+    packagerPass: 'password',
+
+    // Vendor release for the runtime
+    vendorOutput: 'com.jibo.PixiAnimate/runtime/vendor',
+    vendorResources: [
+        'node_modules/pixi.js/bin/pixi.min.js',
+        'node_modules/pixi-flash/dist/pixi-flash.min.js',
+        'node_modules/createjs-tweenjs/lib/tweenjs-*.*.*.min.js'
+    ]
 };
 
 // Gulp plugins for tasks to use

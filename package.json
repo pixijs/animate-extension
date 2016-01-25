@@ -1,5 +1,6 @@
 {
   "name": "PixiAnimateExtension",
+  "private": true,
   "version": "1.0.0",
   "repository": {
     "url": "https://github.com/jiborobot/adobe-animate-pixijs-custom-platform-plugin",
@@ -14,5 +15,10 @@
     "gulp-shell": "^0.5.2",
     "gulp-util": "^3.0.7",
     "load-gulp-tasks": "^0.1.0"
+  },
+  "dependencies": {
+    "pixi-flash": "^0.2.11",
+    "pixi.js": "^3.0.9",
+    "createjs-tweenjs": "^0.6.0"
   }
 }

@@ -1,5 +1,5 @@
 module.exports = function(gulp, options, plugins) {
-    gulp.task('clean-temp', function(){
+    gulp.task('clean-stage', function(){
         return plugins.del([options.bundleId]);
     });  
 };
