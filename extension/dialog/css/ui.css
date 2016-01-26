@@ -29,9 +29,6 @@ body.light {
 html * {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -42,6 +39,11 @@ html * {
 	box-shadow: 0 1px 0 0 rgba(255,255,255,0.1);
 	-webkit-appearance:none;
     border-radius: 0;
+}
+
+.text {
+    -webkit-user-select: text;
+    user-select: text;
 }
 
 

@@ -25,16 +25,16 @@
         var outputFile = $('#outputFile').value;
 
         if (!outputFile.match(/\S/)) {
-            error = 'Output file path cannot be empty';
+            error = 'Output file path cannot be empty.';
             success = false;
         }
         else if (!outputFile.match(/\.html$/)) {
-            error = 'Output file must be an HTML file';
+            error = 'Output file must be an HTML file.';
             success = false;
         }
 
         // Show the error message
-        if (!success) alert(error);
+        if (!success) csInterface.evalScript("alert('" + error + "')");
         return success;
     }
 
@@ -126,8 +126,7 @@
     $("#publishButton").onclick = function() {
         if (isReadyToPublish()) {
             serialize();
-            var script = "fl.getDocumentDOM().publish();";
-            csInterface.evalScript(script, close);
+            csInterface.evalScript("fl.getDocumentDOM().publish();");
         }
     };
 
