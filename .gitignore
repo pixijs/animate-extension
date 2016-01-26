@@ -1,7 +1,7 @@
 *.DS_Store
 *~
 .idea/
-dist/
+*.zxp
 temp/
 src/PixiAnimate/lib/
 src/project/mac/build/

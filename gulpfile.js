@@ -30,7 +30,6 @@ var options = {
     
     // The name of the ZXP file
     outputName: 'PixiAnimate.zxp',
-    outputFile: 'dist/PixiAnimate.zxp',
     
     // ZXP plugin packaging options
     packager: 'build/ZXPSignCmd',
