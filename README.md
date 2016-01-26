@@ -6,7 +6,7 @@ Creates a custom FLA document which support publishing to [PixiJS](http://pixijs
 
 The following dependencies are required in order to publishing FLA document created with this Plugin.
 
-* Adobe Flash CC 2015+ or Adobe Animte CC
+* Adobe Flash CC 2015+ or Adobe Animate CC
 * Mac OS X (Window not currently supported)
 * [Node & NPM](http://nodejs.org)
 * [Electron](http://electron.atom.io/) `npm install -g electron-prebuilt`
