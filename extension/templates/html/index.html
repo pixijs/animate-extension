@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="%s/vendor/pixi.min.js"></script>
+        <script src="%s/vendor/tweenjs-0.6.0.min.js"></script>
+        <script src="%s/vendor/pixi-flash.min.js"></script>
+        <script src="%s/html/resourcemanager.js"></script>
+        <script src="%s/html/utils.js"></script>
+        <script src="%s/html/timelineanimator.js"></script>
+        <script src="%s/html/player.js"></script>
+    </head>
+    <body>
+        <canvas id="canvas" width="%d" height="%d" style="background-color:#%06X"></canvas>
+        <script type="text/javascript">
+           
+            var loader = PIXI.loader;
+            loader.add('Bpic', "./%s/images/B.png");
+            loader.add('pixijs_flash_publish_json', "./%s");
+            loader.once("complete", handleComplete);
+            loader.load();
+            function handleComplete(loader, args) {
+                var canvas = document.getElementById("canvas");
+                var stage = new pixiflash.Container();
+                var renderer = new PIXI.autoDetectRenderer(canvas.width, canvas.height, {
+                    view: document.getElementById("canvas"),
+                    antialias: true
+                });
+               
+                //pass FPS and use that in the player
+                init(stage, renderer, args.pixijs_flash_publish_json.data, %d);
+            }
+        </script>
+    </body>
+</html>

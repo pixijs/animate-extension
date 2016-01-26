@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html> 
+    <head> 
+        <script src="%s/vendor/tweenjs-0.6.0.min.js"> </script> 
+    </head> 
+    <body> 
+        <canvas id="canvas" width="%d" height="%d" style="background-color:#%06X"></canvas> 
+        <script> 
+            require('./node_modules/babel/register'); 
+            require('./%s/electron/runtimeMain')("./%s", %d); 
+        </script> 
+    </body> 
+</html>

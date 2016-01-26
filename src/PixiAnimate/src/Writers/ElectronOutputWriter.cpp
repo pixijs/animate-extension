@@ -39,7 +39,7 @@ namespace PixiJS
     "<!DOCTYPE html> \r\n\
     <html> \r\n\
         <head> \r\n\
-        <script src=\"%s/vendor/tweenjs-0.6.1.min.js\"> </script> \r\n\
+        <script src=\"%s/vendor/tweenjs-0.6.0.min.js\"> </script> \r\n\
         </head> \r\n\
         \r\n\
         <body> \r\n\
@@ -50,7 +50,7 @@ namespace PixiJS
         \r\n\
         <script> \r\n\
             require('./node_modules/babel/register'); \r\n\
-            require('./%s/runtime/electron/runtimeMain')(\"./%s\", %d); \r\n\
+            require('./%s/electron/runtimeMain')(\"./%s\", %d); \r\n\
         </script> \r\n\
     </html>";
     
