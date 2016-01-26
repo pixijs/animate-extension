@@ -1,0 +1,67 @@
+.dialog {
+	width:360px;
+	margin:10px auto 0;
+	text-align:left;
+}
+
+.dialog_row {
+	padding:5px;
+	line-height: 1.8;
+}
+
+.dialog_row.right {
+    text-align:right;
+}
+
+.dialog_row .side {
+	display:inline-block;
+	width:75px;
+}
+.dialog_row .side.right {
+	text-align: right;
+}
+.dialog_row .text {
+	width:260px;
+	margin-bottom:5px;
+}
+
+.dialog_row .select {
+    width:120px;
+    margin-bottom:5px;
+}
+.dialog_row .indent {
+	padding-left:80px;
+}
+
+#outputFile {
+	width:230px;
+}
+
+.text.small {
+	width:30px;
+	text-align: center;
+}
+
+.text.xsmall {
+	width:20px;
+	text-align: center;
+}
+
+.sub_options {
+	border:1px solid rgba(0, 0, 0, 0.2);
+	padding:10px 10px 5px;
+	background-color: rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 0 0 rgba(255,255,255,0.1);
+}
+
+.sub_options .checkbox {
+	width:14px;
+}
+
+h2 {
+	font-size:11px;
+	font-weight: normal;
+	margin:0.5em 0;
+	padding:0;
+	text-transform: uppercase;
+}

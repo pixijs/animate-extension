@@ -2,8 +2,8 @@
 <ExtensionManifest Version="6.0" ExtensionBundleId="com.jibo.PixiAnimate" ExtensionBundleVersion="1.0.0"
 		ExtensionBundleName="PixiAnimate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ExtensionList>
-		<Extension Id="PixiAnimate.PublishSettings" Version="1.0" />
-		<Extension Id="PixiAnimate.Plugin" Version="1.0" />
+		<Extension Id="com.jibo.PixiAnimate.PublishSettings" Version="1.0" />
+		<Extension Id="com.jibo.PixiAnimate.Plugin" Version="1.0" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
@@ -17,8 +17,8 @@
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
-		<Extension Id="PixiAnimate.PublishSettings">
-			<DispatchInfo >
+		<Extension Id="com.jibo.PixiAnimate.PublishSettings">
+			<DispatchInfo>
 				<Resources>
 				<MainPath>./dialog/index.html</MainPath>
 				</Resources>
@@ -30,15 +30,15 @@
 					<Menu>PixiAnimate Publish Settings</Menu>
 					<Geometry>
 						<Size>
-							<Height>170</Height>
-							<Width>486</Width>
+							<Height>360</Height>
+							<Width>400</Width>
 						</Size>
 					</Geometry>
 				</UI>
 			</DispatchInfo>
 		</Extension>
-		<Extension Id="PixiAnimate.Plugin">
-			<DispatchInfo >
+		<Extension Id="com.jibo.PixiAnimate.Plugin">
+			<DispatchInfo>
 				<Resources>
 				<MainPath>./plugin/fcm.xml</MainPath>
 				</Resources>

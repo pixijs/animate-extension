@@ -30,6 +30,10 @@ var options = {
     
     // The name of the ZXP file
     outputName: 'PixiAnimate.zxp',
+
+    // Remote debugging for panels in Flash
+    remoteDebug: 'build/debug.xml',
+    remoteDebugOutput: '.debug',
     
     // ZXP plugin packaging options
     packager: 'build/ZXPSignCmd',
@@ -53,7 +57,8 @@ var plugins = {
     fs: require('fs'),
     shell: require('gulp-shell'),
     sequence: require('gulp-sequence').use(gulp),
-    gutil: require('gulp-util')
+    gutil: require('gulp-util'),
+    rename: require('gulp-rename')
 };
 
 require('load-gulp-tasks')(gulp, options, plugins);

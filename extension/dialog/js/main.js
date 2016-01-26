@@ -1,10 +1,9 @@
-(function(document, cep){
+(function(document, cep, undefined) {
 
     var $ = document.querySelector.bind(document);
+    var $$ = document.querySelectorAll.bind(document);
 
     var csInterface;
-    var im_folder;
-    var globalColor = 'colorThemeCSS';
 
     function isNumber(event) {
       if (event) {
@@ -19,225 +18,133 @@
       return true;
     }
 
-    function minmax(value, min, max) 
-    {
-        if(parseInt(value) < 1 || isNaN(value)) 
-            return 1; 
-        else if(parseInt(value) > 100) 
-            return 100; 
-        else return value;
-    }
+    function isReadyToPublish() { 
+        var success = true;
+        var error;
 
-    function scripttime_minmax(value, min, max) 
-    {
-        if(parseInt(value) < 1 || isNaN(value)) 
-            return 1; 
-        else if(parseInt(value) > 65535) 
-            return 65535; 
-        else return value;
-    }
+        var outputFile = $('#outputFile').value;
 
-    function checkvalue() { 
-        var mystring = document.getElementById('of').value; 
-        if(!mystring.match(/\S/)) {
-            alert ('Output file path cannot be empty');
-            return false;
-        } else {
-            return true;
+        if (!outputFile.match(/\S/)) {
+            error = 'Output file path cannot be empty';
+            success = false;
         }
+        else if (!outputFile.match(/\.html$/)) {
+            error = 'Output file must be an HTML file';
+            success = false;
+        }
+
+        // Show the error message
+        if (!success) alert(error);
+        return success;
     }
 
-    function setUI(uiState)
-    {
-        //alert(JSON.stringify(uiState.data["PublishSettings.PixiJS.OutFile"]));
-        if(uiState.data["PublishSettings.PixiJS.OutFile"] !=null && uiState.data["PublishSettings.PixiJS.OutFile"] != undefined)
+    function deserialize(event) {
+        var data = event.data;
+
+        if (data["PublishSettings.PixiJS.OutFile"])
         {
-            $("#of").value = uiState.data["PublishSettings.PixiJS.OutFile"];
-            
-            if (uiState.data["PublishSettings.IncludeInvisibleLayer"] == "true")
-            {
-                $("#HiddenLayer").checked = true;
-            }
-            else
-            {
-                $("#HiddenLayer").checked = false;
-            }
-
-            if (uiState.data["PublishSettings.PixiJS.Minify"] == "true")
-            {
-                $("#Minify").checked = true;
-            }
-            else
-            {
-                $("#Minify").checked = false;
-            }     
-
-            if (uiState.data["PublishSettings.PixiJS.CompactData"] == "true")
-            {
-                $("#CompactData").checked = true;
-                $("#CompactDataOptions").disabled = false;
-            }
-            else
-            {
-                $("#CompactData").checked = false;
-                $("#CompactDataOptions").disabled = true;
-            }             
-            val = uiState.data["PublishSettings.PixiJS.CompactDataOptions"];
-            $("#CompactDataOptions").value = val;
+            $("#outputFile").value = data["PublishSettings.PixiJS.OutFile"];
+            $("#hiddenLayers").checked = data["PublishSettings.IncludeInvisibleLayer"] == "true";
+            $("#minify").checked = data["PublishSettings.PixiJS.Minify"] == "true";
+            $("#compactData").checked = data["PublishSettings.PixiJS.CompactData"] == "true";
+            $("#compactDataOptions").disabled = $("#compactData").checked;
+            val = data["PublishSettings.PixiJS.CompactDataOptions"];
+            $("#compactDataOptions").value = val;
         }
     }
 
-    function publish_callback()
-    {
-        //csInterface.closeExtension();
-    }
-        
-    function populate_textfield(val)
-    {
-        $("#of").value = val;
-    }
-        
-    function open_callback(pathVal)
-    {
-        evalScript("FLfile.uriToPlatformPath('"+pathVal+"');",populate_textfield);
-    }
-
-    function evalScript(script, callback) 
-    {
-        csInterface.evalScript(script, callback);
-    }
-
-    function serializeUI()
-    {
+    function serialize() {
         var event = new CSEvent();
-
-        var pubSettings = new Object();
-        pubSettings["PublishSettings.PixiJS.OutFile"] = $("#of").value.toString();
-            
-        if($("#HiddenLayer").checked == true)
-        {
-            pubSettings["PublishSettings.IncludeInvisibleLayer"] = "true";
-        }
-        else
-        {
-            pubSettings["PublishSettings.IncludeInvisibleLayer"] = "false";
-        }
-
-        
-        if($("#Minify").checked == true)
-        {
-            pubSettings["PublishSettings.PixiJS.Minify"] = "true";
-        }
-        else
-        {
-            pubSettings["PublishSettings.PixiJS.Minify"] = "false";
-        }
-        
-        if($("#CompactData").checked == true)
-        {
-            pubSettings["PublishSettings.PixiJS.CompactData"] = "true";
-        }
-        else
-        {
-            pubSettings["PublishSettings.PixiJS.CompactData"] = "false";
-        }
-
-        var compactVal = $("#CompactDataOptions");
-        pubSettings["PublishSettings.PixiJS.CompactDataOptions"] = compactVal.value;
-        
+        var settings = {
+            "PublishSettings.PixiJS.OutFile": $("#outputFile").value.toString(),
+            "PublishSettings.IncludeInvisibleLayer": $("#hiddenLayers").checked.toString(),
+            "PublishSettings.PixiJS.Minify": $("#minify").checked.toString(),
+            "PublishSettings.PixiJS.CompactDataOptions": $("#compactDataOptions").value
+        };
         event.scope = "APPLICATION";
         event.type = "com.adobe.events.flash.extension.savestate";
-        event.data = JSON.stringify(pubSettings);
-        event.extensionId = "PixiAnimate.PublishSettings";
+        event.data = JSON.stringify(settings);
+        event.extensionId = "com.jibo.PixiAnimate.PublishSettings";
         csInterface.dispatchEvent(event);
-
-        evalScript("fl.getDocumentDOM().publish();",publish_callback);
     }
 
-    function onLoaded() {
-        im_folder = "";
+    function onInit() {
+
+        if (!window.CSInterface) return;
+
         csInterface = new CSInterface();
         //Light and dark theme change
+        refreshColorTheme();
         
-        var skinInfo = JSON.parse(cep.getHostEnvironment()).appSkinInfo;
-        
-        ChangePanelTheme(skinInfo);
-        
-        csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
-        
-        csInterface.addEventListener("com.adobe.events.flash.extension.setstate", setUI);
+        // Gets the style information such as color info from the skinInfo, 
+        // and redraw all UI controls of your extension according to the style info.
+        csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, function(){
+            refreshColorTheme();
+        });
+        csInterface.addEventListener("com.adobe.events.flash.extension.setstate", deserialize);
         var event = new CSEvent();
         event.scope = "APPLICATION";
         event.type = "com.adobe.events.flash.extensionLoaded";
         event.data = "Test Event";
-        event.extensionId = "PixiAnimate.PublishSettings";
+        event.extensionId = "com.jibo.PixiAnimate.PublishSettings";
         csInterface.dispatchEvent(event);
     }
         
-    function ChangePanelTheme(skinInfo){
-        var darkTheme = (skinInfo.appBarBackgroundColor.color.blue < 128)
-        var head  = document.getElementsByTagName('head')[0];
-            //load the CSS for App theme
-        var loadedCSS = document.getElementById(globalColor);
-        if (loadedCSS)
-            loadedCSS.parentNode.removeChild(loadedCSS);
-        var link  = document.createElement('link');
-        link.rel  = 'stylesheet';
-        link.type = 'text/css';
-        link.media = 'all';
-        if(darkTheme)
-            link.href = 'css/panel-dark.css';
-        else
-            link.href = 'css/panel-light.css';
-        link.id = globalColor;
-        head.appendChild(link);
-        
-        var styleSheets= document.styleSheets;
-        if(styleSheets.length > 0)
-        {
-            for(var i=0;i<styleSheets.length;i++)
-            {
-                styleSheets.item(i).addRule("*",'font-family: "' + skinInfo.baseFontFamily + '";font-size:11px',0);
-            }
-        }
-    }
-
-    function onAppThemeColorChanged(event) {
-        // Should get a latest HostEnvironment object from application.
-        //var skinInfo = JSON.parse(window.__adobe_cep__.getHostEnvironment()).appSkinInfo;
-        // Gets the style information such as color info from the skinInfo, 
-        // and redraw all UI controls of your extension according to the style info.
+    function refreshColorTheme() {
         var skinInfo = JSON.parse(cep.getHostEnvironment()).appSkinInfo;
-        ChangePanelTheme(skinInfo);
+        var darkTheme = (skinInfo.appBarBackgroundColor.color.blue < 128)
+        $('body').className = darkTheme ? 'dark' : 'light';
+        // var styleSheets= document.styleSheets;
+        // if(styleSheets.length > 0)
+        // {
+        //     for(var i=0;i<styleSheets.length;i++)
+        //     {
+        //         styleSheets.item(i).addRule("*",'font-family: "' + skinInfo.baseFontFamily + '";font-size:11px',0);
+        //     }
+        // }
     }
 
-    function onPublish() {
-        var retVal = checkvalue();
-        if(retVal)
-        serializeUI();
-    }
-
-    function opsd() {
-       evalScript("fl.browseForFileURL('save','Publish to HTML','HTML','html');",open_callback);
-    }
-
-
-    function compactDataChanged()
+    function onBrowseDone(uri)
     {
-        if ($("#CompactData").checked == true)
-        {
-            $("#CompactDataOptions").disabled = false;
-        }
-        else
-        {
-            $("#CompactDataOptions").disabled = true;
-        }
+        csInterface.evalScript("FLfile.uriToPlatformPath('"+uri+"');", function(path) {
+            $("#outputFile").value = path;
+        });
+    }
+
+    function close()
+    {
+        csInterface.closeExtension();
+    }
+
+    function compactDataChanged(e) {
+        $("#compactDataOptions").disabled = !$("#compactData").checked;
     }
 
     // Bind the DOM elements to handlers
-    $("body").onload = onLoaded;
-    $("#publish").onclick = onPublish;
-    $("#OPShowOpenDialog").onclick = opsd;
-    $("#CompactData").onchange = compactDataChanged;
+    $("body").onload = onInit;
+
+    $("#publishButton").onclick = function() {
+        if (isReadyToPublish()) {
+            serialize();
+            var script = "fl.getDocumentDOM().publish();";
+            csInterface.evalScript(script, close);
+        }
+    };
+
+    $("#browseButton").onclick = function onBrowse() {
+        var script = "fl.browseForFileURL('save','Publish to HTML','HTML','html');";
+        csInterface.evalScript(script, onBrowseDone);
+    };
+
+    $("#cancelButton").onclick = close;
+
+    $("#okButton").onclick = function() {
+        if (isReadyToPublish()) {
+            serialize();
+            close();
+        }
+    };
+
+    $("#compactData").onchange = compactDataChanged;
 
 }(document, window.__adobe_cep__));

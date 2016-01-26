@@ -11,6 +11,7 @@
     "colors": "^1.1.2",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
+    "gulp-rename": "^1.2.2",
     "gulp-sequence": "^0.4.4",
     "gulp-shell": "^0.5.2",
     "gulp-util": "^3.0.7",

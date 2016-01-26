@@ -32,7 +32,7 @@
 #define PUBLISHER_UNIVERSAL_NAME			"PixiAnimate"
 
 /* The value of the PUBLISH_SETTINGS_UI_ID has to be the HTML extension ID used for Publish settings dialog*/
-#define PUBLISH_SETTINGS_UI_ID				"PixiAnimate.PublishSettings"
+#define PUBLISH_SETTINGS_UI_ID				"com.jibo.PixiAnimate.PublishSettings"
 
 #define DOCTYPE_NAME						"PixiAnimate"
 #define DOCTYPE_UNIVERSAL_NAME				"PixiAnimate"
