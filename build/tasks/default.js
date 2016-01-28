@@ -10,7 +10,7 @@ module.exports = function(gulp, options, plugins) {
         
         var tasks = [];
 
-        tasks.push('clean', 'stage');
+        tasks.push('clean', 'lint', 'stage');
 
         // Turn on remote debugging
         if (debug) {

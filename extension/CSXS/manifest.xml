@@ -20,7 +20,8 @@
 		<Extension Id="com.jibo.PixiAnimate.PublishSettings">
 			<DispatchInfo>
 				<Resources>
-				<MainPath>./dialog/index.html</MainPath>
+    				<MainPath>./dialog/index.html</MainPath>
+                    <ScriptPath>./dialog/js/host.jsx</ScriptPath>
 				</Resources>
 				<Lifecycle>
 					<AutoVisible>true</AutoVisible>
@@ -40,7 +41,7 @@
 		<Extension Id="com.jibo.PixiAnimate.Plugin">
 			<DispatchInfo>
 				<Resources>
-				<MainPath>./plugin/fcm.xml</MainPath>
+    				<MainPath>./plugin/fcm.xml</MainPath>
 				</Resources>
 				<Lifecycle>
 					<AutoVisible>true</AutoVisible>

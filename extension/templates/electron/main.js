@@ -18,10 +18,10 @@ app.on('window-all-closed', function() {
 // initialization and is ready to create browser windows. 
 app.on('ready', function() { 
     // Create the browser window. 
-    mainWindow = new BrowserWindow({width: %d, height: %d}); 
+    mainWindow = new BrowserWindow({width: ${width}, height: ${height}}); 
     
     // and load the index.html of the app. 
-    mainWindow.loadURL('file://' + __dirname + '/%s'); 
+    mainWindow.loadURL('file://' + __dirname + '/${filename}'); 
     
     // Open the DevTools. 
     mainWindow.webContents.openDevTools(); 

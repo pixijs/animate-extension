@@ -74,7 +74,8 @@ function reset(stage)
 	if(rootAnimator !== undefined) 
 	{
 		rootAnimator.dispose();
-		delete rootAnimator;
+		// delete rootAnimator;
+        rootAnimator = undefined;
 	}
 	//Getting the index of the last element of the Timeline array
 	var maintimelineIndex = resourceManager.m_data.DOMDocument.Timeline.length - 1;

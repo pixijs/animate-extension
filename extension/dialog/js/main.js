@@ -1,22 +1,23 @@
-(function(document, cep, undefined) {
+/*global CSEvent:true, CSInterface:true */
+(function(document, cep) {
 
     var $ = document.querySelector.bind(document);
-    var $$ = document.querySelectorAll.bind(document);
+    // var $$ = document.querySelectorAll.bind(document);
 
     var csInterface;
 
-    function isNumber(event) {
-      if (event) {
-        var charCode = (event.which) ? event.which : event.keyCode;
-        if (charCode != 190 && charCode > 31 && 
-           (charCode < 48 || charCode > 57) && 
-           (charCode < 96 || charCode > 105) && 
-           (charCode < 37 || charCode > 40) && 
-            charCode != 110 && charCode != 8 && charCode != 46 )
-           return false;
-      }
-      return true;
-    }
+    // function isNumber(event) {
+    //   if (event) {
+    //     var charCode = (event.which) ? event.which : event.keyCode;
+    //     if (charCode != 190 && charCode > 31 && 
+    //        (charCode < 48 || charCode > 57) && 
+    //        (charCode < 96 || charCode > 105) && 
+    //        (charCode < 37 || charCode > 40) && 
+    //         charCode != 110 && charCode != 8 && charCode != 46 )
+    //        return false;
+    //   }
+    //   return true;
+    // }
 
     function isReadyToPublish() { 
         var success = true;
@@ -34,7 +35,7 @@
         }
 
         // Show the error message
-        if (!success) csInterface.evalScript("alert('" + error + "')");
+        if (!success) exec("alert", error);
         return success;
     }
 
@@ -48,8 +49,7 @@
             $("#minify").checked = data["PublishSettings.PixiJS.Minify"] == "true";
             $("#compactData").checked = data["PublishSettings.PixiJS.CompactData"] == "true";
             $("#compactDataOptions").disabled = $("#compactData").checked;
-            val = data["PublishSettings.PixiJS.CompactDataOptions"];
-            $("#compactDataOptions").value = val;
+            $("#compactDataOptions").value = data["PublishSettings.PixiJS.CompactDataOptions"];
         }
     }
 
@@ -94,31 +94,41 @@
         var skinInfo = JSON.parse(cep.getHostEnvironment()).appSkinInfo;
         var darkTheme = (skinInfo.appBarBackgroundColor.color.blue < 128)
         $('body').className = darkTheme ? 'dark' : 'light';
-        // var styleSheets= document.styleSheets;
-        // if(styleSheets.length > 0)
-        // {
-        //     for(var i=0;i<styleSheets.length;i++)
-        //     {
-        //         styleSheets.item(i).addRule("*",'font-family: "' + skinInfo.baseFontFamily + '";font-size:11px',0);
-        //     }
-        // }
     }
 
-    function onBrowseDone(uri)
-    {
-        csInterface.evalScript("FLfile.uriToPlatformPath('"+uri+"');", function(path) {
-            $("#outputFile").value = path;
-        });
-    }
-
-    function close()
-    {
+    function close() {
         csInterface.closeExtension();
     }
 
-    function compactDataChanged(e) {
+    function compactDataChanged() {
         $("#compactDataOptions").disabled = !$("#compactData").checked;
     }
+
+    function exec(script, callback) {
+        var args = [];
+        for (var arg, i = 1; i < arguments.length; i++) {
+            arg = arguments[i];
+            if (typeof arg == "function") {
+                callback = arg;    
+            } else {
+                args.push(JSON.stringify(arg));
+            }
+        }
+        var cmd = script + "(" + args.join(',') + ")";
+        csInterface.evalScript(cmd, function(data) {
+            if (data && callback) {
+                try {
+                    callback(JSON.parse(data));
+                }
+                catch(e) {
+                    callback();
+                }
+            } else if (callback) {
+                callback();
+            }
+        });
+    }
+
 
     // Bind the DOM elements to handlers
     $("body").onload = onInit;
@@ -126,13 +136,14 @@
     $("#publishButton").onclick = function() {
         if (isReadyToPublish()) {
             serialize();
-            csInterface.evalScript("fl.getDocumentDOM().publish();");
+            exec("publish");
         }
     };
 
     $("#browseButton").onclick = function onBrowse() {
-        var script = "fl.browseForFileURL('save','Publish to HTML','HTML','html');";
-        csInterface.evalScript(script, onBrowseDone);
+        exec("browseHTML", function(path) {
+            if (path) $("#outputFile").value = path;
+        });
     };
 
     $("#cancelButton").onclick = close;

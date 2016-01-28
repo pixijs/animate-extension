@@ -58,7 +58,8 @@ var plugins = {
     shell: require('gulp-shell'),
     sequence: require('gulp-sequence').use(gulp),
     gutil: require('gulp-util'),
-    rename: require('gulp-rename')
+    rename: require('gulp-rename'),
+    eslint: require('gulp-eslint')
 };
 
 require('load-gulp-tasks')(gulp, options, plugins);
