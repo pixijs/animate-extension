@@ -2,9 +2,34 @@
 (function(document, cep) {
 
     var $ = document.querySelector.bind(document);
-    // var $$ = document.querySelectorAll.bind(document);
+    var $$ = document.querySelectorAll.bind(document);
 
     var csInterface;
+
+    function exec(script, callback) {
+        var args = [];
+        for (var arg, i = 1; i < arguments.length; i++) {
+            arg = arguments[i];
+            if (typeof arg == "function") {
+                callback = arg;    
+            } else {
+                args.push(JSON.stringify(arg));
+            }
+        }
+        var cmd = script + "(" + args.join(',') + ")";
+        csInterface.evalScript(cmd, function(data) {
+            if (data && callback) {
+                if (data == "null") data = null;
+                else if (data == "true") data = true;
+                else if (data == "false") data = false;
+                else if (data == "undefined") data = undefined;
+                else if (/^\{/.test(data)) data = JSON.parse(data);
+                callback(data);
+            } else if (callback) {
+                callback();
+            }
+        });
+    }
 
     // function isNumber(event) {
     //   if (event) {
@@ -23,14 +48,14 @@
         var success = true;
         var error;
 
-        var outputFile = $('#outputFile').value;
+        var outFile = $('#outputFile').value;
 
-        if (!outputFile.match(/\S/)) {
+        if (!outFile.match(/\S/)) {
             error = 'Output file path cannot be empty.';
             success = false;
         }
-        else if (!outputFile.match(/\.html$/)) {
-            error = 'Output file must be an HTML file.';
+        else if (!outFile.match(/\.js$/)) {
+            error = 'Output file must be an JavaScript file.';
             success = false;
         }
 
@@ -39,40 +64,122 @@
         return success;
     }
 
-    function deserialize(event) {
+    // The prepend name of the settings object keys
+    var SETTINGS = "PublishSettings.PixiJS.";
+
+    function restoreState(event) {
         var data = event.data;
 
-        if (data["PublishSettings.PixiJS.OutFile"])
+        if (data[SETTINGS + "OutputFile"])
         {
-            $("#outputFile").value = data["PublishSettings.PixiJS.OutFile"];
+            // Booleans options
+            $("#compactShapes").checked = data[SETTINGS + "CompactShapes"] == "true";
+            $("#compressJS").checked = data[SETTINGS + "CompressJS"] == "true";
+            $("#html").checked = data[SETTINGS + "HTML"] == "true";
+            $("#libs").checked = data[SETTINGS + "Libs"] == "true";
+            $("#images").checked = data[SETTINGS + "Images"] == "true";
+            $("#loopTimeline").checked = data[SETTINGS + "LoopTimeline"] == "true";
+            $("#electron").checked = data[SETTINGS + "Electron"] == "true";
+
+            // String options
+            $("#HTMLPath").value = data[SETTINGS + "HTMLPath"];
+            $("#LibsPath").value = data[SETTINGS + "LibsPath"];
+            $("#ImagesPath").value = data[SETTINGS + "ImagesPath"];
+            $("#namespace").value = data[SETTINGS + "Namespace"];
+            $("#outputFile").value = data[SETTINGS + "OutputFile"];
+            $("#stageName").value = data[SETTINGS + "StageName"];
+            
+            // Global options
             $("#hiddenLayers").checked = data["PublishSettings.IncludeInvisibleLayer"] == "true";
-            $("#minify").checked = data["PublishSettings.PixiJS.Minify"] == "true";
-            $("#compactData").checked = data["PublishSettings.PixiJS.CompactData"] == "true";
-            $("#compactDataOptions").disabled = $("#compactData").checked;
-            $("#compactDataOptions").value = data["PublishSettings.PixiJS.CompactDataOptions"];
         }
     }
 
-    function serialize() {
+    function saveState() {
+
+        var data = {};
+
+        // Booleans
+        data[SETTINGS + "CompactShapes"] = $("#compactShapes").checked.toString();
+        data[SETTINGS + "CompressJS"] = $("#compressJS").checked.toString();
+        data[SETTINGS + "HTML"] = $("#html").checked.toString();
+        data[SETTINGS + "Libs"] = $("#libs").checked.toString();
+        data[SETTINGS + "Images"] = $("#images").checked.toString();
+        data[SETTINGS + "LoopTimeline"] = $("#loopTimeline").checked.toString();
+        data[SETTINGS + "Electron"] = $("#electron").checked.toString();
+
+        // Strings
+        data[SETTINGS + "OutputFile"] = $("#outputFile").value.toString();
+        data[SETTINGS + "HTMLPath"] = $("#HTMLPath").value.toString();
+        data[SETTINGS + "LibsPath"] = $("#LibsPath").value.toString();
+        data[SETTINGS + "ImagesPath"] = $("#ImagesPath").value.toString();
+        data[SETTINGS + "Namespace"] = $("#namespace").value.toString();
+        data[SETTINGS + "StageName"] = $("#stageName").value.toString();
+
+        // Global options
+        data["PublishSettings.IncludeInvisibleLayer"] = $("#hiddenLayers").checked.toString();
+        
         var event = new CSEvent();
-        var settings = {
-            "PublishSettings.PixiJS.OutFile": $("#outputFile").value.toString(),
-            "PublishSettings.IncludeInvisibleLayer": $("#hiddenLayers").checked.toString(),
-            "PublishSettings.PixiJS.Minify": $("#minify").checked.toString(),
-            "PublishSettings.PixiJS.CompactDataOptions": $("#compactDataOptions").value
-        };
         event.scope = "APPLICATION";
         event.type = "com.adobe.events.flash.extension.savestate";
-        event.data = JSON.stringify(settings);
+        event.data = JSON.stringify(data);
         event.extensionId = "com.jibo.PixiAnimate.PublishSettings";
         csInterface.dispatchEvent(event);
     }
 
     function onInit() {
 
-        if (!window.CSInterface) return;
+        $("#publishButton").onclick = function() {
+            if (isReadyToPublish()) {
+                saveState();
+                exec("publish");
+            }
+        };
+
+        $("#browseButton").onclick = function() {
+            exec("browseOutputFile", function(path) {
+                var outFile = $("#outputFile");
+                if (path) {
+                    outFile.value = path;
+                } 
+            });
+        }
+
+        $("#cancelButton").onclick = close;
+
+        $("#okButton").onclick = function() {
+            if (isReadyToPublish()) {
+                saveState();
+                close();
+            }
+        };
+
+        // Handle the toggle buttons which disable
+        var toggles = $$('.toggle');
+        for(var i = 0, len = toggles.length; i < len; i++) {
+            toggles[i].onchange = onToggleInput.bind(toggles[i]);
+        }
+
+        // Handle the toggles
+        function onToggleInput() {
+            var toggle = $(this.dataset.toggle);
+            toggle.disabled = !this.checked;
+            toggle.className = toggle.className.replace('disabled', '');
+            if (toggle.disabled) {
+                toggle.className += " disabled";
+            }
+        }
+
+        if (!cep) return;
 
         csInterface = new CSInterface();
+
+        exec('getParentURI', function(parent) {
+            if (!parent) {
+                exec('alert', 'Save document first!');
+                close();
+            }
+        });
+
         //Light and dark theme change
         refreshColorTheme();
         
@@ -81,7 +188,7 @@
         csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, function(){
             refreshColorTheme();
         });
-        csInterface.addEventListener("com.adobe.events.flash.extension.setstate", deserialize);
+        csInterface.addEventListener("com.adobe.events.flash.extension.setstate", restoreState);
         var event = new CSEvent();
         event.scope = "APPLICATION";
         event.type = "com.adobe.events.flash.extensionLoaded";
@@ -100,61 +207,7 @@
         csInterface.closeExtension();
     }
 
-    function compactDataChanged() {
-        $("#compactDataOptions").disabled = !$("#compactData").checked;
-    }
-
-    function exec(script, callback) {
-        var args = [];
-        for (var arg, i = 1; i < arguments.length; i++) {
-            arg = arguments[i];
-            if (typeof arg == "function") {
-                callback = arg;    
-            } else {
-                args.push(JSON.stringify(arg));
-            }
-        }
-        var cmd = script + "(" + args.join(',') + ")";
-        csInterface.evalScript(cmd, function(data) {
-            if (data && callback) {
-                try {
-                    callback(JSON.parse(data));
-                }
-                catch(e) {
-                    callback();
-                }
-            } else if (callback) {
-                callback();
-            }
-        });
-    }
-
-
     // Bind the DOM elements to handlers
     $("body").onload = onInit;
-
-    $("#publishButton").onclick = function() {
-        if (isReadyToPublish()) {
-            serialize();
-            exec("publish");
-        }
-    };
-
-    $("#browseButton").onclick = function onBrowse() {
-        exec("browseHTML", function(path) {
-            if (path) $("#outputFile").value = path;
-        });
-    };
-
-    $("#cancelButton").onclick = close;
-
-    $("#okButton").onclick = function() {
-        if (isReadyToPublish()) {
-            serialize();
-            close();
-        }
-    };
-
-    $("#compactData").onchange = compactDataChanged;
 
 }(document, window.__adobe_cep__));

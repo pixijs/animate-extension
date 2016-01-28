@@ -41,11 +41,10 @@ html * {
     border-radius: 0;
 }
 
-.text {
+.text.editable {
     -webkit-user-select: text;
     user-select: text;
 }
-
 
 .selectParent:after {
     content:'\25BC';
@@ -67,6 +66,23 @@ body.dark .select {
 body.light .text,
 body.light .select {
     background-color:#ebeaea;
+}
+
+.text.disabled,
+.select.disabled {
+    background:rgba(0,0,0,0.1) !important;
+    pointer-events:none;
+    box-shadow: none !important;
+}
+
+body.dark .text.disabled,
+body.dark .select.disabled {
+    color:rgba(255,255,255,0.2) !important;
+}
+
+body.light .text.disabled,
+body.light .select.disabled {
+    color:rgba(0,0,0,0.2) !important;
 }
 
 .text:focus,

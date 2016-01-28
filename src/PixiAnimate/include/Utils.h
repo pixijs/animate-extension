@@ -140,10 +140,24 @@ namespace PixiJS
     #endif
 #endif
 
-#define DICT_OUT_FILE_KEY               "PublishSettings.PixiJS.OutFile"
-#define DICT_MINIFY_KEY                 "PublishSettings.PixiJS.Minify"
-#define DICT_COMPACT_DATA_KEY           "PublishSettings.PixiJS.CompactData"
-#define DICT_COMPACT_DATA_OPT_KEY       "PublishSettings.PixiJS.CompactDataOptions"
+#define DICT_OUTPUT_FILE     "PublishSettings.PixiJS.OutputFile"
+#define DICT_HTML_PATH       "PublishSettings.PixiJS.HTMLPath" 
+#define DICT_LIBS_PATH       "PublishSettings.PixiJS.LibsPath" 
+#define DICT_IMAGES_PATH     "PublishSettings.PixiJS.ImagesPath"
+#define DICT_NAMESPACE       "PublishSettings.PixiJS.Namespace" 
+#define DICT_STAGE_NAME      "PublishSettings.PixiJS.StageName"
+
+#define DICT_COMPACT_SHAPES  "PublishSettings.PixiJS.CompactShapes"
+#define DICT_COMPRESS_JS     "PublishSettings.PixiJS.CompressJS"
+#define DICT_HTML            "PublishSettings.PixiJS.HTML"
+#define DICT_LIBS            "PublishSettings.PixiJS.Libs"
+#define DICT_IMAGES          "PublishSettings.PixiJS.Images"
+#define DICT_LOOP_TIMELINE   "PublishSettings.PixiJS.LoopTimeline"
+#define DICT_ELECTRON        "PublishSettings.PixiJS.Electron"
+
+// #define DICT_MINIFY                 "PublishSettings.PixiJS.Minify"
+// #define DICT_COMPACT_DATA           "PublishSettings.PixiJS.CompactData"
+// #define DICT_COMPACT_DATA_OPT       "PublishSettings.PixiJS.CompactDataOptions"
 
 /* -------------------------------------------------- Structs / Unions */
 

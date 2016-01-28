@@ -195,11 +195,11 @@ namespace PixiJS
         {
             std::string str;
             m_minify = true;
-            Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_MINIFY_KEY, str);
-            if (!str.empty())
-            {
-                m_minify = Utils::ToBool(str);
-            }
+            // Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_MINIFY, str);
+            // if (!str.empty())
+            // {
+            //     m_minify = Utils::ToBool(str);
+            // }
         }
 
         // Read the precision option from the publish settings
@@ -207,21 +207,21 @@ namespace PixiJS
         {
             std::string str;
 
-            Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_COMPACT_DATA_KEY, str);
-            if (!str.empty())
-            {
-                bool isCompactData = Utils::ToBool(str);
-                if (isCompactData)
-                {
-                    Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_COMPACT_DATA_OPT_KEY, str);
-                    precision = Utils::ToPrecision(str);
-                }
-                else
-                {
-                    // User does not want to compact data. Use highest precision.
-                    precision = PRECISION_6;
-                }
-            }
+            // Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_COMPACT_DATA, str);
+            // if (!str.empty())
+            // {
+            //     bool isCompactData = Utils::ToBool(str);
+            //     if (isCompactData)
+            //     {
+            //         Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_COMPACT_DATA_OPT, str);
+            //         precision = Utils::ToPrecision(str);
+            //     }
+            //     else
+            //     {
+            //         // User does not want to compact data. Use highest precision.
+            //         precision = PRECISION_6;
+            //     }
+            // }
         }
 
         // Create a output writer
@@ -440,7 +440,7 @@ namespace PixiJS
         ASSERT(pCalloc.m_Ptr != NULL);
 
         // Read the output file name from the publish settings
-        Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_OUT_FILE_KEY, outFile);
+        Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_OUTPUT_FILE, outFile);
         if (outFile.empty())
         {
             FCM::StringRep16 path;
