@@ -273,7 +273,12 @@
         }
         else
         {
-            parentPath = parent;
+            var path = require('path');
+            parentPath = path.dirname(parent);
+            if (path.extname(parent).toLowerCase() == ".xfl")
+            {
+                parentPath = path.dirname(parentPath);
+            }
 
             // Restory the state from the saved settings
             csInterface.addEventListener("com.adobe.events.flash.extension.setstate", restoreState);
