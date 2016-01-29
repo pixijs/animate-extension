@@ -440,7 +440,7 @@ namespace PixiJS
         ASSERT(pCalloc.m_Ptr != NULL);
 
         // Read the output file name from the publish settings
-        Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_OUTPUT_FILE, outFile);
+        Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_OUTPUT_PATH, outFile);
         if (outFile.empty())
         {
             FCM::StringRep16 path;

@@ -10,7 +10,12 @@ module.exports = function(gulp, options, plugins) {
         
         var tasks = [];
 
-        tasks.push('clean', 'lint', 'stage');
+        tasks.push(
+            'clean', 
+            'lint', 
+            'xcodebuild',
+            'stage'
+        );
 
         // Turn on remote debugging
         if (debug) {
@@ -19,7 +24,6 @@ module.exports = function(gulp, options, plugins) {
 
         tasks.push(
             'vendor-copy',
-            'build',
             'move',
             'package',
             'clean-stage',

@@ -140,7 +140,7 @@ namespace PixiJS
     #endif
 #endif
 
-#define DICT_OUTPUT_FILE     "PublishSettings.PixiJS.OutputFile"
+#define DICT_OUTPUT_PATH     "PublishSettings.PixiJS.OutputFile"
 #define DICT_HTML_PATH       "PublishSettings.PixiJS.HTMLPath" 
 #define DICT_LIBS_PATH       "PublishSettings.PixiJS.LibsPath" 
 #define DICT_IMAGES_PATH     "PublishSettings.PixiJS.ImagesPath"

@@ -4,32 +4,32 @@
 	text-align:left;
 }
 
-.dialog_row {
+.dialog-row {
 	padding:5px;
 	line-height: 1.8;
 }
 
-.dialog_row.right {
+.dialog-row.right {
     text-align:right;
 }
 
-.dialog_row .side {
+.dialog-row .side {
 	display:inline-block;
 	width:75px;
 }
-.dialog_row .side.right {
+.dialog-row .side.right {
 	text-align: right;
 }
-.dialog_row .text {
+.dialog-row .text {
 	width:260px;
 	margin-bottom:5px;
 }
 
-.dialog_row .select {
+.dialog-row .select {
     width:120px;
     margin-bottom:5px;
 }
-.dialog_row .indent {
+.dialog-row .indent {
 	padding-left:80px;
 }
 
@@ -47,14 +47,14 @@
 	text-align: center;
 }
 
-.sub_options {
+.sub-options {
 	border:1px solid rgba(0, 0, 0, 0.2);
 	padding:10px 10px 5px;
 	background-color: rgba(0, 0, 0, 0.1);
 	box-shadow: 0 1px 0 0 rgba(255,255,255,0.1);
 }
 
-.sub_options .checkbox {
+.sub-options .checkbox {
 	width:14px;
 }
 

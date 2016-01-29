@@ -6,10 +6,10 @@
         <link rel="stylesheet" type="text/css" href="css/ui.css">
         <link rel="stylesheet" type="text/css" href="css/layout.css">
     </head>
-    <body class="dark">
+    <body class="dark loading">
         <div class="dialog">
             <h2>JavaScript Options</h2>
-            <div class="dialog_row">
+            <div class="dialog-row">
                 <div class="side">Output file:</div>
                 <input type="text" disabled id="outputFile" class="text">
                 <button class="button icon-open" id="browseButton">
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <h2>Asset Export Options</h2>
-            <div class="dialog_row">
+            <div class="dialog-row">
                 <div class="side">
                     <div class="checkbox">
                         <input type="checkbox" checked="true" class="toggle" data-toggle="#htmlPath" id="html" />
@@ -69,7 +69,7 @@
 
                     <h2>Spritesheet Options</h2>
 
-                    <div class="sub_options">
+                    <div class="sub-options">
                         Maximum spritesheet size <input type="text" value="2048" class="small text editable" id="maxWidth"> &times; <input type="text" value="2048" class="small text" id="maxHeight">
                         <br>
                         Base spritesheet scale <input type="text" value="1.0" class="xsmall text editable" id="baseScale">
@@ -95,7 +95,7 @@
             </div>
 
             <h2>Advanced Options</h2>
-            <div class="dialog_row">
+            <div class="dialog-row">
                 <div class="indent">
                     <div class="checkbox">
                         <input type="checkbox" checked="true" id="hiddenLayers" />
@@ -123,7 +123,7 @@
                 </div>
             </div>
             <hr>
-            <div class="dialog_row right">
+            <div class="dialog-row right">
                 <button class="button action" id="publishButton">Publish</button>
                 <button class="button action" id="okButton">OK</button>
                 <button class="button action" id="cancelButton">Cancel</button>

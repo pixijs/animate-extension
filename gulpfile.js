@@ -45,6 +45,22 @@ var options = {
     vendorResources: [
         'node_modules/pixi.js/bin/pixi.min.js',
         'node_modules/pixi-animate/dist/pixi-animate.min.js'
+    ],
+
+    // The files to source when running watch
+    watchFiles: [
+        './**/*.*',
+        '!node_modules/**',
+        '!com.jibo.PixiAnimate'
+    ],
+    
+    // The files to include for JS linting
+    lintFiles: [
+        '**/*.js',
+        '!node_modules/**',
+        '!extension/runtime/**',
+        '!extension/templates/**',
+        '!src/**'
     ]
 };
 

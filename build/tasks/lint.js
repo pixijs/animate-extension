@@ -1,12 +1,6 @@
 module.exports = function(gulp, options, plugins) {
     gulp.task('lint', function(){
-        return gulp.src([
-                '**/*.js',
-                '!node_modules/**',
-                '!extension/runtime/**',
-                '!extension/templates/**',
-                '!src/**'
-            ])
+        return gulp.src(options.lintFiles)
             .pipe(plugins.eslint({
                 extends: 'eslint:recommended', 
                 rules: {

@@ -7,6 +7,10 @@ body {
     overflow: hidden;
 }
 
+body.loading .dialog {
+    display:none;
+}
+
 body, .text, .select, .button {
     font-family:Tahoma, Arial, sans-serif;
 }
