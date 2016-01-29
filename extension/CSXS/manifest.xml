@@ -21,14 +21,13 @@
 			<DispatchInfo>
 				<Resources>
     				<MainPath>./dialog/index.html</MainPath>
-                    <ScriptPath>./dialog/js/host.jsx</ScriptPath>
+                    <ScriptPath>./dialog/host.jsx</ScriptPath>
 				</Resources>
 				<Lifecycle>
 					<AutoVisible>true</AutoVisible>
 				</Lifecycle>
 				<UI>
 					<Type>ModalDialog</Type>
-					<Menu>Publish Settings</Menu>
 					<Geometry>
 						<Size>
 							<Height>430</Height>

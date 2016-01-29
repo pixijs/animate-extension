@@ -23,7 +23,8 @@ module.exports = function(gulp, options, plugins) {
         }
 
         tasks.push(
-            'vendor-copy',
+            'vendor-public-copy',
+            'vendor-private-copy',
             'move',
             'package',
             'clean-stage',

@@ -3,8 +3,14 @@
   "private": true,
   "version": "1.0.0",
   "repository": {
-    "url": "https://github.com/jiborobot/adobe-animate-pixijs-custom-platform-plugin",
+    "url": "https://github.com/jiborobot/pixi-animate-extension",
     "type": "git"
+  },
+  "scripts": {
+    "install": "napa"
+  },
+  "napa": {
+    "cep": "Adobe-CEP/CEP-Resources"
   },
   "license": "UNLICENSED",
   "devDependencies": {
@@ -16,11 +22,11 @@
     "gulp-sequence": "^0.4.4",
     "gulp-shell": "^0.5.2",
     "gulp-util": "^3.0.7",
-    "load-gulp-tasks": "^0.1.0"
+    "load-gulp-tasks": "^0.1.0",
+    "napa": "^2.2.0"
   },
   "dependencies": {
     "pixi-animate": "git+ssh//git@github.com:jiborobot/pixi-animate.git",
-    "pixi.js": "^3.0.9",
-    "createjs-tweenjs": "^0.6.0"
+    "pixi.js": "^3.0.9"
   }
 }

@@ -41,10 +41,15 @@ var options = {
     packagerPass: 'password',
 
     // Vendor release for the runtime
-    vendorOutput: 'com.jibo.PixiAnimate/vendor',
-    vendorResources: [
+    vendorPublicOutput: 'com.jibo.PixiAnimate/vendor/public',
+    vendorPublicResources: [
         'node_modules/pixi.js/bin/pixi.min.js',
         'node_modules/pixi-animate/dist/pixi-animate.min.js'
+    ], 
+
+    vendorPrivateOutput: 'com.jibo.PixiAnimate/vendor/private',
+    vendorPrivateResources: [
+        'node_modules/cep/CEP_6.x/CSInterface.js'
     ],
 
     // The files to source when running watch
