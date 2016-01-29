@@ -5,6 +5,7 @@ body {
     margin:0;
     padding:0;
     overflow: hidden;
+    cursor:default;
 }
 
 body.loading .dialog {
@@ -12,7 +13,7 @@ body.loading .dialog {
 }
 
 body, .text, .select, .button {
-    font-family:Tahoma, Arial, sans-serif;
+    font-family:"LucidaGrande", Tahoma, Arial, sans-serif;
 }
 
 body.dark {
