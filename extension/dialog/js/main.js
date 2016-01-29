@@ -70,6 +70,8 @@
     function restoreState(event) {
         var data = event.data;
 
+        console.log(event.data);
+
         if (data[SETTINGS + "OutputFile"])
         {
             // Booleans options
@@ -82,9 +84,9 @@
             $("#electron").checked = data[SETTINGS + "Electron"] == "true";
 
             // String options
-            $("#HTMLPath").value = data[SETTINGS + "HTMLPath"];
-            $("#LibsPath").value = data[SETTINGS + "LibsPath"];
-            $("#ImagesPath").value = data[SETTINGS + "ImagesPath"];
+            $("#htmlPath").value = data[SETTINGS + "HTMLPath"];
+            $("#libsPath").value = data[SETTINGS + "LibsPath"];
+            $("#imagesPath").value = data[SETTINGS + "ImagesPath"];
             $("#namespace").value = data[SETTINGS + "Namespace"];
             $("#outputFile").value = data[SETTINGS + "OutputFile"];
             $("#stageName").value = data[SETTINGS + "StageName"];
@@ -109,15 +111,17 @@
 
         // Strings
         data[SETTINGS + "OutputFile"] = $("#outputFile").value.toString();
-        data[SETTINGS + "HTMLPath"] = $("#HTMLPath").value.toString();
-        data[SETTINGS + "LibsPath"] = $("#LibsPath").value.toString();
-        data[SETTINGS + "ImagesPath"] = $("#ImagesPath").value.toString();
+        data[SETTINGS + "HTMLPath"] = $("#htmlPath").value.toString();
+        data[SETTINGS + "LibsPath"] = $("#libsPath").value.toString();
+        data[SETTINGS + "ImagesPath"] = $("#imagesPath").value.toString();
         data[SETTINGS + "Namespace"] = $("#namespace").value.toString();
         data[SETTINGS + "StageName"] = $("#stageName").value.toString();
 
         // Global options
         data["PublishSettings.IncludeInvisibleLayer"] = $("#hiddenLayers").checked.toString();
         
+        console.log(data);
+
         var event = new CSEvent();
         event.scope = "APPLICATION";
         event.type = "com.adobe.events.flash.extension.savestate";
@@ -147,6 +151,7 @@
         $("#cancelButton").onclick = close;
 
         $("#okButton").onclick = function() {
+            console.log("ready? ", isReadyToPublish());
             if (isReadyToPublish()) {
                 saveState();
                 close();
