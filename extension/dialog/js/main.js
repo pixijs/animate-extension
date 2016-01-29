@@ -70,8 +70,6 @@
     function restoreState(event) {
         var data = event.data;
 
-        console.log(event.data);
-
         if (data[SETTINGS + "OutputFile"])
         {
             // Booleans options
@@ -83,6 +81,10 @@
             $("#loopTimeline").checked = data[SETTINGS + "LoopTimeline"] == "true";
             $("#electron").checked = data[SETTINGS + "Electron"] == "true";
 
+            onToggleInput.call($("#html"));
+            onToggleInput.call($("#images"));
+            onToggleInput.call($("#libs"));
+
             // String options
             $("#htmlPath").value = data[SETTINGS + "HTMLPath"];
             $("#libsPath").value = data[SETTINGS + "LibsPath"];
@@ -93,6 +95,14 @@
             
             // Global options
             $("#hiddenLayers").checked = data["PublishSettings.IncludeInvisibleLayer"] == "true";
+        }
+        else
+        {
+            exec('getDocumentName', function(name) {
+                $("#htmlPath").value = name + '.html';
+                $("#outputFile").value = name + '.js';
+                $("#stageName").value = name.replace(/[^A-Za-z0-9_]/g, '_');
+            });
         }
     }
 
@@ -164,16 +174,6 @@
             toggles[i].onchange = onToggleInput.bind(toggles[i]);
         }
 
-        // Handle the toggles
-        function onToggleInput() {
-            var toggle = $(this.dataset.toggle);
-            toggle.disabled = !this.checked;
-            toggle.className = toggle.className.replace('disabled', '');
-            if (toggle.disabled) {
-                toggle.className += " disabled";
-            }
-        }
-
         if (!cep) return;
 
         csInterface = new CSInterface();
@@ -200,6 +200,16 @@
         event.data = "Test Event";
         event.extensionId = "com.jibo.PixiAnimate.PublishSettings";
         csInterface.dispatchEvent(event);
+    }
+
+    // Handle the toggles
+    function onToggleInput() {
+        var toggle = $(this.dataset.toggle);
+        toggle.disabled = !this.checked;
+        toggle.className = toggle.className.replace('disabled', '');
+        if (toggle.disabled) {
+            toggle.className += " disabled";
+        }
     }
         
     function refreshColorTheme() {
