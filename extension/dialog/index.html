@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Publish Settings</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="main.css">
+    </head>
+    <body class="dark loading">
+        <div class="dialog">
+            <h2>JavaScript Options</h2>
+            <div class="dialog-row">
+                <div class="side">Output file:</div>
+                <input type="text" disabled id="outputFile" class="text">
+                <button class="button icon-open" id="browseButton">
+                    <svg class="dark" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="10" viewBox="0 0 512 512">
+                        <path fill="#a0a0a0" d="M416 480l96-256h-416l-96 256zM64 192l-64 288v-416h144l64 64h208v64z"></path>
+                    </svg>
+                    <svg class="light" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="10" viewBox="0 0 512 512">
+                        <path fill="#222222" d="M416 480l96-256h-416l-96 256zM64 192l-64 288v-416h144l64 64h208v64z"></path>
+                    </svg>
+                </button>
+                <div class="side">Stage Name:</div>
+                <input type="text" class="text editable" id="stageName">
+                <div class="side">Namespace:</div>
+                <input type="text" class="text editable" value="lib" id="namespace">
+                <div class="indent">
+                    <div class="checkbox">
+                        <input type="checkbox" checked="true" id="loopTimeline" />
+                        <label for="loopTimeline"></label> 
+                    </div>
+                    <label for="loopTimeline">Loop timeline</label>
+                </div>
+            </div>
+            <h2>Asset Export Options</h2>
+            <div class="dialog-row">
+                <div class="side">
+                    <div class="checkbox">
+                        <input type="checkbox" checked="true" class="toggle" data-toggle="#htmlPath" id="html" />
+                        <label for="html"></label> 
+                    </div> 
+                    <label for="html">HTML:</label>
+                </div>
+                <input type="text" id="htmlPath" class="text editable">
+                <div class="side">
+                    <div class="checkbox">
+                        <input type="checkbox" class="toggle" data-toggle="#libsPath" checked="true" id="libs" />
+                        <label for="libs"></label> 
+                    </div> 
+                    <label for="libs">Libraries:</label>
+                </div>
+                <input type="text" id="libsPath" class="text editable" value="libs/">
+                <div class="side">
+                    <div class="checkbox">
+                        <input type="checkbox" class="toggle" data-toggle="#imagesPath" checked="true" id="images" />
+                        <label for="images"></label> 
+                    </div> 
+                    <label for="images">Images:</label>
+                </div>
+                <input type="text" id="imagesPath" class="text editable" value="images/">
+            </label>
+                <!--<div class="indent">
+                    <div class="checkbox">
+                        <input type="checkbox" checked="true" id="spritesheets" />
+                        <label for="spritesheets"></label> 
+                    </div> 
+                    <label for="spritesheets">Export all bitmaps as Spritesheets</label>
+                    <br>
+
+                    <h2>Spritesheet Options</h2>
+
+                    <div class="sub-options">
+                        Maximum spritesheet size <input type="text" value="2048" class="small text editable" id="maxWidth"> &times; <input type="text" value="2048" class="small text" id="maxHeight">
+                        <br>
+                        Base spritesheet scale <input type="text" value="1.0" class="xsmall text editable" id="baseScale">
+                        <br>
+                        Scales variants
+                        <div class="checkbox">
+                            <input type="checkbox" id="variant2" />
+                            <label for="variant2"></label> 
+                        </div> 
+                        <label for="variant2">&times;2</label>&nbsp;
+                        <div class="checkbox">
+                            <input type="checkbox" id="variantHalf" />
+                            <label for="variantHalf"></label> 
+                        </div>
+                        <label for="variantHalf">&times;&frac12;</label>&nbsp;
+                        <div class="checkbox">
+                            <input type="checkbox" id="variantCustom" />
+                            <label for="variantCustom"></label> 
+                        </div>
+                        <label for="variantCustom">&times;&frac14;</label>
+                    </div>
+                </div>-->
+            </div>
+
+            <h2>Advanced Options</h2>
+            <div class="dialog-row">
+                <div class="indent">
+                    <div class="checkbox">
+                        <input type="checkbox" checked="true" id="hiddenLayers" />
+                        <label for="hiddenLayers"></label> 
+                    </div> 
+                    <label for="hiddenLayers">Include Hidden Layers</label>
+                    <br>
+                    <div class="checkbox">
+                        <input type="checkbox" checked="true" id="compactShapes" />
+                        <label for="compactShapes"></label> 
+                    </div> 
+                    <label for="compactShapes">Compact Shapes</label>
+                    <br>
+                    <div class="checkbox">
+                        <input type="checkbox" checked="true" id="compressJS" />
+                        <label for="compressJS"></label> 
+                    </div> 
+                    <label for="compressJS">Compress Output JavaScript</label>
+                    <br>
+                    <div class="checkbox">
+                        <input type="checkbox" id="electron" />
+                        <label for="electron"></label> 
+                    </div> 
+                    <label for="electron">Use Electron (must be installed)</label>
+                </div>
+            </div>
+            <hr>
+            <div class="dialog-row right">
+                <button class="button action" id="publishButton">Publish</button>
+                <button class="button action" id="okButton">OK</button>
+                <button class="button action" id="cancelButton">Cancel</button>
+            </div>
+        </div>
+        <script src="../vendor/private/CSInterface.js"></script>
+        <script src="main.js"></script>
+    </body>
+</html>
