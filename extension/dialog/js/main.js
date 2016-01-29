@@ -250,7 +250,11 @@
         toggles[i].onchange = onToggleInput.bind(toggles[i]);
     }
 
-    if (!cep) return;
+    if (!cep)
+    {
+        isLoaded();
+        return;
+    } 
 
     csInterface = new CSInterface();
 
