@@ -193,6 +193,11 @@ namespace PixiJS
         return string;
     }
 
+    std::string Utils::ToString(bool b)
+    {
+        return b ? "true" : "false";
+    }
+
     void Utils::RemoveTrailingZeroes(char *str) 
     {
         char *ptr;
@@ -765,11 +770,11 @@ namespace PixiJS
 #endif
     }
 
-    void Utils::OpenFStream(const std::string& outputFileName, std::fstream &file, std::ios_base::openmode mode, FCM::PIFCMCallback pCallback)
+    void Utils::OpenFStream(const std::string& outputFile, std::fstream &file, std::ios_base::openmode mode, FCM::PIFCMCallback pCallback)
     {
  
 #ifdef _WINDOWS
-        FCM::StringRep16 pFilePath = Utils::ToString16(outputFileName, pCallback);
+        FCM::StringRep16 pFilePath = Utils::ToString16(outputFile, pCallback);
 
         file.open(pFilePath,mode);
 
@@ -777,7 +782,7 @@ namespace PixiJS
         ASSERT(pCalloc.m_Ptr != NULL);  
         pCalloc->Free(pFilePath);
 #else
-       file.open(outputFileName.c_str(),mode);
+       file.open(outputFile.c_str(),mode);
 #endif
     }
 
@@ -966,6 +971,29 @@ namespace PixiJS
         return true;
     }
 
+    bool Utils::ReadStringToBool(
+        const FCM::PIFCMDictionary pDict,
+        FCM::StringRep8 key,
+        bool &result)
+    {
+        std::string str;
+        Utils::ReadString(pDict, key, str);
+        if (!str.empty())
+        {
+            result = Utils::ToBool(str);
+        }
+    }
+
+    void Utils::ReplaceAll(std::string &content, const std::string &from, const std::string &to)
+    {
+        size_t start_pos = 0;
+        while((start_pos = content.find(from, start_pos)) != std::string::npos)
+        {
+            content.replace(start_pos, from.length(), to);
+            start_pos += to.length();
+        }
+    }
+
 
     bool Utils::ToBool(const std::string& str)
     {
@@ -976,37 +1004,57 @@ namespace PixiJS
         return false;
     }
 
-    DataPrecision Utils::ToPrecision(const std::string& str)
+    void Utils::GetParentByFLA(const std::string& path, std::string& parent)
     {
-        DataPrecision precision;
-
-        std::string compactDataStr = str;
-        std::transform(compactDataStr.begin(), compactDataStr.end(), compactDataStr.begin(), ::tolower);
-
-        if (compactDataStr == "low")
-            precision = PRECISION_5;
-        else if (compactDataStr == "medium")
-            precision = PRECISION_4;
-        else if (compactDataStr == "high")
-            precision = PRECISION_3;
-        else if (compactDataStr == "veryhigh")
-            precision = PRECISION_2;
+        std::string ext;
+        Utils::GetFileExtension(path, ext);
+            
+        // Convert the extension to lower case and then compare
+        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+        if (ext.compare("xfl") == 0)
+        {
+            std::string immParent;
+            Utils::GetParent(path, immParent);
+            Utils::GetParent(immParent, parent);
+        }
         else
-            precision = PRECISION_6;
-
-        return precision;
+        {
+            // FLA
+            Utils::GetParent(path, parent);
+        }
     }
+
+    // DataPrecision Utils::ToPrecision(const std::string& str)
+    // {
+    //     DataPrecision precision;
+
+    //     std::string compactDataStr = str;
+    //     std::transform(compactDataStr.begin(), compactDataStr.end(), compactDataStr.begin(), ::tolower);
+
+    //     if (compactDataStr == "low")
+    //         precision = PRECISION_5;
+    //     else if (compactDataStr == "medium")
+    //         precision = PRECISION_4;
+    //     else if (compactDataStr == "high")
+    //         precision = PRECISION_3;
+    //     else if (compactDataStr == "veryhigh")
+    //         precision = PRECISION_2;
+    //     else
+    //         precision = PRECISION_6;
+
+    //     return precision;
+    // }
 
 #ifdef USE_HTTP_SERVER
 
-    void Utils::LaunchBrowser(const std::string& outputFileName, int port, FCM::PIFCMCallback pCallback)
+    void Utils::LaunchBrowser(const std::string& outputFile, int port, FCM::PIFCMCallback pCallback)
     {
 
 #ifdef _WINDOWS
 
         std::wstring output = L"http://localhost:";
         std::wstring tail;
-        tail.assign(outputFileName.begin(), outputFileName.end());
+        tail.assign(outputFile.begin(), outputFile.end());
         FCM::StringRep16 portStr = Utils::ToString16(Utils::ToString(port), pCallback);
         output += portStr;
         output += L"/";
@@ -1020,7 +1068,7 @@ namespace PixiJS
         std::string output = "http://localhost:";
         output += Utils::ToString(port);
         output += "/";
-        output += outputFileName;
+        output += outputFile;
         std::string str = "/usr/bin/open " + output;
         popen(str.c_str(), "r");
         

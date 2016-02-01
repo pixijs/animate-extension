@@ -113,7 +113,7 @@ namespace PixiJS
     public:
 
         // Marks the begining of the output
-        virtual FCM::Result StartOutput(std::string& outputFileName) = 0;
+        virtual FCM::Result StartOutput() = 0;
 
         // Marks the end of the output
         virtual FCM::Result EndOutput() = 0;

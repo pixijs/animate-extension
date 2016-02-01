@@ -66,7 +66,6 @@
 #include "Utils/IRadialColorGradient.h"
 
 #include "Writers/JSONOutputWriter.h"
-#include "Writers/ElectronOutputWriter.h"
 
 #include "Exporter/Service/IResourcePalette.h"
 #include "Exporter/Service/ITimelineBuilder2.h"
@@ -81,7 +80,17 @@ namespace PixiJS
 
     /* ----------------------------------------------------- CPublisher */
     
-    CPublisher::CPublisher()
+    CPublisher::CPublisher():
+        m_html(true),
+        m_libs(true),
+        m_images(true),
+        m_compactShapes(true),
+        m_compressJS(true),
+        m_loopTimeline(true),
+        m_electron(false),
+        m_libsPath("libs/"),
+        m_namespace("lib"),
+        m_imagesPath("images/")
     {
 
     }
@@ -93,34 +102,35 @@ namespace PixiJS
 
 
     FCM::Result CPublisher::Publish(
-        DOM::PIFLADocument pFlaDocument, 
-        const PIFCMDictionary pDictPublishSettings, 
-        const PIFCMDictionary pDictConfig)
+        DOM::PIFLADocument flaDocument, 
+        const PIFCMDictionary publishSettings, 
+        const PIFCMDictionary dictConfig)
     {
-        return Export(pFlaDocument, NULL, NULL, pDictPublishSettings, pDictConfig);
+        return Export(flaDocument, NULL, NULL, publishSettings, dictConfig);
     }
 
     // This function will be currently called in "Test-Scene" workflow. 
     // In future, it might be called in other workflows as well. 
     FCM::Result CPublisher::Publish(
-        DOM::PIFLADocument pFlaDocument, 
-        DOM::PITimeline pTimeline, 
+        DOM::PIFLADocument flaDocument, 
+        DOM::PITimeline timeline, 
         const Exporter::Service::RANGE &frameRange, 
-        const PIFCMDictionary pDictPublishSettings, 
-        const PIFCMDictionary pDictConfig)
+        const PIFCMDictionary publishSettings, 
+        const PIFCMDictionary dictConfig)
     {
-        return Export(pFlaDocument, pTimeline, &frameRange, pDictPublishSettings, pDictConfig);
+        return Export(flaDocument, timeline, &frameRange, publishSettings, dictConfig);
     }
 
 
     FCM::Result CPublisher::Export(
-        DOM::PIFLADocument pFlaDocument, 
-        DOM::PITimeline pTimeline, 
+        DOM::PIFLADocument flaDocument, 
+        DOM::PITimeline timeline, 
         const Exporter::Service::RANGE* pFrameRange, 
-        const PIFCMDictionary pDictPublishSettings, 
-        const PIFCMDictionary pDictConfig)
+        const PIFCMDictionary publishSettings, 
+        const PIFCMDictionary dictConfig)
     {
-        std::string outFile;
+        std::string outputFile;
+        std::string basePath;
         FCM::Result res;
         FCM::FCMGUID guid;
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
@@ -131,14 +141,16 @@ namespace PixiJS
         pCalloc = PixiJS::Utils::GetCallocService(GetCallback());
         ASSERT(pCalloc.m_Ptr != NULL);
 
-        res = pFlaDocument->GetTypeId(guid);
+        res = flaDocument->GetTypeId(guid);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        std::string pub_guid = Utils::ToString(guid);
-        Utils::Trace(GetCallback(), "Publishing begins for document with GUID: %s\n", 
-            pub_guid.c_str());
+        #ifdef _DEBUG
+            std::string pub_guid = Utils::ToString(guid);
+            Utils::Trace(GetCallback(), "Publishing begins for document with GUID: %s\n", pub_guid.c_str());
+        #endif
 
-        res = GetOutputFileName(pFlaDocument, pTimeline, pDictPublishSettings, outFile);
+        res = GetOutputFileName(flaDocument, timeline, publishSettings, basePath, outputFile);
+
         if (FCM_FAILURE_CODE(res))
         {
             // FLA is untitled. Ideally, we should use a temporary location for output generation.
@@ -146,8 +158,6 @@ namespace PixiJS
             Utils::Trace(GetCallback(), "Failed to publish. Either save the FLA or provide output path in publish settings.\n");
             return res;
         }
-
-        Utils::Trace(GetCallback(), "Creating output file : %s\n", outFile.c_str());
 
 #ifdef USE_SWF_EXPORTER_SERVICE
 
@@ -159,19 +169,19 @@ namespace PixiJS
             return res;
         }
         
-        FCM::StringRep16 outputFilePath = Utils::ToString16(outFile, GetCallback());
+        FCM::StringRep16 outputFilePath = Utils::ToString16(outputFile, GetCallback());
 
         FCM::AutoPtr<Exporter::Service::ISWFExportService> pSWfExportService = pUnk;
 
-        if (!pTimeline)
+        if (!timeline)
         {
             // Export complete document
-            res = pSWfExportService->ExportToFile(pFlaDocument, outputFilePath);
+            res = pSWfExportService->ExportToFile(flaDocument, outputFilePath);
         }
         else
         {
             // Export only specified timeline
-            res = pSWfExportService->ExportToFile(pTimeline, outputFilePath);
+            res = pSWfExportService->ExportToFile(timeline, outputFilePath);
         }
         pCalloc->Free(outputFilePath);
         if (FCM_SUCCESS_CODE(res))
@@ -187,100 +197,117 @@ namespace PixiJS
         FCM::U_Int32 stageWidth;
         FCM::Double fps;
         FCM::U_Int32 framesPerSec;
-        AutoPtr<ITimelineBuilderFactory> pTimelineBuilderFactory;
-        FCM::FCMListPtr pTimelineList;
+        AutoPtr<ITimelineBuilderFactory> timelineBuilderFactory;
+        FCM::FCMListPtr timelineList;
         FCM::U_Int32 timelineCount;
-
-        // Read the minify option from the publish settings
-        {
-            std::string str;
-            m_minify = true;
-            // Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_MINIFY, str);
-            // if (!str.empty())
-            // {
-            //     m_minify = Utils::ToBool(str);
-            // }
-        }
-
-        // Read the precision option from the publish settings
         DataPrecision precision = PRECISION_3;
-        {
-            std::string str;
 
-            // Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_COMPACT_DATA, str);
-            // if (!str.empty())
-            // {
-            //     bool isCompactData = Utils::ToBool(str);
-            //     if (isCompactData)
-            //     {
-            //         Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_COMPACT_DATA_OPT, str);
-            //         precision = Utils::ToPrecision(str);
-            //     }
-            //     else
-            //     {
-            //         // User does not want to compact data. Use highest precision.
-            //         precision = PRECISION_6;
-            //     }
-            // }
-        }
+        // Default dependent on the output direction
+        Utils::GetFileNameWithoutExtension(outputFile, m_stageName);
+        m_htmlPath = m_stageName + ".html";
 
-        // Create a output writer
-//        std::auto_ptr<IOutputWriter> pOutputWriter(new JSONOutputWriter(GetCallback(), m_minify, precision));
-        std::auto_ptr<OutputWriterBase> pOutputWriter(new ElectronOutputWriter(GetCallback(), m_minify, precision));
-        if (pOutputWriter.get() == NULL)
+        // Sanitize the stage name for JavaScript
+        Utils::ReplaceAll(m_stageName, "-", "_");
+        Utils::ReplaceAll(m_stageName, " ", "_");
+
+        // Read the output file name from the publish settings
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_HTML, m_html);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LIBS, m_libs);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_IMAGES, m_images);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPACT_SHAPES, m_compactShapes);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPRESS_JS, m_compressJS);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LOOP_TIMELINE, m_loopTimeline);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_ELECTRON, m_electron);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_LIBS_PATH, m_libsPath);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_IMAGES_PATH, m_imagesPath);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_HTML_PATH, m_htmlPath);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_NAMESPACE, m_namespace);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, m_stageName);
+
+        #ifdef _DEBUG
+            Utils::Trace(GetCallback(), "Export relative to %s\n", basePath.c_str());
+            Utils::Trace(GetCallback(), " -> Output file : %s\n", outputFile.c_str());
+            Utils::Trace(GetCallback(), " -> HTML path : %s\n", m_htmlPath.c_str());
+            Utils::Trace(GetCallback(), " -> Libraries path : %s\n", m_libsPath.c_str());
+            Utils::Trace(GetCallback(), " -> Images path : %s\n", m_imagesPath.c_str());
+            Utils::Trace(GetCallback(), " -> Namespace : %s\n", m_namespace.c_str());
+            Utils::Trace(GetCallback(), " -> Stage Name : %s\n", m_stageName.c_str());
+            Utils::Trace(GetCallback(), " -> Export HTML: %s\n", Utils::ToString(m_html).c_str());
+            Utils::Trace(GetCallback(), " -> Export Libraries: %s\n", Utils::ToString(m_libs).c_str());
+            Utils::Trace(GetCallback(), " -> Export Images: %s\n", Utils::ToString(m_images).c_str());
+            Utils::Trace(GetCallback(), " -> Compact Shapes: %s\n", Utils::ToString(m_compactShapes).c_str());
+            Utils::Trace(GetCallback(), " -> Compress JS: %s\n", Utils::ToString(m_compressJS).c_str());
+            Utils::Trace(GetCallback(), " -> Loop Timeline: %s\n", Utils::ToString(m_loopTimeline).c_str());
+            Utils::Trace(GetCallback(), " -> Electron: %s\n", Utils::ToString(m_compactShapes).c_str());
+        #endif
+
+        // Temporary
+        // return FCM_SUCCESS;
+
+        std::auto_ptr<JSONOutputWriter> outputWriter(new JSONOutputWriter(GetCallback(), 
+            basePath, 
+            outputFile, 
+            m_imagesPath, 
+            m_htmlPath, 
+            m_libsPath, 
+            m_stageName, 
+            m_namespace,
+            precision));
+        
+        if (outputWriter.get() == NULL)
         {
             return FCM_MEM_NOT_AVAILABLE;
         }
         
         // Start output
-        pOutputWriter->StartOutput(outFile);
+        outputWriter->StartOutput();
 
         // Create a Timeline Builder Factory for the root timeline of the document
         res = GetCallback()->CreateInstance(
             NULL, 
             CLSID_TimelineBuilderFactory, 
             IID_ITimelineBuilderFactory, 
-            (void**)&pTimelineBuilderFactory);
+            (void**)&timelineBuilderFactory);
         if (FCM_FAILURE_CODE(res))
         {
             return res;
         }
 
-        (static_cast<TimelineBuilderFactory*>(pTimelineBuilderFactory.m_Ptr))->Init(
-            pOutputWriter.get(), precision);
+        (static_cast<TimelineBuilderFactory*>(timelineBuilderFactory.m_Ptr))->Init(
+            outputWriter.get(), precision);
 
         ResourcePalette* pResPalette = static_cast<ResourcePalette*>(m_pResourcePalette.m_Ptr);
         pResPalette->Clear();
-        pResPalette->Init(pOutputWriter.get());
+        pResPalette->Init(outputWriter.get());
 
-        res = pFlaDocument->GetBackgroundColor(color);
+        res = flaDocument->GetBackgroundColor(color);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        res = pFlaDocument->GetStageHeight(stageHeight);
+        res = flaDocument->GetStageHeight(stageHeight);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        res = pFlaDocument->GetStageWidth(stageWidth);
+        res = flaDocument->GetStageWidth(stageWidth);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        res = pFlaDocument->GetFrameRate(fps);
+        res = flaDocument->GetFrameRate(fps);
         ASSERT(FCM_SUCCESS_CODE(res));
 
         framesPerSec = (FCM::U_Int32)fps;
 
-        res = pOutputWriter->StartDocument(color, stageHeight, stageWidth, framesPerSec);
+        res = outputWriter->StartDocument(color, stageHeight, stageWidth, framesPerSec);
         ASSERT(FCM_SUCCESS_CODE(res));
 
         // Export complete document ?
-        if (!pTimeline)
+        if (!timeline)
         {
             // Get all the timelines for the document
-            res = pFlaDocument->GetTimelines(pTimelineList.m_Ptr);
+            res = flaDocument->GetTimelines(timelineList.m_Ptr);
             if (FCM_FAILURE_CODE(res))
             {
                 return res;
             }
 
-            res = pTimelineList->Count(timelineCount);
+            res = timelineList->Count(timelineCount);
             if (FCM_FAILURE_CODE(res))
             {
                 return res;
@@ -311,10 +338,10 @@ namespace PixiJS
             for (FCM::U_Int32 i = 0; i < timelineCount; i++)
             {
                 Exporter::Service::RANGE range;
-                AutoPtr<ITimelineBuilder> pTimelineBuilder;
-                ITimelineWriter* pTimelineWriter;
+                AutoPtr<ITimelineBuilder> timelineBuilder;
+                ITimelineWriter* timelineWriter;
 
-                AutoPtr<DOM::ITimeline> timeline = pTimelineList[i];
+                AutoPtr<DOM::ITimeline> timeline = timelineList[i];
 
                 range.min = 0;
                 res = timeline->GetMaxFrameCount(range.max);
@@ -329,28 +356,28 @@ namespace PixiJS
                 res = m_frameCmdGeneratorService->GenerateFrameCommands(
                     timeline, 
                     range, 
-                    pDictPublishSettings,
+                    publishSettings,
                     m_pResourcePalette, 
-                    pTimelineBuilderFactory, 
-                    pTimelineBuilder.m_Ptr);
+                    timelineBuilderFactory, 
+                    timelineBuilder.m_Ptr);
 
                 if (FCM_FAILURE_CODE(res))
                 {
                     return res;
                 }
 
-                ((TimelineBuilder*)pTimelineBuilder.m_Ptr)->Build(0, NULL, &pTimelineWriter);
+                ((TimelineBuilder*)timelineBuilder.m_Ptr)->Build(0, NULL, &timelineWriter);
             }
 
-            res = pOutputWriter->EndDocument();
+            res = outputWriter->EndDocument();
             ASSERT(FCM_SUCCESS_CODE(res));
 
-            res = pOutputWriter->EndOutput();
+            res = outputWriter->EndOutput();
             ASSERT(FCM_SUCCESS_CODE(res));
 
             // Export the library items with linkages
             FCM::FCMListPtr pLibraryItemList;
-            res = pFlaDocument->GetLibraryItems(pLibraryItemList.m_Ptr);
+            res = flaDocument->GetLibraryItems(pLibraryItemList.m_Ptr);
             if (FCM_FAILURE_CODE(res))
             {
                 return res;
@@ -361,52 +388,52 @@ namespace PixiJS
         else
         {
             // Export a timeline
-            AutoPtr<ITimelineBuilder> pTimelineBuilder;
-            ITimelineWriter* pTimelineWriter;
+            AutoPtr<ITimelineBuilder> timelineBuilder;
+            ITimelineWriter* timelineWriter;
 
             // Generate frame commands
             res = m_frameCmdGeneratorService->GenerateFrameCommands(
-                pTimeline, 
+                timeline, 
                 *pFrameRange, 
-                pDictPublishSettings,
+                publishSettings,
                 m_pResourcePalette, 
-                pTimelineBuilderFactory, 
-                pTimelineBuilder.m_Ptr);
+                timelineBuilderFactory, 
+                timelineBuilder.m_Ptr);
 
             if (FCM_FAILURE_CODE(res))
             {
                 return res;
             }
 
-            ((TimelineBuilder*)pTimelineBuilder.m_Ptr)->Build(0, NULL, &pTimelineWriter);
+            ((TimelineBuilder*)timelineBuilder.m_Ptr)->Build(0, NULL, &timelineWriter);
 
-            res = pOutputWriter->EndDocument();
+            res = outputWriter->EndDocument();
             ASSERT(FCM_SUCCESS_CODE(res));
 
-            res = pOutputWriter->EndOutput();
+            res = outputWriter->EndOutput();
             ASSERT(FCM_SUCCESS_CODE(res));
         }
         
         // Stop preview
-        pOutputWriter->StopPreview(outFile);
+        outputWriter->StopPreview(outputFile);
 
         #ifdef USE_RUNTIME
 
                 // We are now going to copy the runtime from the zxp package to the output folder.
                 std::string outFolder;
                 
-                Utils::GetParent(outFile, outFolder);
+                Utils::GetParent(outputFile, outFolder);
 
                 CopyRuntime(outFolder);
 
         #endif
         
         // run the post publish step after the runtime folder is created but before a preview is potentially run
-        pOutputWriter->PostPublishStep(outFolder, GetCallback());
+        outputWriter->PostPublishStep(outFolder, GetCallback());
         
-        if (IsPreviewNeeded(pDictConfig))
+        if (IsPreviewNeeded(dictConfig))
         {
-            pOutputWriter->StartPreview(outFile, GetCallback());
+            outputWriter->StartPreview(outputFile, GetCallback());
         }
 
 #endif
@@ -427,10 +454,11 @@ namespace PixiJS
 
 
     FCM::Result CPublisher::GetOutputFileName(        
-        DOM::PIFLADocument pFlaDocument, 
-        DOM::PITimeline pTimeline, 
-        const PIFCMDictionary pDictPublishSettings,
-        std::string& outFile)
+        DOM::PIFLADocument flaDocument, 
+        DOM::PITimeline timeline, 
+        const PIFCMDictionary publishSettings,
+        std::string& basePath,
+        std::string& outputFile)
     {
         FCM::Result res = FCM_SUCCESS;
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
@@ -440,85 +468,82 @@ namespace PixiJS
         ASSERT(pCalloc.m_Ptr != NULL);
 
         // Read the output file name from the publish settings
-        Utils::ReadString(pDictPublishSettings, (FCM::StringRep8)DICT_OUTPUT_PATH, outFile);
-        if (outFile.empty())
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_OUTPUT_FILE, outputFile);
+
+        // The path to the FLA/XFL document
+        FCM::StringRep16 path;
+
+        // String of the FLA and the parent directory
+        std::string flaPath;
+
+        // Get the path to the FLA
+        res = flaDocument->GetPath(&path);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        // Get the FLA file path if we've been saved already
+        if (path)
         {
-            FCM::StringRep16 path;
-            std::string filePath;
-            std::string parent;
-            std::string ext;
+            flaPath = Utils::ToString(path, GetCallback());
+        }
 
-            res = pFlaDocument->GetPath(&path);
-            ASSERT(FCM_SUCCESS_CODE(res));
-
+        // No output file either because the document hasn't been saved,
+        // or the publishing settings haven't been saved yet
+        if (outputFile.empty())
+        {
+            // We have a saved FLA/XFL, get the file name of that document
             if (path)
             {
-                filePath = Utils::ToString(path, GetCallback());
-                Utils::GetFileNameWithoutExtension(filePath, outFile);
+                Utils::GetFileNameWithoutExtension(flaPath, outputFile);
             }
+            // Document has not been saved yet
+            // get the temporary directy to save the file
+            // and create a complete flaPath
             else
             {
-                res = Utils::GetAppTempDir(GetCallback(), filePath);
+                res = Utils::GetAppTempDir(GetCallback(), flaPath);
                 if (!FCM_SUCCESS_CODE(res))
                 {
                     return FCM_INVALID_PARAM;
                 }
-                outFile = "Untitled";
-                outFile += Utils::ToString(rand() % 65536);
-                filePath += "Untitled.fla";
+                outputFile = "Untitled";
+                outputFile += Utils::ToString(rand() % 65536);
+                flaPath += "Untitled.fla";
             }
 
-            if (pTimeline)
+            // Exporting a scene
+            if (timeline)
             {
                 FCM::StringRep16 pSceneName;
                 std::string sceneName;
 
-                res = pTimeline->GetName(&pSceneName);
+                res = timeline->GetName(&pSceneName);
                 ASSERT(FCM_SUCCESS_CODE(res));
 
                 sceneName = Utils::ToString(pSceneName, GetCallback());
 
-                outFile += "_";
-                outFile += sceneName;
+                outputFile += "_";
+                outputFile += sceneName;
             }
 
-            outFile += ".";
-            outFile += OUTPUT_FILE_EXTENSION;
-
-            Utils::GetFileExtension(filePath, ext);
-                
-            // Convert the extension to lower case and then compare
-            std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-            if (ext.compare("xfl") == 0)
-            {
-                std::string immParent;
-                Utils::GetParent(filePath, immParent);
-                Utils::GetParent(immParent, parent);
-            }
-            else
-            {
-                // FLA
-                Utils::GetParent(filePath, parent);
-            }
-
-            // Extract the extension and append output file extension.
-            outFile = parent + outFile;
-
-            pCalloc->Free(path);
-
+            outputFile += ".";
+            outputFile += OUTPUT_FILE_EXTENSION;
         }
+
+        pCalloc->Free(path);
+
+        Utils::GetParentByFLA(flaPath, basePath);
 
         return res;
     }
 
 
-    FCM::Boolean CPublisher::IsPreviewNeeded(const PIFCMDictionary pDictConfig)
+    FCM::Boolean CPublisher::IsPreviewNeeded(const PIFCMDictionary dictConfig)
     {
         FCM::Boolean found;
         std::string previewNeeded;
         FCM::Boolean res;
 
-        found = Utils::ReadString(pDictConfig, (FCM::StringRep8)kPublishSettingsKey_PreviewNeeded, previewNeeded);
+        found = Utils::ReadString(dictConfig, (FCM::StringRep8)kPublishSettingsKey_PreviewNeeded, previewNeeded);
 
         res = true;
         if (found)
@@ -679,50 +704,8 @@ namespace PixiJS
         // First let us remove the existing runtime folder (if any)
         Utils::Remove(outputFolder + RUNTIME_ROOT_FOLDER_NAME, GetCallback());
 
-        // Jibo (mlb) -- the following code is copied from the SVG Animator plugin example from adobe.
-        // The project structure is much different than the createJS example which is what we copied from originally.
-        // Eventually the project structure will likely be much different but this may be a good reference for how the SVG Animator did things.
-        #if 0
-            if (m_minify)
-            {
-                // Copy the minified runtime
-                std::string srcFolder = sourceFolder + RUNTIME_ROOT_FOLDER_NAME + "/" + 
-                    RUNTIME_COMMON_SUBFOLDER_NAME + "/";
-
-                std::string srcFilePath = srcFolder + RUNTIME_MINIFIED_FILE_NAME;
-                std::string dstFileFolder = outputFolder + RUNTIME_ROOT_FOLDER_NAME + "/";
-
-                Utils::CreateDir(dstFileFolder, GetCallback());
-
-                dstFileFolder += RUNTIME_COMMON_SUBFOLDER_NAME;
-                dstFileFolder += "/";
-                Utils::CreateDir(dstFileFolder, GetCallback());
-
-                std::string dstFilePath = dstFileFolder + RUNTIME_MINIFIED_FILE_NAME;
-
-                res = Utils::CopyAFile(srcFilePath, dstFilePath, GetCallback());
-
-                // Copy the snap.svg library
-                srcFilePath = srcFolder + THIRD_PARTY_SUBFOLDER_NAME + "/" + SNAP_SVG_SUBFOLDER_NAME + "/" + 
-                    SNAP_SVG_MINIFIED_LIB_FILE_NAME;
-
-                dstFileFolder = dstFileFolder + THIRD_PARTY_SUBFOLDER_NAME + "/";
-                Utils::CreateDir(dstFileFolder, GetCallback());
-
-                dstFileFolder = dstFileFolder + SNAP_SVG_SUBFOLDER_NAME + "/";
-                Utils::CreateDir(dstFileFolder, GetCallback());
-
-                dstFilePath = dstFileFolder + SNAP_SVG_MINIFIED_LIB_FILE_NAME;
-                res = Utils::CopyAFile(srcFilePath, dstFilePath, GetCallback());
-            }
-            else
-            {
-                // Copy the runtime folder
-                res = Utils::CopyDir(sourceFolder + RUNTIME_ROOT_FOLDER_NAME, outputFolder, GetCallback());
-            }
-        #endif
-
-        // Jibo (mlb) - the following is how the createJS adobe example did things. we may want to investigate the minifying functionality at some point in the future.
+        // Jibo (mlb) - the following is how the createJS adobe example did things. 
+        // we may want to investigate the minifying functionality at some point in the future.
         // Copy the runtime folder
         res = Utils::CopyDir(sourceFolder + RUNTIME_ROOT_FOLDER_NAME, outputFolder, GetCallback());
         
@@ -734,10 +717,10 @@ namespace PixiJS
     FCM::Result ResourcePalette::AddSymbol(
         FCM::U_Int32 resourceId, 
         FCM::StringRep16 pName, 
-        Exporter::Service::PITimelineBuilder pTimelineBuilder)
+        Exporter::Service::PITimelineBuilder timelineBuilder)
     {
         FCM::Result res;
-        ITimelineWriter* pTimelineWriter;
+        ITimelineWriter* timelineWriter;
 
         LOG(("[EndSymbol] ResId: %d\n", resourceId));
 
@@ -748,9 +731,9 @@ namespace PixiJS
             m_resourceNames.push_back(Utils::ToString(pName, GetCallback()));
         }
 
-        TimelineBuilder* pTimeline = static_cast<TimelineBuilder*>(pTimelineBuilder);
+        TimelineBuilder* timeline = static_cast<TimelineBuilder*>(timelineBuilder);
 
-        res = pTimeline->Build(resourceId, pName, &pTimelineWriter);
+        res = timeline->Build(resourceId, pName, &timelineWriter);
 
         return res;
     }
@@ -767,7 +750,7 @@ namespace PixiJS
         LOG(("[DefineShape] ResId: %d\n", resourceId));
 
         m_resourceList.push_back(resourceId);
-        m_pOutputWriter->StartDefineShape();
+        m_outputWriter->StartDefineShape();
 
         if (pShape)
         {
@@ -788,7 +771,7 @@ namespace PixiJS
             }
         }
 
-        m_pOutputWriter->EndDefineShape(resourceId);
+        m_outputWriter->EndDefineShape(resourceId);
 
         return FCM_SUCCESS;
     }
@@ -820,7 +803,7 @@ namespace PixiJS
         AutoPtr<DOM::MediaInfo::ISoundInfo> pSoundInfo = pUnknown;
         ASSERT(pSoundInfo);
         
-        m_pOutputWriter->DefineSound(resourceId, libName, pMediaItem);
+        m_outputWriter->DefineSound(resourceId, libName, pMediaItem);
 
         // Free the name
         FCM::AutoPtr<FCM::IFCMUnknown> pUnkCalloc;
@@ -868,7 +851,7 @@ namespace PixiJS
         ASSERT(FCM_SUCCESS_CODE(res));
 
         // Dump the definition of a bitmap
-        res = m_pOutputWriter->DefineBitmap(resourceId, height, width, libItemName, pMediaItem);
+        res = m_outputWriter->DefineBitmap(resourceId, height, width, libItemName, pMediaItem);
 
         // Free the name
         FCM::AutoPtr<FCM::IFCMUnknown> pUnkCalloc;
@@ -911,7 +894,7 @@ namespace PixiJS
         ASSERT(FCM_SUCCESS_CODE(res));
 
         // Start define text
-        res = m_pOutputWriter->StartDefineClassicText(resourceId, aaModeProp, displayText, textBehaviour);
+        res = m_outputWriter->StartDefineClassicText(resourceId, aaModeProp, displayText, textBehaviour);
         ASSERT(FCM_SUCCESS_CODE(res));
 
         res = pTextItem->GetParagraphs(pParagraphsList.m_Ptr);
@@ -943,7 +926,7 @@ namespace PixiJS
                 res = pParagraph->GetParagraphStyle(paragraphStyle);
                 ASSERT(FCM_SUCCESS_CODE(res));
 
-                res = m_pOutputWriter->StartDefineParagraph(paraStartIndex, paraLength, paragraphStyle);
+                res = m_outputWriter->StartDefineParagraph(paraStartIndex, paraLength, paragraphStyle);
                 ASSERT(FCM_SUCCESS_CODE(res));
 
                 res = pParagraph->GetTextRuns(pTextRunList.m_Ptr);
@@ -974,22 +957,22 @@ namespace PixiJS
                     res = GetTextStyle(runStyle, textStyle);
                     ASSERT(FCM_SUCCESS_CODE(res));
 
-                    res = m_pOutputWriter->StartDefineTextRun(runStartIndex, runLength, textStyle);
+                    res = m_outputWriter->StartDefineTextRun(runStartIndex, runLength, textStyle);
                     ASSERT(FCM_SUCCESS_CODE(res));
 
                     // End text run
-                    res = m_pOutputWriter->EndDefineTextRun();
+                    res = m_outputWriter->EndDefineTextRun();
                     ASSERT(FCM_SUCCESS_CODE(res));
                 }
 
                 // End Paragraph
-                res = m_pOutputWriter->EndDefineParagraph();
+                res = m_outputWriter->EndDefineParagraph();
                 ASSERT(FCM_SUCCESS_CODE(res));
             }
         }
 
         // End define text
-        res = m_pOutputWriter->EndDefineClassicText();
+        res = m_outputWriter->EndDefineClassicText();
         ASSERT(FCM_SUCCESS_CODE(res));
 
         return res;
@@ -1019,7 +1002,7 @@ namespace PixiJS
 
     ResourcePalette::ResourcePalette()
     {
-        m_pOutputWriter = NULL;
+        m_outputWriter = NULL;
     }
 
 
@@ -1028,9 +1011,9 @@ namespace PixiJS
     }
 
 
-    void ResourcePalette::Init(IOutputWriter* pOutputWriter)
+    void ResourcePalette::Init(IOutputWriter* outputWriter)
     {
-        m_pOutputWriter = pOutputWriter;
+        m_outputWriter = outputWriter;
     }
 
     void ResourcePalette::Clear()
@@ -1077,7 +1060,7 @@ namespace PixiJS
             FCM::AutoPtr<DOM::Service::Shape::IFilledRegion> pFilledRegion = pFilledRegionList[j];
             FCM::AutoPtr<DOM::Service::Shape::IPath> pPath;
 
-            m_pOutputWriter->StartDefineFill();
+            m_outputWriter->StartDefineFill();
 
             // Fill Style
             FCM::AutoPtr<DOM::IFCMUnknown> fillStyle;
@@ -1112,7 +1095,7 @@ namespace PixiJS
                 res = ExportHole(pPath);
             }
 
-            m_pOutputWriter->EndDefineFill();
+            m_outputWriter->EndDefineFill();
         }
 
         return res;
@@ -1123,12 +1106,12 @@ namespace PixiJS
     {
         FCM::Result res;
 
-        m_pOutputWriter->StartDefineBoundary();
+        m_outputWriter->StartDefineBoundary();
 
         res = ExportPath(pPath);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        m_pOutputWriter->EndDefineBoundary();
+        m_outputWriter->EndDefineBoundary();
 
         return res;
     }
@@ -1138,12 +1121,12 @@ namespace PixiJS
     {
         FCM::Result res;
 
-        m_pOutputWriter->StartDefineHole();
+        m_outputWriter->StartDefineHole();
 
         res = ExportPath(pPath);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        m_pOutputWriter->EndDefineHole();
+        m_outputWriter->EndDefineHole();
 
         return res;
     }
@@ -1171,7 +1154,7 @@ namespace PixiJS
 
             res = pEdge->GetSegment(segment);
 
-            m_pOutputWriter->SetSegment(segment);
+            m_outputWriter->SetSegment(segment);
         }
 
         return res;
@@ -1251,7 +1234,7 @@ namespace PixiJS
             AutoPtr<DOM::Service::Shape::IStrokeGroup> pStrokeGroup = pStrokeGroupList[j];
             ASSERT(pStrokeGroup);
 
-            res = m_pOutputWriter->StartDefineStrokeGroup();
+            res = m_outputWriter->StartDefineStrokeGroup();
             ASSERT(FCM_SUCCESS_CODE(res));
 
             AutoPtr<FCM::IFCMUnknown> pStrokeStyle;
@@ -1275,7 +1258,7 @@ namespace PixiJS
                 pPath = pPathList[k];
                 ASSERT(pPath);
 
-                res = m_pOutputWriter->StartDefineStroke();
+                res = m_outputWriter->StartDefineStroke();
                 ASSERT(FCM_SUCCESS_CODE(res));
 
                 res = ExportStrokeStyle(pStrokeStyle);
@@ -1284,11 +1267,11 @@ namespace PixiJS
                 res = ExportPath(pPath);
                 ASSERT(FCM_SUCCESS_CODE(res));
 
-                res = m_pOutputWriter->EndDefineStroke();
+                res = m_outputWriter->EndDefineStroke();
                 ASSERT(FCM_SUCCESS_CODE(res));
             }
 
-            res = m_pOutputWriter->EndDefineStrokeGroup();
+            res = m_outputWriter->EndDefineStrokeGroup();
             ASSERT(FCM_SUCCESS_CODE(res));
         }
 
@@ -1424,7 +1407,7 @@ namespace PixiJS
         res = pSolidStrokeStyle->GetStrokeHinting(strokeHinting);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        res = m_pOutputWriter->StartDefineSolidStrokeStyle(
+        res = m_outputWriter->StartDefineSolidStrokeStyle(
             thickness, 
             joinStyle, 
             capStyle, 
@@ -1439,7 +1422,7 @@ namespace PixiJS
         res = ExportFillStyle(pFillStyle);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        res = m_pOutputWriter->EndDefineSolidStrokeStyle();
+        res = m_outputWriter->EndDefineSolidStrokeStyle();
         ASSERT(FCM_SUCCESS_CODE(res));
 
         return res;
@@ -1457,7 +1440,7 @@ namespace PixiJS
         res = solidFill->GetColor(color);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        m_pOutputWriter->DefineSolidFillStyle(color);
+        m_outputWriter->DefineSolidFillStyle(color);
 
         return res;
     }
@@ -1487,7 +1470,7 @@ namespace PixiJS
         res = radialColorGradient->GetFocalPoint(focalPoint);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        res = m_pOutputWriter->StartDefineRadialGradientFillStyle(spread, matrix, focalPoint);
+        res = m_outputWriter->StartDefineRadialGradientFillStyle(spread, matrix, focalPoint);
         ASSERT(FCM_SUCCESS_CODE(res));
 
         FCM::U_Int8 nColors;
@@ -1501,11 +1484,11 @@ namespace PixiJS
             res = radialColorGradient->GetKeyColorAtIndex(i, point);
             ASSERT(FCM_SUCCESS_CODE(res));
 
-            res = m_pOutputWriter->SetKeyColorPoint(point);
+            res = m_outputWriter->SetKeyColorPoint(point);
             ASSERT(FCM_SUCCESS_CODE(res));
         }
 
-        res = m_pOutputWriter->EndDefineRadialGradientFillStyle();
+        res = m_outputWriter->EndDefineRadialGradientFillStyle();
         ASSERT(FCM_SUCCESS_CODE(res));
 
         return res;
@@ -1531,7 +1514,7 @@ namespace PixiJS
         res = gradientFill->GetMatrix(matrix);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        res = m_pOutputWriter->StartDefineLinearGradientFillStyle(spread, matrix);
+        res = m_outputWriter->StartDefineLinearGradientFillStyle(spread, matrix);
         ASSERT(FCM_SUCCESS_CODE(res));
 
         FCM::U_Int8 nColors;
@@ -1545,11 +1528,11 @@ namespace PixiJS
             res = linearColorGradient->GetKeyColorAtIndex(i, point);
             ASSERT(FCM_SUCCESS_CODE(res));
 
-            res = m_pOutputWriter->SetKeyColorPoint(point);
+            res = m_outputWriter->SetKeyColorPoint(point);
             ASSERT(FCM_SUCCESS_CODE(res));
         }
 
-        res = m_pOutputWriter->EndDefineLinearGradientFillStyle();
+        res = m_outputWriter->EndDefineLinearGradientFillStyle();
         ASSERT(FCM_SUCCESS_CODE(res));
 
         return res;
@@ -1603,7 +1586,7 @@ namespace PixiJS
         ASSERT(FCM_SUCCESS_CODE(res));
 
         // Dump the definition of a bitmap fill style
-        res = m_pOutputWriter->DefineBitmapFillStyle(
+        res = m_outputWriter->DefineBitmapFillStyle(
             isClipped, 
             matrix, 
             height, 
@@ -1785,7 +1768,7 @@ namespace PixiJS
         LOG(("[AddShape] ObjId: %d ResId: %d PlaceAfter: %d\n", 
             objectId, pShapeInfo->resourceId, pShapeInfo->placeAfterObjectId));
 
-        res = m_pTimelineWriter->PlaceObject(
+        res = m_timelineWriter->PlaceObject(
             pShapeInfo->resourceId, 
             objectId, 
             pShapeInfo->placeAfterObjectId, 
@@ -1816,7 +1799,7 @@ namespace PixiJS
             // to map it to its parent's co-orinate space to render it.
         }
         
-        res = m_pTimelineWriter->PlaceObject(
+        res = m_timelineWriter->PlaceObject(
             pClassicTextInfo->resourceId, 
             objectId, 
             pClassicTextInfo->placeAfterObjectId, 
@@ -1836,7 +1819,7 @@ namespace PixiJS
         LOG(("[AddBitmap] ObjId: %d ResId: %d PlaceAfter: %d\n", 
             objectId, pBitmapInfo->resourceId, pBitmapInfo->placeAfterObjectId));
 
-        res = m_pTimelineWriter->PlaceObject(
+        res = m_timelineWriter->PlaceObject(
             pBitmapInfo->resourceId, 
             objectId, 
             pBitmapInfo->placeAfterObjectId, 
@@ -1856,7 +1839,7 @@ namespace PixiJS
         LOG(("[AddMovieClip] ObjId: %d ResId: %d PlaceAfter: %d\n", 
             objectId, pMovieClipInfo->resourceId, pMovieClipInfo->placeAfterObjectId));
 
-        res = m_pTimelineWriter->PlaceObject(
+        res = m_timelineWriter->PlaceObject(
             pMovieClipInfo->resourceId, 
             objectId, 
             pMovieClipInfo->placeAfterObjectId, 
@@ -1877,7 +1860,7 @@ namespace PixiJS
         LOG(("[AddGraphic] ObjId: %d ResId: %d PlaceAfter: %d\n", 
             objectId, pGraphicInfo->resourceId, pGraphicInfo->placeAfterObjectId));
 
-        res = m_pTimelineWriter->PlaceObject(
+        res = m_timelineWriter->PlaceObject(
             pGraphicInfo->resourceId, 
             objectId, 
             pGraphicInfo->placeAfterObjectId, 
@@ -1902,7 +1885,7 @@ namespace PixiJS
         LOG(("[AddSound] ObjId: %d ResId: %d\n", 
             objectId, pSoundInfo->resourceId));
 
-        res = m_pTimelineWriter->PlaceObject(
+        res = m_timelineWriter->PlaceObject(
             pSoundInfo->resourceId, 
             objectId, 
             pUnknown);
@@ -1917,7 +1900,7 @@ namespace PixiJS
         LOG(("[UpdateZOrder] ObjId: %d PlaceAfter: %d\n", 
             objectId, placeAfterObjectId));
 
-        res = m_pTimelineWriter->UpdateZOrder(objectId, placeAfterObjectId);
+        res = m_timelineWriter->UpdateZOrder(objectId, placeAfterObjectId);
 
         return res;
     }
@@ -1929,7 +1912,7 @@ namespace PixiJS
         LOG(("[UpdateMask] ObjId: %d MaskTill: %d\n", 
             objectId, maskTillObjectId));
 
-        res = m_pTimelineWriter->UpdateMask(objectId, maskTillObjectId);
+        res = m_timelineWriter->UpdateMask(objectId, maskTillObjectId);
 
         return res;
     }
@@ -1940,7 +1923,7 @@ namespace PixiJS
 
         LOG(("[Remove] ObjId: %d\n", objectId));
 
-        res = m_pTimelineWriter->RemoveObject(objectId);
+        res = m_timelineWriter->RemoveObject(objectId);
 
         return res;
     }
@@ -1951,7 +1934,7 @@ namespace PixiJS
 
         LOG(("[UpdateBlendMode] ObjId: %d BlendMode: %d\n", objectId, blendMode));
 
-        res = m_pTimelineWriter->UpdateBlendMode(objectId, blendMode);
+        res = m_timelineWriter->UpdateBlendMode(objectId, blendMode);
 
         return res;
     }
@@ -1962,7 +1945,7 @@ namespace PixiJS
 
         LOG(("[UpdateVisibility] ObjId: %d Visible: %d\n", objectId, visible));
 
-        res = m_pTimelineWriter->UpdateVisibility(objectId, visible);
+        res = m_timelineWriter->UpdateVisibility(objectId, visible);
 
         return res;
     }
@@ -1982,7 +1965,7 @@ namespace PixiJS
         for (FCM::U_Int32 i = 0; i < count; i++)
         {
             FCM::AutoPtr<FCM::IFCMUnknown> pUnknown = (*pFilterable)[i];
-            res = m_pTimelineWriter->AddGraphicFilter(objectId, pUnknown.m_Ptr);
+            res = m_timelineWriter->AddGraphicFilter(objectId, pUnknown.m_Ptr);
 
             if (FCM_FAILURE_CODE(res))
             {
@@ -2000,7 +1983,7 @@ namespace PixiJS
 
         LOG(("[UpdateDisplayTransform] ObjId: %d\n", objectId));
 
-        res = m_pTimelineWriter->UpdateDisplayTransform(objectId, matrix);
+        res = m_timelineWriter->UpdateDisplayTransform(objectId, matrix);
 
         return res;
     }
@@ -2011,7 +1994,7 @@ namespace PixiJS
 
         LOG(("[UpdateColorTransform] ObjId: %d\n", objectId));
 
-        res = m_pTimelineWriter->UpdateColorTransform(objectId, colorMatrix);
+        res = m_timelineWriter->UpdateColorTransform(objectId, colorMatrix);
 
         return res;
     }
@@ -2022,7 +2005,7 @@ namespace PixiJS
 
         LOG(("[ShowFrame] Frame: %d\n", m_frameIndex));
 
-        res = m_pTimelineWriter->ShowFrame(m_frameIndex);
+        res = m_timelineWriter->ShowFrame(m_frameIndex);
 
         m_frameIndex++;
 
@@ -2037,7 +2020,7 @@ namespace PixiJS
 
         if (pScript != NULL)
         {
-            res = m_pTimelineWriter->AddFrameScript(pScript, layerNum);
+            res = m_timelineWriter->AddFrameScript(pScript, layerNum);
         }
 
         return res;
@@ -2049,7 +2032,7 @@ namespace PixiJS
 
         LOG(("[RemoveFrameScript] LayerNum: %d\n", layerNum));
 
-        res = m_pTimelineWriter->RemoveFrameScript(layerNum);
+        res = m_timelineWriter->RemoveFrameScript(layerNum);
 
         return res;
     }
@@ -2062,7 +2045,7 @@ namespace PixiJS
 
         if (pLabel != NULL)
         {
-            res = m_pTimelineWriter->SetFrameLabel(pLabel, labelType);
+            res = m_timelineWriter->SetFrameLabel(pLabel, labelType);
         }
 
         return res;
@@ -2070,21 +2053,21 @@ namespace PixiJS
 
     FCM::Result TimelineBuilder::Build(
         FCM::U_Int32 resourceId, 
-        FCM::StringRep16 pName,
-        ITimelineWriter** ppTimelineWriter)
+        FCM::StringRep16 name,
+        ITimelineWriter** timelineWriter)
     {
         FCM::Result res;
 
-        res = m_pOutputWriter->EndDefineTimeline(resourceId, pName, m_pTimelineWriter);
+        res = m_outputWriter->EndDefineTimeline(resourceId, name, m_timelineWriter);
 
-        *ppTimelineWriter = m_pTimelineWriter;
+        *timelineWriter = m_timelineWriter;
 
         return res;
     }
 
 
     TimelineBuilder::TimelineBuilder() :
-        m_pOutputWriter(NULL),
+        m_outputWriter(NULL),
         m_frameIndex(0)
     {
         //LOG(("[CreateTimeline]\n"));
@@ -2094,14 +2077,14 @@ namespace PixiJS
     {
     }
 
-    void TimelineBuilder::Init(IOutputWriter* pOutputWriter, DataPrecision precision)
+    void TimelineBuilder::Init(IOutputWriter* outputWriter, DataPrecision precision)
     {
-        m_pOutputWriter = pOutputWriter;
+        m_outputWriter = outputWriter;
 
-        m_pOutputWriter->StartDefineTimeline();
+        m_outputWriter->StartDefineTimeline();
 
-        m_pTimelineWriter = new JSONTimelineWriter(GetCallback(), precision);
-        ASSERT(m_pTimelineWriter);
+        m_timelineWriter = new JSONTimelineWriter(GetCallback(), precision);
+        ASSERT(m_timelineWriter);
     }
 
     /* ----------------------------------------------------- TimelineBuilderFactory */
@@ -2114,20 +2097,20 @@ namespace PixiJS
     {
     }
 
-    FCM::Result TimelineBuilderFactory::CreateTimelineBuilder(PITimelineBuilder& pTimelineBuilder)
+    FCM::Result TimelineBuilderFactory::CreateTimelineBuilder(PITimelineBuilder& timelineBuilder)
     {
-        FCM::Result res = GetCallback()->CreateInstance(NULL, CLSID_TimelineBuilder, IID_ITIMELINE_BUILDER_2, (void**)&pTimelineBuilder);
+        FCM::Result res = GetCallback()->CreateInstance(NULL, CLSID_TimelineBuilder, IID_ITIMELINE_BUILDER_2, (void**)&timelineBuilder);
 
-        TimelineBuilder* pTimeline = static_cast<TimelineBuilder*>(pTimelineBuilder);
+        TimelineBuilder* timeline = static_cast<TimelineBuilder*>(timelineBuilder);
         
-        pTimeline->Init(m_pOutputWriter, m_dataPrecision);
+        timeline->Init(m_outputWriter, m_dataPrecision);
 
         return res;
     }
 
-    void TimelineBuilderFactory::Init(IOutputWriter* pOutputWriter, DataPrecision dataPrecision)
+    void TimelineBuilderFactory::Init(IOutputWriter* outputWriter, DataPrecision dataPrecision)
     {
-        m_pOutputWriter = pOutputWriter;
+        m_outputWriter = outputWriter;
         m_dataPrecision = dataPrecision;
     }
 

@@ -140,7 +140,7 @@ namespace PixiJS
     #endif
 #endif
 
-#define DICT_OUTPUT_PATH     "PublishSettings.PixiJS.OutputFile"
+#define DICT_OUTPUT_FILE     "PublishSettings.PixiJS.OutputFile"
 #define DICT_HTML_PATH       "PublishSettings.PixiJS.HTMLPath" 
 #define DICT_LIBS_PATH       "PublishSettings.PixiJS.LibsPath" 
 #define DICT_IMAGES_PATH     "PublishSettings.PixiJS.ImagesPath"
@@ -154,10 +154,6 @@ namespace PixiJS
 #define DICT_IMAGES          "PublishSettings.PixiJS.Images"
 #define DICT_LOOP_TIMELINE   "PublishSettings.PixiJS.LoopTimeline"
 #define DICT_ELECTRON        "PublishSettings.PixiJS.Electron"
-
-// #define DICT_MINIFY                 "PublishSettings.PixiJS.Minify"
-// #define DICT_COMPACT_DATA           "PublishSettings.PixiJS.CompactData"
-// #define DICT_COMPACT_DATA_OPT       "PublishSettings.PixiJS.CompactDataOptions"
 
 /* -------------------------------------------------- Structs / Unions */
 
@@ -220,6 +216,8 @@ namespace PixiJS
 
         static std::string ToString(const DOM::Utils::COLOR& color);
 
+        static std::string ToString(bool b);
+
         static bool ToBool(const std::string& str);
 
         static DataPrecision ToPrecision(const std::string& str);
@@ -230,6 +228,8 @@ namespace PixiJS
             DOM::Utils::POINT2D& outPoint);
 
         static void GetParent(const std::string& path, std::string& parent);
+
+        static void GetParentByFLA(const std::string& path, std::string& parent);
 
         static void GetFileName(const std::string& path, std::string& fileName);
 
@@ -256,7 +256,7 @@ namespace PixiJS
         static void Log(const char* fmt, ...);
 
         static void OpenFStream(
-            const std::string& outputFileName, 
+            const std::string& outputFile, 
             std::fstream &file, 
             std::ios_base::openmode mode, 
             FCM::PIFCMCallback pCallback);
@@ -271,14 +271,29 @@ namespace PixiJS
             const std::string& dstFolder, 
             FCM::PIFCMCallback pCallback);
 
-        static FCM::Result Remove(const std::string& folder, FCM::PIFCMCallback pCallback);
+        static FCM::Result Remove(
+            const std::string& folder, 
+            FCM::PIFCMCallback pCallback);
 
-        static bool ReadString(const FCM::PIFCMDictionary pDict, FCM::StringRep8 key, 
+        static bool ReadString(
+            const FCM::PIFCMDictionary pDict, 
+            FCM::StringRep8 key, 
             std::string &retString);
+
+        static bool ReadStringToBool(
+            const FCM::PIFCMDictionary pDict, 
+            FCM::StringRep8 key, 
+            bool &result);
+
+        static void ReplaceAll(
+            std::string &content, 
+            const std::string &from, 
+            const std::string &to);
+      
 
 #ifdef USE_HTTP_SERVER
 
-        static void LaunchBrowser(const std::string& outputFileName, int port, FCM::PIFCMCallback pCallback);
+        static void LaunchBrowser(const std::string& outputFile, int port, FCM::PIFCMCallback pCallback);
 		
         static int GetUnusedLocalPort();
 
