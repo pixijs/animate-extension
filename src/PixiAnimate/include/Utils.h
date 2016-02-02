@@ -56,11 +56,6 @@ namespace PixiJS
     };
 }
 
-/* -------------------------------------------------- Macros / Constants */
-
-#define IMAGE_FOLDER "images"
-#define SOUND_FOLDER "sounds"
-
 /* -------------------------------------------------- Structs / Unions */
 
 namespace PixiJS
@@ -144,14 +139,17 @@ namespace PixiJS
 #define DICT_HTML_PATH       "PublishSettings.PixiJS.HTMLPath" 
 #define DICT_LIBS_PATH       "PublishSettings.PixiJS.LibsPath" 
 #define DICT_IMAGES_PATH     "PublishSettings.PixiJS.ImagesPath"
+#define DICT_SOUNDS_PATH     "PublishSettings.PixiJS.SoundsPath"
 #define DICT_NAMESPACE       "PublishSettings.PixiJS.Namespace" 
 #define DICT_STAGE_NAME      "PublishSettings.PixiJS.StageName"
+#define DICT_ELECTRON_PATH   "PublishSettings.PixiJS.ElectronPath"
 
 #define DICT_COMPACT_SHAPES  "PublishSettings.PixiJS.CompactShapes"
 #define DICT_COMPRESS_JS     "PublishSettings.PixiJS.CompressJS"
 #define DICT_HTML            "PublishSettings.PixiJS.HTML"
 #define DICT_LIBS            "PublishSettings.PixiJS.Libs"
 #define DICT_IMAGES          "PublishSettings.PixiJS.Images"
+#define DICT_SOUNDS          "PublishSettings.PixiJS.Sounds"
 #define DICT_LOOP_TIMELINE   "PublishSettings.PixiJS.LoopTimeline"
 #define DICT_ELECTRON        "PublishSettings.PixiJS.Electron"
 
@@ -236,6 +234,8 @@ namespace PixiJS
         static void GetFileNameWithoutExtension(const std::string& path, std::string& fileName);
 
         static void GetFileExtension(const std::string& path, std::string& extension);
+
+        static void GetExtensionPath(std::string& path, FCM::PIFCMCallback pCallback);
 
         static void GetModuleFilePath(std::string& path, FCM::PIFCMCallback pCallback);
         

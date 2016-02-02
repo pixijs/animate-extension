@@ -31,6 +31,11 @@
 
 #include <cstring>
 #include <fstream>
+#include <map>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <iterator>
 #include "FlashFCMPublicIDs.h"
 #include "FCMPluginInterface.h"
 #include "libjson.h"
@@ -71,15 +76,12 @@ namespace PixiJS
     
     FCM::Result JSONOutputWriter::StartOutput()
     {
-        m_outputImageFolder = m_basePath + m_imagesPath;
-        m_outputSoundFolder = m_basePath + SOUND_FOLDER;
         return FCM_SUCCESS;
     }
     
     
     FCM::Result JSONOutputWriter::EndOutput()
     {
-        
         return FCM_SUCCESS;
     }
     
@@ -92,37 +94,68 @@ namespace PixiJS
 
         FCM::U_Int32 backColor = (background.red << 16) | (background.green << 8) | (background.blue);
 
+        // Convert the backColor INT to a hex string e.g., ffffff
+        std::stringstream sstream;
+        sstream << std::hex << backColor;
+
+        std::string outputName;
+        Utils::GetFileNameWithoutExtension(m_outputFile, outputName);
+
+        #ifdef _DEBUG
+
+            Utils::Trace(m_pCallback, " -> Data output %s\n", m_outputDataFile.c_str());
+
+        #endif
+
+        // Template substitutions are created e.g., ${imagesPath} replaced with path to images
+        m_substitutions["imagesPath"] = m_imagesPath;
+        m_substitutions["libsPath"] = m_libsPath;
+        m_substitutions["soundsPath"] = m_soundsPath;
+        m_substitutions["htmlPath"] = m_htmlPath;
+        m_substitutions["outputFile"] = m_outputFile;
+        m_substitutions["outputName"] = outputName;
+        m_substitutions["stageName"] = m_stageName;
+        m_substitutions["electronPath"] = m_electronPath;
+        m_substitutions["width"] = Utils::ToString(stageWidth);
+        m_substitutions["height"] = Utils::ToString(stageHeight);
+        m_substitutions["background"] = sstream.str();
+        m_substitutions["fps"] = Utils::ToString(fps);
+        m_substitutions["nameSpace"] = m_nameSpace;
+
         return FCM_SUCCESS;
     }
     
     FCM::Result JSONOutputWriter::EndDocument()
     {
-        std::fstream file;
         m_pRootNode->push_back(*m_pShapeArray);
         m_pRootNode->push_back(*m_pBitmapArray);
         m_pRootNode->push_back(*m_pSoundArray);
         m_pRootNode->push_back(*m_pTextArray);
         m_pRootNode->push_back(*m_pTimelineArray);
         
-        // Write the JSON file (overwrite file if it already exists)
-        Utils::OpenFStream(m_outputDataFile, file, std::ios_base::trunc|std::ios_base::out, m_pCallback);
-        
         JSONNode firstNode(JSON_NODE);
         firstNode.push_back(*m_pRootNode);
-        
-        // Pretty printing of JSON
-        file << firstNode.write_formatted();
-        file.close();
-        
-        // std::fstream file;
-        
-        // // Write the HTML file (overwrite file if it already exists)
-        // Utils::OpenFStream(m_outputFile, file, std::ios_base::trunc|std::ios_base::out, m_pCallback);
 
-        // file << m_HTMLOutput;
-        // file.close();
+        // Write the JSON file (overwrite file if it already exists)
+        Save(m_outputDataFile, firstNode.write_formatted());
+        
+        // Get the path to the templates folder
+        std::string templatesPath;
+        Utils::GetExtensionPath(templatesPath, m_pCallback);
+        templatesPath += TEMPLATE_FOLDER_NAME;
 
-        // delete [] m_HTMLOutput;
+        // Output the HTML templates
+        if (m_html)
+        {
+            SaveFromTemplate(templatesPath + "index.html", m_basePath + m_htmlPath);
+        }
+
+        // Output the electron path
+        if (m_electron)
+        {
+            SaveFromTemplate(templatesPath + "package.json", m_basePath + "package.json");
+            SaveFromTemplate(templatesPath + "main.js", m_basePath + m_electronPath);
+        }
 
         return FCM_SUCCESS;
     }
@@ -213,6 +246,11 @@ namespace PixiJS
                                                         const std::string& libPathName,
                                                         DOM::LibraryItem::PIMediaItem pMediaItem)
     {
+        if (!m_images)
+        {
+            return FCM_SUCCESS;
+        }
+
         FCM::Result res;
         std::string name;
         JSONNode bitmapElem(JSON_NODE);
@@ -248,7 +286,7 @@ namespace PixiJS
         bitmapExportPath += name;
         
         bitmapRelPath = "./";
-        bitmapRelPath += IMAGE_FOLDER;
+        bitmapRelPath += m_imagesPath;
         bitmapRelPath += "/";
         bitmapRelPath += name;
         
@@ -613,6 +651,11 @@ namespace PixiJS
                                                const std::string& libPathName,
                                                DOM::LibraryItem::PIMediaItem pMediaItem)
     {
+        if (!m_images)
+        {
+            return FCM_SUCCESS;
+        }
+
         FCM::Result res;
         JSONNode bitmapElem(JSON_NODE);
         std::string bitmapPath;
@@ -649,7 +692,7 @@ namespace PixiJS
         bitmapExportPath += name;
         
         bitmapRelPath = "./";
-        bitmapRelPath += IMAGE_FOLDER;
+        bitmapRelPath += m_imagesPath;
         bitmapRelPath += "/";
         bitmapRelPath += name;
         
@@ -875,7 +918,7 @@ namespace PixiJS
         soundExportPath += name;
         
         soundRelPath = "./";
-        soundRelPath += SOUND_FOLDER;
+        soundRelPath += m_soundsPath;
         soundRelPath += "/";
         soundRelPath += name;
         
@@ -904,26 +947,46 @@ namespace PixiJS
         std::string& basePath,
         std::string& outputFile,
         std::string& imagesPath,
+        std::string& soundsPath,
         std::string& htmlPath,
         std::string& libsPath,
         std::string& stageName,
         std::string& nameSpace,
+        std::string& electronPath,
+        bool html,
+        bool libs,
+        bool images,
+        bool sounds,
+        bool compactShapes,
+        bool compressJS,
+        bool loopTimeline,
+        bool electron,
         DataPrecision dataPrecision)
     : m_pCallback(pCallback),
     m_outputFile(outputFile),
-    m_outputDataName(outputFile + "on"),
     m_outputDataFile(basePath + outputFile + "on"),
+    m_outputImageFolder(basePath + imagesPath),
+    m_outputSoundFolder(basePath + soundsPath),
     m_basePath(basePath),
     m_imagesPath(imagesPath),
+    m_soundsPath(soundsPath),
     m_htmlPath(htmlPath),
     m_libsPath(libsPath),
     m_stageName(stageName),
     m_nameSpace(nameSpace),
+    m_electronPath(electronPath),
+    m_html(html),
+    m_libs(libs),
+    m_images(images),
+    m_sounds(sounds),
+    m_compactShapes(compactShapes),
+    m_compressJS(compressJS),
+    m_loopTimeline(loopTimeline),
+    m_electron(electron),
     m_shapeElem(NULL),
     m_pathArray(NULL),
     m_pathElem(NULL),
     m_firstSegment(false),
-    m_HTMLOutput(NULL),
     m_imageFileNameLabel(0),
     m_soundFileNameLabel(0),
     m_imageFolderCreated(false),
@@ -1167,5 +1230,46 @@ namespace PixiJS
         ASSERT(m_imageMap.find(libPathName) == m_imageMap.end());
         
         m_imageMap.insert(std::pair<std::string, std::string>(libPathName, name));
+    }
+
+    bool JSONOutputWriter::SaveFromTemplate(const std::string &templatePath, const std::string &outputPath)
+    {
+        std::ifstream inFile(templatePath.c_str());
+        if (!inFile)
+        {
+            return false;
+        }
+        std::stringstream strStream;
+        strStream << inFile.rdbuf();
+        std::string content(strStream.str());
+
+        std::map<std::string, std::string>::const_iterator i;
+        for(i = m_substitutions.begin(); i != m_substitutions.end(); i++)
+        {
+            ReplaceAll("${" + i->first + "}", i->second, content);
+        }
+
+        // Save the file
+        Save(outputPath, content);
+
+        return true;
+    }
+
+    void JSONOutputWriter::ReplaceAll(const std::string &from, const std::string &to, std::string& content)
+    {
+        size_t start_pos = 0;
+        while((start_pos = content.find(from, start_pos)) != std::string::npos)
+        {
+            content.replace(start_pos, from.length(), to);
+            start_pos += to.length();
+        }
+    }
+
+    void JSONOutputWriter::Save(const std::string &outputFile, const std::string &content)
+    {
+        std::fstream file;
+        Utils::OpenFStream(outputFile, file, std::ios_base::trunc|std::ios_base::out, m_pCallback);
+        file << content;
+        file.close();
     }
 };

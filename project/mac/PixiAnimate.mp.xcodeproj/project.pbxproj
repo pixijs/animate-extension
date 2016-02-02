@@ -32,7 +32,6 @@
 		681CC6011AF8BF5C0041AEC0 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = 681CC6001AF8BF5C0041AEC0 /* mongoose.c */; };
 		681CC6021AF8BF5C0041AEC0 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = 681CC6001AF8BF5C0041AEC0 /* mongoose.c */; };
 		"6df97df6-cdcc-3eec-8b67-b64cb2bd3741" /* JSONValidator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "3e78f8ad-c8d1-3e1d-9fba-a1af81089f89" /* JSONValidator.cpp */; };
-		7505C8701C5FD841004E1841 /* TemplateParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7505C86F1C5FD841004E1841 /* TemplateParser.cpp */; };
 		"80eccaa8-142f-385a-a04f-942a76afb0bf" /* JSONIterators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "9bbfd7be-ac57-384d-984e-1afc2e0ed3b2" /* JSONIterators.cpp */; };
 		"81e0cad2-705a-3d5e-a15a-311ce49f6b73" /* JSONNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "41c65d04-39ac-3a96-94e1-12f1abc61564" /* JSONNode.cpp */; };
 		"8af5fe69-f0db-3e01-a117-1799a08ecc35" /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */; };
@@ -88,7 +87,6 @@
 		681CC6001AF8BF5C0041AEC0 /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mongoose.c; path = ../../src/ThirdParty/mongoose/mongoose.c; sourceTree = "<group>"; };
 		"72093546-f441-3bed-8ee2-78acd3cf688d" /* JSONStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONStream.cpp; sourceTree = "<group>"; };
 		"7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppKit.framework; sourceTree = "<group>"; };
-		7505C86F1C5FD841004E1841 /* TemplateParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TemplateParser.cpp; sourceTree = "<group>"; };
 		"7aa76593-b10f-3f2e-bbea-7a3e63e1a65b" /* JSONNode_Mutex.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONNode_Mutex.cpp; sourceTree = "<group>"; };
 		"7bfcfcd8-dedc-3680-b9e1-95891cdfa343" /* libjson.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = libjson.cpp; sourceTree = "<group>"; };
 		"960c8d89-d632-3678-815d-49888c76392b" /* JSONPreparse.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONPreparse.cpp; sourceTree = "<group>"; };
@@ -188,7 +186,6 @@
 		9AEE4A4E1C04BEB70019C03B /* Writers */ = {
 			isa = PBXGroup;
 			children = (
-				7505C86F1C5FD841004E1841 /* TemplateParser.cpp */,
 				9AEE4A501C04BEB70019C03B /* JSONOutputWriter.cpp */,
 				9AEE4A511C04BEB70019C03B /* JSONTimelineWriter.cpp */,
 			);
@@ -426,7 +423,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				"15374b4a-426d-343d-bc8c-ee021693988c" /* Main.cpp in Sources */,
-				7505C8701C5FD841004E1841 /* TemplateParser.cpp in Sources */,
 				"11b6ea6f-8dda-395a-b7d9-307f60c8da7e" /* DocType.cpp in Sources */,
 				"ac0a0f9d-96dd-3620-ace9-4e86f0332be8" /* Publisher.cpp in Sources */,
 				"b56f3c1f-3389-398f-9deb-68998a4a4751" /* Utils.cpp in Sources */,

@@ -643,6 +643,15 @@ namespace PixiJS
         }
     }
 
+    void Utils::GetExtensionPath(std::string& path, FCM::PIFCMCallback pCallback)
+    {
+        // Get the source folder
+        GetModuleFilePath(path, pCallback);
+        GetParent(path, path);
+        GetParent(path, path);
+        GetParent(path, path);
+    }
+
     void Utils::GetModuleFilePath(std::string& path, FCM::PIFCMCallback pCallback)
     {
 #ifdef _WINDOWS

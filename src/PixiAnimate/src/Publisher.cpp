@@ -80,17 +80,7 @@ namespace PixiJS
 
     /* ----------------------------------------------------- CPublisher */
     
-    CPublisher::CPublisher():
-        m_html(true),
-        m_libs(true),
-        m_images(true),
-        m_compactShapes(true),
-        m_compressJS(true),
-        m_loopTimeline(true),
-        m_electron(false),
-        m_libsPath("libs/"),
-        m_namespace("lib"),
-        m_imagesPath("images/")
+    CPublisher::CPublisher()
     {
 
     }
@@ -202,43 +192,80 @@ namespace PixiJS
         FCM::U_Int32 timelineCount;
         DataPrecision precision = PRECISION_3;
 
+        bool html(true);
+        bool libs(true);
+        bool images(true);
+        bool sounds(true);
+        bool compactShapes(true);
+        bool compressJS(true);
+        bool loopTimeline(true);
+        bool electron(false);
+        std::string htmlPath;
+        std::string stageName;
+        std::string libsPath("libs/");
+        std::string nameSpace("lib");
+        std::string imagesPath("images/");
+        std::string soundsPath("sounds/");
+        std::string electronPath("main.js");
+
         // Default dependent on the output direction
-        Utils::GetFileNameWithoutExtension(outputFile, m_stageName);
-        m_htmlPath = m_stageName + ".html";
+        Utils::GetFileNameWithoutExtension(outputFile, stageName);
+        htmlPath = stageName + ".html";
 
         // Sanitize the stage name for JavaScript
-        Utils::ReplaceAll(m_stageName, "-", "_");
-        Utils::ReplaceAll(m_stageName, " ", "_");
+        Utils::ReplaceAll(stageName, "-", "_");
+        Utils::ReplaceAll(stageName, " ", "_");
 
         // Read the output file name from the publish settings
-        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_HTML, m_html);
-        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LIBS, m_libs);
-        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_IMAGES, m_images);
-        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPACT_SHAPES, m_compactShapes);
-        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPRESS_JS, m_compressJS);
-        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LOOP_TIMELINE, m_loopTimeline);
-        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_ELECTRON, m_electron);
-        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_LIBS_PATH, m_libsPath);
-        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_IMAGES_PATH, m_imagesPath);
-        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_HTML_PATH, m_htmlPath);
-        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_NAMESPACE, m_namespace);
-        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, m_stageName);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_HTML, html);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LIBS, libs);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_IMAGES, images);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_SOUNDS, sounds);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPACT_SHAPES, compactShapes);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPRESS_JS, compressJS);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LOOP_TIMELINE, loopTimeline);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_ELECTRON, electron);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_LIBS_PATH, libsPath);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_IMAGES_PATH, imagesPath);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_SOUNDS_PATH, soundsPath);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_HTML_PATH, htmlPath);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_NAMESPACE, nameSpace);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, stageName);
+        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_ELECTRON_PATH, electronPath);
 
         #ifdef _DEBUG
             Utils::Trace(GetCallback(), "Export relative to %s\n", basePath.c_str());
             Utils::Trace(GetCallback(), " -> Output file : %s\n", outputFile.c_str());
-            Utils::Trace(GetCallback(), " -> HTML path : %s\n", m_htmlPath.c_str());
-            Utils::Trace(GetCallback(), " -> Libraries path : %s\n", m_libsPath.c_str());
-            Utils::Trace(GetCallback(), " -> Images path : %s\n", m_imagesPath.c_str());
-            Utils::Trace(GetCallback(), " -> Namespace : %s\n", m_namespace.c_str());
-            Utils::Trace(GetCallback(), " -> Stage Name : %s\n", m_stageName.c_str());
-            Utils::Trace(GetCallback(), " -> Export HTML: %s\n", Utils::ToString(m_html).c_str());
-            Utils::Trace(GetCallback(), " -> Export Libraries: %s\n", Utils::ToString(m_libs).c_str());
-            Utils::Trace(GetCallback(), " -> Export Images: %s\n", Utils::ToString(m_images).c_str());
-            Utils::Trace(GetCallback(), " -> Compact Shapes: %s\n", Utils::ToString(m_compactShapes).c_str());
-            Utils::Trace(GetCallback(), " -> Compress JS: %s\n", Utils::ToString(m_compressJS).c_str());
-            Utils::Trace(GetCallback(), " -> Loop Timeline: %s\n", Utils::ToString(m_loopTimeline).c_str());
-            Utils::Trace(GetCallback(), " -> Electron: %s\n", Utils::ToString(m_compactShapes).c_str());
+            Utils::Trace(GetCallback(), " -> Namespace : %s\n", nameSpace.c_str());
+            Utils::Trace(GetCallback(), " -> Stage Name : %s\n", stageName.c_str());
+            Utils::Trace(GetCallback(), " -> Compact Shapes : %s\n", Utils::ToString(compactShapes).c_str());
+            Utils::Trace(GetCallback(), " -> Compress JS : %s\n", Utils::ToString(compressJS).c_str());
+            Utils::Trace(GetCallback(), " -> Loop Timeline : %s\n", Utils::ToString(loopTimeline).c_str());
+            if (html)
+            {
+                Utils::Trace(GetCallback(), " -> HTML path : %s\n", htmlPath.c_str());
+                Utils::Trace(GetCallback(), " -> Export HTML: %s\n", Utils::ToString(html).c_str());
+            }
+            if (libs)
+            {
+                Utils::Trace(GetCallback(), " -> Libraries path : %s\n", libsPath.c_str());
+                Utils::Trace(GetCallback(), " -> Export Libraries : %s\n", Utils::ToString(libs).c_str());
+            }
+            if (images)
+            {
+                Utils::Trace(GetCallback(), " -> Images path : %s\n", imagesPath.c_str());
+                Utils::Trace(GetCallback(), " -> Export Images : %s\n", Utils::ToString(images).c_str());
+            }
+            if (sounds)
+            {
+                Utils::Trace(GetCallback(), " -> Sounds path : %s\n", soundsPath.c_str());
+                Utils::Trace(GetCallback(), " -> Export Sounds : %s\n", Utils::ToString(sounds).c_str());
+            }
+            if (electron)
+            {
+                Utils::Trace(GetCallback(), " -> Electron path : %s\n", electronPath.c_str());
+                Utils::Trace(GetCallback(), " -> Electron : %s\n", Utils::ToString(electron).c_str());
+            }
         #endif
 
         // Temporary
@@ -247,11 +274,21 @@ namespace PixiJS
         std::auto_ptr<JSONOutputWriter> outputWriter(new JSONOutputWriter(GetCallback(), 
             basePath, 
             outputFile, 
-            m_imagesPath, 
-            m_htmlPath, 
-            m_libsPath, 
-            m_stageName, 
-            m_namespace,
+            imagesPath,
+            soundsPath,
+            htmlPath, 
+            libsPath, 
+            stageName, 
+            nameSpace,
+            electronPath,
+            html,
+            libs,
+            images,
+            sounds,
+            compactShapes,
+            compressJS,
+            loopTimeline,
+            electron,
             precision));
         
         if (outputWriter.get() == NULL)
@@ -417,19 +454,14 @@ namespace PixiJS
         // Stop preview
         outputWriter->StopPreview(outputFile);
 
-        #ifdef USE_RUNTIME
-
-                // We are now going to copy the runtime from the zxp package to the output folder.
-                std::string outFolder;
-                
-                Utils::GetParent(outputFile, outFolder);
-
-                CopyRuntime(outFolder);
-
-        #endif
+        if (libs)
+        {
+            // We are now going to copy the runtime from the zxp package to the output folder.
+            CopyRuntime(basePath + libsPath);
+        }
         
         // run the post publish step after the runtime folder is created but before a preview is potentially run
-        outputWriter->PostPublishStep(outFolder, GetCallback());
+        outputWriter->PostPublishStep(basePath, GetCallback());
         
         if (IsPreviewNeeded(dictConfig))
         {
@@ -532,6 +564,14 @@ namespace PixiJS
         pCalloc->Free(path);
 
         Utils::GetParentByFLA(flaPath, basePath);
+
+        // Add the base path of the output file to the basePath
+        std::string outputParent;
+        Utils::GetParent(outputFile, outputParent);
+        basePath += outputParent;
+
+        // Remove the root path from the output file
+        Utils::GetFileName(outputFile, outputFile);
 
         return res;
     }
@@ -696,13 +736,10 @@ namespace PixiJS
         std::string sourceFolder;
 
         // Get the source folder
-        Utils::GetModuleFilePath(sourceFolder, GetCallback());
-        Utils::GetParent(sourceFolder, sourceFolder);
-        Utils::GetParent(sourceFolder, sourceFolder);
-        Utils::GetParent(sourceFolder, sourceFolder);
+        Utils::GetExtensionPath(sourceFolder, GetCallback());
 
         // First let us remove the existing runtime folder (if any)
-        Utils::Remove(outputFolder + RUNTIME_ROOT_FOLDER_NAME, GetCallback());
+        Utils::Remove(outputFolder, GetCallback());
 
         // Jibo (mlb) - the following is how the createJS adobe example did things. 
         // we may want to investigate the minifying functionality at some point in the future.

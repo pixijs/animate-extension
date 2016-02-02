@@ -1,6 +1,6 @@
 { 
-    "name": "${stageName}", 
+    "name": "${outputName}", 
     "version": "1.0.0",
-    "description": "${stageName} exported using PixiAnimate Extension", 
-    "main": "./${stageName}-electron.js"
+    "description": "${outputName} exported using PixiAnimate Extension", 
+    "main": "${electronPath}"
 }

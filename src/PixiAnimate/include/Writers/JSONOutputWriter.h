@@ -180,10 +180,20 @@ namespace PixiJS
             std::string& basePath,
             std::string& outputFile,
             std::string& imagesPath,
+            std::string& soundsPath,
             std::string& htmlPath,
             std::string& libsPath,
             std::string& stageName,
             std::string& nameSpace,
+            std::string& electronPath,
+            bool html,
+            bool libs,
+            bool images,
+            bool sounds,
+            bool compactShapes,
+            bool compressJS,
+            bool loopTimeline,
+            bool electron,
             DataPrecision dataPrecision);
         
         virtual ~JSONOutputWriter();
@@ -212,6 +222,12 @@ namespace PixiJS
         FCM::Boolean GetImageExportFileName(const std::string& libPathName, std::string& name);
         
         void SetImageExportFileName(const std::string& libPathName, const std::string& name);
+
+        void Save(const std::string &filePath, const std::string &content);
+
+        bool SaveFromTemplate(const std::string &templatePath, const std::string &outputPath);
+        
+        void ReplaceAll(const std::string &from, const std::string &to, std::string& content);
         
         JSONNode* m_pRootNode;
         
@@ -249,7 +265,7 @@ namespace PixiJS
         
         STROKE_STYLE m_strokeStyle;
         
-        char* m_HTMLOutput;
+        // char* m_HTMLOutput;
         
         FCM::PIFCMCallback m_pCallback;
         
@@ -269,6 +285,8 @@ namespace PixiJS
 
         std::string m_imagesPath;
 
+        std::string m_soundsPath;
+
         std::string m_htmlPath;
 
         std::string m_libsPath;
@@ -277,15 +295,33 @@ namespace PixiJS
 
         std::string m_nameSpace;
 
+        std::string m_electronPath;
+
         std::string m_outputFile;
         
         std::string m_outputDataFile;
-        
-        std::string m_outputDataName;
-        
+                
         std::string m_outputImageFolder;
         
         std::string m_outputSoundFolder;
+
+        std::map<std::string, std::string> m_substitutions;
+
+        bool m_html;
+
+        bool m_libs;
+
+        bool m_images;
+
+        bool m_sounds;
+
+        bool m_compactShapes;
+
+        bool m_compressJS;
+
+        bool m_loopTimeline;
+
+        bool m_electron;
     };
 };
 

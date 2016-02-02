@@ -42,7 +42,6 @@
 #include "Exporter/Service/IFrameCommandGenerator.h"
 #include "Writers/JSONOutputWriter.h"
 #include "Writers/JSONTimelineWriter.h"
-#include "Writers/TemplateParser.h"
 #include "PluginConfiguration.h"
 
 /* -------------------------------------------------- Forward Decl */
@@ -154,18 +153,6 @@ namespace PixiJS
 
         AutoPtr<IFrameCommandGenerator> m_frameCmdGeneratorService;
         AutoPtr<IResourcePalette> m_pResourcePalette;
-        bool m_html;
-        bool m_libs;
-        bool m_images;
-        bool m_compactShapes;
-        bool m_loopTimeline;
-        bool m_compressJS;
-        bool m_electron;
-        std::string m_htmlPath;
-        std::string m_libsPath;
-        std::string m_imagesPath;
-        std::string m_namespace;
-        std::string m_stageName;
     };
 
 

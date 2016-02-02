@@ -10,14 +10,6 @@ app.on('window-all-closed', function() {
     app.quit(); 
 });
 
-// Clear when closed
-app.on('before-quit', function() {
-    if (mainWindow) {
-        mainWindow.removeAllListeners('close');
-        mainWindow.close();
-    }
-});
-
 // This method will be called when Electron has finished 
 // initialization and is ready to create browser windows. 
 app.on('ready', function() { 

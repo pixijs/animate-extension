@@ -16,7 +16,9 @@
     var $outputFile = $('#outputFile');
     var $htmlPath = $("#htmlPath");
     var $imagesPath = $("#imagesPath");
+    var $soundsPath = $("#soundsPath");
     var $libsPath = $("#libsPath");
+    var $electronPath = $("#electronPath");
     var $compactShapes = $("#compactShapes");
     var $compressJS = $("#compressJS");
     var $namespace = $("#namespace");
@@ -24,6 +26,7 @@
     var $html = $("#html");
     var $libs = $("#libs");
     var $images = $("#images");
+    var $sounds = $("#sounds");
     var $loopTimeline = $("#loopTimeline");
     var $electron = $("#electron");
     var $hiddenLayers = $("#hiddenLayers");
@@ -117,17 +120,22 @@
             $html.checked = data[SETTINGS + "HTML"] == "true";
             $libs.checked = data[SETTINGS + "Libs"] == "true";
             $images.checked = data[SETTINGS + "Images"] == "true";
+            $sounds.checked = data[SETTINGS + "Sounds"] == "true";
             $loopTimeline.checked = data[SETTINGS + "LoopTimeline"] == "true";
             $electron.checked = data[SETTINGS + "Electron"] == "true";
 
             onToggleInput.call($html);
             onToggleInput.call($images);
             onToggleInput.call($libs);
+            onToggleInput.call($sounds);
+            onToggleInput.call($electron);
 
             // String options
             $htmlPath.value = data[SETTINGS + "HTMLPath"];
             $libsPath.value = data[SETTINGS + "LibsPath"];
             $imagesPath.value = data[SETTINGS + "ImagesPath"];
+            $soundsPath.value = data[SETTINGS + "SoundsPath"];
+            $electronPath.value = data[SETTINGS + "ElectronPath"];
             $namespace.value = data[SETTINGS + "Namespace"];
             $outputFile.value = data[SETTINGS + "OutputFile"];
             $stageName.value = data[SETTINGS + "StageName"];
@@ -159,6 +167,7 @@
         data[SETTINGS + "HTML"] = $html.checked.toString();
         data[SETTINGS + "Libs"] = $libs.checked.toString();
         data[SETTINGS + "Images"] = $images.checked.toString();
+        data[SETTINGS + "Sounds"] = $sounds.checked.toString();
         data[SETTINGS + "LoopTimeline"] = $loopTimeline.checked.toString();
         data[SETTINGS + "Electron"] = $electron.checked.toString();
 
@@ -167,6 +176,8 @@
         data[SETTINGS + "HTMLPath"] = $htmlPath.value.toString();
         data[SETTINGS + "LibsPath"] = $libsPath.value.toString();
         data[SETTINGS + "ImagesPath"] = $imagesPath.value.toString();
+        data[SETTINGS + "SoundsPath"] = $soundsPath.value.toString();
+        data[SETTINGS + "ElectronPath"] = $electronPath.value.toString();
         data[SETTINGS + "Namespace"] = $namespace.value.toString();
         data[SETTINGS + "StageName"] = $stageName.value.toString();
 
@@ -266,29 +277,21 @@
     // Check for the parent document
     exec('getParentPath', function(parent)
     {
-        if (!parent)
+        var path = require('path');
+        parentPath = path.dirname(parent);
+        if (path.extname(parent).toLowerCase() == ".xfl")
         {
-            exec('alert', 'Save document first');
-            close();
+            parentPath = path.dirname(parentPath);
         }
-        else
-        {
-            var path = require('path');
-            parentPath = path.dirname(parent);
-            if (path.extname(parent).toLowerCase() == ".xfl")
-            {
-                parentPath = path.dirname(parentPath);
-            }
 
-            // Restory the state from the saved settings
-            csInterface.addEventListener("com.adobe.events.flash.extension.setstate", restoreState);
-            var event = new CSEvent();
-            event.scope = "APPLICATION";
-            event.type = "com.adobe.events.flash.extensionLoaded";
-            event.data = "Test Event";
-            event.extensionId = "com.jibo.PixiAnimate.PublishSettings";
-            csInterface.dispatchEvent(event);
-        }
+        // Restory the state from the saved settings
+        csInterface.addEventListener("com.adobe.events.flash.extension.setstate", restoreState);
+        var event = new CSEvent();
+        event.scope = "APPLICATION";
+        event.type = "com.adobe.events.flash.extensionLoaded";
+        event.data = "Test Event";
+        event.extensionId = "com.jibo.PixiAnimate.PublishSettings";
+        csInterface.dispatchEvent(event);
     });
 
 }(document, window.__adobe_cep__));
