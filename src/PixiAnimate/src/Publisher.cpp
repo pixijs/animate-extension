@@ -149,6 +149,9 @@ namespace PixiJS
             return res;
         }
 
+        // Create the output directory
+        Utils::CreateDir(basePath, GetCallback());
+
 #ifdef USE_SWF_EXPORTER_SERVICE
 
         // Use the SWF Exporter Service to export to a SWF
