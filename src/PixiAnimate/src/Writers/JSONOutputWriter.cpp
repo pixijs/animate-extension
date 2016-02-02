@@ -1091,7 +1091,7 @@ namespace PixiJS
                 if (FCM_SUCCESS_CODE(res))
                 {
                     // Launch the browser
-                    Utils::LaunchBrowser(outFile, config.port, pCallback);
+                    Utils::LaunchBrowser(fileName, config.port, pCallback);
                     break;
                 }
                 numTries++;

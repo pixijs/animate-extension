@@ -468,7 +468,7 @@ namespace PixiJS
         
         if (IsPreviewNeeded(dictConfig))
         {
-            outputWriter->StartPreview(outputFile, GetCallback());
+            outputWriter->StartPreview(basePath + htmlPath, GetCallback());
         }
 
 #endif
