@@ -214,8 +214,10 @@ namespace PixiJS
         m_pathElem = new JSONNode(JSON_NODE);
         ASSERT(m_pathElem);
         
-        m_pathCmdStr.clear();
-        
+        m_pathCmdArray = new JSONNode(JSON_ARRAY);
+        ASSERT(m_pathCmdArray);
+        m_pathCmdArray->set_name("d");
+
         return FCM_SUCCESS;
     }
     
@@ -464,42 +466,30 @@ namespace PixiJS
         {
             if (segment.segmentType == DOM::Utils::LINE_SEGMENT)
             {
-                m_pathCmdStr.append(Utils::ToString((double)(segment.line.endPoint1.x), m_dataPrecision));
-                m_pathCmdStr.append(space);
-                m_pathCmdStr.append(Utils::ToString((double)(segment.line.endPoint1.y), m_dataPrecision));
-                m_pathCmdStr.append(space);
+                m_pathCmdArray->push_back(JSONNode("", (double)(segment.line.endPoint1.x)));
+                m_pathCmdArray->push_back(JSONNode("", (double)(segment.line.endPoint1.y)));
             }
             else
             {
-                m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.anchor1.x), m_dataPrecision));
-                m_pathCmdStr.append(space);
-                m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.anchor1.y), m_dataPrecision));
-                m_pathCmdStr.append(space);
+                m_pathCmdArray->push_back(JSONNode("", (double)(segment.quadBezierCurve.anchor1.x)));
+                m_pathCmdArray->push_back(JSONNode("", (double)(segment.quadBezierCurve.anchor1.y)));
             }
             m_firstSegment = false;
         }
         
         if (segment.segmentType == DOM::Utils::LINE_SEGMENT)
         {
-            m_pathCmdStr.append(lineTo);
-            m_pathCmdStr.append(space);
-            m_pathCmdStr.append(Utils::ToString((double)(segment.line.endPoint2.x), m_dataPrecision));
-            m_pathCmdStr.append(space);
-            m_pathCmdStr.append(Utils::ToString((double)(segment.line.endPoint2.y), m_dataPrecision));
-            m_pathCmdStr.append(space);
+            m_pathCmdArray->push_back(JSONNode("", lineTo));
+            m_pathCmdArray->push_back(JSONNode("", (double)(segment.line.endPoint2.x)));
+            m_pathCmdArray->push_back(JSONNode("", (double)(segment.line.endPoint2.y)));
         }
         else
         {
-            m_pathCmdStr.append(bezierCurveTo);
-            m_pathCmdStr.append(space);
-            m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.control.x), m_dataPrecision));
-            m_pathCmdStr.append(space);
-            m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.control.y), m_dataPrecision));
-            m_pathCmdStr.append(space);
-            m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.anchor2.x), m_dataPrecision));
-            m_pathCmdStr.append(space);
-            m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.anchor2.y), m_dataPrecision));
-            m_pathCmdStr.append(space);
+            m_pathCmdArray->push_back(JSONNode("", bezierCurveTo));
+            m_pathCmdArray->push_back(JSONNode("", (double)(segment.quadBezierCurve.control.x)));
+            m_pathCmdArray->push_back(JSONNode("", (double)(segment.quadBezierCurve.control.y)));
+            m_pathCmdArray->push_back(JSONNode("", (double)(segment.quadBezierCurve.anchor2.x)));
+            m_pathCmdArray->push_back(JSONNode("", (double)(segment.quadBezierCurve.anchor2.y)));
         }
         
         return FCM_SUCCESS;
@@ -568,7 +558,6 @@ namespace PixiJS
         m_pathElem = new JSONNode(JSON_NODE);
         ASSERT(m_pathElem);
         
-        m_pathCmdStr.clear();
         StartDefinePath();
         
         return FCM_SUCCESS;
@@ -578,7 +567,7 @@ namespace PixiJS
     // End of a stroke
     FCM::Result OutputWriter::EndDefineStroke()
     {
-        m_pathElem->push_back(JSONNode("d", m_pathCmdStr));
+        m_pathElem->push_back(*m_pathCmdArray);
         
         if (m_strokeStyle.type == SOLID_STROKE_STYLE_TYPE)
         {
@@ -600,8 +589,10 @@ namespace PixiJS
         m_pathArray->push_back(*m_pathElem);
         
         delete m_pathElem;
-        
+        delete m_pathCmdArray;
+
         m_pathElem = NULL;
+        m_pathCmdArray = NULL;
         
         return FCM_SUCCESS;
     }
@@ -618,15 +609,17 @@ namespace PixiJS
     // End of fill style definition
     FCM::Result OutputWriter::EndDefineFill()
     {
-        m_pathElem->push_back(JSONNode("d", m_pathCmdStr));
+        m_pathElem->push_back(*m_pathCmdArray);
         m_pathElem->push_back(JSONNode("pathType", JSON_TEXT("Fill")));
         m_pathElem->push_back(JSONNode("stroke", JSON_TEXT("none")));
         
         m_pathArray->push_back(*m_pathElem);
         
         delete m_pathElem;
-        
+        delete m_pathCmdArray;
+
         m_pathElem = NULL;
+        m_pathCmdArray = NULL;
         
         return FCM_SUCCESS;
     }
@@ -1010,8 +1003,11 @@ namespace PixiJS
     
     FCM::Result OutputWriter::StartDefinePath()
     {
-        m_pathCmdStr.append(moveTo);
-        m_pathCmdStr.append(space);
+        m_pathCmdArray = new JSONNode(JSON_ARRAY);
+        ASSERT(m_pathCmdArray);
+        m_pathCmdArray->set_name("d");
+        
+        m_pathCmdArray->push_back(JSONNode("", moveTo));
         m_firstSegment = true;
         return FCM_SUCCESS;
     }

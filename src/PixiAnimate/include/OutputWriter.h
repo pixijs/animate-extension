@@ -232,11 +232,11 @@ namespace PixiJS
         
         JSONNode* m_pTextArray;
         
-        JSONNode*   m_shapeElem;
+        JSONNode*  m_shapeElem;
         
-        JSONNode*   m_pathArray;
+        JSONNode*  m_pathArray;
         
-        JSONNode*   m_pathElem;
+        JSONNode*  m_pathElem;
         
         JSONNode*  m_pTextElem;
         
@@ -246,13 +246,13 @@ namespace PixiJS
         
         JSONNode*  m_pTextRunArray;
         
-        JSONNode*   m_gradientColor;
+        JSONNode*  m_gradientColor;
         
-        JSONNode*   m_stopPointArray;
+        JSONNode*  m_stopPointArray;
         
-        std::string m_pathCmdStr;
+        JSONNode*  m_pathCmdArray;
         
-        bool        m_firstSegment;
+        bool       m_firstSegment;
         
         STROKE_STYLE m_strokeStyle;
         
