@@ -766,11 +766,7 @@ namespace PixiJS
 
         TimelineBuilder* timeline = static_cast<TimelineBuilder*>(timelineBuilder);
 
-        Utils::Trace(GetCallback(), "Add symbol: %s\n", Utils::ToString(pName).c_str());
-
-        res = timeline->Build(resourceId, pName, &timelineWriter);
-
-        return res;
+        return timeline->Build(resourceId, pName, &timelineWriter);
     }
 
 

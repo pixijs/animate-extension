@@ -41,7 +41,7 @@ namespace PixiJS
         
         if (pMatrix)
         {
-            commandElement.push_back(JSONNode("transformMatrix", Utils::ToString(*pMatrix, m_dataPrecision).c_str()));
+            commandElement.push_back(Utils::ToJSON("transformMatrix", *pMatrix));
         }
         
         if (pRect)
@@ -72,7 +72,7 @@ namespace PixiJS
         
         if (pMatrix)
         {
-            commandElement.push_back(JSONNode("transformMatrix", Utils::ToString(*pMatrix, m_dataPrecision).c_str()));
+            commandElement.push_back(Utils::ToJSON("transformMatrix", *pMatrix));
         }
         
         commandElement.push_back(JSONNode("loop", loop));
@@ -786,8 +786,7 @@ namespace PixiJS
         
         commandElement.push_back(JSONNode("cmdType", "Move"));
         commandElement.push_back(JSONNode("objectId", objectId));
-        transformMat = Utils::ToString(matrix, m_dataPrecision);
-        commandElement.push_back(JSONNode("transformMatrix", transformMat.c_str()));
+        commandElement.push_back(Utils::ToJSON("transformMatrix", matrix));
         
         m_pCommandArray->push_back(commandElement);
         
@@ -800,12 +799,10 @@ namespace PixiJS
                                                          const DOM::Utils::COLOR_MATRIX& colorMatrix)
     {
         JSONNode commandElement(JSON_NODE);
-        std::string colorMat;
         
         commandElement.push_back(JSONNode("cmdType", "UpdateColorTransform"));
         commandElement.push_back(JSONNode("objectId", objectId));
-        colorMat = Utils::ToString(colorMatrix, m_dataPrecision);
-        commandElement.push_back(JSONNode("colorMatrix", colorMat.c_str()));
+        commandElement.push_back(Utils::ToJSON("colorMatrix", colorMatrix));
         
         m_pCommandArray->push_back(commandElement);
         
@@ -927,11 +924,8 @@ namespace PixiJS
     TimelineWriter::~TimelineWriter()
     {
         delete m_pCommandArray;
-        
         delete m_pFrameArray;
-        
         delete m_pTimelineElement;
-        
         delete m_pFrameElement;
     }
 
@@ -942,7 +936,8 @@ namespace PixiJS
     }
 
 
-    void TimelineWriter::Finish(FCM::U_Int32 resId, FCM::StringRep16 pName)
+    // void TimelineWriter::Finish(FCM::U_Int32 resId, FCM::StringRep16 pName)
+    void TimelineWriter::Finish(FCM::U_Int32 resId, FCM::StringRep16 pName, std::string name)
     {
         if (resId != 0)
         {
@@ -954,10 +949,8 @@ namespace PixiJS
                 m_pTimelineElement->push_back(JSONNode("isGraphic", true));
             }
         }
-
-        m_pTimelineElement->push_back(JSONNode("name", Utils::ToString(pName)));
+        m_pTimelineElement->push_back(JSONNode("name", name));
         m_pTimelineElement->push_back(JSONNode("frameCount", m_FrameCount));
-        
         m_pTimelineElement->push_back(*m_pFrameArray);
     }
 };

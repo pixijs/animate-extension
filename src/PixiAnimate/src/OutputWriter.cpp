@@ -63,12 +63,10 @@
 
 namespace PixiJS
 {
-    static const std::string moveTo = "M";
-    static const std::string lineTo = "L";
-    static const std::string bezierCurveTo = "Q";
+    static const std::string moveTo = "mt";
+    static const std::string lineTo = "lt";
+    static const std::string bezierCurveTo = "bt";
     static const std::string space = " ";
-    static const std::string comma = ",";
-    static const std::string semiColon = ";";
     
     static const FCM::Float GRADIENT_VECTOR_CONSTANT = 16384.0;
     
@@ -166,21 +164,15 @@ namespace PixiJS
     {
         TimelineWriter* pWriter = static_cast<TimelineWriter*> (pTimelineWriter);
         
-        // if (resId == 0)
-        // {
-        //     pName = Utils::ToString16(m_stageName, m_pCallback);
-        // }
-        // // TODO: SDK is broken here pName is not returning the actual name
-        // else
-        // {
-        //     m_symbolNameLabel++;
-        //     pName = Utils::ToString16("Symbol" + m_symbolNameLabel, m_pCallback);
-        // }
+        std::string name(m_stageName);
+        if (resId != 0)
+        {
+            // This is temporary until the pName works on getting the name
+            m_symbolNameLabel++;
+            name = "Symbol" + Utils::ToString(m_symbolNameLabel);
+        }
 
-
-        // pWriter->Finish(resId, pName);
-
-        pWriter->Finish(resId, tempName);
+        pWriter->Finish(resId, pName, name);
         
         m_pTimelineArray->push_back(*(pWriter->GetRoot()));
         
@@ -313,7 +305,7 @@ namespace PixiJS
         matrix1.d /= 20.0;
         
         bitmapElem.push_back(JSONNode(("patternUnits"), "userSpaceOnUse"));
-        bitmapElem.push_back(JSONNode(("patternTransform"), Utils::ToString(matrix1, m_dataPrecision).c_str()));
+        bitmapElem.push_back(Utils::ToJSON("patternTransform", matrix1));
         
         m_pathElem->push_back(bitmapElem);
         
@@ -590,16 +582,18 @@ namespace PixiJS
         
         if (m_strokeStyle.type == SOLID_STROKE_STYLE_TYPE)
         {
-            m_pathElem->push_back(JSONNode("strokeWidth", (double)m_strokeStyle.solidStrokeStyle.thickness));
+            m_pathElem->push_back(JSONNode("strokeWidth",
+                (double)m_strokeStyle.solidStrokeStyle.thickness));
             m_pathElem->push_back(JSONNode("fill", "none"));
-            m_pathElem->push_back(JSONNode("strokeLinecap", Utils::ToString(m_strokeStyle.solidStrokeStyle.capStyle.type).c_str()));
-            m_pathElem->push_back(JSONNode("strokeLinejoin", Utils::ToString(m_strokeStyle.solidStrokeStyle.joinStyle.type).c_str()));
+            m_pathElem->push_back(JSONNode("strokeLinecap", 
+                Utils::ToString(m_strokeStyle.solidStrokeStyle.capStyle.type).c_str()));
+            m_pathElem->push_back(JSONNode("strokeLinejoin", 
+                Utils::ToString(m_strokeStyle.solidStrokeStyle.joinStyle.type).c_str()));
             
             if (m_strokeStyle.solidStrokeStyle.joinStyle.type == DOM::Utils::MITER_JOIN)
             {
-                m_pathElem->push_back(JSONNode(
-                                               "stroke-miterlimit",
-                                               (double)m_strokeStyle.solidStrokeStyle.joinStyle.miterJoinProp.miterLimit));
+                m_pathElem->push_back(JSONNode("stroke-miterlimit",
+                    (double)m_strokeStyle.solidStrokeStyle.joinStyle.miterJoinProp.miterLimit));
             }
             m_pathElem->push_back(JSONNode("pathType", "Stroke"));
         }

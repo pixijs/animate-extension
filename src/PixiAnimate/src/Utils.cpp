@@ -49,6 +49,7 @@
 #include <string>
 #include <cstring>
 #include <stdlib.h>
+#include "JSONNode.h"
 #include "Application/Service/IOutputConsoleService.h"
 #include "Application/Service/IFlashApplicationService.h"
 #include "FlashFCMPublicIDs.h"
@@ -281,22 +282,33 @@ namespace PixiJS
         return matrixString;
     }
 
-    std::string Utils::ToString(const DOM::Utils::COLOR_MATRIX& colorMatrix, FCM::U_Int8 precision)
+    JSONNode Utils::ToJSON(const std::string& name, const DOM::Utils::MATRIX2D& matrix)
     {
-        std::string matrixString = "";
+        JSONNode json;
+        json.push_back(JSONNode("a", matrix.a));
+        json.push_back(JSONNode("b", matrix.b));
+        json.push_back(JSONNode("c", matrix.c));
+        json.push_back(JSONNode("d", matrix.d));
+        json.push_back(JSONNode("tx", matrix.tx));
+        json.push_back(JSONNode("ty", matrix.ty));
+        json.set_name(name);
+        return json;
+    }
+
+    JSONNode Utils::ToJSON(const std::string& name, const DOM::Utils::COLOR_MATRIX& colorMatrix)
+    {
+        JSONNode arr(JSON_ARRAY);
+        arr.set_name(name);
 
         for (FCM::U_Int32 i = 0; i < 4; i++)
         {
             // Multiplicative factor
-            matrixString.append(ToString(colorMatrix.matrix[i][i], precision));
-            matrixString.append(comma);
+            arr.push_back(JSONNode("", colorMatrix.matrix[i][i]));
 
             // Additive factor
-            matrixString.append(ToString(colorMatrix.matrix[i][4], precision));
-            matrixString.append(comma);
+            arr.push_back(JSONNode("", colorMatrix.matrix[i][4]));
         }
-
-        return matrixString;
+        return arr;
     }
 
     std::string Utils::ToString(const DOM::Utils::CapType& capType)

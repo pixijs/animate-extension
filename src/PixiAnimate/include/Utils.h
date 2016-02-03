@@ -28,6 +28,7 @@
 #include "FCMTypes.h"
 #include "FCMPluginInterface.h"
 #include "Utils/DOMTypes.h"
+#include "JSONNode.h"
 #include <string>
 #include "FillStyle/IGradientFillStyle.h"
 #include "FrameElement/IClassicText.h"
@@ -182,7 +183,6 @@ namespace PixiJS
 
         static std::string ToString(const DOM::Utils::MATRIX2D& matrix, FCM::U_Int8 precision);
 
-        static std::string ToString(const DOM::Utils::COLOR_MATRIX& colorMatrix, FCM::U_Int8 precision);
 
         static std::string ToString(const DOM::Utils::CapType& capType);
 
@@ -215,6 +215,10 @@ namespace PixiJS
         static std::string ToString(const DOM::Utils::COLOR& color);
 
         static std::string ToString(bool b);
+
+        static JSONNode ToJSON(const std::string& name, const DOM::Utils::COLOR_MATRIX& colorMatrix);
+
+        static JSONNode ToJSON(const std::string& name, const DOM::Utils::MATRIX2D& matrix);
 
         static bool ToBool(const std::string& str);
 

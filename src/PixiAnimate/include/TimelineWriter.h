@@ -86,7 +86,7 @@ namespace PixiJS
         
         const JSONNode* GetRoot();
         
-        void Finish(FCM::U_Int32 resId, FCM::StringRep16 pName);
+        void Finish(FCM::U_Int32 resId, FCM::StringRep16 pName, std::string name);
         
         
     private:
