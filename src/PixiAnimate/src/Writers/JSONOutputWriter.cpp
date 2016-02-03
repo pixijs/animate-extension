@@ -79,13 +79,11 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
     
-    
     FCM::Result JSONOutputWriter::EndOutput()
     {
         return FCM_SUCCESS;
     }
     
-    // no-op. subclasses should implement this method
     FCM::Result JSONOutputWriter::StartDocument(const DOM::Utils::COLOR& background,
                                                 FCM::U_Int32 stageHeight,
                                                 FCM::U_Int32 stageWidth,
@@ -100,12 +98,6 @@ namespace PixiJS
 
         std::string outputName;
         Utils::GetFileNameWithoutExtension(m_outputFile, outputName);
-
-        #ifdef _DEBUG
-
-            Utils::Trace(m_pCallback, " -> Data output %s\n", m_outputDataFile.c_str());
-
-        #endif
 
         // Template substitutions are created e.g., ${imagesPath} replaced with path to images
         m_substitutions["imagesPath"] = m_imagesPath;
@@ -198,7 +190,7 @@ namespace PixiJS
     // Marks the end of a shape
     FCM::Result JSONOutputWriter::EndDefineShape(FCM::U_Int32 resId)
     {
-        m_shapeElem->push_back(JSONNode(("charid"), PixiJS::Utils::ToString(resId)));
+        m_shapeElem->push_back(JSONNode(("charid"), Utils::ToString(resId)));
         m_shapeElem->push_back(*m_pathArray);
         
         m_pShapeArray->push_back(*m_shapeElem);
@@ -228,7 +220,7 @@ namespace PixiJS
         std::string colorStr = Utils::ToString(color);
 
         float myalpha = (float)(color.alpha / 255.0);
-        std::string colorOpacityStr = PixiJS::Utils::ToString(myalpha, m_dataPrecision);
+        std::string colorOpacityStr = Utils::ToString(myalpha, m_dataPrecision);
         
         m_pathElem->push_back(JSONNode("color", colorStr.c_str()));
         m_pathElem->push_back(JSONNode("colorOpacity", colorOpacityStr.c_str()));
@@ -253,18 +245,15 @@ namespace PixiJS
 
         FCM::Result res;
         std::string name;
+        std::string ext;
         JSONNode bitmapElem(JSON_NODE);
-        std::string bitmapPath;
-        std::string bitmapName;
         
         bitmapElem.set_name("image");
         
-        bitmapElem.push_back(JSONNode(("height"), PixiJS::Utils::ToString(height)));
-        bitmapElem.push_back(JSONNode(("width"), PixiJS::Utils::ToString(width)));
+        bitmapElem.push_back(JSONNode(("height"), Utils::ToString(height)));
+        bitmapElem.push_back(JSONNode(("width"), Utils::ToString(width)));
         
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
-        std::string bitmapRelPath;
-        std::string bitmapExportPath = m_outputImageFolder + "/";
         
         FCM::Boolean alreadyExported = GetImageExportFileName(libPathName, name);
         if (!alreadyExported)
@@ -279,16 +268,13 @@ namespace PixiJS
                 }
                 m_imageFolderCreated = true;
             }
-            CreateImageFileName(libPathName, name);
+            Utils::GetFileExtension(libPathName, ext);
+            Utils::GetJavaScriptName(libPathName, name);
             SetImageExportFileName(libPathName, name);
         }
         
-        bitmapExportPath += name;
-        
-        bitmapRelPath = "./";
-        bitmapRelPath += m_imagesPath;
-        bitmapRelPath += "/";
-        bitmapRelPath += name;
+        std::string bitmapExportPath(m_outputImageFolder + name + "." + ext);
+        std::string bitmapRelPath(m_imagesPath + name + "." + ext);
         
         res = m_pCallback->GetService(DOM::FLA_BITMAP_SERVICE, pUnk.m_Ptr);
         ASSERT(FCM_SUCCESS_CODE(res));
@@ -301,13 +287,14 @@ namespace PixiJS
             res = bitmapExportService->ExportToFile(pMediaItem, pFilePath, 100);
             ASSERT(FCM_SUCCESS_CODE(res));
             
-            pCalloc = PixiJS::Utils::GetCallocService(m_pCallback);
+            pCalloc = Utils::GetCallocService(m_pCallback);
             ASSERT(pCalloc.m_Ptr != NULL);
             
             pCalloc->Free(pFilePath);
         }
         
-        bitmapElem.push_back(JSONNode(("bitmapPath"), bitmapRelPath));
+        bitmapElem.push_back(JSONNode(("src"), bitmapRelPath));
+        bitmapElem.push_back(JSONNode(("name"), name));
         
         DOM::Utils::MATRIX2D matrix1 = matrix;
         matrix1.a /= 20.0;
@@ -475,16 +462,16 @@ namespace PixiJS
         {
             if (segment.segmentType == DOM::Utils::LINE_SEGMENT)
             {
-                m_pathCmdStr.append(PixiJS::Utils::ToString((double)(segment.line.endPoint1.x), m_dataPrecision));
+                m_pathCmdStr.append(Utils::ToString((double)(segment.line.endPoint1.x), m_dataPrecision));
                 m_pathCmdStr.append(space);
-                m_pathCmdStr.append(PixiJS::Utils::ToString((double)(segment.line.endPoint1.y), m_dataPrecision));
+                m_pathCmdStr.append(Utils::ToString((double)(segment.line.endPoint1.y), m_dataPrecision));
                 m_pathCmdStr.append(space);
             }
             else
             {
-                m_pathCmdStr.append(PixiJS::Utils::ToString((double)(segment.quadBezierCurve.anchor1.x), m_dataPrecision));
+                m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.anchor1.x), m_dataPrecision));
                 m_pathCmdStr.append(space);
-                m_pathCmdStr.append(PixiJS::Utils::ToString((double)(segment.quadBezierCurve.anchor1.y), m_dataPrecision));
+                m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.anchor1.y), m_dataPrecision));
                 m_pathCmdStr.append(space);
             }
             m_firstSegment = false;
@@ -494,22 +481,22 @@ namespace PixiJS
         {
             m_pathCmdStr.append(lineTo);
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(PixiJS::Utils::ToString((double)(segment.line.endPoint2.x), m_dataPrecision));
+            m_pathCmdStr.append(Utils::ToString((double)(segment.line.endPoint2.x), m_dataPrecision));
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(PixiJS::Utils::ToString((double)(segment.line.endPoint2.y), m_dataPrecision));
+            m_pathCmdStr.append(Utils::ToString((double)(segment.line.endPoint2.y), m_dataPrecision));
             m_pathCmdStr.append(space);
         }
         else
         {
             m_pathCmdStr.append(bezierCurveTo);
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(PixiJS::Utils::ToString((double)(segment.quadBezierCurve.control.x), m_dataPrecision));
+            m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.control.x), m_dataPrecision));
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(PixiJS::Utils::ToString((double)(segment.quadBezierCurve.control.y), m_dataPrecision));
+            m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.control.y), m_dataPrecision));
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(PixiJS::Utils::ToString((double)(segment.quadBezierCurve.anchor2.x), m_dataPrecision));
+            m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.anchor2.x), m_dataPrecision));
             m_pathCmdStr.append(space);
-            m_pathCmdStr.append(PixiJS::Utils::ToString((double)(segment.quadBezierCurve.anchor2.y), m_dataPrecision));
+            m_pathCmdStr.append(Utils::ToString((double)(segment.quadBezierCurve.anchor2.y), m_dataPrecision));
             m_pathCmdStr.append(space);
         }
         
@@ -594,7 +581,7 @@ namespace PixiJS
         if (m_strokeStyle.type == SOLID_STROKE_STYLE_TYPE)
         {
             m_pathElem->push_back(JSONNode("strokeWidth",
-                                           PixiJS::Utils::ToString((double)m_strokeStyle.solidStrokeStyle.thickness, m_dataPrecision).c_str()));
+                                           Utils::ToString((double)m_strokeStyle.solidStrokeStyle.thickness, m_dataPrecision).c_str()));
             m_pathElem->push_back(JSONNode("fill", "none"));
             m_pathElem->push_back(JSONNode("strokeLinecap", Utils::ToString(m_strokeStyle.solidStrokeStyle.capStyle.type).c_str()));
             m_pathElem->push_back(JSONNode("strokeLinejoin", Utils::ToString(m_strokeStyle.solidStrokeStyle.joinStyle.type).c_str()));
@@ -603,7 +590,7 @@ namespace PixiJS
             {
                 m_pathElem->push_back(JSONNode(
                                                "stroke-miterlimit",
-                                               PixiJS::Utils::ToString((double)m_strokeStyle.solidStrokeStyle.joinStyle.miterJoinProp.miterLimit,
+                                               Utils::ToString((double)m_strokeStyle.solidStrokeStyle.joinStyle.miterJoinProp.miterLimit,
                                                                            m_dataPrecision).c_str()));
             }
             m_pathElem->push_back(JSONNode("pathType", "Stroke"));
@@ -658,19 +645,16 @@ namespace PixiJS
 
         FCM::Result res;
         JSONNode bitmapElem(JSON_NODE);
-        std::string bitmapPath;
-        std::string bitmapName;
         std::string name;
+        std::string ext;
         
         bitmapElem.set_name("image");
         
-        bitmapElem.push_back(JSONNode(("charid"), PixiJS::Utils::ToString(resId)));
-        bitmapElem.push_back(JSONNode(("height"), PixiJS::Utils::ToString(height)));
-        bitmapElem.push_back(JSONNode(("width"), PixiJS::Utils::ToString(width)));
+        bitmapElem.push_back(JSONNode(("charid"), Utils::ToString(resId)));
+        bitmapElem.push_back(JSONNode(("height"), Utils::ToString(height)));
+        bitmapElem.push_back(JSONNode(("width"), Utils::ToString(width)));
         
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
-        std::string bitmapRelPath;
-        std::string bitmapExportPath = m_outputImageFolder + "/";
         
         FCM::Boolean alreadyExported = GetImageExportFileName(libPathName, name);
         if (!alreadyExported)
@@ -685,17 +669,14 @@ namespace PixiJS
                 }
                 m_imageFolderCreated = true;
             }
-            CreateImageFileName(libPathName, name);
+            Utils::GetFileExtension(libPathName, ext);
+            Utils::GetJavaScriptName(libPathName, name);
             SetImageExportFileName(libPathName, name);
         }
         
-        bitmapExportPath += name;
-        
-        bitmapRelPath = "./";
-        bitmapRelPath += m_imagesPath;
-        bitmapRelPath += "/";
-        bitmapRelPath += name;
-        
+        std::string bitmapExportPath(m_outputImageFolder + name + "." + ext);
+        std::string bitmapRelPath(m_imagesPath + name + "." + ext);
+
         res = m_pCallback->GetService(DOM::FLA_BITMAP_SERVICE, pUnk.m_Ptr);
         ASSERT(FCM_SUCCESS_CODE(res));
         
@@ -704,16 +685,18 @@ namespace PixiJS
         {
             FCM::AutoPtr<FCM::IFCMCalloc> pCalloc;
             FCM::StringRep16 pFilePath = Utils::ToString16(bitmapExportPath, m_pCallback);
+
             res = bitmapExportService->ExportToFile(pMediaItem, pFilePath, 100);
             ASSERT(FCM_SUCCESS_CODE(res));
             
-            pCalloc = PixiJS::Utils::GetCallocService(m_pCallback);
+            pCalloc = Utils::GetCallocService(m_pCallback);
             ASSERT(pCalloc.m_Ptr != NULL);
             
             pCalloc->Free(pFilePath);
         }
         
-        bitmapElem.push_back(JSONNode(("bitmapPath"), bitmapRelPath));
+        bitmapElem.push_back(JSONNode(("src"), bitmapRelPath));
+        bitmapElem.push_back(JSONNode(("name"), name));
         
         m_pBitmapArray->push_back(bitmapElem);
         
@@ -734,16 +717,16 @@ namespace PixiJS
         ASSERT(m_pTextElem != NULL);
         
         m_pTextElem->set_name("text");
-        m_pTextElem->push_back(JSONNode(("charid"), PixiJS::Utils::ToString(resId)));
+        m_pTextElem->push_back(JSONNode(("charid"), Utils::ToString(resId)));
         
         aaMode.set_name("aaMode");
-        aaMode.push_back(JSONNode(("mode"), PixiJS::Utils::ToString(aaModeProp.aaMode)));
+        aaMode.push_back(JSONNode(("mode"), Utils::ToString(aaModeProp.aaMode)));
         if (aaModeProp.aaMode == DOM::FrameElement::ANTI_ALIAS_MODE_CUSTOM)
         {
             aaMode.push_back(JSONNode(("thickness"),
-                                      PixiJS::Utils::ToString(aaModeProp.customAAModeProp.aaThickness, m_dataPrecision)));
+                                      Utils::ToString(aaModeProp.customAAModeProp.aaThickness, m_dataPrecision)));
             aaMode.push_back(JSONNode(("sharpness"),
-                                      PixiJS::Utils::ToString(aaModeProp.customAAModeProp.aaSharpness, m_dataPrecision)));
+                                      Utils::ToString(aaModeProp.customAAModeProp.aaSharpness, m_dataPrecision)));
         }
         m_pTextElem->push_back(aaMode);
         
@@ -755,8 +738,8 @@ namespace PixiJS
         {
             // Static Text
             behaviour.push_back(JSONNode(("type"), "Static"));
-            behaviour.push_back(JSONNode(("flow"), PixiJS::Utils::ToString(textBehaviour.u.staticText.flow)));
-            behaviour.push_back(JSONNode(("orientation"), PixiJS::Utils::ToString(textBehaviour.u.staticText.orientationMode)));
+            behaviour.push_back(JSONNode(("flow"), Utils::ToString(textBehaviour.u.staticText.flow)));
+            behaviour.push_back(JSONNode(("orientation"), Utils::ToString(textBehaviour.u.staticText.orientationMode)));
         }
         else if (textBehaviour.type == 1)
         {
@@ -764,7 +747,7 @@ namespace PixiJS
             behaviour.push_back(JSONNode(("type"), "Dynamic"));
             behaviour.push_back(JSONNode(("name"), textBehaviour.name));
             behaviour.push_back(JSONNode(("isBorderDrawn"), textBehaviour.u.dynamicText.borderDrawn ? "true" : "false"));
-            behaviour.push_back(JSONNode(("lineMode"), PixiJS::Utils::ToString(textBehaviour.u.dynamicText.lineMode)));
+            behaviour.push_back(JSONNode(("lineMode"), Utils::ToString(textBehaviour.u.dynamicText.lineMode)));
             behaviour.push_back(JSONNode(("isRenderAsHTML"), textBehaviour.u.dynamicText.renderAsHtml ? "true" : "false"));
             behaviour.push_back(JSONNode(("isScrollable"), textBehaviour.u.dynamicText.scrollable ? "true" : "false"));
         }
@@ -774,7 +757,7 @@ namespace PixiJS
             behaviour.push_back(JSONNode(("type"), "Input"));
             behaviour.push_back(JSONNode(("name"), textBehaviour.name));
             behaviour.push_back(JSONNode(("isBorderDrawn"), textBehaviour.u.inputText.borderDrawn ? "true" : "false"));
-            behaviour.push_back(JSONNode(("lineMode"), PixiJS::Utils::ToString(textBehaviour.u.inputText.lineMode)));
+            behaviour.push_back(JSONNode(("lineMode"), Utils::ToString(textBehaviour.u.inputText.lineMode)));
             behaviour.push_back(JSONNode(("isRenderAsHTML"), textBehaviour.u.inputText.renderAsHtml ? "true" : "false"));
             behaviour.push_back(JSONNode(("isScrollable"), textBehaviour.u.inputText.scrollable ? "true" : "false"));
             behaviour.push_back(JSONNode(("isPassword"), textBehaviour.u.inputText.password ? "true" : "false"));
@@ -802,13 +785,13 @@ namespace PixiJS
         m_pTextPara = new JSONNode(JSON_NODE);
         ASSERT(m_pTextPara != NULL);
         
-        m_pTextPara->push_back(JSONNode(("startIndex"), PixiJS::Utils::ToString(startIndex)));
-        m_pTextPara->push_back(JSONNode(("length"), PixiJS::Utils::ToString(length)));
-        m_pTextPara->push_back(JSONNode(("indent"), PixiJS::Utils::ToString(paragraphStyle.indent)));
-        m_pTextPara->push_back(JSONNode(("leftMargin"), PixiJS::Utils::ToString(paragraphStyle.leftMargin)));
-        m_pTextPara->push_back(JSONNode(("rightMargin"), PixiJS::Utils::ToString(paragraphStyle.rightMargin)));
-        m_pTextPara->push_back(JSONNode(("linespacing"), PixiJS::Utils::ToString(paragraphStyle.lineSpacing)));
-        m_pTextPara->push_back(JSONNode(("alignment"), PixiJS::Utils::ToString(paragraphStyle.alignment)));
+        m_pTextPara->push_back(JSONNode(("startIndex"), Utils::ToString(startIndex)));
+        m_pTextPara->push_back(JSONNode(("length"), Utils::ToString(length)));
+        m_pTextPara->push_back(JSONNode(("indent"), Utils::ToString(paragraphStyle.indent)));
+        m_pTextPara->push_back(JSONNode(("leftMargin"), Utils::ToString(paragraphStyle.leftMargin)));
+        m_pTextPara->push_back(JSONNode(("rightMargin"), Utils::ToString(paragraphStyle.rightMargin)));
+        m_pTextPara->push_back(JSONNode(("linespacing"), Utils::ToString(paragraphStyle.lineSpacing)));
+        m_pTextPara->push_back(JSONNode(("alignment"), Utils::ToString(paragraphStyle.alignment)));
         
         m_pTextRunArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pTextRunArray != NULL);
@@ -827,18 +810,18 @@ namespace PixiJS
         JSONNode textRun(JSON_NODE);
         JSONNode style(JSON_NODE);
         
-        textRun.push_back(JSONNode(("startIndex"), PixiJS::Utils::ToString(startIndex)));
-        textRun.push_back(JSONNode(("length"), PixiJS::Utils::ToString(length)));
+        textRun.push_back(JSONNode(("startIndex"), Utils::ToString(startIndex)));
+        textRun.push_back(JSONNode(("length"), Utils::ToString(length)));
         
         style.set_name("style");
         style.push_back(JSONNode("fontName", textStyle.fontName));
-        style.push_back(JSONNode("fontSize", PixiJS::Utils::ToString(textStyle.fontSize)));
-        style.push_back(JSONNode("fontColor", PixiJS::Utils::ToString(textStyle.fontColor)));
+        style.push_back(JSONNode("fontSize", Utils::ToString(textStyle.fontSize)));
+        style.push_back(JSONNode("fontColor", Utils::ToString(textStyle.fontColor)));
         style.push_back(JSONNode("fontStyle", textStyle.fontStyle));
-        style.push_back(JSONNode("letterSpacing", PixiJS::Utils::ToString(textStyle.letterSpacing)));
+        style.push_back(JSONNode("letterSpacing", Utils::ToString(textStyle.letterSpacing)));
         style.push_back(JSONNode("isRotated", textStyle.rotated ? "true" : "false"));
         style.push_back(JSONNode("isAutoKern", textStyle.autoKern ? "true" : "false"));
-        style.push_back(JSONNode("baseLineShiftStyle", PixiJS::Utils::ToString(textStyle.baseLineShiftStyle)));
+        style.push_back(JSONNode("baseLineShiftStyle", Utils::ToString(textStyle.baseLineShiftStyle)));
         style.push_back(JSONNode("link", textStyle.link));
         style.push_back(JSONNode("linkTarget", textStyle.linkTarget));
         
@@ -892,16 +875,13 @@ namespace PixiJS
     {
         FCM::Result res;
         JSONNode soundElem(JSON_NODE);
-        std::string soundPath;
-        std::string soundName;
         std::string name;
+        std::string ext;
         
         soundElem.set_name("sound");
-        soundElem.push_back(JSONNode(("charid"), PixiJS::Utils::ToString(resId)));
+        soundElem.push_back(JSONNode(("charid"), Utils::ToString(resId)));
         
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
-        std::string soundRelPath;
-        std::string soundExportPath = m_outputSoundFolder + "/";
         
         if (!m_soundFolderCreated)
         {
@@ -914,13 +894,11 @@ namespace PixiJS
             m_soundFolderCreated = true;
         }
         
-        CreateSoundFileName(libPathName, name);
-        soundExportPath += name;
-        
-        soundRelPath = "./";
-        soundRelPath += m_soundsPath;
-        soundRelPath += "/";
-        soundRelPath += name;
+        Utils::GetFileExtension(libPathName, ext);
+        Utils::GetJavaScriptName(libPathName, name);
+
+        std::string soundRelPath = m_soundsPath + name + "." + ext;
+        std::string soundExportPath = m_outputSoundFolder + name + "." + ext;
         
         res = m_pCallback->GetService(DOM::FLA_SOUND_SERVICE, pUnk.m_Ptr);
         ASSERT(FCM_SUCCESS_CODE(res));
@@ -931,12 +909,14 @@ namespace PixiJS
             FCM::StringRep16 pFilePath = Utils::ToString16(soundExportPath, m_pCallback);
             res = soundExportService->ExportToFile(pMediaItem, pFilePath);
             ASSERT(FCM_SUCCESS_CODE(res));
-            pCalloc = PixiJS::Utils::GetCallocService(m_pCallback);
+            pCalloc = Utils::GetCallocService(m_pCallback);
             ASSERT(pCalloc.m_Ptr != NULL);
             pCalloc->Free(pFilePath);
         }
         
-        soundElem.push_back(JSONNode(("soundPath"), soundRelPath));
+        soundElem.push_back(JSONNode(("src"), soundRelPath));
+        soundElem.push_back(JSONNode(("name"), name));
+
         m_pSoundArray->push_back(soundElem);
         
         return FCM_SUCCESS;
@@ -987,8 +967,6 @@ namespace PixiJS
     m_pathArray(NULL),
     m_pathElem(NULL),
     m_firstSegment(false),
-    m_imageFileNameLabel(0),
-    m_soundFileNameLabel(0),
     m_imageFolderCreated(false),
     m_soundFolderCreated(false),
     m_dataPrecision(dataPrecision)
@@ -1019,47 +997,27 @@ namespace PixiJS
         m_strokeStyle.type = INVALID_STROKE_STYLE_TYPE;
     }
     
-    
     JSONOutputWriter::~JSONOutputWriter()
     {
         delete m_pBitmapArray;
         delete m_pSoundArray;
-        
         delete m_pTimelineArray;
-        
         delete m_pShapeArray;
-        
         delete m_pTextArray;
-        
         delete m_pRootNode;
     }
-    
     
     FCM::Result JSONOutputWriter::StartDefinePath()
     {
         m_pathCmdStr.append(moveTo);
-        
-        // Jibo (mlb) - disabling the minified stuff for right now.
-        //        if (!m_minify)
-        //        {
         m_pathCmdStr.append(space);
-        //        }
-        
         m_firstSegment = true;
-        
         return FCM_SUCCESS;
     }
     
     FCM::Result JSONOutputWriter::EndDefinePath()
     {
         // No need to do anything
-        return FCM_SUCCESS;
-    }
-
-    
-    FCM::Result JSONOutputWriter::PostPublishStep(const std::string& outputFolder, FCM::PIFCMCallback pCallback)
-    {
-        // No-op
         return FCM_SUCCESS;
     }
     
@@ -1127,85 +1085,7 @@ namespace PixiJS
         
         return res;
     }
-
-    
-    FCM::Result JSONOutputWriter::CreateImageFileName(const std::string& libPathName, std::string& name)
-    {
-        std::string str;
-        size_t pos;
-        std::string fileLabel;
         
-        fileLabel = Utils::ToString(m_imageFileNameLabel);
-        name = "Image" + fileLabel;
-        m_imageFileNameLabel++;
-        
-        str = libPathName;
-        
-        // DOM APIs do not provide a way to get the compression of the image.
-        // For time being, we will use the extension of the library item name.
-        pos = str.rfind(".");
-        if (pos != std::string::npos)
-        {
-            if (str.substr(pos + 1) == "jpg")
-            {
-                name += ".jpg";
-            }
-            else if (str.substr(pos + 1) == "png")
-            {
-                name += ".png";
-            }
-            else
-            {
-                name += ".png";
-            }
-        }
-        else
-        {
-            name += ".png";
-        }
-        
-        return FCM_SUCCESS;
-    }
-    
-    
-    FCM::Result JSONOutputWriter::CreateSoundFileName(const std::string& libPathName, std::string& name)
-    {
-        std::string str;
-        size_t pos;
-        std::string fileLabel;
-        
-        fileLabel = Utils::ToString(m_soundFileNameLabel);
-        name = "Sound" + fileLabel;
-        m_soundFileNameLabel++;
-        
-        str = libPathName;
-        
-        // DOM APIs do not provide a way to get the compression of the sound.
-        // For time being, we will use the extension of the library item name.
-        pos = str.rfind(".");
-        if (pos != std::string::npos)
-        {
-            if (str.substr(pos + 1) == "wav")
-            {
-                name += ".WAV";
-            }
-            else if (str.substr(pos + 1) == "mp3")
-            {
-                name += ".MP3";
-            }
-            else
-            {
-                name += ".MP3";
-            }
-        }
-        else
-        {
-            name += ".MP3";
-        }
-        
-        return FCM_SUCCESS;
-    }
-    
     
     FCM::Boolean JSONOutputWriter::GetImageExportFileName(const std::string& libPathName, std::string& name)
     {

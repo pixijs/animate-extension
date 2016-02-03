@@ -203,9 +203,6 @@ namespace PixiJS
         
         // End of a path 
         virtual FCM::Result EndDefinePath();
-
-        // Perform operations after publishing from Adobe Flash
-        virtual FCM::Result PostPublishStep(const std::string& outputFolder, FCM::PIFCMCallback pCallback);
         
         // Start a preview for the output content for this writer
         virtual FCM::Result StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback);
@@ -214,11 +211,7 @@ namespace PixiJS
         virtual FCM::Result StopPreview(const std::string& outFile);
         
     private:
-        
-        FCM::Result CreateImageFileName(const std::string& libPathName, std::string& name);
-        
-        FCM::Result CreateSoundFileName(const std::string& libPathName, std::string& name);
-        
+                        
         FCM::Boolean GetImageExportFileName(const std::string& libPathName, std::string& name);
         
         void SetImageExportFileName(const std::string& libPathName, const std::string& name);
@@ -265,13 +258,7 @@ namespace PixiJS
         
         STROKE_STYLE m_strokeStyle;
         
-        // char* m_HTMLOutput;
-        
         FCM::PIFCMCallback m_pCallback;
-        
-        FCM::U_Int32 m_imageFileNameLabel;
-        
-        FCM::U_Int32 m_soundFileNameLabel;
         
         std::map<std::string, std::string> m_imageMap;
         

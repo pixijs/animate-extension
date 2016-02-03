@@ -211,13 +211,9 @@ namespace PixiJS
         std::string soundsPath("sounds/");
         std::string electronPath("main.js");
 
-        // Default dependent on the output direction
-        Utils::GetFileNameWithoutExtension(outputFile, stageName);
-        htmlPath = stageName + ".html";
-
         // Sanitize the stage name for JavaScript
-        Utils::ReplaceAll(stageName, "-", "_");
-        Utils::ReplaceAll(stageName, " ", "_");
+        Utils::GetJavaScriptName(outputFile, stageName);
+        htmlPath = stageName + ".html";
 
         // Read the output file name from the publish settings
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_HTML, html);
@@ -462,9 +458,6 @@ namespace PixiJS
             // We are now going to copy the runtime from the zxp package to the output folder.
             CopyRuntime(basePath + libsPath);
         }
-        
-        // run the post publish step after the runtime folder is created but before a preview is potentially run
-        outputWriter->PostPublishStep(basePath, GetCallback());
         
         if (IsPreviewNeeded(dictConfig))
         {
@@ -772,6 +765,8 @@ namespace PixiJS
         }
 
         TimelineBuilder* timeline = static_cast<TimelineBuilder*>(timelineBuilder);
+
+        // Utils::Trace(GetCallback(), "Add symbol: %s\n", Utils::ToString(pName).c_str());
 
         res = timeline->Build(resourceId, pName, &timelineWriter);
 
@@ -2097,6 +2092,8 @@ namespace PixiJS
         ITimelineWriter** timelineWriter)
     {
         FCM::Result res;
+
+        // Utils::Trace(GetCallback(), "Add timeline %s\n", Utils::ToString(name).c_str());
 
         res = m_outputWriter->EndDefineTimeline(resourceId, name, m_timelineWriter);
 

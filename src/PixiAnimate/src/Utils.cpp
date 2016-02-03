@@ -633,6 +633,15 @@ namespace PixiJS
         }
     }
 
+    void Utils::GetJavaScriptName(const std::string& path, std::string& name)
+    {
+        GetFileNameWithoutExtension(path, name);
+        const std::string rep = "_";
+        ReplaceAll(name, "-", rep);
+        ReplaceAll(name, " ", rep);
+        ReplaceAll(name, ".", rep);
+    }
+
     void Utils::GetFileExtension(const std::string& path, std::string& extension)
     {
         size_t index = path.find_last_of(".");

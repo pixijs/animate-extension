@@ -233,6 +233,8 @@ namespace PixiJS
 
         static void GetFileNameWithoutExtension(const std::string& path, std::string& fileName);
 
+        static void GetJavaScriptName(const std::string& path, std::string& name);
+
         static void GetFileExtension(const std::string& path, std::string& extension);
 
         static void GetExtensionPath(std::string& path, FCM::PIFCMCallback pCallback);
