@@ -766,7 +766,7 @@ namespace PixiJS
 
         TimelineBuilder* timeline = static_cast<TimelineBuilder*>(timelineBuilder);
 
-        // Utils::Trace(GetCallback(), "Add symbol: %s\n", Utils::ToString(pName).c_str());
+        Utils::Trace(GetCallback(), "Add symbol: %s\n", Utils::ToString(pName).c_str());
 
         res = timeline->Build(resourceId, pName, &timelineWriter);
 
@@ -2092,8 +2092,6 @@ namespace PixiJS
         ITimelineWriter** timelineWriter)
     {
         FCM::Result res;
-
-        // Utils::Trace(GetCallback(), "Add timeline %s\n", Utils::ToString(name).c_str());
 
         res = m_outputWriter->EndDefineTimeline(resourceId, name, m_timelineWriter);
 

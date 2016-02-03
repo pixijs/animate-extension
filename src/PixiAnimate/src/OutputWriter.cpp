@@ -166,7 +166,21 @@ namespace PixiJS
     {
         TimelineWriter* pWriter = static_cast<TimelineWriter*> (pTimelineWriter);
         
-        pWriter->Finish(resId, pName);
+        // if (resId == 0)
+        // {
+        //     pName = Utils::ToString16(m_stageName, m_pCallback);
+        // }
+        // // TODO: SDK is broken here pName is not returning the actual name
+        // else
+        // {
+        //     m_symbolNameLabel++;
+        //     pName = Utils::ToString16("Symbol" + m_symbolNameLabel, m_pCallback);
+        // }
+
+
+        // pWriter->Finish(resId, pName);
+
+        pWriter->Finish(resId, tempName);
         
         m_pTimelineArray->push_back(*(pWriter->GetRoot()));
         
@@ -190,7 +204,7 @@ namespace PixiJS
     // Marks the end of a shape
     FCM::Result OutputWriter::EndDefineShape(FCM::U_Int32 resId)
     {
-        m_shapeElem->push_back(JSONNode(("charid"), Utils::ToString(resId)));
+        m_shapeElem->push_back(JSONNode(("charid"), resId));
         m_shapeElem->push_back(*m_pathArray);
         
         m_pShapeArray->push_back(*m_shapeElem);
@@ -217,13 +231,9 @@ namespace PixiJS
     // Solid fill style definition
     FCM::Result OutputWriter::DefineSolidFillStyle(const DOM::Utils::COLOR& color)
     {
-        std::string colorStr = Utils::ToString(color);
-
-        float myalpha = (float)(color.alpha / 255.0);
-        std::string colorOpacityStr = Utils::ToString(myalpha, m_dataPrecision);
-        
+        std::string colorStr = Utils::ToString(color);        
         m_pathElem->push_back(JSONNode("color", colorStr.c_str()));
-        m_pathElem->push_back(JSONNode("colorOpacity", colorOpacityStr.c_str()));
+        m_pathElem->push_back(JSONNode("colorOpacity", (float)(color.alpha / 255.0)));
         
         return FCM_SUCCESS;
     }
@@ -250,8 +260,8 @@ namespace PixiJS
         
         bitmapElem.set_name("image");
         
-        bitmapElem.push_back(JSONNode(("height"), Utils::ToString(height)));
-        bitmapElem.push_back(JSONNode(("width"), Utils::ToString(width)));
+        bitmapElem.push_back(JSONNode("height", height));
+        bitmapElem.push_back(JSONNode("width", width));
         
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
         
@@ -326,15 +336,15 @@ namespace PixiJS
         point.y = 0;
         Utils::TransformPoint(matrix, point, point);
         
-        m_gradientColor->push_back(JSONNode("x1", Utils::ToString(point.x, m_dataPrecision)));
-        m_gradientColor->push_back(JSONNode("y1", Utils::ToString(point.y, m_dataPrecision)));
+        m_gradientColor->push_back(JSONNode("x1", point.x));
+        m_gradientColor->push_back(JSONNode("y1", point.y));
         
         point.x = GRADIENT_VECTOR_CONSTANT / 20;
         point.y = 0;
         Utils::TransformPoint(matrix, point, point);
         
-        m_gradientColor->push_back(JSONNode("x2", Utils::ToString(point.x, m_dataPrecision)));
-        m_gradientColor->push_back(JSONNode("y2", Utils::ToString(point.y, m_dataPrecision)));
+        m_gradientColor->push_back(JSONNode("x2", point.x));
+        m_gradientColor->push_back(JSONNode("y2", point.y));
         
         m_gradientColor->push_back(JSONNode("spreadMethod", Utils::ToString(spread)));
         
@@ -355,9 +365,9 @@ namespace PixiJS
         
         offset = (float)((colorPoint.pos * 100) / 255.0);
         
-        stopEntry.push_back(JSONNode("offset", Utils::ToString(offset, m_dataPrecision)));
+        stopEntry.push_back(JSONNode("offset", offset));
         stopEntry.push_back(JSONNode("stopColor", Utils::ToString(colorPoint.color)));
-        stopEntry.push_back(JSONNode("stopOpacity", Utils::ToString((colorPoint.color.alpha / 255.0), m_dataPrecision)));
+        stopEntry.push_back(JSONNode("stopOpacity", (float)(colorPoint.color.alpha / 255.0)));
         
         m_stopPointArray->push_back(stopEntry);
         
@@ -409,11 +419,11 @@ namespace PixiJS
         float fx = -r * focusPointRatio * cos(angle);
         float fy = -r * focusPointRatio * sin(angle);
         
-        m_gradientColor->push_back(JSONNode("cx", "0"));
-        m_gradientColor->push_back(JSONNode("cy", "0"));
-        m_gradientColor->push_back(JSONNode("r", Utils::ToString((float) r, m_dataPrecision)));
-        m_gradientColor->push_back(JSONNode("fx", Utils::ToString((float) fx, m_dataPrecision)));
-        m_gradientColor->push_back(JSONNode("fy", Utils::ToString((float) fy, m_dataPrecision)));
+        m_gradientColor->push_back(JSONNode("cx", 0));
+        m_gradientColor->push_back(JSONNode("cy", 0));
+        m_gradientColor->push_back(JSONNode("r", (float) r));
+        m_gradientColor->push_back(JSONNode("fx", (float) fx));
+        m_gradientColor->push_back(JSONNode("fy", (float) fy));
         
         FCM::Float scaleFactor = (GRADIENT_VECTOR_CONSTANT / 20) / r;
         DOM::Utils::MATRIX2D matrix1 = {};
@@ -580,8 +590,7 @@ namespace PixiJS
         
         if (m_strokeStyle.type == SOLID_STROKE_STYLE_TYPE)
         {
-            m_pathElem->push_back(JSONNode("strokeWidth",
-                                           Utils::ToString((double)m_strokeStyle.solidStrokeStyle.thickness, m_dataPrecision).c_str()));
+            m_pathElem->push_back(JSONNode("strokeWidth", (double)m_strokeStyle.solidStrokeStyle.thickness));
             m_pathElem->push_back(JSONNode("fill", "none"));
             m_pathElem->push_back(JSONNode("strokeLinecap", Utils::ToString(m_strokeStyle.solidStrokeStyle.capStyle.type).c_str()));
             m_pathElem->push_back(JSONNode("strokeLinejoin", Utils::ToString(m_strokeStyle.solidStrokeStyle.joinStyle.type).c_str()));
@@ -590,8 +599,7 @@ namespace PixiJS
             {
                 m_pathElem->push_back(JSONNode(
                                                "stroke-miterlimit",
-                                               Utils::ToString((double)m_strokeStyle.solidStrokeStyle.joinStyle.miterJoinProp.miterLimit,
-                                                                           m_dataPrecision).c_str()));
+                                               (double)m_strokeStyle.solidStrokeStyle.joinStyle.miterJoinProp.miterLimit));
             }
             m_pathElem->push_back(JSONNode("pathType", "Stroke"));
         }
@@ -650,9 +658,9 @@ namespace PixiJS
         
         bitmapElem.set_name("image");
         
-        bitmapElem.push_back(JSONNode(("charid"), Utils::ToString(resId)));
-        bitmapElem.push_back(JSONNode(("height"), Utils::ToString(height)));
-        bitmapElem.push_back(JSONNode(("width"), Utils::ToString(width)));
+        bitmapElem.push_back(JSONNode("charid", resId));
+        bitmapElem.push_back(JSONNode("height", height));
+        bitmapElem.push_back(JSONNode("width", width));
         
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
         
@@ -717,16 +725,14 @@ namespace PixiJS
         ASSERT(m_pTextElem != NULL);
         
         m_pTextElem->set_name("text");
-        m_pTextElem->push_back(JSONNode(("charid"), Utils::ToString(resId)));
+        m_pTextElem->push_back(JSONNode(("charid"), resId));
         
         aaMode.set_name("aaMode");
         aaMode.push_back(JSONNode(("mode"), Utils::ToString(aaModeProp.aaMode)));
         if (aaModeProp.aaMode == DOM::FrameElement::ANTI_ALIAS_MODE_CUSTOM)
         {
-            aaMode.push_back(JSONNode(("thickness"),
-                                      Utils::ToString(aaModeProp.customAAModeProp.aaThickness, m_dataPrecision)));
-            aaMode.push_back(JSONNode(("sharpness"),
-                                      Utils::ToString(aaModeProp.customAAModeProp.aaSharpness, m_dataPrecision)));
+            aaMode.push_back(JSONNode(("thickness"), aaModeProp.customAAModeProp.aaThickness));
+            aaMode.push_back(JSONNode(("sharpness"), aaModeProp.customAAModeProp.aaSharpness));
         }
         m_pTextElem->push_back(aaMode);
         
@@ -746,24 +752,24 @@ namespace PixiJS
             // Dynamic text
             behaviour.push_back(JSONNode(("type"), "Dynamic"));
             behaviour.push_back(JSONNode(("name"), textBehaviour.name));
-            behaviour.push_back(JSONNode(("isBorderDrawn"), textBehaviour.u.dynamicText.borderDrawn ? "true" : "false"));
+            behaviour.push_back(JSONNode(("isBorderDrawn"), textBehaviour.u.dynamicText.borderDrawn ? true : false));
             behaviour.push_back(JSONNode(("lineMode"), Utils::ToString(textBehaviour.u.dynamicText.lineMode)));
-            behaviour.push_back(JSONNode(("isRenderAsHTML"), textBehaviour.u.dynamicText.renderAsHtml ? "true" : "false"));
-            behaviour.push_back(JSONNode(("isScrollable"), textBehaviour.u.dynamicText.scrollable ? "true" : "false"));
+            behaviour.push_back(JSONNode(("isRenderAsHTML"), textBehaviour.u.dynamicText.renderAsHtml ? true : false));
+            behaviour.push_back(JSONNode(("isScrollable"), textBehaviour.u.dynamicText.scrollable ? true : false));
         }
         else
         {
             // Input text
             behaviour.push_back(JSONNode(("type"), "Input"));
             behaviour.push_back(JSONNode(("name"), textBehaviour.name));
-            behaviour.push_back(JSONNode(("isBorderDrawn"), textBehaviour.u.inputText.borderDrawn ? "true" : "false"));
+            behaviour.push_back(JSONNode(("isBorderDrawn"), textBehaviour.u.inputText.borderDrawn ? true : false));
             behaviour.push_back(JSONNode(("lineMode"), Utils::ToString(textBehaviour.u.inputText.lineMode)));
-            behaviour.push_back(JSONNode(("isRenderAsHTML"), textBehaviour.u.inputText.renderAsHtml ? "true" : "false"));
-            behaviour.push_back(JSONNode(("isScrollable"), textBehaviour.u.inputText.scrollable ? "true" : "false"));
-            behaviour.push_back(JSONNode(("isPassword"), textBehaviour.u.inputText.password ? "true" : "false"));
+            behaviour.push_back(JSONNode(("isRenderAsHTML"), textBehaviour.u.inputText.renderAsHtml ? true : false));
+            behaviour.push_back(JSONNode(("isScrollable"), textBehaviour.u.inputText.scrollable ? true : false));
+            behaviour.push_back(JSONNode(("isPassword"), textBehaviour.u.inputText.password ? true : false));
         }
         
-        behaviour.push_back(JSONNode(("isSelectable"), textBehaviour.selectable  ? "true" : "false"));
+        behaviour.push_back(JSONNode(("isSelectable"), textBehaviour.selectable  ? true : false));
         
         m_pTextElem->push_back(behaviour);
         
@@ -810,17 +816,17 @@ namespace PixiJS
         JSONNode textRun(JSON_NODE);
         JSONNode style(JSON_NODE);
         
-        textRun.push_back(JSONNode(("startIndex"), Utils::ToString(startIndex)));
-        textRun.push_back(JSONNode(("length"), Utils::ToString(length)));
+        textRun.push_back(JSONNode(("startIndex"), startIndex));
+        textRun.push_back(JSONNode(("length"), length));
         
         style.set_name("style");
         style.push_back(JSONNode("fontName", textStyle.fontName));
-        style.push_back(JSONNode("fontSize", Utils::ToString(textStyle.fontSize)));
+        style.push_back(JSONNode("fontSize", textStyle.fontSize));
         style.push_back(JSONNode("fontColor", Utils::ToString(textStyle.fontColor)));
         style.push_back(JSONNode("fontStyle", textStyle.fontStyle));
-        style.push_back(JSONNode("letterSpacing", Utils::ToString(textStyle.letterSpacing)));
-        style.push_back(JSONNode("isRotated", textStyle.rotated ? "true" : "false"));
-        style.push_back(JSONNode("isAutoKern", textStyle.autoKern ? "true" : "false"));
+        style.push_back(JSONNode("letterSpacing", textStyle.letterSpacing));
+        style.push_back(JSONNode("isRotated", textStyle.rotated ? true : false));
+        style.push_back(JSONNode("isAutoKern", textStyle.autoKern ? true : false));
         style.push_back(JSONNode("baseLineShiftStyle", Utils::ToString(textStyle.baseLineShiftStyle)));
         style.push_back(JSONNode("link", textStyle.link));
         style.push_back(JSONNode("linkTarget", textStyle.linkTarget));
@@ -967,6 +973,7 @@ namespace PixiJS
     m_pathArray(NULL),
     m_pathElem(NULL),
     m_firstSegment(false),
+    m_symbolNameLabel(0),
     m_imageFolderCreated(false),
     m_soundFolderCreated(false),
     m_dataPrecision(dataPrecision)

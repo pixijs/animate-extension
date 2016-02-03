@@ -259,6 +259,8 @@ namespace PixiJS
         FCM::PIFCMCallback m_pCallback;
         
         std::map<std::string, std::string> m_imageMap;
+
+        FCM::U_Int32 m_symbolNameLabel;
         
         FCM::Boolean m_imageFolderCreated;
         
