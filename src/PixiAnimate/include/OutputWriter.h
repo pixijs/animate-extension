@@ -1,5 +1,5 @@
 //
-//  JSONOutputWriter.hpp
+//  OutputWriter.hpp
 //  PixiAnimate.mp
 //
 //  Created by Matt Bittarelli on 11/24/15.
@@ -23,7 +23,7 @@ class JSONNode;
 
 namespace PixiJS
 {
-    class JSONOutputWriter : public IOutputWriter
+    class OutputWriter : public IOutputWriter
     {
     public:
         
@@ -175,7 +175,7 @@ namespace PixiJS
                                         const std::string& libPathName,
                                         DOM::LibraryItem::PIMediaItem pMediaItem);
         
-        JSONOutputWriter(
+        OutputWriter(
             FCM::PIFCMCallback pCallback, 
             std::string& basePath,
             std::string& outputFile,
@@ -196,7 +196,7 @@ namespace PixiJS
             bool electron,
             DataPrecision dataPrecision);
         
-        virtual ~JSONOutputWriter();
+        virtual ~OutputWriter();
         
         // Start of a path
         virtual FCM::Result StartDefinePath();

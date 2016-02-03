@@ -1,12 +1,12 @@
 //
-//  JSONTimelineWriter.cpp
+//  TimelineWriter.cpp
 //  PixiAnimate.mp
 //
 //  Created by Matt Bittarelli on 11/23/15.
 //
 //
 
-#include "Writers/JSONTimelineWriter.h"
+#include "TimelineWriter.h"
 #include "JSONNode.h"
 #include "Utils.h"
 #include "FrameElement/ISound.h"
@@ -25,7 +25,7 @@
 
 namespace PixiJS
 {
-    FCM::Result JSONTimelineWriter::PlaceObject(
+    FCM::Result TimelineWriter::PlaceObject(
                                                 FCM::U_Int32 resId,
                                                 FCM::U_Int32 objectId,
                                                 FCM::U_Int32 placeAfterObjectId,
@@ -55,7 +55,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::PlaceObject(
+    FCM::Result TimelineWriter::PlaceObject(
                                                 FCM::U_Int32 resId,
                                                 FCM::U_Int32 objectId,
                                                 FCM::U_Int32 placeAfterObjectId,
@@ -82,7 +82,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::PlaceObject(
+    FCM::Result TimelineWriter::PlaceObject(
                                                 FCM::U_Int32 resId,
                                                 FCM::U_Int32 objectId,
                                                 FCM::PIFCMUnknown pUnknown /* = NULL*/)
@@ -139,7 +139,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::RemoveObject(
+    FCM::Result TimelineWriter::RemoveObject(
                                                  FCM::U_Int32 objectId)
     {
         JSONNode commandElement(JSON_NODE);
@@ -153,7 +153,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::UpdateZOrder(
+    FCM::Result TimelineWriter::UpdateZOrder(
                                                  FCM::U_Int32 objectId,
                                                  FCM::U_Int32 placeAfterObjectId)
     {
@@ -169,7 +169,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::UpdateMask(
+    FCM::Result TimelineWriter::UpdateMask(
                                                FCM::U_Int32 objectId,
                                                FCM::U_Int32 maskTillObjectId)
     {
@@ -183,7 +183,7 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
 
-    FCM::Result JSONTimelineWriter::DeferUpdateMask(
+    FCM::Result TimelineWriter::DeferUpdateMask(
                                                     FCM::U_Int32 objectId,
                                                     FCM::U_Int32 maskTillObjectId)
     {
@@ -198,7 +198,7 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
 
-    FCM::Result JSONTimelineWriter::DeferUpdateMasks()
+    FCM::Result TimelineWriter::DeferUpdateMasks()
     {
         JSONNode commandElement(JSON_NODE);
         
@@ -213,7 +213,7 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
 
-    FCM::Result JSONTimelineWriter::UpdateBlendMode(
+    FCM::Result TimelineWriter::UpdateBlendMode(
                                                     FCM::U_Int32 objectId,
                                                     DOM::FrameElement::BlendMode blendMode)
     {
@@ -255,7 +255,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::UpdateVisibility(
+    FCM::Result TimelineWriter::UpdateVisibility(
                                                      FCM::U_Int32 objectId,
                                                      FCM::Boolean visible)
     {
@@ -279,7 +279,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::AddGraphicFilter(
+    FCM::Result TimelineWriter::AddGraphicFilter(
                                                      FCM::U_Int32 objectId,
                                                      FCM::PIFCMUnknown pFilter)
     {
@@ -884,7 +884,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::UpdateDisplayTransform(
+    FCM::Result TimelineWriter::UpdateDisplayTransform(
                                                            FCM::U_Int32 objectId,
                                                            const DOM::Utils::MATRIX2D& matrix)
     {
@@ -902,7 +902,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::UpdateColorTransform(
+    FCM::Result TimelineWriter::UpdateColorTransform(
                                                          FCM::U_Int32 objectId,
                                                          const DOM::Utils::COLOR_MATRIX& colorMatrix)
     {
@@ -920,7 +920,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::ShowFrame(FCM::U_Int32 frameNum)
+    FCM::Result TimelineWriter::ShowFrame(FCM::U_Int32 frameNum)
     {
         DeferUpdateMasks();
         
@@ -946,7 +946,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::AddFrameScript(FCM::CStringRep16 pScript, FCM::U_Int32 layerNum)
+    FCM::Result TimelineWriter::AddFrameScript(FCM::CStringRep16 pScript, FCM::U_Int32 layerNum)
     {
         // As frame script is not supported, let us disable it.
     #if 0
@@ -981,14 +981,14 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::RemoveFrameScript(FCM::U_Int32 layerNum)
+    FCM::Result TimelineWriter::RemoveFrameScript(FCM::U_Int32 layerNum)
     {
         Utils::Trace(m_pCallback, "[RemoveFrameScript] (Layer: %d)\n", layerNum);
         
         return FCM_SUCCESS;
     }
 
-    FCM::Result JSONTimelineWriter::SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType)
+    FCM::Result TimelineWriter::SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType)
     {
         std::string label = Utils::ToString(pLabel, m_pCallback);
         Utils::Trace(m_pCallback, "[SetFrameLabel] (Type: %d): %s\n", labelType, label.c_str());
@@ -1006,7 +1006,7 @@ namespace PixiJS
     }
 
 
-    JSONTimelineWriter::JSONTimelineWriter(
+    TimelineWriter::TimelineWriter(
                                            FCM::PIFCMCallback pCallback,
                                            DataPrecision dataPrecision) :
     m_pCallback(pCallback),
@@ -1031,7 +1031,7 @@ namespace PixiJS
     }
 
 
-    JSONTimelineWriter::~JSONTimelineWriter()
+    TimelineWriter::~TimelineWriter()
     {
         delete m_pCommandArray;
         
@@ -1043,13 +1043,13 @@ namespace PixiJS
     }
 
 
-    const JSONNode* JSONTimelineWriter::GetRoot()
+    const JSONNode* TimelineWriter::GetRoot()
     {
         return m_pTimelineElement;
     }
 
 
-    void JSONTimelineWriter::Finish(FCM::U_Int32 resId, FCM::StringRep16 pName)
+    void TimelineWriter::Finish(FCM::U_Int32 resId, FCM::StringRep16 pName)
     {
         if (resId != 0)
         {

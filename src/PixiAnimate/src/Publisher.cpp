@@ -65,7 +65,7 @@
 #include "Utils/ILinearColorGradient.h"
 #include "Utils/IRadialColorGradient.h"
 
-#include "Writers/JSONOutputWriter.h"
+#include "OutputWriter.h"
 
 #include "Exporter/Service/IResourcePalette.h"
 #include "Exporter/Service/ITimelineBuilder2.h"
@@ -270,7 +270,7 @@ namespace PixiJS
         // Temporary
         // return FCM_SUCCESS;
 
-        std::auto_ptr<JSONOutputWriter> outputWriter(new JSONOutputWriter(GetCallback(), 
+        std::auto_ptr<OutputWriter> outputWriter(new OutputWriter(GetCallback(), 
             basePath, 
             outputFile, 
             imagesPath,
@@ -2120,7 +2120,7 @@ namespace PixiJS
 
         m_outputWriter->StartDefineTimeline();
 
-        m_timelineWriter = new JSONTimelineWriter(GetCallback(), precision);
+        m_timelineWriter = new TimelineWriter(GetCallback(), precision);
         ASSERT(m_timelineWriter);
     }
 

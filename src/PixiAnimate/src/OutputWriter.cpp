@@ -1,12 +1,12 @@
 //
-//  JSONOutputWriter.cpp
+//  OutputWriter.cpp
 //  PixiAnimate.mp
 //
 //  Created by Matt Bittarelli on 11/24/15.
 //
 //
 
-#include "Writers/JSONOutputWriter.h"
+#include "OutputWriter.h"
 
 /*************************************************************************
  * ADOBE CONFIDENTIAL
@@ -26,7 +26,7 @@
  * from Adobe Systems Incorporated.
  **************************************************************************/
 
-#include "Writers/JSONOutputWriter.h"
+#include "OutputWriter.h"
 #include "PluginConfiguration.h"
 
 #include <cstring>
@@ -54,7 +54,7 @@
 #include "GraphicFilter/IGradientGlowFilter.h"
 #include "Utils/ILinearColorGradient.h"
 #include <math.h>
-#include "Writers/JSONTimelineWriter.h"
+#include "TimelineWriter.h"
 #include "HTTPServer.h"
 
 #ifdef _WINDOWS
@@ -72,19 +72,19 @@ namespace PixiJS
     
     static const FCM::Float GRADIENT_VECTOR_CONSTANT = 16384.0;
     
-    /* -------------------------------------------------- JSONOutputWriter */
+    /* -------------------------------------------------- OutputWriter */
     
-    FCM::Result JSONOutputWriter::StartOutput()
+    FCM::Result OutputWriter::StartOutput()
     {
         return FCM_SUCCESS;
     }
     
-    FCM::Result JSONOutputWriter::EndOutput()
+    FCM::Result OutputWriter::EndOutput()
     {
         return FCM_SUCCESS;
     }
     
-    FCM::Result JSONOutputWriter::StartDocument(const DOM::Utils::COLOR& background,
+    FCM::Result OutputWriter::StartDocument(const DOM::Utils::COLOR& background,
                                                 FCM::U_Int32 stageHeight,
                                                 FCM::U_Int32 stageWidth,
                                                 FCM::U_Int32 fps)
@@ -117,7 +117,7 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
     
-    FCM::Result JSONOutputWriter::EndDocument()
+    FCM::Result OutputWriter::EndDocument()
     {
         m_pRootNode->push_back(*m_pShapeArray);
         m_pRootNode->push_back(*m_pBitmapArray);
@@ -153,18 +153,18 @@ namespace PixiJS
     }
     
     
-    FCM::Result JSONOutputWriter::StartDefineTimeline()
+    FCM::Result OutputWriter::StartDefineTimeline()
     {
         return FCM_SUCCESS;
     }
     
     
-    FCM::Result JSONOutputWriter::EndDefineTimeline(
+    FCM::Result OutputWriter::EndDefineTimeline(
                                                     FCM::U_Int32 resId,
                                                     FCM::StringRep16 pName,
                                                     ITimelineWriter* pTimelineWriter)
     {
-        JSONTimelineWriter* pWriter = static_cast<JSONTimelineWriter*> (pTimelineWriter);
+        TimelineWriter* pWriter = static_cast<TimelineWriter*> (pTimelineWriter);
         
         pWriter->Finish(resId, pName);
         
@@ -174,7 +174,7 @@ namespace PixiJS
     }
     
     
-    FCM::Result JSONOutputWriter::StartDefineShape()
+    FCM::Result OutputWriter::StartDefineShape()
     {
         m_shapeElem = new JSONNode(JSON_NODE);
         ASSERT(m_shapeElem);
@@ -188,7 +188,7 @@ namespace PixiJS
     
     
     // Marks the end of a shape
-    FCM::Result JSONOutputWriter::EndDefineShape(FCM::U_Int32 resId)
+    FCM::Result OutputWriter::EndDefineShape(FCM::U_Int32 resId)
     {
         m_shapeElem->push_back(JSONNode(("charid"), Utils::ToString(resId)));
         m_shapeElem->push_back(*m_pathArray);
@@ -203,7 +203,7 @@ namespace PixiJS
     
     
     // Start of fill region definition
-    FCM::Result JSONOutputWriter::StartDefineFill()
+    FCM::Result OutputWriter::StartDefineFill()
     {
         m_pathElem = new JSONNode(JSON_NODE);
         ASSERT(m_pathElem);
@@ -215,7 +215,7 @@ namespace PixiJS
     
     
     // Solid fill style definition
-    FCM::Result JSONOutputWriter::DefineSolidFillStyle(const DOM::Utils::COLOR& color)
+    FCM::Result OutputWriter::DefineSolidFillStyle(const DOM::Utils::COLOR& color)
     {
         std::string colorStr = Utils::ToString(color);
 
@@ -230,7 +230,7 @@ namespace PixiJS
     
     
     // Bitmap fill style definition
-    FCM::Result JSONOutputWriter::DefineBitmapFillStyle(
+    FCM::Result OutputWriter::DefineBitmapFillStyle(
                                                         FCM::Boolean clipped,
                                                         const DOM::Utils::MATRIX2D& matrix,
                                                         FCM::S_Int32 height,
@@ -312,7 +312,7 @@ namespace PixiJS
     
     
     // Start Linear Gradient fill style definition
-    FCM::Result JSONOutputWriter::StartDefineLinearGradientFillStyle(
+    FCM::Result OutputWriter::StartDefineLinearGradientFillStyle(
                                                                      DOM::FillStyle::GradientSpread spread,
                                                                      const DOM::Utils::MATRIX2D& matrix)
     {
@@ -347,7 +347,7 @@ namespace PixiJS
     
     
     // Sets a specific key point in a color ramp (for both radial and linear gradient)
-    FCM::Result JSONOutputWriter::SetKeyColorPoint(
+    FCM::Result OutputWriter::SetKeyColorPoint(
                                                    const DOM::Utils::GRADIENT_COLOR_POINT& colorPoint)
     {
         JSONNode stopEntry(JSON_NODE);
@@ -366,7 +366,7 @@ namespace PixiJS
     
     
     // End Linear Gradient fill style definition
-    FCM::Result JSONOutputWriter::EndDefineLinearGradientFillStyle()
+    FCM::Result OutputWriter::EndDefineLinearGradientFillStyle()
     {
         m_gradientColor->push_back(*m_stopPointArray);
         m_pathElem->push_back(*m_gradientColor);
@@ -379,7 +379,7 @@ namespace PixiJS
     
     
     // Start Radial Gradient fill style definition
-    FCM::Result JSONOutputWriter::StartDefineRadialGradientFillStyle(
+    FCM::Result OutputWriter::StartDefineRadialGradientFillStyle(
                                                                      DOM::FillStyle::GradientSpread spread,
                                                                      const DOM::Utils::MATRIX2D& matrix,
                                                                      FCM::S_Int32 focalPoint)
@@ -436,7 +436,7 @@ namespace PixiJS
     
     
     // End Radial Gradient fill style definition
-    FCM::Result JSONOutputWriter::EndDefineRadialGradientFillStyle()
+    FCM::Result OutputWriter::EndDefineRadialGradientFillStyle()
     {
         m_gradientColor->push_back(*m_stopPointArray);
         m_pathElem->push_back(*m_gradientColor);
@@ -449,14 +449,14 @@ namespace PixiJS
     
     
     // Start of fill region boundary
-    FCM::Result JSONOutputWriter::StartDefineBoundary()
+    FCM::Result OutputWriter::StartDefineBoundary()
     {
         return StartDefinePath();
     }
     
     
     // Sets a segment of a path (Used for boundary, holes)
-    FCM::Result JSONOutputWriter::SetSegment(const DOM::Utils::SEGMENT& segment)
+    FCM::Result OutputWriter::SetSegment(const DOM::Utils::SEGMENT& segment)
     {
         if (m_firstSegment)
         {
@@ -505,28 +505,28 @@ namespace PixiJS
     
     
     // End of fill region boundary
-    FCM::Result JSONOutputWriter::EndDefineBoundary()
+    FCM::Result OutputWriter::EndDefineBoundary()
     {
         return EndDefinePath();
     }
     
     
     // Start of fill region hole
-    FCM::Result JSONOutputWriter::StartDefineHole()
+    FCM::Result OutputWriter::StartDefineHole()
     {
         return StartDefinePath();
     }
     
     
     // End of fill region hole
-    FCM::Result JSONOutputWriter::EndDefineHole()
+    FCM::Result OutputWriter::EndDefineHole()
     {
         return EndDefinePath();
     }
     
     
     // Start of stroke group
-    FCM::Result JSONOutputWriter::StartDefineStrokeGroup()
+    FCM::Result OutputWriter::StartDefineStrokeGroup()
     {
         // No need to do anything
         return FCM_SUCCESS;
@@ -534,7 +534,7 @@ namespace PixiJS
     
     
     // Start solid stroke style definition
-    FCM::Result JSONOutputWriter::StartDefineSolidStrokeStyle(
+    FCM::Result OutputWriter::StartDefineSolidStrokeStyle(
                                                               FCM::Double thickness,
                                                               const DOM::StrokeStyle::JOIN_STYLE& joinStyle,
                                                               const DOM::StrokeStyle::CAP_STYLE& capStyle,
@@ -553,7 +553,7 @@ namespace PixiJS
     
     
     // End of solid stroke style
-    FCM::Result JSONOutputWriter::EndDefineSolidStrokeStyle()
+    FCM::Result OutputWriter::EndDefineSolidStrokeStyle()
     {
         // No need to do anything
         return FCM_SUCCESS;
@@ -561,7 +561,7 @@ namespace PixiJS
     
     
     // Start of stroke
-    FCM::Result JSONOutputWriter::StartDefineStroke()
+    FCM::Result OutputWriter::StartDefineStroke()
     {
         m_pathElem = new JSONNode(JSON_NODE);
         ASSERT(m_pathElem);
@@ -574,7 +574,7 @@ namespace PixiJS
     
     
     // End of a stroke
-    FCM::Result JSONOutputWriter::EndDefineStroke()
+    FCM::Result OutputWriter::EndDefineStroke()
     {
         m_pathElem->push_back(JSONNode("d", m_pathCmdStr));
         
@@ -606,7 +606,7 @@ namespace PixiJS
     
     
     // End of stroke group
-    FCM::Result JSONOutputWriter::EndDefineStrokeGroup()
+    FCM::Result OutputWriter::EndDefineStrokeGroup()
     {
         // No need to do anything
         return FCM_SUCCESS;
@@ -614,7 +614,7 @@ namespace PixiJS
     
     
     // End of fill style definition
-    FCM::Result JSONOutputWriter::EndDefineFill()
+    FCM::Result OutputWriter::EndDefineFill()
     {
         m_pathElem->push_back(JSONNode("d", m_pathCmdStr));
         m_pathElem->push_back(JSONNode("pathType", JSON_TEXT("Fill")));
@@ -631,7 +631,7 @@ namespace PixiJS
     
     
     // Define a bitmap
-    FCM::Result JSONOutputWriter::DefineBitmap(
+    FCM::Result OutputWriter::DefineBitmap(
                                                FCM::U_Int32 resId,
                                                FCM::S_Int32 height,
                                                FCM::S_Int32 width,
@@ -704,7 +704,7 @@ namespace PixiJS
     }
     
     
-    FCM::Result JSONOutputWriter::StartDefineClassicText(
+    FCM::Result OutputWriter::StartDefineClassicText(
                                                          FCM::U_Int32 resId,
                                                          const DOM::FrameElement::AA_MODE_PROP& aaModeProp,
                                                          const std::string& displayText,
@@ -777,7 +777,7 @@ namespace PixiJS
     }
     
     
-    FCM::Result JSONOutputWriter::StartDefineParagraph(
+    FCM::Result OutputWriter::StartDefineParagraph(
                                                        FCM::U_Int32 startIndex,
                                                        FCM::U_Int32 length,
                                                        const DOM::FrameElement::PARAGRAPH_STYLE& paragraphStyle)
@@ -802,7 +802,7 @@ namespace PixiJS
     }
     
     
-    FCM::Result JSONOutputWriter::StartDefineTextRun(
+    FCM::Result OutputWriter::StartDefineTextRun(
                                                      FCM::U_Int32 startIndex,
                                                      FCM::U_Int32 length,
                                                      const TEXT_STYLE& textStyle)
@@ -832,13 +832,13 @@ namespace PixiJS
     }
     
     
-    FCM::Result JSONOutputWriter::EndDefineTextRun()
+    FCM::Result OutputWriter::EndDefineTextRun()
     {
         return FCM_SUCCESS;
     }
     
     
-    FCM::Result JSONOutputWriter::EndDefineParagraph()
+    FCM::Result OutputWriter::EndDefineParagraph()
     {
         m_pTextPara->push_back(*m_pTextRunArray);
         delete m_pTextRunArray;
@@ -852,7 +852,7 @@ namespace PixiJS
     }
     
     
-    FCM::Result JSONOutputWriter::EndDefineClassicText()
+    FCM::Result OutputWriter::EndDefineClassicText()
     {
         m_pTextElem->push_back(*m_pTextParaArray);
         
@@ -868,7 +868,7 @@ namespace PixiJS
     }
     
     
-    FCM::Result JSONOutputWriter::DefineSound(
+    FCM::Result OutputWriter::DefineSound(
                                               FCM::U_Int32 resId,
                                               const std::string& libPathName,
                                               DOM::LibraryItem::PIMediaItem pMediaItem)
@@ -922,7 +922,7 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
     
-    JSONOutputWriter::JSONOutputWriter(
+    OutputWriter::OutputWriter(
         FCM::PIFCMCallback pCallback, 
         std::string& basePath,
         std::string& outputFile,
@@ -997,7 +997,7 @@ namespace PixiJS
         m_strokeStyle.type = INVALID_STROKE_STYLE_TYPE;
     }
     
-    JSONOutputWriter::~JSONOutputWriter()
+    OutputWriter::~OutputWriter()
     {
         delete m_pBitmapArray;
         delete m_pSoundArray;
@@ -1007,7 +1007,7 @@ namespace PixiJS
         delete m_pRootNode;
     }
     
-    FCM::Result JSONOutputWriter::StartDefinePath()
+    FCM::Result OutputWriter::StartDefinePath()
     {
         m_pathCmdStr.append(moveTo);
         m_pathCmdStr.append(space);
@@ -1015,79 +1015,107 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
     
-    FCM::Result JSONOutputWriter::EndDefinePath()
+    FCM::Result OutputWriter::EndDefinePath()
     {
         // No need to do anything
         return FCM_SUCCESS;
     }
     
-    FCM::Result JSONOutputWriter::StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback)
+    FCM::Result OutputWriter::StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback)
     {
         FCM::Result res = FCM_SUCCESS;
         
-        #ifdef USE_HTTP_SERVER
+        if (m_electron)
+        {
+            #ifdef _WINDOWS
+                // currently this operation is not supported on windows!
+                Utils::Trace(pCallback, "ERROR: Previewing an Electron project is currently not supported under Windows");
+            #else
+                std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + m_basePath + "'";
+                Utils::Trace(pCallback, "Command: %s\n", cmd.c_str());
+                popen(cmd.c_str(), "r");
+            #endif // _WINDOWS
+        }
+        else
+        {
+            #ifdef USE_HTTP_SERVER
+                    
+                // We are now about to start a web server
+                std::string fileName;
+                HTTPServer* server;
+                ServerConfigParam config;
                 
-            // We are now about to start a web server
-            std::string fileName;
-            HTTPServer* server;
-            ServerConfigParam config;
-            
-            Utils::GetFileName(outFile, fileName);
-            
-            server = HTTPServer::GetInstance();
-            
-            int numTries = 0;
-            while (numTries < MAX_RETRY_ATTEMPT)
-            {
-                // Configure the web server
-                config.port = Utils::GetUnusedLocalPort();
-                Utils::GetParent(outFile, config.root);
-                server->SetConfig(config);
+                Utils::GetFileName(outFile, fileName);
                 
-                // Start the web server
-                res = server->Start();
-                if (FCM_SUCCESS_CODE(res))
+                server = HTTPServer::GetInstance();
+                
+                int numTries = 0;
+                while (numTries < MAX_RETRY_ATTEMPT)
                 {
-                    // Launch the browser
-                    Utils::LaunchBrowser(fileName, config.port, pCallback);
-                    break;
+                    // Configure the web server
+                    config.port = Utils::GetUnusedLocalPort();
+                    Utils::GetParent(outFile, config.root);
+                    server->SetConfig(config);
+                    
+                    // Start the web server
+                    res = server->Start();
+                    if (FCM_SUCCESS_CODE(res))
+                    {
+                        // Launch the browser
+                        Utils::LaunchBrowser(fileName, config.port, pCallback);
+                        break;
+                    }
+                    numTries++;
                 }
-                numTries++;
-            }
-            
-            if (numTries == MAX_RETRY_ATTEMPT)
-            {
-                Utils::Trace(pCallback, "Failed to start web server\n");
-                res = FCM_GENERAL_ERROR;
-            }
                 
-        #endif // USE_HTTP_SERVER
-        
+                if (numTries == MAX_RETRY_ATTEMPT)
+                {
+                    Utils::Trace(pCallback, "Failed to start web server\n");
+                    res = FCM_GENERAL_ERROR;
+                }
+                    
+            #endif // USE_HTTP_SERVER
+        }
         return res;
     }
     
-    FCM::Result JSONOutputWriter::StopPreview(const std::string& outFile)
+    FCM::Result OutputWriter::StopPreview(const std::string& outFile)
     {
         FCM::Result res = FCM_SUCCESS;
         
-        #ifdef USE_HTTP_SERVER
+        if (m_electron)
+        {
+            #ifdef _WINDOWS
+                // currently this operation is not supported on windows!
+            #else
+                // ps aux find's everything that's running
+                // grep is searching for any process with the string 'electron' followed by the parent directory.
+                //   (excluding the grep process itself)
+                // awk is printing the second string returned by the grep (which is the pid)
+                // kill is operating over all pids returned in this way
+                std::string cmd = "kill $(ps aux | grep '\\<.*[e]lectron.*\\> '" + m_basePath + "'' | awk '{print $2}')";
+                popen(cmd.c_str(), "r");
+            #endif // _WINDOWS
+        }
+        else
+        {
+            #ifdef USE_HTTP_SERVER
+                    
+                HTTPServer* server;
                 
-            HTTPServer* server;
-            
-            server = HTTPServer::GetInstance();
-            if (server)
-            {
-                // Stop the web server just in case it is running
-                server->Stop();
-            }
-                
-        #endif // USE_HTTP_SERVER
-        
+                server = HTTPServer::GetInstance();
+                if (server)
+                {
+                    // Stop the web server just in case it is running
+                    server->Stop();
+                }
+            #endif // USE_HTTP_SERVER
+        }        
         return res;
     }
         
     
-    FCM::Boolean JSONOutputWriter::GetImageExportFileName(const std::string& libPathName, std::string& name)
+    FCM::Boolean OutputWriter::GetImageExportFileName(const std::string& libPathName, std::string& name)
     {
         std::map<std::string, std::string>::iterator it = m_imageMap.find(libPathName);
         
@@ -1104,7 +1132,7 @@ namespace PixiJS
     }
     
     
-    void JSONOutputWriter::SetImageExportFileName(const std::string& libPathName, const std::string& name)
+    void OutputWriter::SetImageExportFileName(const std::string& libPathName, const std::string& name)
     {
         // Assumption: Name is not already present in the map
         ASSERT(m_imageMap.find(libPathName) == m_imageMap.end());
@@ -1112,7 +1140,7 @@ namespace PixiJS
         m_imageMap.insert(std::pair<std::string, std::string>(libPathName, name));
     }
 
-    bool JSONOutputWriter::SaveFromTemplate(const std::string &templatePath, const std::string &outputPath)
+    bool OutputWriter::SaveFromTemplate(const std::string &templatePath, const std::string &outputPath)
     {
         std::ifstream inFile(templatePath.c_str());
         if (!inFile)
@@ -1135,7 +1163,7 @@ namespace PixiJS
         return true;
     }
 
-    void JSONOutputWriter::Save(const std::string &outputFile, const std::string &content)
+    void OutputWriter::Save(const std::string &outputFile, const std::string &content)
     {
         std::fstream file;
         Utils::OpenFStream(outputFile, file, std::ios_base::trunc|std::ios_base::out, m_pCallback);
