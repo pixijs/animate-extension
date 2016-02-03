@@ -219,9 +219,7 @@ namespace PixiJS
         void Save(const std::string &filePath, const std::string &content);
 
         bool SaveFromTemplate(const std::string &templatePath, const std::string &outputPath);
-        
-        void ReplaceAll(const std::string &from, const std::string &to, std::string& content);
-        
+                
         JSONNode* m_pRootNode;
         
         JSONNode* m_pShapeArray;

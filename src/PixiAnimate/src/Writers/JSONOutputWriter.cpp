@@ -1126,23 +1126,13 @@ namespace PixiJS
         std::map<std::string, std::string>::const_iterator i;
         for(i = m_substitutions.begin(); i != m_substitutions.end(); i++)
         {
-            ReplaceAll("${" + i->first + "}", i->second, content);
+            Utils::ReplaceAll(content, "${" + i->first + "}", i->second);
         }
 
         // Save the file
         Save(outputPath, content);
 
         return true;
-    }
-
-    void JSONOutputWriter::ReplaceAll(const std::string &from, const std::string &to, std::string& content)
-    {
-        size_t start_pos = 0;
-        while((start_pos = content.find(from, start_pos)) != std::string::npos)
-        {
-            content.replace(start_pos, from.length(), to);
-            start_pos += to.length();
-        }
     }
 
     void JSONOutputWriter::Save(const std::string &outputFile, const std::string &content)
