@@ -49,7 +49,8 @@ var options = {
 
     vendorPrivateOutput: 'com.jibo.PixiAnimate/vendor/private',
     vendorPrivateResources: [
-        'node_modules/cep/CEP_6.x/CSInterface.js'
+        'node_modules/cep/CEP_6.x/CSInterface.js',
+        'node_modules/bson/**'
     ],
 
     // The files to source when running watch

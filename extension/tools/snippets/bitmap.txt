@@ -1,0 +1,5 @@
+lib.${id} = Sprite.extend(function()
+{
+    Sprite.call(this, fromFrame("${id}"));
+});
+

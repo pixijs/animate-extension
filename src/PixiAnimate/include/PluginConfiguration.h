@@ -46,6 +46,8 @@
 /** The directory inside of the extension to get the output templates */
 #define TEMPLATE_FOLDER_NAME                "templates/"
 
+/** The Node script to run to compile the output */
+#define NODE_COMPILER                       "tools/publish.js";
 
 namespace PixiJS
 {

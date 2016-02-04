@@ -1,0 +1,4 @@
+
+
+})(${nameSpace} = ${nameSpace}||{});
+var ${nameSpace};

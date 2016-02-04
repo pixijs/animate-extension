@@ -122,20 +122,41 @@ namespace PixiJS
     
     FCM::Result OutputWriter::EndDocument()
     {
+        #ifdef _WINDOWS
+            Utils::Trace(pCallback, "ERROR: Publishing not yet supported on Windows");
+            return FCM_FAILURE;
+        #endif
+
         m_pRootNode->push_back(*m_pShapeArray);
         m_pRootNode->push_back(*m_pBitmapArray);
         m_pRootNode->push_back(*m_pSoundArray);
         m_pRootNode->push_back(*m_pTextArray);
         m_pRootNode->push_back(*m_pTimelineArray);
-        m_pRootNode->push_back(Utils::ToJSON("_meta", m_substitutions));
+
+        JSONNode meta(JSON_NODE);
+        meta.set_name("_meta");
+        meta.push_back(JSONNode("imagesPath", m_imagesPath));
+        meta.push_back(JSONNode("stageName", m_stageName));
+        meta.push_back(JSONNode("outputFile", m_outputFile));
+        meta.push_back(JSONNode("htmlPath", m_htmlPath));
+        meta.push_back(JSONNode("soundsPath", m_soundsPath));
+        meta.push_back(JSONNode("compressJS", m_compressJS));
+        meta.push_back(JSONNode("compactShapes", m_compactShapes));
+        meta.push_back(JSONNode("nameSpace", m_nameSpace));
+        m_pRootNode->push_back(meta);
 
         // Write the JSON file (overwrite file if it already exists)
         Save(m_outputDataFile, m_pRootNode->write_formatted());
         
+        std::string extensionPath;
+        Utils::GetExtensionPath(extensionPath, m_pCallback);
+
+        std::string compiler = extensionPath + NODE_COMPILER;
+        std::string cmd("/usr/local/bin/node '" + compiler + "' '" + m_outputDataFile + "'");
+        popen(cmd.c_str(), "r");
+
         // Get the path to the templates folder
-        std::string templatesPath;
-        Utils::GetExtensionPath(templatesPath, m_pCallback);
-        templatesPath += TEMPLATE_FOLDER_NAME;
+        std::string templatesPath(extensionPath + TEMPLATE_FOLDER_NAME);
 
         // Output the HTML templates
         if (m_html)
@@ -197,7 +218,7 @@ namespace PixiJS
         
         m_pathArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pathArray);
-        m_pathArray->set_name("path");
+        m_pathArray->set_name("paths");
         
         return FCM_SUCCESS;
     }
@@ -206,7 +227,7 @@ namespace PixiJS
     // Marks the end of a shape
     FCM::Result OutputWriter::EndDefineShape(FCM::U_Int32 resId)
     {
-        m_shapeElem->push_back(JSONNode("charid", resId));
+        m_shapeElem->push_back(JSONNode("id", resId));
         m_shapeElem->push_back(*m_pathArray);
         
         m_pShapeArray->push_back(*m_shapeElem);
@@ -237,7 +258,7 @@ namespace PixiJS
     {
         std::string colorStr = Utils::ToString(color);        
         m_pathElem->push_back(JSONNode("color", colorStr.c_str()));
-        m_pathElem->push_back(JSONNode("colorOpacity", (float)(color.alpha / 255.0)));
+        m_pathElem->push_back(JSONNode("alpha", (float)(color.alpha / 255.0)));
         
         return FCM_SUCCESS;
     }
@@ -581,20 +602,19 @@ namespace PixiJS
         
         if (m_strokeStyle.type == SOLID_STROKE_STYLE_TYPE)
         {
-            m_pathElem->push_back(JSONNode("strokeWidth",
+            m_pathElem->push_back(JSONNode("thickness",
                 (double)m_strokeStyle.solidStrokeStyle.thickness));
-            m_pathElem->push_back(JSONNode("fill", "none"));
-            m_pathElem->push_back(JSONNode("strokeLinecap", 
+            m_pathElem->push_back(JSONNode("linecap", 
                 Utils::ToString(m_strokeStyle.solidStrokeStyle.capStyle.type).c_str()));
-            m_pathElem->push_back(JSONNode("strokeLinejoin", 
+            m_pathElem->push_back(JSONNode("linejoin", 
                 Utils::ToString(m_strokeStyle.solidStrokeStyle.joinStyle.type).c_str()));
             
             if (m_strokeStyle.solidStrokeStyle.joinStyle.type == DOM::Utils::MITER_JOIN)
             {
-                m_pathElem->push_back(JSONNode("stroke-miterlimit",
+                m_pathElem->push_back(JSONNode("miterLimit",
                     (double)m_strokeStyle.solidStrokeStyle.joinStyle.miterJoinProp.miterLimit));
             }
-            m_pathElem->push_back(JSONNode("pathType", "Stroke"));
+            m_pathElem->push_back(JSONNode("stroke", true));
         }
         m_pathArray->push_back(*m_pathElem);
         
@@ -620,8 +640,7 @@ namespace PixiJS
     FCM::Result OutputWriter::EndDefineFill()
     {
         m_pathElem->push_back(*m_pathCmdArray);
-        m_pathElem->push_back(JSONNode("pathType", JSON_TEXT("Fill")));
-        m_pathElem->push_back(JSONNode("stroke", JSON_TEXT("none")));
+        m_pathElem->push_back(JSONNode("stroke", false));
         
         m_pathArray->push_back(*m_pathElem);
         
@@ -655,7 +674,7 @@ namespace PixiJS
         
         bitmapElem.set_name("image");
         
-        bitmapElem.push_back(JSONNode("charid", resId));
+        bitmapElem.push_back(JSONNode("id", resId));
         bitmapElem.push_back(JSONNode("height", height));
         bitmapElem.push_back(JSONNode("width", width));
         
@@ -722,7 +741,7 @@ namespace PixiJS
         ASSERT(m_pTextElem != NULL);
         
         m_pTextElem->set_name("text");
-        m_pTextElem->push_back(JSONNode("charid", resId));
+        m_pTextElem->push_back(JSONNode("id", resId));
         
         aaMode.set_name("aaMode");
         aaMode.push_back(JSONNode("mode", Utils::ToString(aaModeProp.aaMode)));
@@ -882,7 +901,7 @@ namespace PixiJS
         std::string ext;
         
         soundElem.set_name("sound");
-        soundElem.push_back(JSONNode("charid", Utils::ToString(resId)));
+        soundElem.push_back(JSONNode("id", Utils::ToString(resId)));
         
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
         

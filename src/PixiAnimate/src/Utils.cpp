@@ -257,19 +257,6 @@ namespace PixiJS
         return json;
     }
 
-    JSONNode Utils::ToJSON(const std::string& name, const std::map<std::string, std::string>& m)
-    {
-        JSONNode json;
-
-        std::map<std::string, std::string>::const_iterator i;
-        for(i = m.begin(); i != m.end(); i++)
-        {
-            json.push_back(JSONNode(i->first, i->second));
-        }
-        json.set_name(name);
-        return json;
-    }
-
     JSONNode Utils::ToJSON(const std::string& name, const DOM::Utils::COLOR_MATRIX& colorMatrix)
     {
         JSONNode arr(JSON_ARRAY);

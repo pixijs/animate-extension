@@ -35,7 +35,7 @@ namespace PixiJS
         JSONNode commandElement(JSON_NODE);
         
         commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("charid", resId));
+        commandElement.push_back(JSONNode("id", resId));
         commandElement.push_back(JSONNode("objectId", objectId));
         commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
         
@@ -67,7 +67,7 @@ namespace PixiJS
         JSONNode commandElement(JSON_NODE);
         
         commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("charid", resId));
+        commandElement.push_back(JSONNode("id", resId));
         commandElement.push_back(JSONNode("objectId", objectId));
         commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
         
@@ -99,7 +99,7 @@ namespace PixiJS
         FCM::AutoPtr<DOM::FrameElement::ISound> pSound;
         
         commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("charid", resId));
+        commandElement.push_back(JSONNode("id", resId));
         commandElement.push_back(JSONNode("objectId", objectId));
         
         pSound = pUnknown;
@@ -924,7 +924,7 @@ namespace PixiJS
     {
         if (resId != 0)
         {
-            m_pTimelineElement->push_back(JSONNode("charid", resId));
+            m_pTimelineElement->push_back(JSONNode("id", resId));
 
             // Check for graphics (dependent timeline)
             if (!pName)

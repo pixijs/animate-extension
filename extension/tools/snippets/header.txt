@@ -1,0 +1,5 @@
+(function (lib) {
+
+var MovieClip = PIXI.animate.MovieClip;
+${classes}
+

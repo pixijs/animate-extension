@@ -20,8 +20,7 @@
             });
             var stage = new PIXI.Container();
             var loader = new PIXI.loaders.Loader()
-                .add('${imagesPath}${outputName}_atlas_.json')
-                .add('${imagesPath}${outputName}_graphics_.json') 
+                ${assets}
                 .once('complete', function(loader, resources) {
                     var clip = new ${nameSpace}.${stageName}();
                     clip.framerate = ${fps};

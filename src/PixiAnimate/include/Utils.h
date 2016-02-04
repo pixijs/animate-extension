@@ -198,8 +198,6 @@ namespace PixiJS
 
         static JSONNode ToJSON(const std::string& name, const DOM::Utils::MATRIX2D& matrix);
 
-        static JSONNode ToJSON(const std::string& name, const std::map<std::string, std::string>& m);
-
         static bool ToBool(const std::string& str);
 
         static void TransformPoint(
