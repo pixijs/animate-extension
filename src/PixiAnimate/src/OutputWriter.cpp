@@ -688,7 +688,7 @@ namespace PixiJS
                 res = Utils::CreateDir(m_outputImageFolder, m_pCallback);
                 if (!(FCM_SUCCESS_CODE(res)))
                 {
-                    Utils::Trace(m_pCallback, "Output image folder (%s) could not be created\n", m_outputImageFolder.c_str());
+                    Utils::Trace(m_pCallback, "ERROR: Output image folder (%s) could not be created\n", m_outputImageFolder.c_str());
                     return res;
                 }
                 m_imageFolderCreated = true;
@@ -910,7 +910,7 @@ namespace PixiJS
             res = Utils::CreateDir(m_outputSoundFolder, m_pCallback);
             if (!(FCM_SUCCESS_CODE(res)))
             {
-                Utils::Trace(m_pCallback, "Output sound folder (%s) could not be created\n", m_outputSoundFolder.c_str());
+                Utils::Trace(m_pCallback, "ERROR: Output sound folder (%s) could not be created\n", m_outputSoundFolder.c_str());
                 return res;
             }
             m_soundFolderCreated = true;
@@ -1056,7 +1056,6 @@ namespace PixiJS
                 Utils::Trace(pCallback, "ERROR: Previewing an Electron project is currently not supported under Windows");
             #else
                 std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + m_basePath + "'";
-                Utils::Trace(pCallback, "Command: %s\n", cmd.c_str());
                 popen(cmd.c_str(), "r");
             #endif // _WINDOWS
         }
