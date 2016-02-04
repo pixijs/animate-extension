@@ -807,12 +807,12 @@ namespace PixiJS
         m_pTextPara = new JSONNode(JSON_NODE);
         ASSERT(m_pTextPara != NULL);
         
-        m_pTextPara->push_back(JSONNode("startIndex", Utils::ToString(startIndex)));
-        m_pTextPara->push_back(JSONNode("length", Utils::ToString(length)));
-        m_pTextPara->push_back(JSONNode("indent", Utils::ToString(paragraphStyle.indent)));
-        m_pTextPara->push_back(JSONNode("leftMargin", Utils::ToString(paragraphStyle.leftMargin)));
-        m_pTextPara->push_back(JSONNode("rightMargin", Utils::ToString(paragraphStyle.rightMargin)));
-        m_pTextPara->push_back(JSONNode("linespacing", Utils::ToString(paragraphStyle.lineSpacing)));
+        m_pTextPara->push_back(JSONNode("startIndex", startIndex));
+        m_pTextPara->push_back(JSONNode("length", length));
+        m_pTextPara->push_back(JSONNode("indent", paragraphStyle.indent));
+        m_pTextPara->push_back(JSONNode("leftMargin", paragraphStyle.leftMargin));
+        m_pTextPara->push_back(JSONNode("rightMargin", paragraphStyle.rightMargin));
+        m_pTextPara->push_back(JSONNode("linespacing", paragraphStyle.lineSpacing));
         m_pTextPara->push_back(JSONNode("alignment", Utils::ToString(paragraphStyle.alignment)));
         
         m_pTextRunArray = new JSONNode(JSON_ARRAY);
@@ -994,27 +994,26 @@ namespace PixiJS
     {
         m_pRootNode = new JSONNode(JSON_NODE);
         ASSERT(m_pRootNode);
-        // m_pRootNode->set_name("DOMDocument");
         
         m_pShapeArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pShapeArray);
-        m_pShapeArray->set_name("shapes");
+        m_pShapeArray->set_name("Shapes");
         
         m_pTimelineArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pTimelineArray);
-        m_pTimelineArray->set_name("timelines");
+        m_pTimelineArray->set_name("Timelines");
         
         m_pBitmapArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pBitmapArray);
-        m_pBitmapArray->set_name("bitmaps");
+        m_pBitmapArray->set_name("Bitmaps");
         
         m_pTextArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pTextArray);
-        m_pTextArray->set_name("text");
+        m_pTextArray->set_name("Text");
         
         m_pSoundArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pSoundArray);
-        m_pSoundArray->set_name("sounds");
+        m_pSoundArray->set_name("Sounds");
         m_strokeStyle.type = INVALID_STROKE_STYLE_TYPE;
     }
     

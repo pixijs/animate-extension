@@ -34,18 +34,18 @@ module.exports = function(data)
     let buffer = "";
     let classes = "";
 
-    if (data.bitmaps.length)
+    if (data.Bitmaps.length)
     {
         classes += "var Sprite = PIXI.Sprite;\n";
         classes += "var fromFrame = PIXI.Texture.fromFrame;\n";
     }
 
-    if (data.text.length)
+    if (data.Text.length)
     {
         classes += "var Text = PIXI.Text;\n";
     }
 
-    if (data.shapes.length)
+    if (data.Shapes.length)
     {
         classes += "var Graphics = PIXI.Graphics;\n";
         classes += "var graphics = PIXI.animate.GraphicsCache;\n"
@@ -55,7 +55,7 @@ module.exports = function(data)
     buffer += template('header', { classes : classes });
 
     // Write all the bitmaps
-    data.bitmaps.forEach(function(bitmap){
+    data.Bitmaps.forEach(function(bitmap){
         buffer += template('bitmap', { id: bitmap.name });
     });
 

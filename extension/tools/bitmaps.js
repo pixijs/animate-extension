@@ -2,11 +2,11 @@
 
 module.exports = function(data, library, assets)
 {
-    if (!data.bitmaps.length) return;
+    if (!data.Bitmaps.length) return;
 
-    for(let i = 0, len = data.bitmaps.length; i < len; i++)
+    for(let i = 0, len = data.Bitmaps.length; i < len; i++)
     {
-        let bitmap = data.bitmaps[i];
+        let bitmap = data.Bitmaps[i];
         library[bitmap.id] = bitmap.name;
         assets.push([bitmap.name, bitmap.src]);
     }

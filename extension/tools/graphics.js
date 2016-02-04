@@ -8,14 +8,14 @@ let BISON = require('./libs/bison.js');
 
 module.exports = function(data, library, assets)
 {
-    if (!data.shapes.length) return;
+    if (!data.Shapes.length) return;
 
     // Convert all the shapes into a lookup
     let map = {};
-    for(let i = 0, len = data.shapes.length; i < len; i++)
+    for(let i = 0, len = data.Shapes.length; i < len; i++)
     {
         let name = "Shape" + i;
-        let shape = data.shapes[i];
+        let shape = data.Shapes[i];
         library[shape.id] = name;
         let draw = [];
         for(let j = 0, len = shape.paths.length; j < len; j++) {

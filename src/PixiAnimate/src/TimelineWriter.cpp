@@ -934,7 +934,7 @@ namespace PixiJS
         }
         
         m_pTimelineElement->push_back(JSONNode("name", name.c_str()));
-        m_pTimelineElement->push_back(JSONNode("length", m_FrameCount));
+        m_pTimelineElement->push_back(JSONNode("totalFrames", m_FrameCount));
         m_pTimelineElement->push_back(*m_pFrameArray);
     }
 };
