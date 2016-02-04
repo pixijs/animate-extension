@@ -1872,13 +1872,9 @@ namespace PixiJS
         res = pMovieClip->GetName(&pInstanceName);
         ASSERT(FCM_SUCCESS_CODE(res));
 
-        Utils::Trace(GetCallback(), "pInstanceName: %d\n", pInstanceName);
-
        if (FCM_SUCCESS == res)
        {
            instanceName = Utils::ToString(pInstanceName, GetCallback());
-
-           Utils::Trace(GetCallback(), "MovieClip Instance name %s\n", instanceName.c_str());
 
            // Free the name
            FCM::AutoPtr<FCM::IFCMUnknown> pUnkCalloc;

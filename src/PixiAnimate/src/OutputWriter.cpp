@@ -122,6 +122,7 @@ namespace PixiJS
         m_pRootNode->push_back(*m_pSoundArray);
         m_pRootNode->push_back(*m_pTextArray);
         m_pRootNode->push_back(*m_pTimelineArray);
+        m_pRootNode->push_back(Utils::ToJSON("_meta", m_substitutions));
 
         // Write the JSON file (overwrite file if it already exists)
         Save(m_outputDataFile, m_pRootNode->write_formatted());
