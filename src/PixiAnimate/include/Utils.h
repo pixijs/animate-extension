@@ -28,6 +28,7 @@
 #include "FCMTypes.h"
 #include "FCMPluginInterface.h"
 #include "Utils/DOMTypes.h"
+#include "JSONNode.h"
 #include <string>
 #include "FillStyle/IGradientFillStyle.h"
 #include "FrameElement/IClassicText.h"
@@ -55,11 +56,6 @@ namespace PixiJS
         SOLID_STROKE_STYLE_TYPE
     };
 }
-
-/* -------------------------------------------------- Macros / Constants */
-
-#define IMAGE_FOLDER "images"
-#define SOUND_FOLDER "sounds"
 
 /* -------------------------------------------------- Structs / Unions */
 
@@ -140,24 +136,23 @@ namespace PixiJS
     #endif
 #endif
 
-#define DICT_OUTPUT_PATH     "PublishSettings.PixiJS.OutputFile"
+#define DICT_OUTPUT_FILE     "PublishSettings.PixiJS.OutputFile"
 #define DICT_HTML_PATH       "PublishSettings.PixiJS.HTMLPath" 
 #define DICT_LIBS_PATH       "PublishSettings.PixiJS.LibsPath" 
 #define DICT_IMAGES_PATH     "PublishSettings.PixiJS.ImagesPath"
+#define DICT_SOUNDS_PATH     "PublishSettings.PixiJS.SoundsPath"
 #define DICT_NAMESPACE       "PublishSettings.PixiJS.Namespace" 
 #define DICT_STAGE_NAME      "PublishSettings.PixiJS.StageName"
+#define DICT_ELECTRON_PATH   "PublishSettings.PixiJS.ElectronPath"
 
 #define DICT_COMPACT_SHAPES  "PublishSettings.PixiJS.CompactShapes"
 #define DICT_COMPRESS_JS     "PublishSettings.PixiJS.CompressJS"
 #define DICT_HTML            "PublishSettings.PixiJS.HTML"
 #define DICT_LIBS            "PublishSettings.PixiJS.Libs"
 #define DICT_IMAGES          "PublishSettings.PixiJS.Images"
+#define DICT_SOUNDS          "PublishSettings.PixiJS.Sounds"
 #define DICT_LOOP_TIMELINE   "PublishSettings.PixiJS.LoopTimeline"
 #define DICT_ELECTRON        "PublishSettings.PixiJS.Electron"
-
-// #define DICT_MINIFY                 "PublishSettings.PixiJS.Minify"
-// #define DICT_COMPACT_DATA           "PublishSettings.PixiJS.CompactData"
-// #define DICT_COMPACT_DATA_OPT       "PublishSettings.PixiJS.CompactDataOptions"
 
 /* -------------------------------------------------- Structs / Unions */
 
@@ -188,7 +183,6 @@ namespace PixiJS
 
         static std::string ToString(const DOM::Utils::MATRIX2D& matrix, FCM::U_Int8 precision);
 
-        static std::string ToString(const DOM::Utils::COLOR_MATRIX& colorMatrix, FCM::U_Int8 precision);
 
         static std::string ToString(const DOM::Utils::CapType& capType);
 
@@ -220,6 +214,12 @@ namespace PixiJS
 
         static std::string ToString(const DOM::Utils::COLOR& color);
 
+        static std::string ToString(bool b);
+
+        static JSONNode ToJSON(const std::string& name, const DOM::Utils::COLOR_MATRIX& colorMatrix);
+
+        static JSONNode ToJSON(const std::string& name, const DOM::Utils::MATRIX2D& matrix);
+
         static bool ToBool(const std::string& str);
 
         static DataPrecision ToPrecision(const std::string& str);
@@ -231,11 +231,17 @@ namespace PixiJS
 
         static void GetParent(const std::string& path, std::string& parent);
 
+        static void GetParentByFLA(const std::string& path, std::string& parent);
+
         static void GetFileName(const std::string& path, std::string& fileName);
 
         static void GetFileNameWithoutExtension(const std::string& path, std::string& fileName);
 
+        static void GetJavaScriptName(const std::string& path, std::string& name);
+
         static void GetFileExtension(const std::string& path, std::string& extension);
+
+        static void GetExtensionPath(std::string& path, FCM::PIFCMCallback pCallback);
 
         static void GetModuleFilePath(std::string& path, FCM::PIFCMCallback pCallback);
         
@@ -256,7 +262,7 @@ namespace PixiJS
         static void Log(const char* fmt, ...);
 
         static void OpenFStream(
-            const std::string& outputFileName, 
+            const std::string& outputFile, 
             std::fstream &file, 
             std::ios_base::openmode mode, 
             FCM::PIFCMCallback pCallback);
@@ -271,14 +277,29 @@ namespace PixiJS
             const std::string& dstFolder, 
             FCM::PIFCMCallback pCallback);
 
-        static FCM::Result Remove(const std::string& folder, FCM::PIFCMCallback pCallback);
+        static FCM::Result Remove(
+            const std::string& folder, 
+            FCM::PIFCMCallback pCallback);
 
-        static bool ReadString(const FCM::PIFCMDictionary pDict, FCM::StringRep8 key, 
+        static bool ReadString(
+            const FCM::PIFCMDictionary pDict, 
+            FCM::StringRep8 key, 
             std::string &retString);
+
+        static bool ReadStringToBool(
+            const FCM::PIFCMDictionary pDict, 
+            FCM::StringRep8 key, 
+            bool &result);
+
+        static void ReplaceAll(
+            std::string &content, 
+            const std::string &from, 
+            const std::string &to);
+      
 
 #ifdef USE_HTTP_SERVER
 
-        static void LaunchBrowser(const std::string& outputFileName, int port, FCM::PIFCMCallback pCallback);
+        static void LaunchBrowser(const std::string& outputFile, int port, FCM::PIFCMCallback pCallback);
 		
         static int GetUnusedLocalPort();
 

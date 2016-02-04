@@ -113,7 +113,7 @@ namespace PixiJS
     public:
 
         // Marks the begining of the output
-        virtual FCM::Result StartOutput(std::string& outputFileName) = 0;
+        virtual FCM::Result StartOutput() = 0;
 
         // Marks the end of the output
         virtual FCM::Result EndOutput() = 0;
@@ -147,34 +147,34 @@ namespace PixiJS
         virtual FCM::Result DefineSolidFillStyle(const DOM::Utils::COLOR& color) = 0;
 
         // Bitmap fill style definition
-        virtual FCM::Result DefineBitmapFillStyle(
-            FCM::Boolean clipped,
-            const DOM::Utils::MATRIX2D& matrix,
-            FCM::S_Int32 height, 
-            FCM::S_Int32 width,
-            const std::string& libPathName,
-            DOM::LibraryItem::PIMediaItem pMediaItem) = 0;
+        // virtual FCM::Result DefineBitmapFillStyle(
+        //     FCM::Boolean clipped,
+        //     const DOM::Utils::MATRIX2D& matrix,
+        //     FCM::S_Int32 height, 
+        //     FCM::S_Int32 width,
+        //     const std::string& libPathName,
+        //     DOM::LibraryItem::PIMediaItem pMediaItem) = 0;
 
         // Start Linear Gradient fill style definition
-        virtual FCM::Result StartDefineLinearGradientFillStyle(
-            DOM::FillStyle::GradientSpread spread,
-            const DOM::Utils::MATRIX2D& matrix) = 0;
+        // virtual FCM::Result StartDefineLinearGradientFillStyle(
+        //     DOM::FillStyle::GradientSpread spread,
+        //     const DOM::Utils::MATRIX2D& matrix) = 0;
 
         // Sets a specific key point in a color ramp (for both radial and linear gradient)
-        virtual FCM::Result SetKeyColorPoint(
-            const DOM::Utils::GRADIENT_COLOR_POINT& colorPoint) = 0;
+        // virtual FCM::Result SetKeyColorPoint(
+        //     const DOM::Utils::GRADIENT_COLOR_POINT& colorPoint) = 0;
 
         // End Linear Gradient fill style definition
-        virtual FCM::Result EndDefineLinearGradientFillStyle() = 0;
+        // virtual FCM::Result EndDefineLinearGradientFillStyle() = 0;
 
         // Start Radial Gradient fill style definition
-        virtual FCM::Result StartDefineRadialGradientFillStyle(
-            DOM::FillStyle::GradientSpread spread,
-            const DOM::Utils::MATRIX2D& matrix,
-            FCM::S_Int32 focalPoint) = 0;
+        // virtual FCM::Result StartDefineRadialGradientFillStyle(
+        //     DOM::FillStyle::GradientSpread spread,
+        //     const DOM::Utils::MATRIX2D& matrix,
+        //     FCM::S_Int32 focalPoint) = 0;
 
         // End Radial Gradient fill style definition
-        virtual FCM::Result EndDefineRadialGradientFillStyle() = 0;
+        // virtual FCM::Result EndDefineRadialGradientFillStyle() = 0;
 
         // Start of fill region boundary
         virtual FCM::Result StartDefineBoundary() = 0;

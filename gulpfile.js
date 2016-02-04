@@ -10,7 +10,7 @@ var options = {
     pattern: ['build/tasks/*.js'],
 
     // Contains the project folder
-    projectContent: 'extension',
+    projectContent: ['extension/**/*'],
 
     // XCode project for building the plugin
     xcodeproj: 'project/mac/PixiAnimate.mp.xcodeproj',
@@ -56,14 +56,15 @@ var options = {
     watchFiles: [
         './**/*.*',
         '!node_modules/**',
-        '!com.jibo.PixiAnimate'
+        '!com.jibo.PixiAnimate',
+        '!extension/bin'
     ],
     
     // The files to include for JS linting
     lintFiles: [
         '**/*.js',
         '!node_modules/**',
-        '!extension/runtime/**',
+        '!extension/bin/**',
         '!extension/templates/**',
         '!src/**'
     ]

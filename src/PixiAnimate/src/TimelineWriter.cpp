@@ -1,12 +1,12 @@
 //
-//  JSONTimelineWriter.cpp
+//  TimelineWriter.cpp
 //  PixiAnimate.mp
 //
 //  Created by Matt Bittarelli on 11/23/15.
 //
 //
 
-#include "Writers/JSONTimelineWriter.h"
+#include "TimelineWriter.h"
 #include "JSONNode.h"
 #include "Utils.h"
 #include "FrameElement/ISound.h"
@@ -25,7 +25,7 @@
 
 namespace PixiJS
 {
-    FCM::Result JSONTimelineWriter::PlaceObject(
+    FCM::Result TimelineWriter::PlaceObject(
                                                 FCM::U_Int32 resId,
                                                 FCM::U_Int32 objectId,
                                                 FCM::U_Int32 placeAfterObjectId,
@@ -35,13 +35,13 @@ namespace PixiJS
         JSONNode commandElement(JSON_NODE);
         
         commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("charid", PixiJS::Utils::ToString(resId)));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
-        commandElement.push_back(JSONNode("placeAfter", PixiJS::Utils::ToString(placeAfterObjectId)));
+        commandElement.push_back(JSONNode("charid", resId));
+        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
         
         if (pMatrix)
         {
-            commandElement.push_back(JSONNode("transformMatrix", Utils::ToString(*pMatrix, m_dataPrecision).c_str()));
+            commandElement.push_back(Utils::ToJSON("transformMatrix", *pMatrix));
         }
         
         if (pRect)
@@ -55,7 +55,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::PlaceObject(
+    FCM::Result TimelineWriter::PlaceObject(
                                                 FCM::U_Int32 resId,
                                                 FCM::U_Int32 objectId,
                                                 FCM::U_Int32 placeAfterObjectId,
@@ -66,23 +66,23 @@ namespace PixiJS
         JSONNode commandElement(JSON_NODE);
         
         commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("charid", PixiJS::Utils::ToString(resId)));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
-        commandElement.push_back(JSONNode("placeAfter", PixiJS::Utils::ToString(placeAfterObjectId)));
+        commandElement.push_back(JSONNode("charid", resId));
+        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
         
         if (pMatrix)
         {
-            commandElement.push_back(JSONNode("transformMatrix", Utils::ToString(*pMatrix, m_dataPrecision).c_str()));
+            commandElement.push_back(Utils::ToJSON("transformMatrix", *pMatrix));
         }
         
-        commandElement.push_back(JSONNode("loop", loop ? "true" : "false"));
+        commandElement.push_back(JSONNode("loop", loop));
         m_pCommandArray->push_back(commandElement);
         
         return FCM_SUCCESS;
     }
 
 
-    FCM::Result JSONTimelineWriter::PlaceObject(
+    FCM::Result TimelineWriter::PlaceObject(
                                                 FCM::U_Int32 resId,
                                                 FCM::U_Int32 objectId,
                                                 FCM::PIFCMUnknown pUnknown /* = NULL*/)
@@ -93,8 +93,8 @@ namespace PixiJS
         FCM::AutoPtr<DOM::FrameElement::ISound> pSound;
         
         commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("charid", PixiJS::Utils::ToString(resId)));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("charid", resId));
+        commandElement.push_back(JSONNode("objectId", objectId));
         
         pSound = pUnknown;
         if (pSound)
@@ -110,15 +110,13 @@ namespace PixiJS
             ASSERT(FCM_SUCCESS_CODE(res));
             
             commandElement.push_back(JSONNode("loopMode",
-                                              PixiJS::Utils::ToString(lMode.loopMode)));
-            commandElement.push_back(JSONNode("repeatCount",
-                                              PixiJS::Utils::ToString(lMode.repeatCount)));
+                                              Utils::ToString(lMode.loopMode)));
+            commandElement.push_back(JSONNode("repeatCount", lMode.repeatCount));
             
             res = pSound->GetSyncMode(syncMode);
             ASSERT(FCM_SUCCESS_CODE(res));
             
-            commandElement.push_back(JSONNode("syncMode",
-                                              PixiJS::Utils::ToString(syncMode)));
+            commandElement.push_back(JSONNode("syncMode", Utils::ToString(syncMode)));
             
             // We should not get SOUND_SYNC_STOP as for stop, "RemoveObject" command will
             // be generated by Exporter Service.
@@ -128,9 +126,9 @@ namespace PixiJS
             ASSERT(FCM_SUCCESS_CODE(res));
             
             commandElement.push_back(JSONNode("LimitInPos44",
-                                              PixiJS::Utils::ToString(soundLimit.inPos44)));
+                                              Utils::ToString(soundLimit.inPos44)));
             commandElement.push_back(JSONNode("LimitOutPos44",
-                                              PixiJS::Utils::ToString(soundLimit.outPos44)));
+                                              Utils::ToString(soundLimit.outPos44)));
         }
         
         m_pCommandArray->push_back(commandElement);
@@ -139,13 +137,13 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::RemoveObject(
+    FCM::Result TimelineWriter::RemoveObject(
                                                  FCM::U_Int32 objectId)
     {
         JSONNode commandElement(JSON_NODE);
         
         commandElement.push_back(JSONNode("cmdType", "Remove"));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("objectId", objectId));
         
         m_pCommandArray->push_back(commandElement);
         
@@ -153,15 +151,15 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::UpdateZOrder(
+    FCM::Result TimelineWriter::UpdateZOrder(
                                                  FCM::U_Int32 objectId,
                                                  FCM::U_Int32 placeAfterObjectId)
     {
         JSONNode commandElement(JSON_NODE);
         
         commandElement.push_back(JSONNode("cmdType", "UpdateZOrder"));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
-        commandElement.push_back(JSONNode("placeAfter", PixiJS::Utils::ToString(placeAfterObjectId)));
+        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
         
         m_pCommandArray->push_back(commandElement);
         
@@ -169,7 +167,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::UpdateMask(
+    FCM::Result TimelineWriter::UpdateMask(
                                                FCM::U_Int32 objectId,
                                                FCM::U_Int32 maskTillObjectId)
     {
@@ -183,22 +181,22 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
 
-    FCM::Result JSONTimelineWriter::DeferUpdateMask(
+    FCM::Result TimelineWriter::DeferUpdateMask(
                                                     FCM::U_Int32 objectId,
                                                     FCM::U_Int32 maskTillObjectId)
     {
         JSONNode commandElement(JSON_NODE);
         
         commandElement.push_back(JSONNode("cmdType", "UpdateMask"));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
-        commandElement.push_back(JSONNode("maskTill", PixiJS::Utils::ToString(maskTillObjectId)));
+        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("maskTill", Utils::ToString(maskTillObjectId)));
         
         m_pCommandArray->push_back(commandElement);
         
         return FCM_SUCCESS;
     }
 
-    FCM::Result JSONTimelineWriter::DeferUpdateMasks()
+    FCM::Result TimelineWriter::DeferUpdateMasks()
     {
         JSONNode commandElement(JSON_NODE);
         
@@ -213,14 +211,14 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
 
-    FCM::Result JSONTimelineWriter::UpdateBlendMode(
+    FCM::Result TimelineWriter::UpdateBlendMode(
                                                     FCM::U_Int32 objectId,
                                                     DOM::FrameElement::BlendMode blendMode)
     {
         JSONNode commandElement(JSON_NODE);
         
         commandElement.push_back(JSONNode("cmdType", "UpdateBlendMode"));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("objectId", objectId));
         if(blendMode == 0)
             commandElement.push_back(JSONNode("blendMode","Normal"));
         else if(blendMode == 1)
@@ -255,23 +253,15 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::UpdateVisibility(
+    FCM::Result TimelineWriter::UpdateVisibility(
                                                      FCM::U_Int32 objectId,
                                                      FCM::Boolean visible)
     {
         JSONNode commandElement(JSON_NODE);
         
         commandElement.push_back(JSONNode("cmdType", "UpdateVisibility"));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
-        
-        if (visible)
-        {
-            commandElement.push_back(JSONNode("visibility", "true"));
-        }
-        else
-        {
-            commandElement.push_back(JSONNode("visibility", "false"));
-        }
+        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("visibility", visible));
         
         m_pCommandArray->push_back(commandElement);
         
@@ -279,14 +269,14 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::AddGraphicFilter(
+    FCM::Result TimelineWriter::AddGraphicFilter(
                                                      FCM::U_Int32 objectId,
                                                      FCM::PIFCMUnknown pFilter)
     {
         FCM::Result res;
         JSONNode commandElement(JSON_NODE);
         commandElement.push_back(JSONNode("cmdType", "UpdateFilter"));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
+        commandElement.push_back(JSONNode("objectId", objectId));
         FCM::AutoPtr<DOM::GraphicFilter::IDropShadowFilter> pDropShadowFilter = pFilter;
         FCM::AutoPtr<DOM::GraphicFilter::IBlurFilter> pBlurFilter = pFilter;
         FCM::AutoPtr<DOM::GraphicFilter::IGlowFilter> pGlowFilter = pFilter;
@@ -315,64 +305,60 @@ namespace PixiJS
             pDropShadowFilter->IsEnabled(enabled);
             if(enabled)
             {
-                commandElement.push_back(JSONNode("enabled", "true"));
+                commandElement.push_back(JSONNode("enabled", true));
             }
             else
             {
-                commandElement.push_back(JSONNode("enabled", "false"));
+                commandElement.push_back(JSONNode("enabled", false));
             }
             
             res = pDropShadowFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("angle",
-                                              PixiJS::Utils::ToString((double)angle, m_dataPrecision)));
+            commandElement.push_back(JSONNode("angle", (double)angle));
             
             res = pDropShadowFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX",
-                                              PixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurX", (double)blurX));
             
             res = pDropShadowFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY",
-                                              PixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurY", (double)blurY));
             
             res = pDropShadowFilter->GetDistance(distance);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("distance",
-                                              PixiJS::Utils::ToString((double)distance, m_dataPrecision)));
+            commandElement.push_back(JSONNode("distance", (double)distance));
             
             res = pDropShadowFilter->GetHideObject(hideObject);
             ASSERT(FCM_SUCCESS_CODE(res));
             if(hideObject)
             {
-                commandElement.push_back(JSONNode("hideObject", "true"));
+                commandElement.push_back(JSONNode("hideObject", true));
             }
             else
             {
-                commandElement.push_back(JSONNode("hideObject", "false"));
+                commandElement.push_back(JSONNode("hideObject", false));
             }
             
             res = pDropShadowFilter->GetInnerShadow(innerShadow);
             ASSERT(FCM_SUCCESS_CODE(res));
             if(innerShadow)
             {
-                commandElement.push_back(JSONNode("innerShadow", "true"));
+                commandElement.push_back(JSONNode("innerShadow", true));
             }
             else
             {
-                commandElement.push_back(JSONNode("innerShadow", "false"));
+                commandElement.push_back(JSONNode("innerShadow", false));
             }
             
             res = pDropShadowFilter->GetKnockout(knockOut);
             ASSERT(FCM_SUCCESS_CODE(res));
             if(knockOut)
             {
-                commandElement.push_back(JSONNode("knockOut", "true"));
+                commandElement.push_back(JSONNode("knockOut", true));
             }
             else
             {
-                commandElement.push_back(JSONNode("knockOut", "false"));
+                commandElement.push_back(JSONNode("knockOut", false));
             }
             
             res = pDropShadowFilter->GetQuality(qualityType);
@@ -386,7 +372,7 @@ namespace PixiJS
             
             res = pDropShadowFilter->GetStrength(strength);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("strength", PixiJS::Utils::ToString(strength)));
+            commandElement.push_back(JSONNode("strength", Utils::ToString(strength)));
             
             res = pDropShadowFilter->GetShadowColor(color);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -407,22 +393,20 @@ namespace PixiJS
             res = pBlurFilter->IsEnabled(enabled);
             if(enabled)
             {
-                commandElement.push_back(JSONNode("enabled", "true"));
+                commandElement.push_back(JSONNode("enabled", true));
             }
             else
             {
-                commandElement.push_back(JSONNode("enabled", "false"));
+                commandElement.push_back(JSONNode("enabled", false));
             }
             
             res = pBlurFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX",
-                                              PixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurX", (double)blurX));
             
             res = pBlurFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY",
-                                              PixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurY", (double)blurY));
             
             res = pBlurFilter->GetQuality(qualityType);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -449,46 +433,23 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "GlowFilter"));
             
             res = pGlowFilter->IsEnabled(enabled);
-            if(enabled)
-            {
-                commandElement.push_back(JSONNode("enabled", "true"));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("enabled", "false"));
-            }
+            commandElement.push_back(JSONNode("enabled", enabled));
             
             res = pGlowFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX",
-                                              PixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurX", (double)blurX));
             
             res = pGlowFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY",
-                                              PixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurY", (double)blurY));
             
             res = pGlowFilter->GetInnerShadow(innerShadow);
             ASSERT(FCM_SUCCESS_CODE(res));
-            if(innerShadow)
-            {
-                commandElement.push_back(JSONNode("innerShadow", "true"));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("innerShadow", "false"));
-            }
+            commandElement.push_back(JSONNode("innerShadow", innerShadow));
             
             res = pGlowFilter->GetKnockout(knockOut);
             ASSERT(FCM_SUCCESS_CODE(res));
-            if(knockOut)
-            {
-                commandElement.push_back(JSONNode("knockOut", "true"));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("knockOut", "false"));
-            }
+            commandElement.push_back(JSONNode("knockOut", knockOut));
             
             res = pGlowFilter->GetQuality(qualityType);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -501,7 +462,7 @@ namespace PixiJS
             
             res = pGlowFilter->GetStrength(strength);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("strength", PixiJS::Utils::ToString(strength)));
+            commandElement.push_back(JSONNode("strength", Utils::ToString(strength)));
             
             res = pGlowFilter->GetShadowColor(color);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -528,34 +489,23 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "BevelFilter"));
             
             res = pBevelFilter->IsEnabled(enabled);
-            if(enabled)
-            {
-                commandElement.push_back(JSONNode("enabled", "true"));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("enabled", "false"));
-            }
+            commandElement.push_back(JSONNode("enabled", enabled));
             
             res = pBevelFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("angle",
-                                              PixiJS::Utils::ToString((double)angle, m_dataPrecision)));
+            commandElement.push_back(JSONNode("angle", (double)angle));
             
             res = pBevelFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX",
-                                              PixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurX", (double)blurX));
             
             res = pBevelFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY",
-                                              PixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurY", (double)blurY));
             
             res = pBevelFilter->GetDistance(distance);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("distance",
-                                              PixiJS::Utils::ToString((double)distance, m_dataPrecision)));
+            commandElement.push_back(JSONNode("distance", (double)distance));
             
             res = pBevelFilter->GetHighlightColor(highlightColor);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -564,14 +514,7 @@ namespace PixiJS
             
             res = pBevelFilter->GetKnockout(knockOut);
             ASSERT(FCM_SUCCESS_CODE(res));
-            if(knockOut)
-            {
-                commandElement.push_back(JSONNode("knockOut", "true"));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("knockOut", "false"));
-            }
+            commandElement.push_back(JSONNode("knockOut", knockOut));
             
             res = pBevelFilter->GetQuality(qualityType);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -584,7 +527,7 @@ namespace PixiJS
             
             res = pBevelFilter->GetStrength(strength);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("strength", PixiJS::Utils::ToString(strength)));
+            commandElement.push_back(JSONNode("strength", Utils::ToString(strength)));
             
             res = pBevelFilter->GetShadowColor(color);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -617,45 +560,27 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "GradientGlowFilter"));
             
             pGradientGlowFilter->IsEnabled(enabled);
-            if(enabled)
-            {
-                commandElement.push_back(JSONNode("enabled", "true"));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("enabled", "false"));
-            }
+            commandElement.push_back(JSONNode("enabled", enabled));
             
             res = pGradientGlowFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("angle",
-                                              PixiJS::Utils::ToString((double)angle, m_dataPrecision)));
+            commandElement.push_back(JSONNode("angle", (double)angle));
             
             res = pGradientGlowFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX",
-                                              PixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurX", (double)blurX));
             
             res = pGradientGlowFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY",
-                                              PixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurY", (double)blurY));
             
             res = pGradientGlowFilter->GetDistance(distance);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("distance",
-                                              PixiJS::Utils::ToString((double)distance, m_dataPrecision)));
+            commandElement.push_back(JSONNode("distance", (double)distance));
             
             res = pGradientGlowFilter->GetKnockout(knockOut);
             ASSERT(FCM_SUCCESS_CODE(res));
-            if(knockOut)
-            {
-                commandElement.push_back(JSONNode("knockOut", "true"));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("knockOut", "false"));
-            }
+            commandElement.push_back(JSONNode("knockOut", knockOut));
             
             res = pGradientGlowFilter->GetQuality(qualityType);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -668,7 +593,7 @@ namespace PixiJS
             
             res = pGradientGlowFilter->GetStrength(strength);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("strength", PixiJS::Utils::ToString(strength)));
+            commandElement.push_back(JSONNode("strength", Utils::ToString(strength)));
             
             res = pGradientGlowFilter->GetFilterType(filterType);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -706,10 +631,9 @@ namespace PixiJS
                     
                     offset = (float)((colorPoint.pos * 100) / 255.0);
                     
-                    stopEntry.push_back(JSONNode("offset", Utils::ToString((float) offset, m_dataPrecision)));
+                    stopEntry.push_back(JSONNode("offset", (float)offset));
                     stopEntry.push_back(JSONNode("stopColor", Utils::ToString(colorPoint.color)));
-                    stopEntry.push_back(JSONNode("stopOpacity",
-                                                 Utils::ToString((float)(colorPoint.color.alpha / 255.0), m_dataPrecision)));
+                    stopEntry.push_back(JSONNode("stopOpacity", (float)(colorPoint.color.alpha / 255.0)));
                     stopPointArray->set_name("GradientStops");
                     stopPointArray->push_back(stopEntry);
                 }
@@ -734,45 +658,27 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "GradientBevelFilter"));
             
             pGradientBevelFilter->IsEnabled(enabled);
-            if(enabled)
-            {
-                commandElement.push_back(JSONNode("enabled", "true"));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("enabled", "false"));
-            }
+            commandElement.push_back(JSONNode("enabled", enabled));
             
             res = pGradientBevelFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("angle",
-                                              PixiJS::Utils::ToString((double)angle, m_dataPrecision)));
+            commandElement.push_back(JSONNode("angle", (double)angle));
             
             res = pGradientBevelFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurX",
-                                              PixiJS::Utils::ToString((double)blurX, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurX", (double)blurX));
             
             res = pGradientBevelFilter->GetBlurY(blurY);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("blurY",
-                                              PixiJS::Utils::ToString((double)blurY, m_dataPrecision)));
+            commandElement.push_back(JSONNode("blurY", (double)blurY));
             
             res = pGradientBevelFilter->GetDistance(distance);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("distance",
-                                              PixiJS::Utils::ToString((double)distance, m_dataPrecision)));
+            commandElement.push_back(JSONNode("distance", (double)distance));
             
             res = pGradientBevelFilter->GetKnockout(knockOut);
             ASSERT(FCM_SUCCESS_CODE(res));
-            if(knockOut)
-            {
-                commandElement.push_back(JSONNode("knockOut", "true"));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("knockOut", "false"));
-            }
+            commandElement.push_back(JSONNode("knockOut", knockOut));
             
             res = pGradientBevelFilter->GetQuality(qualityType);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -785,7 +691,7 @@ namespace PixiJS
             
             res = pGradientBevelFilter->GetStrength(strength);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("strength", PixiJS::Utils::ToString(strength)));
+            commandElement.push_back(JSONNode("strength", Utils::ToString(strength)));
             
             res = pGradientBevelFilter->GetFilterType(filterType);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -823,11 +729,9 @@ namespace PixiJS
                     
                     offset = (float)((colorPoint.pos * 100) / 255.0);
                     
-                    stopEntry.push_back(JSONNode("offset",
-                                                 Utils::ToString((float) offset, m_dataPrecision)));
+                    stopEntry.push_back(JSONNode("offset", (float) offset));
                     stopEntry.push_back(JSONNode("stopColor", Utils::ToString(colorPoint.color)));
-                    stopEntry.push_back(JSONNode("stopOpacity",
-                                                 Utils::ToString((float)(colorPoint.color.alpha / 255.0), m_dataPrecision)));
+                    stopEntry.push_back(JSONNode("stopOpacity", (float)(colorPoint.color.alpha / 255.0)));
                     stopPointsArray->set_name("GradientStops");
                     stopPointsArray->push_back(stopEntry);
                 }
@@ -848,34 +752,23 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "AdjustColorFilter"));
             
             pAdjustColorFilter->IsEnabled(enabled);
-            if(enabled)
-            {
-                commandElement.push_back(JSONNode("enabled", "true"));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("enabled", "false"));
-            }
+            commandElement.push_back(JSONNode("enabled", enabled));
             
             res = pAdjustColorFilter->GetBrightness(brightness);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("brightness",
-                                              PixiJS::Utils::ToString((double)brightness, m_dataPrecision)));
+            commandElement.push_back(JSONNode("brightness", (double)brightness));
             
             res = pAdjustColorFilter->GetContrast(contrast);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("contrast",
-                                              PixiJS::Utils::ToString((double)contrast, m_dataPrecision)));
+            commandElement.push_back(JSONNode("contrast", (double)contrast));
             
             res = pAdjustColorFilter->GetSaturation(saturation);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("saturation",
-                                              PixiJS::Utils::ToString((double)saturation, m_dataPrecision)));
+            commandElement.push_back(JSONNode("saturation", (double)saturation));
             
             res = pAdjustColorFilter->GetHue(hue);
             ASSERT(FCM_SUCCESS_CODE(res));
-            commandElement.push_back(JSONNode("hue",
-                                              PixiJS::Utils::ToString((double)hue, m_dataPrecision)));
+            commandElement.push_back(JSONNode("hue", (double)hue));
         }
         
         m_pCommandArray->push_back(commandElement);
@@ -884,7 +777,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::UpdateDisplayTransform(
+    FCM::Result TimelineWriter::UpdateDisplayTransform(
                                                            FCM::U_Int32 objectId,
                                                            const DOM::Utils::MATRIX2D& matrix)
     {
@@ -892,9 +785,8 @@ namespace PixiJS
         std::string transformMat;
         
         commandElement.push_back(JSONNode("cmdType", "Move"));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
-        transformMat = PixiJS::Utils::ToString(matrix, m_dataPrecision);
-        commandElement.push_back(JSONNode("transformMatrix", transformMat.c_str()));
+        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(Utils::ToJSON("transformMatrix", matrix));
         
         m_pCommandArray->push_back(commandElement);
         
@@ -902,17 +794,15 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::UpdateColorTransform(
+    FCM::Result TimelineWriter::UpdateColorTransform(
                                                          FCM::U_Int32 objectId,
                                                          const DOM::Utils::COLOR_MATRIX& colorMatrix)
     {
         JSONNode commandElement(JSON_NODE);
-        std::string colorMat;
         
         commandElement.push_back(JSONNode("cmdType", "UpdateColorTransform"));
-        commandElement.push_back(JSONNode("objectId", PixiJS::Utils::ToString(objectId)));
-        colorMat = PixiJS::Utils::ToString(colorMatrix, m_dataPrecision);
-        commandElement.push_back(JSONNode("colorMatrix", colorMat.c_str()));
+        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(Utils::ToJSON("colorMatrix", colorMatrix));
         
         m_pCommandArray->push_back(commandElement);
         
@@ -920,13 +810,13 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::ShowFrame(FCM::U_Int32 frameNum)
+    FCM::Result TimelineWriter::ShowFrame(FCM::U_Int32 frameNum)
     {
         DeferUpdateMasks();
         
         if (!m_pCommandArray->empty())
         {
-            m_pFrameElement->push_back(JSONNode(("num"), PixiJS::Utils::ToString(frameNum)));
+            m_pFrameElement->push_back(JSONNode("num", frameNum));
             m_pFrameElement->push_back(*m_pCommandArray);
             m_pFrameArray->push_back(*m_pFrameElement);
         }
@@ -946,7 +836,7 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::AddFrameScript(FCM::CStringRep16 pScript, FCM::U_Int32 layerNum)
+    FCM::Result TimelineWriter::AddFrameScript(FCM::CStringRep16 pScript, FCM::U_Int32 layerNum)
     {
         // As frame script is not supported, let us disable it.
     #if 0
@@ -981,14 +871,14 @@ namespace PixiJS
     }
 
 
-    FCM::Result JSONTimelineWriter::RemoveFrameScript(FCM::U_Int32 layerNum)
+    FCM::Result TimelineWriter::RemoveFrameScript(FCM::U_Int32 layerNum)
     {
         Utils::Trace(m_pCallback, "[RemoveFrameScript] (Layer: %d)\n", layerNum);
         
         return FCM_SUCCESS;
     }
 
-    FCM::Result JSONTimelineWriter::SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType)
+    FCM::Result TimelineWriter::SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType)
     {
         std::string label = Utils::ToString(pLabel, m_pCallback);
         Utils::Trace(m_pCallback, "[SetFrameLabel] (Type: %d): %s\n", labelType, label.c_str());
@@ -1006,7 +896,7 @@ namespace PixiJS
     }
 
 
-    JSONTimelineWriter::JSONTimelineWriter(
+    TimelineWriter::TimelineWriter(
                                            FCM::PIFCMCallback pCallback,
                                            DataPrecision dataPrecision) :
     m_pCallback(pCallback),
@@ -1031,37 +921,36 @@ namespace PixiJS
     }
 
 
-    JSONTimelineWriter::~JSONTimelineWriter()
+    TimelineWriter::~TimelineWriter()
     {
         delete m_pCommandArray;
-        
         delete m_pFrameArray;
-        
         delete m_pTimelineElement;
-        
         delete m_pFrameElement;
     }
 
 
-    const JSONNode* JSONTimelineWriter::GetRoot()
+    const JSONNode* TimelineWriter::GetRoot()
     {
         return m_pTimelineElement;
     }
 
 
-    void JSONTimelineWriter::Finish(FCM::U_Int32 resId, FCM::StringRep16 pName)
+    // void TimelineWriter::Finish(FCM::U_Int32 resId, FCM::StringRep16 pName)
+    void TimelineWriter::Finish(FCM::U_Int32 resId, FCM::StringRep16 pName, std::string name)
     {
         if (resId != 0)
         {
-            m_pTimelineElement->push_back(
-                                          JSONNode(("charid"),
-                                                   PixiJS::Utils::ToString(resId)));
+            m_pTimelineElement->push_back(JSONNode("charid", resId));
+
+            // Check for graphics (dependent timeline)
+            if (pName == NULL)
+            {
+                m_pTimelineElement->push_back(JSONNode("isGraphic", true));
+            }
         }
-        
-        m_pTimelineElement->push_back(
-                                      JSONNode(("frameCount"),
-                                               PixiJS::Utils::ToString(m_FrameCount)));
-        
+        m_pTimelineElement->push_back(JSONNode("name", name));
+        m_pTimelineElement->push_back(JSONNode("frameCount", m_FrameCount));
         m_pTimelineElement->push_back(*m_pFrameArray);
     }
 };

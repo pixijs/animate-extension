@@ -9,8 +9,8 @@
     </head>
     <body>
         <canvas id="stage" width="${width}" height="${height}"></canvas>
-        <script src="${libsPath}/pixi.min.js"></script>
-        <script src="${libsPath}/pixi-animate.min.js"></script>
+        <script src="${libsPath}pixi.min.js"></script>
+        <script src="${libsPath}pixi-animate.min.js"></script>
         <script src="${outputFile}"></script>
         <script>
             var renderer = new PIXI.autoDetectRenderer(${width}, ${height}, {
@@ -20,10 +20,10 @@
             });
             var stage = new PIXI.Container();
             var loader = new PIXI.loaders.Loader()
-                .add('${imagesPath}/${stageName}_atlas_.json')
-                .add('${imagesPath}/${stageName}_graphics_.json') 
+                .add('${imagesPath}${outputName}_atlas_.json')
+                .add('${imagesPath}${outputName}_graphics_.json') 
                 .once('complete', function(loader, resources) {
-                    var clip = new ${namespace}.${stageName}();
+                    var clip = new ${nameSpace}.${stageName}();
                     clip.framerate = ${fps};
                     stage.addChild(clip);
                 })

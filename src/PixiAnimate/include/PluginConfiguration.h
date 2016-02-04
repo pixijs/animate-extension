@@ -40,8 +40,11 @@
 /* This string must be localized for various locales and stored in the "res" in their respective lang folder. */
 #define DOCTYPE_DESCRIPTION					"This document can be used to author content for Pixi.js."
 
-/* The value of RUNTIME_FOLDER_NAME must be the name of the runtime folder present in EclipseProject/ExtensionContent. */
-#define RUNTIME_ROOT_FOLDER_NAME            "runtime"
+/* The value of RUNTIME_FOLDER_NAME must be the name of the runtime folder present in extension. */
+#define RUNTIME_ROOT_FOLDER_NAME            "vendor/public"
+
+/** The directory inside of the extension to get the output templates */
+#define TEMPLATE_FOLDER_NAME                "templates/"
 
 
 namespace PixiJS

@@ -32,20 +32,14 @@
 		681CC6011AF8BF5C0041AEC0 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = 681CC6001AF8BF5C0041AEC0 /* mongoose.c */; };
 		681CC6021AF8BF5C0041AEC0 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = 681CC6001AF8BF5C0041AEC0 /* mongoose.c */; };
 		"6df97df6-cdcc-3eec-8b67-b64cb2bd3741" /* JSONValidator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "3e78f8ad-c8d1-3e1d-9fba-a1af81089f89" /* JSONValidator.cpp */; };
+		75FD74551C6255BD00042B73 /* OutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD74531C6255BD00042B73 /* OutputWriter.cpp */; };
+		75FD74561C6255BD00042B73 /* TimelineWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD74541C6255BD00042B73 /* TimelineWriter.cpp */; };
 		"80eccaa8-142f-385a-a04f-942a76afb0bf" /* JSONIterators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "9bbfd7be-ac57-384d-984e-1afc2e0ed3b2" /* JSONIterators.cpp */; };
 		"81e0cad2-705a-3d5e-a15a-311ce49f6b73" /* JSONNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "41c65d04-39ac-3a96-94e1-12f1abc61564" /* JSONNode.cpp */; };
 		"8af5fe69-f0db-3e01-a117-1799a08ecc35" /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */; };
 		"8ed2c99a-79c7-3e25-a978-d21041af1b50" /* JSONNode_Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "7aa76593-b10f-3f2e-bbea-7a3e63e1a65b" /* JSONNode_Mutex.cpp */; };
 		"8f71b0ac-f77e-35e0-8ba3-eafefe65d054" /* internalJSONNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "a47eaabc-0062-3299-b91c-06037678b948" /* internalJSONNode.cpp */; };
 		9A0112641BFB99D200E546CC /* include in Resources */ = {isa = PBXBuildFile; fileRef = 9A0112631BFB99D200E546CC /* include */; };
-		9AEE4A521C04BEB70019C03B /* ElectronOutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A4F1C04BEB70019C03B /* ElectronOutputWriter.cpp */; };
-		9AEE4A531C04BEB70019C03B /* ElectronOutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A4F1C04BEB70019C03B /* ElectronOutputWriter.cpp */; };
-		9AEE4A541C04BEB70019C03B /* JSONOutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A501C04BEB70019C03B /* JSONOutputWriter.cpp */; };
-		9AEE4A551C04BEB70019C03B /* JSONOutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A501C04BEB70019C03B /* JSONOutputWriter.cpp */; };
-		9AEE4A561C04BEB70019C03B /* JSONTimelineWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A511C04BEB70019C03B /* JSONTimelineWriter.cpp */; };
-		9AEE4A571C04BEB70019C03B /* JSONTimelineWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A511C04BEB70019C03B /* JSONTimelineWriter.cpp */; };
-		9AEE4A5A1C04FDD50019C03B /* OutputWriterBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A581C04FDD50019C03B /* OutputWriterBase.cpp */; };
-		9AEE4A5B1C04FDD50019C03B /* OutputWriterBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE4A581C04FDD50019C03B /* OutputWriterBase.cpp */; };
 		"9a4a5e32-90e2-3a86-be56-054e9f4842dd" /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */; };
 		"a3dd5fb5-163b-33cf-83f9-75486dca0771" /* JSONWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "9af15e97-f1a1-37db-bcf9-fba2786df1c4" /* JSONWriter.cpp */; };
 		"a605f5ea-9b2f-3782-aca6-f5a8c586b668" /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "242250eb-c22a-31fb-b531-b0b9cb9b75e8" /* ApplicationServices.framework */; };
@@ -91,14 +85,12 @@
 		681CC6001AF8BF5C0041AEC0 /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mongoose.c; path = ../../src/ThirdParty/mongoose/mongoose.c; sourceTree = "<group>"; };
 		"72093546-f441-3bed-8ee2-78acd3cf688d" /* JSONStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONStream.cpp; sourceTree = "<group>"; };
 		"7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppKit.framework; sourceTree = "<group>"; };
+		75FD74531C6255BD00042B73 /* OutputWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OutputWriter.cpp; sourceTree = "<group>"; };
+		75FD74541C6255BD00042B73 /* TimelineWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimelineWriter.cpp; sourceTree = "<group>"; };
 		"7aa76593-b10f-3f2e-bbea-7a3e63e1a65b" /* JSONNode_Mutex.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONNode_Mutex.cpp; sourceTree = "<group>"; };
 		"7bfcfcd8-dedc-3680-b9e1-95891cdfa343" /* libjson.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = libjson.cpp; sourceTree = "<group>"; };
 		"960c8d89-d632-3678-815d-49888c76392b" /* JSONPreparse.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONPreparse.cpp; sourceTree = "<group>"; };
 		9A0112631BFB99D200E546CC /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../src/PixiAnimate/include; sourceTree = "<group>"; };
-		9AEE4A4F1C04BEB70019C03B /* ElectronOutputWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronOutputWriter.cpp; sourceTree = "<group>"; };
-		9AEE4A501C04BEB70019C03B /* JSONOutputWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONOutputWriter.cpp; sourceTree = "<group>"; };
-		9AEE4A511C04BEB70019C03B /* JSONTimelineWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONTimelineWriter.cpp; sourceTree = "<group>"; };
-		9AEE4A581C04FDD50019C03B /* OutputWriterBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OutputWriterBase.cpp; sourceTree = "<group>"; };
 		"9af15e97-f1a1-37db-bcf9-fba2786df1c4" /* JSONWriter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONWriter.cpp; sourceTree = "<group>"; };
 		"9bbfd7be-ac57-384d-984e-1afc2e0ed3b2" /* JSONIterators.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONIterators.cpp; sourceTree = "<group>"; };
 		"9f0688c3-3f04-3a69-a219-c79da92040db" /* Main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Main.cpp; sourceTree = "<group>"; };
@@ -152,7 +144,8 @@
 		"5d440201-ca36-32fd-882f-9a16c34ed966" /* src */ = {
 			isa = PBXGroup;
 			children = (
-				9AEE4A4E1C04BEB70019C03B /* Writers */,
+				75FD74531C6255BD00042B73 /* OutputWriter.cpp */,
+				75FD74541C6255BD00042B73 /* TimelineWriter.cpp */,
 				681CC5F61AF8BE630041AEC0 /* HTTPServer.cpp */,
 				"9f0688c3-3f04-3a69-a219-c79da92040db" /* Main.cpp */,
 				"37ac9b87-549b-3c4b-935a-8ff607750468" /* DocType.cpp */,
@@ -188,17 +181,6 @@
 			name = "ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
 			path = "../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
 			sourceTree = SOURCE_ROOT;
-		};
-		9AEE4A4E1C04BEB70019C03B /* Writers */ = {
-			isa = PBXGroup;
-			children = (
-				9AEE4A4F1C04BEB70019C03B /* ElectronOutputWriter.cpp */,
-				9AEE4A501C04BEB70019C03B /* JSONOutputWriter.cpp */,
-				9AEE4A511C04BEB70019C03B /* JSONTimelineWriter.cpp */,
-				9AEE4A581C04FDD50019C03B /* OutputWriterBase.cpp */,
-			);
-			path = Writers;
-			sourceTree = "<group>";
 		};
 		F5977F0909B7D3970058A43E /* PixiAnimate.xcconfigs */ = {
 			isa = PBXGroup;
@@ -339,6 +321,7 @@
 		F5D357240948E8C4008C36CA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0720;
 			};
 			buildConfigurationList = F5D357250948E8C4008C36CA /* Build configuration list for PBXProject "PixiAnimate.mp" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -434,23 +417,21 @@
 				"ac0a0f9d-96dd-3620-ace9-4e86f0332be8" /* Publisher.cpp in Sources */,
 				"b56f3c1f-3389-398f-9deb-68998a4a4751" /* Utils.cpp in Sources */,
 				"6299172a-94f3-3e36-9b11-fbe824232c00" /* MyXmlParser.cpp in Sources */,
+				75FD74551C6255BD00042B73 /* OutputWriter.cpp in Sources */,
 				"8f71b0ac-f77e-35e0-8ba3-eafefe65d054" /* internalJSONNode.cpp in Sources */,
+				75FD74561C6255BD00042B73 /* TimelineWriter.cpp in Sources */,
 				"c53ddf8a-bbbc-3dee-82ba-65a87c37db4e" /* JSONAllocator.cpp in Sources */,
-				9AEE4A561C04BEB70019C03B /* JSONTimelineWriter.cpp in Sources */,
 				681CC5F71AF8BE630041AEC0 /* HTTPServer.cpp in Sources */,
 				"bc7b98e1-a321-3015-9217-0f5c6f3cbfed" /* JSONChildren.cpp in Sources */,
-				9AEE4A5A1C04FDD50019C03B /* OutputWriterBase.cpp in Sources */,
 				"4ebc8a76-6e5e-38d1-bd1e-a44ac9b6cf09" /* JSONDebug.cpp in Sources */,
 				"80eccaa8-142f-385a-a04f-942a76afb0bf" /* JSONIterators.cpp in Sources */,
 				"a667ac45-a68a-3e4c-b8f0-e54bfac215bd" /* JSONMemory.cpp in Sources */,
 				"5a4158f3-d11a-3378-b5bb-b87611f2f747" /* JSONNode.cpp in Sources */,
-				9AEE4A541C04BEB70019C03B /* JSONOutputWriter.cpp in Sources */,
 				681CC6011AF8BF5C0041AEC0 /* mongoose.c in Sources */,
 				"8ed2c99a-79c7-3e25-a978-d21041af1b50" /* JSONNode_Mutex.cpp in Sources */,
 				"411a4dda-fc45-3eaf-a9da-35ee6f8160a6" /* JSONPreparse.cpp in Sources */,
 				"61759552-656a-34f8-864d-dee2b46bbc02" /* JSONStream.cpp in Sources */,
 				"6df97df6-cdcc-3eec-8b67-b64cb2bd3741" /* JSONValidator.cpp in Sources */,
-				9AEE4A521C04BEB70019C03B /* ElectronOutputWriter.cpp in Sources */,
 				"18fd347f-e3e6-39d6-871d-61dfdd6a372d" /* JSONWorker.cpp in Sources */,
 				"a3dd5fb5-163b-33cf-83f9-75486dca0771" /* JSONWriter.cpp in Sources */,
 				"35666a89-c77e-30b3-8294-49cb42bb3457" /* libjson.cpp in Sources */,
@@ -469,21 +450,17 @@
 				"f77fdb47-d483-3c03-8a74-4c0138c180d6" /* MyXmlParser.cpp in Sources */,
 				"157ca6f8-2e54-371b-8649-bb34db8f2d63" /* internalJSONNode.cpp in Sources */,
 				"f7f31334-a317-32e3-a2ff-22b21f1da5e9" /* JSONAllocator.cpp in Sources */,
-				9AEE4A571C04BEB70019C03B /* JSONTimelineWriter.cpp in Sources */,
 				681CC5F81AF8BE630041AEC0 /* HTTPServer.cpp in Sources */,
 				"ac2e8f32-a38e-3738-ac31-7f1a20406449" /* JSONChildren.cpp in Sources */,
-				9AEE4A5B1C04FDD50019C03B /* OutputWriterBase.cpp in Sources */,
 				"d09e3c89-9e1e-31ad-a1e3-7b33bd5e56b5" /* JSONDebug.cpp in Sources */,
 				"1a74ed6f-1455-3f15-9f44-14bb8e20b635" /* JSONIterators.cpp in Sources */,
 				"cf030e3d-ea74-3c90-9ae4-541a93a2e770" /* JSONMemory.cpp in Sources */,
 				"81e0cad2-705a-3d5e-a15a-311ce49f6b73" /* JSONNode.cpp in Sources */,
-				9AEE4A551C04BEB70019C03B /* JSONOutputWriter.cpp in Sources */,
 				681CC6021AF8BF5C0041AEC0 /* mongoose.c in Sources */,
 				"da95733a-774c-306e-867b-6f491e3c38e4" /* JSONNode_Mutex.cpp in Sources */,
 				"60d764c0-8d8e-3118-8c39-d190f2851cab" /* JSONPreparse.cpp in Sources */,
 				"d26de6fc-3954-384c-a0cb-033a23fa21af" /* JSONStream.cpp in Sources */,
 				"d0219f86-b0bd-3e38-bbdb-78ef59a3c4b1" /* JSONValidator.cpp in Sources */,
-				9AEE4A531C04BEB70019C03B /* ElectronOutputWriter.cpp in Sources */,
 				"3d6b6be0-13dd-3221-921c-9cd8689e5891" /* JSONWorker.cpp in Sources */,
 				"12b2c354-21e2-31f5-b092-ac00777d4c80" /* JSONWriter.cpp in Sources */,
 				"24fed128-bfa3-35fe-9403-2c37eed95a7d" /* libjson.cpp in Sources */,
@@ -498,6 +475,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F5977F0F09B7D4150058A43E /* project_debug.xcconfig */;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				DVA_BUNDLE_IDENTIFIER = PixiAnimate.fcm.plugin;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
@@ -514,6 +492,7 @@
 					../../src/PixiAnimate/include,
 				);
 				LIBRARY_SEARCH_PATHS = "../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+				PRODUCT_BUNDLE_IDENTIFIER = "${DVA_BUNDLE_IDENTIFIER}";
 				PRODUCT_NAME = PixiAnimate;
 			};
 			name = Default;
@@ -523,7 +502,20 @@
 			baseConfigurationReference = F5977F0C09B7D3B80058A43E /* project.xcconfig */;
 			buildSettings = {
 				CLANG_LINK_OBJC_RUNTIME = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"../mac-xcode",
 					../../src/SDK/core/include/common,
@@ -544,6 +536,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F5977F1109B7D41E0058A43E /* project_release.xcconfig */;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				DVA_BUNDLE_IDENTIFIER = PixiAnimate.fcm.plugin;
 				DVA_PRODUCT_NAME = "PixiAnimate Extension";
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
@@ -561,6 +554,7 @@
 					../../src/PixiAnimate/include,
 				);
 				LIBRARY_SEARCH_PATHS = "../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+				PRODUCT_BUNDLE_IDENTIFIER = "${DVA_BUNDLE_IDENTIFIER}";
 				PRODUCT_NAME = PixiAnimate;
 			};
 			name = Default;

@@ -35,13 +35,13 @@
 #include "Exporter/Service/ITimelineBuilderFactory.h"
 #include "Publisher/IPublisher.h"
 #include "FillStyle/ISolidFillStyle.h"
-#include "FillStyle/IGradientFillStyle.h"
-#include "FillStyle/IBitmapFillStyle.h"
+// #include "FillStyle/IGradientFillStyle.h"
+// #include "FillStyle/IBitmapFillStyle.h"
 #include "FrameElement/IClassicText.h"
 #include "FrameElement/ITextStyle.h"
 #include "Exporter/Service/IFrameCommandGenerator.h"
-#include "Writers/JSONOutputWriter.h"
-#include "Writers/JSONTimelineWriter.h"
+#include "OutputWriter.h"
+#include "TimelineWriter.h"
 #include "PluginConfiguration.h"
 
 /* -------------------------------------------------- Forward Decl */
@@ -88,7 +88,7 @@ namespace DOM
 #ifdef USE_SWF_EXPORTER_SERVICE
     #define OUTPUT_FILE_EXTENSION       "swf"
 #else
-    #define OUTPUT_FILE_EXTENSION       "html"
+    #define OUTPUT_FILE_EXTENSION       "js"
 #endif
 
 /* -------------------------------------------------- Structs / Unions */
@@ -108,16 +108,16 @@ namespace PixiJS
     public:
 
         virtual FCM::Result _FCMCALL Publish(
-            DOM::PIFLADocument pFlaDocument, 
-            const PIFCMDictionary pDictPublishSettings, 
-            const PIFCMDictionary pDictConfig);
+            DOM::PIFLADocument flaDocument, 
+            const PIFCMDictionary publishSettings, 
+            const PIFCMDictionary dictConfig);
 
         virtual FCM::Result _FCMCALL Publish(
-            DOM::PIFLADocument pFlaDocument, 
-            DOM::PITimeline pTimeline, 
+            DOM::PIFLADocument flaDocument, 
+            DOM::PITimeline timeline, 
             const Exporter::Service::RANGE &frameRange, 
-            const PIFCMDictionary pDictPublishSettings, 
-            const PIFCMDictionary pDictConfig);
+            const PIFCMDictionary publishSettings, 
+            const PIFCMDictionary dictConfig);
         
         virtual FCM::Result _FCMCALL ClearCache();
 
@@ -128,19 +128,20 @@ namespace PixiJS
     private:
 
         FCM::Result GetOutputFileName(        
-            DOM::PIFLADocument pFlaDocument, 
+            DOM::PIFLADocument flaDocument, 
             DOM::PITimeline pITimeline, 
-            const PIFCMDictionary pDictPublishSettings,
+            const PIFCMDictionary publishSettings,
+            std::string& basePath,
             std::string& outFile);
 
         FCM::Result Export(
-            DOM::PIFLADocument pFlaDocument, 
-            DOM::PITimeline pTimeline, 
+            DOM::PIFLADocument flaDocument, 
+            DOM::PITimeline timeline, 
             const Exporter::Service::RANGE* pFrameRange, 
-            const PIFCMDictionary pDictPublishSettings, 
-            const PIFCMDictionary pDictConfig);
+            const PIFCMDictionary publishSettings, 
+            const PIFCMDictionary dictConfig);
 
-        FCM::Boolean IsPreviewNeeded(const PIFCMDictionary pDictConfig);
+        FCM::Boolean IsPreviewNeeded(const PIFCMDictionary dictConfig);
 
         FCM::Result Init();
         
@@ -152,7 +153,6 @@ namespace PixiJS
 
         AutoPtr<IFrameCommandGenerator> m_frameCmdGeneratorService;
         AutoPtr<IResourcePalette> m_pResourcePalette;
-        bool m_minify;
     };
 
 
@@ -167,7 +167,7 @@ namespace PixiJS
         virtual FCM::Result _FCMCALL AddSymbol(
             FCM::U_Int32 resourceId, 
             FCM::StringRep16 pName, 
-            Exporter::Service::PITimelineBuilder pTimelineBuilder);
+            Exporter::Service::PITimelineBuilder timelineBuilder);
 
         virtual FCM::Result _FCMCALL AddShape(
             FCM::U_Int32 resourceId, 
@@ -193,7 +193,7 @@ namespace PixiJS
 
         ~ResourcePalette();
 
-        void Init(IOutputWriter* pOutputWriter);
+        void Init(IOutputWriter* outputWriter);
 
         void Clear();
 
@@ -222,14 +222,14 @@ namespace PixiJS
         FCM::Result ExportSolidFillStyle(
             DOM::FillStyle::ISolidFillStyle* pSolidFillStyle);
 
-        FCM::Result ExportRadialGradientFillStyle(
-            DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
+        // FCM::Result ExportRadialGradientFillStyle(
+        //     DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
 
-        FCM::Result ExportLinearGradientFillStyle(
-            DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
+        // FCM::Result ExportLinearGradientFillStyle(
+        //     DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
 
-        FCM::Result ExportBitmapFillStyle(
-            DOM::FillStyle::IBitmapFillStyle* pBitmapFillStyle);
+        // FCM::Result ExportBitmapFillStyle(
+        //     DOM::FillStyle::IBitmapFillStyle* pBitmapFillStyle);
 
         FCM::Result GetTextStyle(DOM::FrameElement::ITextStyle* pTextStyleItem, TEXT_STYLE& textStyle);
 
@@ -243,7 +243,7 @@ namespace PixiJS
 
     private:
 
-        IOutputWriter* m_pOutputWriter;
+        IOutputWriter* m_outputWriter;
 
         std::vector<FCM::U_Int32> m_resourceList;
 
@@ -329,16 +329,16 @@ namespace PixiJS
 
         virtual FCM::Result Build(
             FCM::U_Int32 resourceId, 
-            FCM::StringRep16 pName,
-            ITimelineWriter** ppTimelineWriter);
+            FCM::StringRep16 name,
+            ITimelineWriter** timelineWriter);
 
-        void Init(IOutputWriter* pOutputWriter, DataPrecision precision);
+        void Init(IOutputWriter* outputWriter, DataPrecision precision);
 
     private:
 
-        IOutputWriter* m_pOutputWriter;
+        IOutputWriter* m_outputWriter;
 
-        ITimelineWriter* m_pTimelineWriter;
+        ITimelineWriter* m_timelineWriter;
 
         FCM::U_Int32 m_frameIndex;
     };
@@ -352,17 +352,17 @@ namespace PixiJS
             INTERFACE_ENTRY(ITimelineBuilderFactory)            
         END_INTERFACE_MAP    
 
-        virtual FCM::Result _FCMCALL CreateTimelineBuilder(PITimelineBuilder& pTimelineBuilder);
+        virtual FCM::Result _FCMCALL CreateTimelineBuilder(PITimelineBuilder& timelineBuilder);
 
         TimelineBuilderFactory();
 
         ~TimelineBuilderFactory();
 
-        void Init(IOutputWriter* pOutputWriter, DataPrecision dataPrecision);
+        void Init(IOutputWriter* outputWriter, DataPrecision dataPrecision);
 
     private:
 
-        IOutputWriter* m_pOutputWriter;
+        IOutputWriter* m_outputWriter;
 
         DataPrecision m_dataPrecision;
     };

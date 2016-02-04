@@ -49,6 +49,7 @@
 #include <string>
 #include <cstring>
 #include <stdlib.h>
+#include "JSONNode.h"
 #include "Application/Service/IOutputConsoleService.h"
 #include "Application/Service/IFlashApplicationService.h"
 #include "FlashFCMPublicIDs.h"
@@ -193,6 +194,11 @@ namespace PixiJS
         return string;
     }
 
+    std::string Utils::ToString(bool b)
+    {
+        return b ? "true" : "false";
+    }
+
     void Utils::RemoveTrailingZeroes(char *str) 
     {
         char *ptr;
@@ -276,22 +282,33 @@ namespace PixiJS
         return matrixString;
     }
 
-    std::string Utils::ToString(const DOM::Utils::COLOR_MATRIX& colorMatrix, FCM::U_Int8 precision)
+    JSONNode Utils::ToJSON(const std::string& name, const DOM::Utils::MATRIX2D& matrix)
     {
-        std::string matrixString = "";
+        JSONNode json;
+        json.push_back(JSONNode("a", matrix.a));
+        json.push_back(JSONNode("b", matrix.b));
+        json.push_back(JSONNode("c", matrix.c));
+        json.push_back(JSONNode("d", matrix.d));
+        json.push_back(JSONNode("tx", matrix.tx));
+        json.push_back(JSONNode("ty", matrix.ty));
+        json.set_name(name);
+        return json;
+    }
+
+    JSONNode Utils::ToJSON(const std::string& name, const DOM::Utils::COLOR_MATRIX& colorMatrix)
+    {
+        JSONNode arr(JSON_ARRAY);
+        arr.set_name(name);
 
         for (FCM::U_Int32 i = 0; i < 4; i++)
         {
             // Multiplicative factor
-            matrixString.append(ToString(colorMatrix.matrix[i][i], precision));
-            matrixString.append(comma);
+            arr.push_back(JSONNode("", colorMatrix.matrix[i][i]));
 
             // Additive factor
-            matrixString.append(ToString(colorMatrix.matrix[i][4], precision));
-            matrixString.append(comma);
+            arr.push_back(JSONNode("", colorMatrix.matrix[i][4]));
         }
-
-        return matrixString;
+        return arr;
     }
 
     std::string Utils::ToString(const DOM::Utils::CapType& capType)
@@ -628,6 +645,15 @@ namespace PixiJS
         }
     }
 
+    void Utils::GetJavaScriptName(const std::string& path, std::string& name)
+    {
+        GetFileNameWithoutExtension(path, name);
+        const std::string rep = "_";
+        ReplaceAll(name, "-", rep);
+        ReplaceAll(name, " ", rep);
+        ReplaceAll(name, ".", rep);
+    }
+
     void Utils::GetFileExtension(const std::string& path, std::string& extension)
     {
         size_t index = path.find_last_of(".");
@@ -636,6 +662,15 @@ namespace PixiJS
         {
             extension = path.substr(index + 1, path.length());
         }
+    }
+
+    void Utils::GetExtensionPath(std::string& path, FCM::PIFCMCallback pCallback)
+    {
+        // Get the source folder
+        GetModuleFilePath(path, pCallback);
+        GetParent(path, path);
+        GetParent(path, path);
+        GetParent(path, path);
     }
 
     void Utils::GetModuleFilePath(std::string& path, FCM::PIFCMCallback pCallback)
@@ -765,11 +800,11 @@ namespace PixiJS
 #endif
     }
 
-    void Utils::OpenFStream(const std::string& outputFileName, std::fstream &file, std::ios_base::openmode mode, FCM::PIFCMCallback pCallback)
+    void Utils::OpenFStream(const std::string& outputFile, std::fstream &file, std::ios_base::openmode mode, FCM::PIFCMCallback pCallback)
     {
  
 #ifdef _WINDOWS
-        FCM::StringRep16 pFilePath = Utils::ToString16(outputFileName, pCallback);
+        FCM::StringRep16 pFilePath = Utils::ToString16(outputFile, pCallback);
 
         file.open(pFilePath,mode);
 
@@ -777,7 +812,7 @@ namespace PixiJS
         ASSERT(pCalloc.m_Ptr != NULL);  
         pCalloc->Free(pFilePath);
 #else
-       file.open(outputFileName.c_str(),mode);
+       file.open(outputFile.c_str(),mode);
 #endif
     }
 
@@ -966,6 +1001,29 @@ namespace PixiJS
         return true;
     }
 
+    bool Utils::ReadStringToBool(
+        const FCM::PIFCMDictionary pDict,
+        FCM::StringRep8 key,
+        bool &result)
+    {
+        std::string str;
+        Utils::ReadString(pDict, key, str);
+        if (!str.empty())
+        {
+            result = Utils::ToBool(str);
+        }
+    }
+
+    void Utils::ReplaceAll(std::string &content, const std::string &from, const std::string &to)
+    {
+        size_t start_pos = 0;
+        while((start_pos = content.find(from, start_pos)) != std::string::npos)
+        {
+            content.replace(start_pos, from.length(), to);
+            start_pos += to.length();
+        }
+    }
+
 
     bool Utils::ToBool(const std::string& str)
     {
@@ -976,37 +1034,57 @@ namespace PixiJS
         return false;
     }
 
-    DataPrecision Utils::ToPrecision(const std::string& str)
+    void Utils::GetParentByFLA(const std::string& path, std::string& parent)
     {
-        DataPrecision precision;
-
-        std::string compactDataStr = str;
-        std::transform(compactDataStr.begin(), compactDataStr.end(), compactDataStr.begin(), ::tolower);
-
-        if (compactDataStr == "low")
-            precision = PRECISION_5;
-        else if (compactDataStr == "medium")
-            precision = PRECISION_4;
-        else if (compactDataStr == "high")
-            precision = PRECISION_3;
-        else if (compactDataStr == "veryhigh")
-            precision = PRECISION_2;
+        std::string ext;
+        Utils::GetFileExtension(path, ext);
+            
+        // Convert the extension to lower case and then compare
+        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+        if (ext.compare("xfl") == 0)
+        {
+            std::string immParent;
+            Utils::GetParent(path, immParent);
+            Utils::GetParent(immParent, parent);
+        }
         else
-            precision = PRECISION_6;
-
-        return precision;
+        {
+            // FLA
+            Utils::GetParent(path, parent);
+        }
     }
+
+    // DataPrecision Utils::ToPrecision(const std::string& str)
+    // {
+    //     DataPrecision precision;
+
+    //     std::string compactDataStr = str;
+    //     std::transform(compactDataStr.begin(), compactDataStr.end(), compactDataStr.begin(), ::tolower);
+
+    //     if (compactDataStr == "low")
+    //         precision = PRECISION_5;
+    //     else if (compactDataStr == "medium")
+    //         precision = PRECISION_4;
+    //     else if (compactDataStr == "high")
+    //         precision = PRECISION_3;
+    //     else if (compactDataStr == "veryhigh")
+    //         precision = PRECISION_2;
+    //     else
+    //         precision = PRECISION_6;
+
+    //     return precision;
+    // }
 
 #ifdef USE_HTTP_SERVER
 
-    void Utils::LaunchBrowser(const std::string& outputFileName, int port, FCM::PIFCMCallback pCallback)
+    void Utils::LaunchBrowser(const std::string& outputFile, int port, FCM::PIFCMCallback pCallback)
     {
 
 #ifdef _WINDOWS
 
         std::wstring output = L"http://localhost:";
         std::wstring tail;
-        tail.assign(outputFileName.begin(), outputFileName.end());
+        tail.assign(outputFile.begin(), outputFile.end());
         FCM::StringRep16 portStr = Utils::ToString16(Utils::ToString(port), pCallback);
         output += portStr;
         output += L"/";
@@ -1020,7 +1098,7 @@ namespace PixiJS
         std::string output = "http://localhost:";
         output += Utils::ToString(port);
         output += "/";
-        output += outputFileName;
+        output += outputFile;
         std::string str = "/usr/bin/open " + output;
         popen(str.c_str(), "r");
         

@@ -1,13 +1,13 @@
 //
-//  OutputWriterBase.hpp
+//  OutputWriter.hpp
 //  PixiAnimate.mp
 //
 //  Created by Matt Bittarelli on 11/24/15.
 //
 //
 
-#ifndef OUTPUT_WRITER_BASE_H_
-#define OUTPUT_WRITER_BASE_H_
+#ifndef JSON_OUTPUT_WRITER_H_
+#define JSON_OUTPUT_WRITER_H_
 
 #include "Version.h"
 #include "FCMTypes.h"
@@ -17,16 +17,18 @@
 #include <vector>
 #include <map>
 
+#define MAX_RETRY_ATTEMPT               10
+
 class JSONNode;
 
 namespace PixiJS
 {
-    class OutputWriterBase : public IOutputWriter
+    class OutputWriter : public IOutputWriter
     {
     public:
         
         // Marks the begining of the output
-        virtual FCM::Result StartOutput(std::string& outputFileName);
+        virtual FCM::Result StartOutput();
         
         // Marks the end of the output
         virtual FCM::Result EndOutput();
@@ -59,34 +61,34 @@ namespace PixiJS
         virtual FCM::Result DefineSolidFillStyle(const DOM::Utils::COLOR& color);
         
         // Bitmap fill style definition
-        virtual FCM::Result DefineBitmapFillStyle(
-                                                  FCM::Boolean clipped,
-                                                  const DOM::Utils::MATRIX2D& matrix,
-                                                  FCM::S_Int32 height,
-                                                  FCM::S_Int32 width,
-                                                  const std::string& libPathName,
-                                                  DOM::LibraryItem::PIMediaItem pMediaItem);
+        // virtual FCM::Result DefineBitmapFillStyle(
+        //                                           FCM::Boolean clipped,
+        //                                           const DOM::Utils::MATRIX2D& matrix,
+        //                                           FCM::S_Int32 height,
+        //                                           FCM::S_Int32 width,
+        //                                           const std::string& libPathName,
+        //                                           DOM::LibraryItem::PIMediaItem pMediaItem);
         
         // Start Linear Gradient fill style definition
-        virtual FCM::Result StartDefineLinearGradientFillStyle(
-                                                               DOM::FillStyle::GradientSpread spread,
-                                                               const DOM::Utils::MATRIX2D& matrix);
+        // virtual FCM::Result StartDefineLinearGradientFillStyle(
+        //                                                        DOM::FillStyle::GradientSpread spread,
+        //                                                        const DOM::Utils::MATRIX2D& matrix);
         
         // Sets a specific key point in a color ramp (for both radial and linear gradient)
-        virtual FCM::Result SetKeyColorPoint(
-                                             const DOM::Utils::GRADIENT_COLOR_POINT& colorPoint);
+        // virtual FCM::Result SetKeyColorPoint(
+        //                                      const DOM::Utils::GRADIENT_COLOR_POINT& colorPoint);
         
         // End Linear Gradient fill style definition
-        virtual FCM::Result EndDefineLinearGradientFillStyle();
+        // virtual FCM::Result EndDefineLinearGradientFillStyle();
         
         // Start Radial Gradient fill style definition
-        virtual FCM::Result StartDefineRadialGradientFillStyle(
-                                                               DOM::FillStyle::GradientSpread spread,
-                                                               const DOM::Utils::MATRIX2D& matrix,
-                                                               FCM::S_Int32 focalPoint);
+        // virtual FCM::Result StartDefineRadialGradientFillStyle(
+        //                                                        DOM::FillStyle::GradientSpread spread,
+        //                                                        const DOM::Utils::MATRIX2D& matrix,
+        //                                                        FCM::S_Int32 focalPoint);
         
         // End Radial Gradient fill style definition
-        virtual FCM::Result EndDefineRadialGradientFillStyle();
+        // virtual FCM::Result EndDefineRadialGradientFillStyle();
         
         // Start of fill region boundary
         virtual FCM::Result StartDefineBoundary();
@@ -173,18 +175,34 @@ namespace PixiJS
                                         const std::string& libPathName,
                                         DOM::LibraryItem::PIMediaItem pMediaItem);
         
-        OutputWriterBase(FCM::PIFCMCallback pCallback, bool minify, DataPrecision dataPrecision);
+        OutputWriter(
+            FCM::PIFCMCallback pCallback, 
+            std::string& basePath,
+            std::string& outputFile,
+            std::string& imagesPath,
+            std::string& soundsPath,
+            std::string& htmlPath,
+            std::string& libsPath,
+            std::string& stageName,
+            std::string& nameSpace,
+            std::string& electronPath,
+            bool html,
+            bool libs,
+            bool images,
+            bool sounds,
+            bool compactShapes,
+            bool compressJS,
+            bool loopTimeline,
+            bool electron,
+            DataPrecision dataPrecision);
         
-        virtual ~OutputWriterBase();
+        virtual ~OutputWriter();
         
         // Start of a path
         virtual FCM::Result StartDefinePath();
         
         // End of a path 
         virtual FCM::Result EndDefinePath();
-
-        // Perform operations after publishing from Adobe Flash
-        virtual FCM::Result PostPublishStep(const std::string& outputFolder, FCM::PIFCMCallback pCallback);
         
         // Start a preview for the output content for this writer
         virtual FCM::Result StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback);
@@ -193,17 +211,15 @@ namespace PixiJS
         virtual FCM::Result StopPreview(const std::string& outFile);
         
     private:
-        
-        FCM::Result CreateImageFileName(const std::string& libPathName, std::string& name);
-        
-        FCM::Result CreateSoundFileName(const std::string& libPathName, std::string& name);
-        
+                        
         FCM::Boolean GetImageExportFileName(const std::string& libPathName, std::string& name);
         
         void SetImageExportFileName(const std::string& libPathName, const std::string& name);
-        
-    protected:
-        
+
+        void Save(const std::string &filePath, const std::string &content);
+
+        bool SaveFromTemplate(const std::string &templatePath, const std::string &outputPath);
+                
         JSONNode* m_pRootNode;
         
         JSONNode* m_pShapeArray;
@@ -216,11 +232,11 @@ namespace PixiJS
         
         JSONNode* m_pTextArray;
         
-        JSONNode*   m_shapeElem;
+        JSONNode*  m_shapeElem;
         
-        JSONNode*   m_pathArray;
+        JSONNode*  m_pathArray;
         
-        JSONNode*   m_pathElem;
+        JSONNode*  m_pathElem;
         
         JSONNode*  m_pTextElem;
         
@@ -230,44 +246,70 @@ namespace PixiJS
         
         JSONNode*  m_pTextRunArray;
         
-        JSONNode*   m_gradientColor;
+        // JSONNode*  m_gradientColor;
         
-        JSONNode*   m_stopPointArray;
+        JSONNode*  m_stopPointArray;
         
-        std::string m_pathCmdStr;
+        JSONNode*  m_pathCmdArray;
         
-        bool        m_firstSegment;
+        bool       m_firstSegment;
         
         STROKE_STYLE m_strokeStyle;
         
-        std::string m_outputHTMLFile;
-        
-        std::string m_outputJSONFilePath;
-        
-        std::string m_outputJSONFileName;
-        
-        std::string m_outputImageFolder;
-        
-        std::string m_outputSoundFolder;
-        
-        char* m_HTMLOutput;
-        
         FCM::PIFCMCallback m_pCallback;
         
-        FCM::U_Int32 m_imageFileNameLabel;
-        
-        FCM::U_Int32 m_soundFileNameLabel;
-        
         std::map<std::string, std::string> m_imageMap;
+
+        FCM::U_Int32 m_symbolNameLabel;
         
         FCM::Boolean m_imageFolderCreated;
         
         FCM::Boolean m_soundFolderCreated;
-        
-        FCM::Boolean m_minify;
-        
+                
         DataPrecision m_dataPrecision;
+
+        std::string m_basePath;
+
+        std::string m_imagesPath;
+
+        std::string m_soundsPath;
+
+        std::string m_htmlPath;
+
+        std::string m_libsPath;
+
+        std::string m_stageName;
+
+        std::string m_nameSpace;
+
+        std::string m_electronPath;
+
+        std::string m_outputFile;
+        
+        std::string m_outputDataFile;
+                
+        std::string m_outputImageFolder;
+        
+        std::string m_outputSoundFolder;
+
+        std::map<std::string, std::string> m_substitutions;
+
+        bool m_html;
+
+        bool m_libs;
+
+        bool m_images;
+
+        bool m_sounds;
+
+        bool m_compactShapes;
+
+        bool m_compressJS;
+
+        bool m_loopTimeline;
+
+        bool m_electron;
     };
 };
 
-#endif /* OUTPUT_WRITER_BASE_H_ */
+#endif /* JSON_OUTPUT_WRITER_H_ */

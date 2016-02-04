@@ -1,5 +1,5 @@
 //
-//  JSONTimelineWriter.hpp
+//  TimelineWriter.hpp
 //  PixiAnimate.mp
 //
 //  Created by Matt Bittarelli on 11/23/15.
@@ -17,7 +17,7 @@ class JSONNode;
 
 namespace PixiJS
 {
-    class JSONTimelineWriter : public ITimelineWriter
+    class TimelineWriter : public ITimelineWriter
     {
     public:
         
@@ -80,13 +80,13 @@ namespace PixiJS
         
         virtual FCM::Result SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType);
         
-        JSONTimelineWriter(FCM::PIFCMCallback pCallback, DataPrecision dataPrecision);
+        TimelineWriter(FCM::PIFCMCallback pCallback, DataPrecision dataPrecision);
         
-        virtual ~JSONTimelineWriter();
+        virtual ~TimelineWriter();
         
         const JSONNode* GetRoot();
         
-        void Finish(FCM::U_Int32 resId, FCM::StringRep16 pName);
+        void Finish(FCM::U_Int32 resId, FCM::StringRep16 pName, std::string name);
         
         
     private:
