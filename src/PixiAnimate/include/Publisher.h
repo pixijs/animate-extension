@@ -35,8 +35,8 @@
 #include "Exporter/Service/ITimelineBuilderFactory.h"
 #include "Publisher/IPublisher.h"
 #include "FillStyle/ISolidFillStyle.h"
-#include "FillStyle/IGradientFillStyle.h"
-#include "FillStyle/IBitmapFillStyle.h"
+// #include "FillStyle/IGradientFillStyle.h"
+// #include "FillStyle/IBitmapFillStyle.h"
 #include "FrameElement/IClassicText.h"
 #include "FrameElement/ITextStyle.h"
 #include "Exporter/Service/IFrameCommandGenerator.h"
@@ -222,14 +222,14 @@ namespace PixiJS
         FCM::Result ExportSolidFillStyle(
             DOM::FillStyle::ISolidFillStyle* pSolidFillStyle);
 
-        FCM::Result ExportRadialGradientFillStyle(
-            DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
+        // FCM::Result ExportRadialGradientFillStyle(
+        //     DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
 
-        FCM::Result ExportLinearGradientFillStyle(
-            DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
+        // FCM::Result ExportLinearGradientFillStyle(
+        //     DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
 
-        FCM::Result ExportBitmapFillStyle(
-            DOM::FillStyle::IBitmapFillStyle* pBitmapFillStyle);
+        // FCM::Result ExportBitmapFillStyle(
+        //     DOM::FillStyle::IBitmapFillStyle* pBitmapFillStyle);
 
         FCM::Result GetTextStyle(DOM::FrameElement::ITextStyle* pTextStyleItem, TEXT_STYLE& textStyle);
 
