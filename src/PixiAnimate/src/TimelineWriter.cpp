@@ -60,7 +60,8 @@ namespace PixiJS
                                                 FCM::U_Int32 objectId,
                                                 FCM::U_Int32 placeAfterObjectId,
                                                 const DOM::Utils::MATRIX2D* pMatrix,
-                                                FCM::Boolean loop,
+                                                bool loop,
+                                                std::string instanceName,
                                                 FCM::PIFCMUnknown pUnknown)
     {
         JSONNode commandElement(JSON_NODE);
@@ -74,8 +75,13 @@ namespace PixiJS
         {
             commandElement.push_back(Utils::ToJSON("transformMatrix", *pMatrix));
         }
+
+        if (!instanceName.empty())
+        {
+            commandElement.push_back(JSONNode("instanceName", instanceName.c_str()));
+        }
         
-        commandElement.push_back(JSONNode("loop", loop));
+        commandElement.push_back(JSONNode("loop", (bool)loop));
         m_pCommandArray->push_back(commandElement);
         
         return FCM_SUCCESS;
@@ -261,7 +267,7 @@ namespace PixiJS
         
         commandElement.push_back(JSONNode("cmdType", "UpdateVisibility"));
         commandElement.push_back(JSONNode("objectId", objectId));
-        commandElement.push_back(JSONNode("visibility", visible));
+        commandElement.push_back(JSONNode("visibility", (bool)visible));
         
         m_pCommandArray->push_back(commandElement);
         
@@ -303,14 +309,7 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "DropShadowFilter"));
             
             pDropShadowFilter->IsEnabled(enabled);
-            if(enabled)
-            {
-                commandElement.push_back(JSONNode("enabled", true));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("enabled", false));
-            }
+            commandElement.push_back(JSONNode("enabled", (bool)enabled));
             
             res = pDropShadowFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -391,14 +390,7 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "BlurFilter"));
             
             res = pBlurFilter->IsEnabled(enabled);
-            if(enabled)
-            {
-                commandElement.push_back(JSONNode("enabled", true));
-            }
-            else
-            {
-                commandElement.push_back(JSONNode("enabled", false));
-            }
+            commandElement.push_back(JSONNode("enabled", (bool)enabled));
             
             res = pBlurFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -433,7 +425,7 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "GlowFilter"));
             
             res = pGlowFilter->IsEnabled(enabled);
-            commandElement.push_back(JSONNode("enabled", enabled));
+            commandElement.push_back(JSONNode("enabled", (bool)enabled));
             
             res = pGlowFilter->GetBlurX(blurX);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -489,7 +481,7 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "BevelFilter"));
             
             res = pBevelFilter->IsEnabled(enabled);
-            commandElement.push_back(JSONNode("enabled", enabled));
+            commandElement.push_back(JSONNode("enabled", (bool)enabled));
             
             res = pBevelFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -560,7 +552,7 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "GradientGlowFilter"));
             
             pGradientGlowFilter->IsEnabled(enabled);
-            commandElement.push_back(JSONNode("enabled", enabled));
+            commandElement.push_back(JSONNode("enabled", (bool)enabled));
             
             res = pGradientGlowFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -658,7 +650,7 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "GradientBevelFilter"));
             
             pGradientBevelFilter->IsEnabled(enabled);
-            commandElement.push_back(JSONNode("enabled", enabled));
+            commandElement.push_back(JSONNode("enabled", (bool)enabled));
             
             res = pGradientBevelFilter->GetAngle(angle);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -752,7 +744,7 @@ namespace PixiJS
             commandElement.push_back(JSONNode("filterType", "AdjustColorFilter"));
             
             pAdjustColorFilter->IsEnabled(enabled);
-            commandElement.push_back(JSONNode("enabled", enabled));
+            commandElement.push_back(JSONNode("enabled", (bool)enabled));
             
             res = pAdjustColorFilter->GetBrightness(brightness);
             ASSERT(FCM_SUCCESS_CODE(res));
@@ -816,8 +808,13 @@ namespace PixiJS
         
         if (!m_pCommandArray->empty())
         {
-            m_pFrameElement->push_back(JSONNode("num", frameNum));
+            m_pFrameElement->push_back(JSONNode("frame", frameNum));
             m_pFrameElement->push_back(*m_pCommandArray);
+            if (!m_pFrameScripts->empty())
+            {
+                m_pFrameScripts->set_name("scripts");
+                m_pFrameElement->push_back(*m_pFrameScripts);
+            }
             m_pFrameArray->push_back(*m_pFrameElement);
         }
         
@@ -825,12 +822,16 @@ namespace PixiJS
         
         delete m_pCommandArray;
         delete m_pFrameElement;
-        
+        delete m_pFrameScripts;
+
         m_pCommandArray = new JSONNode(JSON_ARRAY);
-        m_pCommandArray->set_name("Command");
+        m_pCommandArray->set_name("commands");
         
         m_pFrameElement = new JSONNode(JSON_NODE);
         ASSERT(m_pFrameElement);
+
+        m_pFrameScripts = new JSONNode(JSON_ARRAY);
+        ASSERT(m_pFrameScripts);
         
         return FCM_SUCCESS;
     }
@@ -838,35 +839,16 @@ namespace PixiJS
 
     FCM::Result TimelineWriter::AddFrameScript(FCM::CStringRep16 pScript, FCM::U_Int32 layerNum)
     {
-        // As frame script is not supported, let us disable it.
-    #if 0
         std::string script = Utils::ToString(pScript, m_pCallback);
+        Utils::ReplaceAll(script, "\n", "\\n");
         
-        std::string scriptWithLayerNumber = "script Layer" +  Utils::ToString(layerNum);
-        
-        std::string find = "\n";
-        std::string replace = "\\n";
-        std::string::size_type i =0;
         JSONNode textElem(JSON_NODE);
+
+        textElem.push_back(JSONNode("layer", layerNum));
+        textElem.push_back(JSONNode("script", script));
         
-        while (true) {
-            /* Locate the substring to replace. */
-            i = script.find(find, i);
-            
-            if (i == std::string::npos) break;
-            /* Make the replacement. */
-            script.replace(i, find.length(), replace);
-            
-            /* Advance index forward so the next iteration doesn't pick it up as well. */
-            i += replace.length();
-        }
-        
-        
-        Utils::Trace(m_pCallback, "[AddFrameScript] (Layer: %d): %s\n", layerNum, script.c_str());
-        
-        m_pFrameElement->push_back(JSONNode(scriptWithLayerNumber,script));
-    #endif
-        
+        m_pFrameScripts->push_back(textElem);
+
         return FCM_SUCCESS;
     }
 
@@ -881,16 +863,16 @@ namespace PixiJS
     FCM::Result TimelineWriter::SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType)
     {
         std::string label = Utils::ToString(pLabel, m_pCallback);
-        Utils::Trace(m_pCallback, "[SetFrameLabel] (Type: %d): %s\n", labelType, label.c_str());
+        // Utils::Trace(m_pCallback, "[SetFrameLabel] (Type: %d): %s\n", labelType, label.c_str());
         
         if(labelType == 1)
-            m_pFrameElement->push_back(JSONNode("LabelType:Name",label));
+            m_pFrameElement->push_back(JSONNode("label:name",label));
         else if(labelType == 2)
-            m_pFrameElement->push_back(JSONNode("labelType:Comment",label));
+            m_pFrameElement->push_back(JSONNode("label:comment",label));
         else if(labelType == 3)
-            m_pFrameElement->push_back(JSONNode("labelType:Ancor",label));
+            m_pFrameElement->push_back(JSONNode("label:ancor",label));
         else if(labelType == 0)
-            m_pFrameElement->push_back(JSONNode("labelType","None"));
+            m_pFrameElement->push_back(JSONNode("label","none"));
         
         return FCM_SUCCESS;
     }
@@ -904,19 +886,22 @@ namespace PixiJS
     {
         m_pCommandArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pCommandArray);
-        m_pCommandArray->set_name("Command");
+        m_pCommandArray->set_name("commands");
         
         m_pFrameArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pFrameArray);
-        m_pFrameArray->set_name("Frame");
+        m_pFrameArray->set_name("frames");
         
         m_pTimelineElement = new JSONNode(JSON_NODE);
         ASSERT(m_pTimelineElement);
-        m_pTimelineElement->set_name("Timeline");
+        m_pTimelineElement->set_name("timelines");
         
         m_pFrameElement = new JSONNode(JSON_NODE);
         ASSERT(m_pFrameElement);
         
+        m_pFrameScripts = new JSONNode(JSON_ARRAY);
+        ASSERT(m_pFrameScripts);
+
         m_FrameCount = 0;
     }
 
@@ -927,6 +912,7 @@ namespace PixiJS
         delete m_pFrameArray;
         delete m_pTimelineElement;
         delete m_pFrameElement;
+        delete m_pFrameScripts;
     }
 
 
@@ -944,13 +930,14 @@ namespace PixiJS
             m_pTimelineElement->push_back(JSONNode("charid", resId));
 
             // Check for graphics (dependent timeline)
-            if (pName == NULL)
+            if (!pName)
             {
-                m_pTimelineElement->push_back(JSONNode("isGraphic", true));
+                m_pTimelineElement->push_back(JSONNode("graphic", true));
             }
         }
-        m_pTimelineElement->push_back(JSONNode("name", name));
-        m_pTimelineElement->push_back(JSONNode("frameCount", m_FrameCount));
+        
+        m_pTimelineElement->push_back(JSONNode("name", name.c_str()));
+        m_pTimelineElement->push_back(JSONNode("length", m_FrameCount));
         m_pTimelineElement->push_back(*m_pFrameArray);
     }
 };

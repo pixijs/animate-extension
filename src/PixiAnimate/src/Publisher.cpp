@@ -1866,11 +1866,35 @@ namespace PixiJS
         FCM::Result res;
         FCM::AutoPtr<FCM::IFCMUnknown> pUnknown = pMovieClip;
 
+        FCM::StringRep16 pInstanceName;
+        std::string instanceName;
+
+        res = pMovieClip->GetName(&pInstanceName);
+        ASSERT(FCM_SUCCESS_CODE(res));
+
+        Utils::Trace(GetCallback(), "pInstanceName: %d\n", pInstanceName);
+
+       if (FCM_SUCCESS == res)
+       {
+           instanceName = Utils::ToString(pInstanceName, GetCallback());
+
+           Utils::Trace(GetCallback(), "MovieClip Instance name %s\n", instanceName.c_str());
+
+           // Free the name
+           FCM::AutoPtr<FCM::IFCMUnknown> pUnkCalloc;
+           res = GetCallback()->GetService(SRVCID_Core_Memory, pUnkCalloc.m_Ptr);
+           AutoPtr<FCM::IFCMCalloc> callocService  = pUnkCalloc;
+           callocService->Free((FCM::PVoid)pInstanceName);
+       }
+
         ASSERT(pMovieClipInfo);
         ASSERT(pMovieClipInfo->structSize >= sizeof(MOVIE_CLIP_INFO));
       
-        LOG(("[AddMovieClip] ObjId: %d ResId: %d PlaceAfter: %d\n", 
-            objectId, pMovieClipInfo->resourceId, pMovieClipInfo->placeAfterObjectId));
+        // LOG(("[AddMovieClip] ObjId: %d ResId: %d PlaceAfter: %d\n", 
+        //     objectId, pMovieClipInfo->resourceId, pMovieClipInfo->placeAfterObjectId));
+
+        // Utils::Trace(GetCallback(), "[AddMovieClip] ObjId: %d ResId: %d PlaceAfter: %d, Instance: %s\n", 
+        //     objectId, pMovieClipInfo->resourceId, pMovieClipInfo->placeAfterObjectId, instanceName/);
 
         res = m_timelineWriter->PlaceObject(
             pMovieClipInfo->resourceId, 
@@ -1878,6 +1902,7 @@ namespace PixiJS
             pMovieClipInfo->placeAfterObjectId, 
             &pMovieClipInfo->matrix,
             true,
+            instanceName,
             pUnknown);
 
         return res;
@@ -1899,6 +1924,7 @@ namespace PixiJS
             pGraphicInfo->placeAfterObjectId, 
             &pGraphicInfo->matrix,
             false,
+            "",
             NULL);
 
         return res;
@@ -2080,7 +2106,6 @@ namespace PixiJS
         {
             res = m_timelineWriter->SetFrameLabel(pLabel, labelType);
         }
-
         return res;
     }
 

@@ -27,13 +27,14 @@ namespace PixiJS
                                         FCM::U_Int32 placeAfterObjectId,
                                         const DOM::Utils::MATRIX2D* pMatrix,
                                         const DOM::Utils::RECT* pRect = NULL);
-        
+
         virtual FCM::Result PlaceObject(
                                         FCM::U_Int32 resId,
                                         FCM::U_Int32 objectId,
                                         FCM::U_Int32 placeAfterObjectId,
                                         const DOM::Utils::MATRIX2D* pMatrix,
-                                        FCM::Boolean loop,
+                                        bool loop,
+                                        std::string instanceName,
                                         FCM::PIFCMUnknown pUnknown);
         
         virtual FCM::Result PlaceObject(
@@ -107,6 +108,8 @@ namespace PixiJS
         JSONNode* m_pTimelineElement;
         
         JSONNode* m_pFrameElement;
+
+        JSONNode* m_pFrameScripts;
         
         std::vector<MaskInfo> maskInfoList;
         

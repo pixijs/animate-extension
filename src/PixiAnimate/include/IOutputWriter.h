@@ -280,7 +280,8 @@ namespace PixiJS
             FCM::U_Int32 objectId,
             FCM::U_Int32 placeAfterObjectId,
             const DOM::Utils::MATRIX2D* pMatrix,
-            FCM::Boolean loop,
+            bool loop,
+            std::string instanceName,
             FCM::PIFCMUnknown pUnknown) = 0;
 
         virtual FCM::Result PlaceObject(

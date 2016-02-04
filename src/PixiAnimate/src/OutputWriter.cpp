@@ -122,12 +122,9 @@ namespace PixiJS
         m_pRootNode->push_back(*m_pSoundArray);
         m_pRootNode->push_back(*m_pTextArray);
         m_pRootNode->push_back(*m_pTimelineArray);
-        
-        JSONNode firstNode(JSON_NODE);
-        firstNode.push_back(*m_pRootNode);
 
         // Write the JSON file (overwrite file if it already exists)
-        Save(m_outputDataFile, firstNode.write_formatted());
+        Save(m_outputDataFile, m_pRootNode->write_formatted());
         
         // Get the path to the templates folder
         std::string templatesPath;
@@ -164,15 +161,22 @@ namespace PixiJS
     {
         TimelineWriter* pWriter = static_cast<TimelineWriter*> (pTimelineWriter);
         
-        std::string name(m_stageName);
+        std::string timelineName(m_stageName);
         if (resId != 0)
         {
-            // This is temporary until the pName works on getting the name
-            m_symbolNameLabel++;
-            name = "Symbol" + Utils::ToString(m_symbolNameLabel);
+            if (pName)
+            {
+                timelineName = Utils::ToString(pName, m_pCallback);
+            }
+            else
+            {
+                // This is temporary until the pName works on getting the name
+                m_symbolNameLabel++;
+                timelineName = "Graphic" + Utils::ToString(m_symbolNameLabel);
+            }
         }
 
-        pWriter->Finish(resId, pName, name);
+        pWriter->Finish(resId, pName, timelineName);
         
         m_pTimelineArray->push_back(*(pWriter->GetRoot()));
         
@@ -196,7 +200,7 @@ namespace PixiJS
     // Marks the end of a shape
     FCM::Result OutputWriter::EndDefineShape(FCM::U_Int32 resId)
     {
-        m_shapeElem->push_back(JSONNode(("charid"), resId));
+        m_shapeElem->push_back(JSONNode("charid", resId));
         m_shapeElem->push_back(*m_pathArray);
         
         m_pShapeArray->push_back(*m_shapeElem);
@@ -297,8 +301,8 @@ namespace PixiJS
             pCalloc->Free(pFilePath);
         }
         
-        bitmapElem.push_back(JSONNode(("src"), bitmapRelPath));
-        bitmapElem.push_back(JSONNode(("name"), name));
+        bitmapElem.push_back(JSONNode("src", bitmapRelPath));
+        bitmapElem.push_back(JSONNode("name", name));
         
         DOM::Utils::MATRIX2D matrix1 = matrix;
         matrix1.a /= 20.0;
@@ -306,7 +310,7 @@ namespace PixiJS
         matrix1.c /= 20.0;
         matrix1.d /= 20.0;
         
-        bitmapElem.push_back(JSONNode(("patternUnits"), "userSpaceOnUse"));
+        bitmapElem.push_back(JSONNode("patternUnits", "userSpaceOnUse"));
         bitmapElem.push_back(Utils::ToJSON("patternTransform", matrix1));
         
         m_pathElem->push_back(bitmapElem);
@@ -690,8 +694,8 @@ namespace PixiJS
             pCalloc->Free(pFilePath);
         }
         
-        bitmapElem.push_back(JSONNode(("src"), bitmapRelPath));
-        bitmapElem.push_back(JSONNode(("name"), name));
+        bitmapElem.push_back(JSONNode("src", bitmapRelPath));
+        bitmapElem.push_back(JSONNode("name", name));
         
         m_pBitmapArray->push_back(bitmapElem);
         
@@ -712,51 +716,51 @@ namespace PixiJS
         ASSERT(m_pTextElem != NULL);
         
         m_pTextElem->set_name("text");
-        m_pTextElem->push_back(JSONNode(("charid"), resId));
+        m_pTextElem->push_back(JSONNode("charid", resId));
         
         aaMode.set_name("aaMode");
-        aaMode.push_back(JSONNode(("mode"), Utils::ToString(aaModeProp.aaMode)));
+        aaMode.push_back(JSONNode("mode", Utils::ToString(aaModeProp.aaMode)));
         if (aaModeProp.aaMode == DOM::FrameElement::ANTI_ALIAS_MODE_CUSTOM)
         {
-            aaMode.push_back(JSONNode(("thickness"), aaModeProp.customAAModeProp.aaThickness));
-            aaMode.push_back(JSONNode(("sharpness"), aaModeProp.customAAModeProp.aaSharpness));
+            aaMode.push_back(JSONNode("thickness", aaModeProp.customAAModeProp.aaThickness));
+            aaMode.push_back(JSONNode("sharpness", aaModeProp.customAAModeProp.aaSharpness));
         }
         m_pTextElem->push_back(aaMode);
         
-        m_pTextElem->push_back(JSONNode(("txt"), displayText));
+        m_pTextElem->push_back(JSONNode("txt", displayText));
         
         behaviour.set_name("behaviour");
         
         if (textBehaviour.type == 0)
         {
             // Static Text
-            behaviour.push_back(JSONNode(("type"), "Static"));
-            behaviour.push_back(JSONNode(("flow"), Utils::ToString(textBehaviour.u.staticText.flow)));
-            behaviour.push_back(JSONNode(("orientation"), Utils::ToString(textBehaviour.u.staticText.orientationMode)));
+            behaviour.push_back(JSONNode("type", "Static"));
+            behaviour.push_back(JSONNode("flow", Utils::ToString(textBehaviour.u.staticText.flow)));
+            behaviour.push_back(JSONNode("orientation", Utils::ToString(textBehaviour.u.staticText.orientationMode)));
         }
         else if (textBehaviour.type == 1)
         {
             // Dynamic text
-            behaviour.push_back(JSONNode(("type"), "Dynamic"));
-            behaviour.push_back(JSONNode(("name"), textBehaviour.name));
-            behaviour.push_back(JSONNode(("isBorderDrawn"), textBehaviour.u.dynamicText.borderDrawn ? true : false));
-            behaviour.push_back(JSONNode(("lineMode"), Utils::ToString(textBehaviour.u.dynamicText.lineMode)));
-            behaviour.push_back(JSONNode(("isRenderAsHTML"), textBehaviour.u.dynamicText.renderAsHtml ? true : false));
-            behaviour.push_back(JSONNode(("isScrollable"), textBehaviour.u.dynamicText.scrollable ? true : false));
+            behaviour.push_back(JSONNode("type", "Dynamic"));
+            behaviour.push_back(JSONNode("name", textBehaviour.name));
+            behaviour.push_back(JSONNode("isBorderDrawn", textBehaviour.u.dynamicText.borderDrawn ? true : false));
+            behaviour.push_back(JSONNode("lineMode", Utils::ToString(textBehaviour.u.dynamicText.lineMode)));
+            behaviour.push_back(JSONNode("isRenderAsHTML", textBehaviour.u.dynamicText.renderAsHtml ? true : false));
+            behaviour.push_back(JSONNode("isScrollable", textBehaviour.u.dynamicText.scrollable ? true : false));
         }
         else
         {
             // Input text
-            behaviour.push_back(JSONNode(("type"), "Input"));
-            behaviour.push_back(JSONNode(("name"), textBehaviour.name));
-            behaviour.push_back(JSONNode(("isBorderDrawn"), textBehaviour.u.inputText.borderDrawn ? true : false));
-            behaviour.push_back(JSONNode(("lineMode"), Utils::ToString(textBehaviour.u.inputText.lineMode)));
-            behaviour.push_back(JSONNode(("isRenderAsHTML"), textBehaviour.u.inputText.renderAsHtml ? true : false));
-            behaviour.push_back(JSONNode(("isScrollable"), textBehaviour.u.inputText.scrollable ? true : false));
-            behaviour.push_back(JSONNode(("isPassword"), textBehaviour.u.inputText.password ? true : false));
+            behaviour.push_back(JSONNode("type", "Input"));
+            behaviour.push_back(JSONNode("name", textBehaviour.name));
+            behaviour.push_back(JSONNode("isBorderDrawn", textBehaviour.u.inputText.borderDrawn ? true : false));
+            behaviour.push_back(JSONNode("lineMode", Utils::ToString(textBehaviour.u.inputText.lineMode)));
+            behaviour.push_back(JSONNode("isRenderAsHTML", textBehaviour.u.inputText.renderAsHtml ? true : false));
+            behaviour.push_back(JSONNode("isScrollable", textBehaviour.u.inputText.scrollable ? true : false));
+            behaviour.push_back(JSONNode("isPassword", textBehaviour.u.inputText.password ? true : false));
         }
         
-        behaviour.push_back(JSONNode(("isSelectable"), textBehaviour.selectable  ? true : false));
+        behaviour.push_back(JSONNode("isSelectable", textBehaviour.selectable  ? true : false));
         
         m_pTextElem->push_back(behaviour);
         
@@ -778,13 +782,13 @@ namespace PixiJS
         m_pTextPara = new JSONNode(JSON_NODE);
         ASSERT(m_pTextPara != NULL);
         
-        m_pTextPara->push_back(JSONNode(("startIndex"), Utils::ToString(startIndex)));
-        m_pTextPara->push_back(JSONNode(("length"), Utils::ToString(length)));
-        m_pTextPara->push_back(JSONNode(("indent"), Utils::ToString(paragraphStyle.indent)));
-        m_pTextPara->push_back(JSONNode(("leftMargin"), Utils::ToString(paragraphStyle.leftMargin)));
-        m_pTextPara->push_back(JSONNode(("rightMargin"), Utils::ToString(paragraphStyle.rightMargin)));
-        m_pTextPara->push_back(JSONNode(("linespacing"), Utils::ToString(paragraphStyle.lineSpacing)));
-        m_pTextPara->push_back(JSONNode(("alignment"), Utils::ToString(paragraphStyle.alignment)));
+        m_pTextPara->push_back(JSONNode("startIndex", Utils::ToString(startIndex)));
+        m_pTextPara->push_back(JSONNode("length", Utils::ToString(length)));
+        m_pTextPara->push_back(JSONNode("indent", Utils::ToString(paragraphStyle.indent)));
+        m_pTextPara->push_back(JSONNode("leftMargin", Utils::ToString(paragraphStyle.leftMargin)));
+        m_pTextPara->push_back(JSONNode("rightMargin", Utils::ToString(paragraphStyle.rightMargin)));
+        m_pTextPara->push_back(JSONNode("linespacing", Utils::ToString(paragraphStyle.lineSpacing)));
+        m_pTextPara->push_back(JSONNode("alignment", Utils::ToString(paragraphStyle.alignment)));
         
         m_pTextRunArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pTextRunArray != NULL);
@@ -803,8 +807,8 @@ namespace PixiJS
         JSONNode textRun(JSON_NODE);
         JSONNode style(JSON_NODE);
         
-        textRun.push_back(JSONNode(("startIndex"), startIndex));
-        textRun.push_back(JSONNode(("length"), length));
+        textRun.push_back(JSONNode("startIndex", startIndex));
+        textRun.push_back(JSONNode("length", length));
         
         style.set_name("style");
         style.push_back(JSONNode("fontName", textStyle.fontName));
@@ -872,7 +876,7 @@ namespace PixiJS
         std::string ext;
         
         soundElem.set_name("sound");
-        soundElem.push_back(JSONNode(("charid"), Utils::ToString(resId)));
+        soundElem.push_back(JSONNode("charid", Utils::ToString(resId)));
         
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
         
@@ -907,8 +911,8 @@ namespace PixiJS
             pCalloc->Free(pFilePath);
         }
         
-        soundElem.push_back(JSONNode(("src"), soundRelPath));
-        soundElem.push_back(JSONNode(("name"), name));
+        soundElem.push_back(JSONNode("src", soundRelPath));
+        soundElem.push_back(JSONNode("name", name));
 
         m_pSoundArray->push_back(soundElem);
         
@@ -967,27 +971,27 @@ namespace PixiJS
     {
         m_pRootNode = new JSONNode(JSON_NODE);
         ASSERT(m_pRootNode);
-        m_pRootNode->set_name("DOMDocument");
+        // m_pRootNode->set_name("DOMDocument");
         
         m_pShapeArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pShapeArray);
-        m_pShapeArray->set_name("Shape");
+        m_pShapeArray->set_name("shapes");
         
         m_pTimelineArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pTimelineArray);
-        m_pTimelineArray->set_name("Timeline");
+        m_pTimelineArray->set_name("timelines");
         
         m_pBitmapArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pBitmapArray);
-        m_pBitmapArray->set_name("Bitmaps");
+        m_pBitmapArray->set_name("bitmaps");
         
         m_pTextArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pTextArray);
-        m_pTextArray->set_name("Text");
+        m_pTextArray->set_name("text");
         
         m_pSoundArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pSoundArray);
-        m_pSoundArray->set_name("Sounds");
+        m_pSoundArray->set_name("sounds");
         m_strokeStyle.type = INVALID_STROKE_STYLE_TYPE;
     }
     
