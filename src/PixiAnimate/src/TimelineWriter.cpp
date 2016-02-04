@@ -46,7 +46,7 @@ namespace PixiJS
         
         if (pRect)
         {
-            commandElement.push_back(JSONNode("bounds", Utils::ToString(*pRect, m_dataPrecision).c_str()));
+            commandElement.push_back(Utils::ToJSON("bounds", *pRect));
         }
         
         m_pCommandArray->push_back(commandElement);
@@ -878,11 +878,8 @@ namespace PixiJS
     }
 
 
-    TimelineWriter::TimelineWriter(
-                                           FCM::PIFCMCallback pCallback,
-                                           DataPrecision dataPrecision) :
-    m_pCallback(pCallback),
-    m_dataPrecision(dataPrecision)
+    TimelineWriter::TimelineWriter(FCM::PIFCMCallback pCallback) :
+    m_pCallback(pCallback)
     {
         m_pCommandArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pCommandArray);

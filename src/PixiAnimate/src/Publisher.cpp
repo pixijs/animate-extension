@@ -193,7 +193,6 @@ namespace PixiJS
         AutoPtr<ITimelineBuilderFactory> timelineBuilderFactory;
         FCM::FCMListPtr timelineList;
         FCM::U_Int32 timelineCount;
-        DataPrecision precision = PRECISION_3;
 
         bool html(true);
         bool libs(true);
@@ -287,8 +286,7 @@ namespace PixiJS
             compactShapes,
             compressJS,
             loopTimeline,
-            electron,
-            precision));
+            electron));
         
         if (outputWriter.get() == NULL)
         {
@@ -310,7 +308,7 @@ namespace PixiJS
         }
 
         (static_cast<TimelineBuilderFactory*>(timelineBuilderFactory.m_Ptr))->Init(
-            outputWriter.get(), precision);
+            outputWriter.get());
 
         ResourcePalette* pResPalette = static_cast<ResourcePalette*>(m_pResourcePalette.m_Ptr);
         pResPalette->Clear();
@@ -2131,13 +2129,13 @@ namespace PixiJS
     {
     }
 
-    void TimelineBuilder::Init(IOutputWriter* outputWriter, DataPrecision precision)
+    void TimelineBuilder::Init(IOutputWriter* outputWriter)
     {
         m_outputWriter = outputWriter;
 
         m_outputWriter->StartDefineTimeline();
 
-        m_timelineWriter = new TimelineWriter(GetCallback(), precision);
+        m_timelineWriter = new TimelineWriter(GetCallback());
         ASSERT(m_timelineWriter);
     }
 
@@ -2157,15 +2155,14 @@ namespace PixiJS
 
         TimelineBuilder* timeline = static_cast<TimelineBuilder*>(timelineBuilder);
         
-        timeline->Init(m_outputWriter, m_dataPrecision);
+        timeline->Init(m_outputWriter);
 
         return res;
     }
 
-    void TimelineBuilderFactory::Init(IOutputWriter* outputWriter, DataPrecision dataPrecision)
+    void TimelineBuilderFactory::Init(IOutputWriter* outputWriter)
     {
         m_outputWriter = outputWriter;
-        m_dataPrecision = dataPrecision;
     }
 
     FCM::Result RegisterPublisher(PIFCMDictionary pPlugins, FCM::FCMCLSID docId)

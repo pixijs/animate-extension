@@ -216,36 +216,6 @@ namespace PixiJS
             *ptr = '\0';
         }
     }
-
-    std::string Utils::ToString(const double& in, int precision)
-    {
-        char buffer[32];
-
-        ASSERT(precision >= 1 && precision <= 6);
-        char* precisionFormat[] = {"%.1f", "%.2f", "%.3f", "%.4f", "%.5f", "%.6f"};
-
-        sprintf(buffer, precisionFormat[precision - 1], in);
-
-        RemoveTrailingZeroes(buffer);
-
-        std::string str(buffer);
-        return str;
-    }
-    
-    std::string Utils::ToString(const float& in, int precision)
-    {
-        char buffer[32];
-
-        ASSERT(precision >= 1 && precision <= 6);
-        const char* precisionFormat[] = {"%.1f", "%.2f", "%.3f", "%.4f", "%.5f", "%.6f"};
-
-        sprintf(buffer, precisionFormat[precision - 1], in);
-
-        RemoveTrailingZeroes(buffer);
-
-        std::string str(buffer);
-        return str;
-    }
     
     std::string Utils::ToString(const FCM::U_Int32& in)
     {
@@ -262,24 +232,16 @@ namespace PixiJS
         std::string str(buffer);
         return str;
     }
-    
-    std::string Utils::ToString(const DOM::Utils::MATRIX2D& matrix, FCM::U_Int8 precision)
+
+    JSONNode Utils::ToJSON(const std::string& name, const DOM::Utils::RECT& rect)
     {
-        std::string matrixString = "";
-
-        matrixString.append(ToString(matrix.a, precision));
-        matrixString.append(comma);
-        matrixString.append(ToString(matrix.b, precision));
-        matrixString.append(comma);
-        matrixString.append(ToString(matrix.c, precision));
-        matrixString.append(comma);
-        matrixString.append(ToString(matrix.d, precision));
-        matrixString.append(comma);
-        matrixString.append(ToString(matrix.tx, precision));
-        matrixString.append(comma);
-        matrixString.append(ToString(matrix.ty, precision));
-
-        return matrixString;
+        JSONNode json;
+        json.push_back(JSONNode("x", rect.topLeft.x));
+        json.push_back(JSONNode("y", rect.topLeft.y));
+        json.push_back(JSONNode("width", rect.bottomRight.x - rect.topLeft.x));
+        json.push_back(JSONNode("height", rect.bottomRight.y - rect.topLeft.y));
+        json.set_name(name);
+        return json;
     }
 
     JSONNode Utils::ToJSON(const std::string& name, const DOM::Utils::MATRIX2D& matrix)
@@ -524,21 +486,6 @@ namespace PixiJS
         }
 
         return str;
-    }
-
-    std::string Utils::ToString(const DOM::Utils::RECT& rect, FCM::U_Int8 precision)
-    {
-        std::string rectString = "";
-
-        rectString.append(ToString(rect.topLeft.x, precision));
-        rectString.append(comma);
-        rectString.append(ToString(rect.topLeft.y, precision));
-        rectString.append(comma);
-        rectString.append(ToString(rect.bottomRight.x, precision));
-        rectString.append(comma);
-        rectString.append(ToString(rect.bottomRight.y, precision));
-
-        return rectString;
     }
 
     FCM::StringRep16 Utils::ToString16(const std::string& str, FCM::PIFCMCallback pCallback)
@@ -1066,27 +1013,6 @@ namespace PixiJS
             Utils::GetParent(path, parent);
         }
     }
-
-    // DataPrecision Utils::ToPrecision(const std::string& str)
-    // {
-    //     DataPrecision precision;
-
-    //     std::string compactDataStr = str;
-    //     std::transform(compactDataStr.begin(), compactDataStr.end(), compactDataStr.begin(), ::tolower);
-
-    //     if (compactDataStr == "low")
-    //         precision = PRECISION_5;
-    //     else if (compactDataStr == "medium")
-    //         precision = PRECISION_4;
-    //     else if (compactDataStr == "high")
-    //         precision = PRECISION_3;
-    //     else if (compactDataStr == "veryhigh")
-    //         precision = PRECISION_2;
-    //     else
-    //         precision = PRECISION_6;
-
-    //     return precision;
-    // }
 
 #ifdef USE_HTTP_SERVER
 

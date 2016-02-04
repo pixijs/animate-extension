@@ -81,7 +81,7 @@ namespace PixiJS
         
         virtual FCM::Result SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType);
         
-        TimelineWriter(FCM::PIFCMCallback pCallback, DataPrecision dataPrecision);
+        TimelineWriter(FCM::PIFCMCallback pCallback);
         
         virtual ~TimelineWriter();
         
@@ -116,8 +116,6 @@ namespace PixiJS
         FCM::PIFCMCallback m_pCallback;
         
         FCM::U_Int32 m_FrameCount;
-        
-        DataPrecision m_dataPrecision;
     };
 };
 

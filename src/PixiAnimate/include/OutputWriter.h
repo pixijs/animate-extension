@@ -193,8 +193,7 @@ namespace PixiJS
             bool compactShapes,
             bool compressJS,
             bool loopTimeline,
-            bool electron,
-            DataPrecision dataPrecision);
+            bool electron);
         
         virtual ~OutputWriter();
         
@@ -265,8 +264,6 @@ namespace PixiJS
         FCM::Boolean m_imageFolderCreated;
         
         FCM::Boolean m_soundFolderCreated;
-                
-        DataPrecision m_dataPrecision;
 
         std::string m_basePath;
 

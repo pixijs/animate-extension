@@ -332,7 +332,7 @@ namespace PixiJS
             FCM::StringRep16 name,
             ITimelineWriter** timelineWriter);
 
-        void Init(IOutputWriter* outputWriter, DataPrecision precision);
+        void Init(IOutputWriter* outputWriter);
 
     private:
 
@@ -358,13 +358,11 @@ namespace PixiJS
 
         ~TimelineBuilderFactory();
 
-        void Init(IOutputWriter* outputWriter, DataPrecision dataPrecision);
+        void Init(IOutputWriter* outputWriter);
 
     private:
 
         IOutputWriter* m_outputWriter;
-
-        DataPrecision m_dataPrecision;
     };
 
     FCM::Result RegisterPublisher(PIFCMDictionary pPlugins, FCM::FCMCLSID docId);

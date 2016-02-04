@@ -63,10 +63,15 @@
 
 namespace PixiJS
 {
+    // Keys for render to graphics
     static const std::string moveTo = "mt";
     static const std::string lineTo = "lt";
     static const std::string bezierCurveTo = "bt";
-    static const std::string space = " ";
+
+    // Templates
+    static const std::string electronPackage = "package.json";
+    static const std::string electronMain = "main.js";
+    static const std::string html = "index.html";
     
     static const FCM::Float GRADIENT_VECTOR_CONSTANT = 16384.0;
     
@@ -135,14 +140,14 @@ namespace PixiJS
         // Output the HTML templates
         if (m_html)
         {
-            SaveFromTemplate(templatesPath + "index.html", m_basePath + m_htmlPath);
+            SaveFromTemplate(templatesPath + html, m_basePath + m_htmlPath);
         }
 
         // Output the electron path
         if (m_electron)
         {
-            SaveFromTemplate(templatesPath + "package.json", m_basePath + "package.json");
-            SaveFromTemplate(templatesPath + "main.js", m_basePath + m_electronPath);
+            SaveFromTemplate(templatesPath + electronPackage, m_basePath + electronPackage);
+            SaveFromTemplate(templatesPath + electronMain, m_basePath + m_electronPath);
         }
 
         return FCM_SUCCESS;
@@ -433,7 +438,7 @@ namespace PixiJS
         matrix1.tx = matrix.tx;
         matrix1.ty = matrix.ty;
         
-        m_gradientColor->push_back(JSONNode("gradientTransform", Utils::ToString(matrix1, m_dataPrecision)));
+        m_gradientColor->push_back(JSONNode(Utils::ToJSON("gradientTransform", matrix1)));
         m_gradientColor->push_back(JSONNode("spreadMethod", Utils::ToString(spread)));
         
         m_stopPointArray = new JSONNode(JSON_ARRAY);
@@ -938,8 +943,7 @@ namespace PixiJS
         bool compactShapes,
         bool compressJS,
         bool loopTimeline,
-        bool electron,
-        DataPrecision dataPrecision)
+        bool electron)
     : m_pCallback(pCallback),
     m_outputFile(outputFile),
     m_outputDataFile(basePath + outputFile + "on"),
@@ -967,8 +971,7 @@ namespace PixiJS
     m_firstSegment(false),
     m_symbolNameLabel(0),
     m_imageFolderCreated(false),
-    m_soundFolderCreated(false),
-    m_dataPrecision(dataPrecision)
+    m_soundFolderCreated(false)
     {
         m_pRootNode = new JSONNode(JSON_NODE);
         ASSERT(m_pRootNode);

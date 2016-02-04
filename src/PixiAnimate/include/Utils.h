@@ -87,21 +87,6 @@ namespace PixiJS
     };
 }
 
-/* -------------------------------------------------- Enums */
-
-namespace PixiJS
-{
-    enum DataPrecision
-    {
-        PRECISION_2 = 2,
-        PRECISION_3 = 3,
-        PRECISION_4 = 4,
-        PRECISION_5 = 5,
-        PRECISION_6 = 6
-    };
-}
-
-
 /* -------------------------------------------------- Macros / Constants */
 
 #ifdef _DEBUG
@@ -173,16 +158,9 @@ namespace PixiJS
 
         static std::string ToString(const FCM::FCMGUID& in);
 
-        static std::string ToString(const double& in, int precision);
-
-        static std::string ToString(const float& in, int precision);
-
         static std::string ToString(const FCM::U_Int32& in);
 
         static std::string ToString(const FCM::S_Int32& in);
-
-        static std::string ToString(const DOM::Utils::MATRIX2D& matrix, FCM::U_Int8 precision);
-
 
         static std::string ToString(const DOM::Utils::CapType& capType);
 
@@ -203,8 +181,6 @@ namespace PixiJS
         static std::string ToString(FCM::CStringRep16 pStr16, FCM::PIFCMCallback pCallback);
 
         static std::string ToString(FCM::CStringRep8 pStr8);
-
-        static std::string ToString(const DOM::Utils::RECT& rect, FCM::U_Int8 precision);
         
         static FCM::StringRep16 ToString16(const std::string& str, FCM::PIFCMCallback pCallback);
 
@@ -216,6 +192,8 @@ namespace PixiJS
 
         static std::string ToString(bool b);
 
+        static JSONNode ToJSON(const std::string& name, const DOM::Utils::RECT& rect);
+
         static JSONNode ToJSON(const std::string& name, const DOM::Utils::COLOR_MATRIX& colorMatrix);
 
         static JSONNode ToJSON(const std::string& name, const DOM::Utils::MATRIX2D& matrix);
@@ -223,8 +201,6 @@ namespace PixiJS
         static JSONNode ToJSON(const std::string& name, const std::map<std::string, std::string>& m);
 
         static bool ToBool(const std::string& str);
-
-        static DataPrecision ToPrecision(const std::string& str);
 
         static void TransformPoint(
             const DOM::Utils::MATRIX2D& matrix, 
