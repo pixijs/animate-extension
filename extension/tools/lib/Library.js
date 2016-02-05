@@ -4,6 +4,7 @@ const Bitmap = require('./objects/Bitmap');
 const Shape = require('./objects/Shape');
 const Text = require('./objects/Text');
 const Timeline = require('./objects/Timeline');
+const Stage = require('./objects/Stage');
 
 /**
  * Handle the converting of data assets to typed objects
@@ -42,6 +43,12 @@ const Library = function(data)
      */
     const map = this._mapById = {};
 
+    /**
+     * Get if the main timeline should loop
+     * @property {Boolean} loopTimeline
+     */
+    this.loopTimeline = data._meta.loopTimeline;
+
     // Convert the bitmaps
     data.Bitmaps.forEach(function(bitmapData)
     {
@@ -68,7 +75,11 @@ const Library = function(data)
 
     data.Timelines.forEach(function(timelineData)
     {
-        const timeline = new Timeline(timelineData);
+        let timeline;
+        if (timelineData.type == "stage")
+            timeline = new Stage(timelineData);
+        else
+            timeline = new Timeline(timelineData);
         timelines.push(timeline);
         map[timeline.id] = timeline;
     });

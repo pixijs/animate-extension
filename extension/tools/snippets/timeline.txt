@@ -1,0 +1,6 @@
+lib.${id} = MovieClip.extend(function(mode, startPosition, loop)
+{
+    MovieClip.call(this, mode, startPosition, loop, ${labels});
+    ${contents}
+});
+

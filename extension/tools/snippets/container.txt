@@ -1,5 +1,4 @@
-lib.${id} = Container.extend(function()
-{
+lib.${id} = Container.extend(function(){
     Container.call(this);
     ${contents}
 });

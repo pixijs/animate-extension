@@ -1,5 +1,6 @@
 "use strict";
 
+const util = require('util');
 const Renderable = require('./Renderable');
 
 /**
@@ -40,7 +41,7 @@ const Shape = function(data)
         // Adding a stroke
         if (path.stroke) 
         {
-            draw.push("s", path.color, path.thickness, path.alpha);
+            draw.push("s", path.thickness, path.color, path.alpha);
         } 
         else 
         {
@@ -62,17 +63,18 @@ const Shape = function(data)
 };
 
 // Reference to the prototype
-const p = Shape.prototype = Object.create(Renderable.prototype);
+util.inherits(Shape, Renderable);
+const p = Shape.prototype;
 
 /**
  * Render the element
- * @method render
+ * @method renderInstance
  * @param {Renderer} renderer
  * @return {string} Buffer of object
  */
-p.render = function(renderer)
+p.renderInstance = function(renderer)
 {
-    return renderer.template('shape', this.name);
+    return renderer.template('shape-instance', this.name);
 };
 
 module.exports = Shape;

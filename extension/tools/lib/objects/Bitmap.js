@@ -1,5 +1,6 @@
 "use strict";
 
+const util = require('util');
 const Renderable = require('./Renderable');
 
 /**
@@ -20,7 +21,8 @@ const Bitmap = function(data)
 };
 
 // Extends the prototype
-const p = Bitmap.prototype = Object.create(Renderable.prototype);
+util.inherits(Bitmap, Renderable);
+const p = Bitmap.prototype;
 
 /**
  * Render the element
@@ -31,6 +33,17 @@ const p = Bitmap.prototype = Object.create(Renderable.prototype);
 p.render = function(renderer)
 {
     return renderer.template('bitmap', this.name);
+};
+
+/**
+ * Render the object as a string
+ * @method renderInstance
+ * @param {Renderer} renderer
+ * @return {string} buffer
+ */
+p.renderInstance = function(renderer)
+{
+    return renderer.template('bitmap-instance', this.name);
 };
 
 /** 

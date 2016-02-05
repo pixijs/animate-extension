@@ -7,7 +7,6 @@ const BISON = require('bisonjs');
 const mkdirp = require('mkdirp');
 const Library = require('./Library');
 const Renderer = require('./Renderer');
-const UglifyJS = require('uglify-js');
 
 /**
  * The application to publish the JSON data to JS output buffer
@@ -166,19 +165,43 @@ p.destroy = function()
  */
 p.run = function()
 {
-    let meta = this._data._meta;
-
     this.exportGraphics();
     this.updateLoader();
+    this.publish();
+    this.destroy();
+};
+
+/**
+ * Save the output stream
+ * @method publish
+ */
+p.publish = function()
+{
+    let meta = this._data._meta;
+
+    // Get the javascript buffer
     let buffer = this.renderer.render(meta.nameSpace);
 
-    // If we should compress the output javascript
     if (meta.compressJS)
     {
+        // Run through uglify
+        const UglifyJS = require('uglify-js');
         let result = UglifyJS.minify(buffer, {
-            fromString: true
+            fromString: true 
         });
         buffer = result.code;
+    }
+    else
+    {
+        // Run through js beautifier
+        const beautify = require('js-beautify').js_beautify;
+        buffer = beautify(buffer, { 
+            indent_size: 4,
+            preserve_newlines: true,
+            space_after_anon_function: true,
+            brace_style: "collapse-preserve-inline",
+            break_chained_methods: true
+        });
     }
 
     // Save the output file
@@ -186,8 +209,6 @@ p.run = function()
     fs.writeFileSync(outputFile, buffer);
 
     console.log(buffer);
-
-    this.destroy();
 };
 
 module.exports = Publisher;

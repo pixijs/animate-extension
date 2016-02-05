@@ -66,7 +66,7 @@ namespace PixiJS
     // Keys for render to graphics
     static const std::string moveTo = "mt";
     static const std::string lineTo = "lt";
-    static const std::string bezierCurveTo = "bt";
+    static const std::string quadraticCurveTo = "qt";
 
     // Templates
     static const std::string electronPackage = "package.json";
@@ -135,6 +135,7 @@ namespace PixiJS
         meta.push_back(JSONNode("compressJS", m_compressJS));
         meta.push_back(JSONNode("compactShapes", m_compactShapes));
         meta.push_back(JSONNode("nameSpace", m_nameSpace));
+        meta.push_back(JSONNode("loopTimeline", m_loopTimeline));
         meta.push_back(JSONNode("imagesPath", m_imagesPath));
         meta.push_back(JSONNode("htmlPath", m_html ? m_htmlPath : false));
         meta.push_back(JSONNode("soundsPath", m_sounds ? m_soundsPath : false));
@@ -526,7 +527,7 @@ namespace PixiJS
         }
         else
         {
-            m_pathCmdArray->push_back(JSONNode("", bezierCurveTo));
+            m_pathCmdArray->push_back(JSONNode("", quadraticCurveTo));
             m_pathCmdArray->push_back(JSONNode("", (double)(segment.quadBezierCurve.control.x)));
             m_pathCmdArray->push_back(JSONNode("", (double)(segment.quadBezierCurve.control.y)));
             m_pathCmdArray->push_back(JSONNode("", (double)(segment.quadBezierCurve.anchor2.x)));

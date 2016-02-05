@@ -21,7 +21,18 @@ const p = Renderable.prototype;
  * @param {Renderer} renderer
  * @return {string} buffer
  */
-p.render = function(renderer)
+p.render = function()
+{
+    throw "Must override";
+};
+
+/**
+ * Render the object as a string
+ * @method renderInstance
+ * @param {Renderer} renderer
+ * @return {string} buffer
+ */
+p.renderInstance = function()
 {
     throw "Must override";
 };

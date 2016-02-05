@@ -1,5 +1,6 @@
 "use strict";
 
+const util = require('util');
 const Renderable = require('./Renderable');
 
 /**
@@ -18,18 +19,19 @@ const Text = function(data)
 };
 
 // Reference to the prototype
-const p = Text.prototype = Object.create(Renderable.prototype);
+util.inherits(Text, Renderable);
+const p = Text.prototype;
 
 /**
  * Render the element
- * @method render
+ * @method renderInstance
  * @param {Renderer} renderer
  * @return {string} Buffer of object
  */
-p.render = function(renderer)
+p.renderInstance = function(renderer)
 {
-    const style = this.paras.textRun.style;
-    return renderer.template('text', {
+    const style = this.paras[0].textRun[0].style;
+    return renderer.template('text-instance', {
         text: this.txt,
         fontSize: style.fontSize,
         fontName: style.fontName,

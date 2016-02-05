@@ -59,7 +59,13 @@ p.template = function(type, subs)
         for (let prop in subs)
         {
             let search = new RegExp("\\$\\{"+prop+"\\}", 'g');
-            buffer = buffer.replace(search, subs[prop]);
+            let value = subs[prop];
+
+            if (typeof value == "object")
+            {
+                value = JSON.stringify(value);
+            }
+            buffer = buffer.replace(search, value);
         }
     }
     return buffer;
