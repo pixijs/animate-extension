@@ -925,12 +925,19 @@ namespace PixiJS
         if (resId != 0)
         {
             m_pTimelineElement->push_back(JSONNode("id", resId));
-
-            // Check for graphics (dependent timeline)
+            
             if (!pName)
             {
-                m_pTimelineElement->push_back(JSONNode("graphic", true));
+                m_pTimelineElement->push_back(JSONNode("type", "graphic"));
             }
+            else
+            {
+                m_pTimelineElement->push_back(JSONNode("type", "movieclip"));
+            }
+        }
+        else
+        {
+            m_pTimelineElement->push_back(JSONNode("type", "stage"));
         }
         
         m_pTimelineElement->push_back(JSONNode("name", name.c_str()));

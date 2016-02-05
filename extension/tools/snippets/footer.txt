@@ -1,4 +1,2 @@
-
-
-})(${nameSpace} = ${nameSpace}||{});
-var ${nameSpace};
+})(PIXI, ${content} = ${content} || {});
+var ${content};

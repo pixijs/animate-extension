@@ -52,15 +52,15 @@ namespace PixiJS
     extern "C" FCMPLUGIN_IMP_EXP FCM::Result PluginBoot(FCM::PIFCMCallback pCallback)
     {
         FCM::Result res;
-        std::string langCode;
-        std::string modulePath;
+        // std::string langCode;
+        // std::string modulePath;
 
         res = g_jiboPixiJSModule.init(pCallback);
 
-        Utils::GetModuleFilePath(modulePath, pCallback);
-        Utils::GetLanguageCode(pCallback, langCode);
+        // Utils::GetModuleFilePath(modulePath, pCallback);
+        // Utils::GetLanguageCode(pCallback, langCode);
 
-        g_jiboPixiJSModule.SetResPath(modulePath + "../res/" + langCode + "/");
+        // g_jiboPixiJSModule.SetResPath(modulePath + "../res/" + langCode + "/");
         return res;
     }
 

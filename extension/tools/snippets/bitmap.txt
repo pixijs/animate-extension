@@ -1,5 +1,5 @@
-lib.${id} = Sprite.extend(function()
+lib.${content} = Sprite.extend(function()
 {
-    Sprite.call(this, fromFrame("${id}"));
+    Sprite.call(this, fromFrame("${content}"));
 });
 

@@ -29,6 +29,7 @@
     "bisonjs": "^2.0.2",
     "mkdirp": "^0.5.1",
     "pixi-animate": "git+ssh//git@github.com:jiborobot/pixi-animate.git",
-    "pixi.js": "^3.0.9"
+    "pixi.js": "^3.0.9",
+    "uglify-js": "^2.6.1"
   }
 }

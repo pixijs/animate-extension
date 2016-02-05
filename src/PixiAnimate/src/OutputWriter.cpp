@@ -135,7 +135,7 @@ namespace PixiJS
         meta.push_back(JSONNode("compressJS", m_compressJS));
         meta.push_back(JSONNode("compactShapes", m_compactShapes));
         meta.push_back(JSONNode("nameSpace", m_nameSpace));
-        meta.push_back(JSONNode("imagesPath", m_images ? m_imagesPath : false));
+        meta.push_back(JSONNode("imagesPath", m_imagesPath));
         meta.push_back(JSONNode("htmlPath", m_html ? m_htmlPath : false));
         meta.push_back(JSONNode("soundsPath", m_sounds ? m_soundsPath : false));
 
@@ -160,6 +160,9 @@ namespace PixiJS
 
         std::string compiler = extensionPath + NODE_COMPILER;
         std::string cmd("/usr/local/bin/node '" + compiler + "' '" + m_outputDataFile + "'");
+        #ifdef _DEBUG
+            cmd += " --debug";
+        #endif
         popen(cmd.c_str(), "r");
 
         // Get the path to the templates folder
@@ -1016,7 +1019,7 @@ namespace PixiJS
         
         m_pTextArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pTextArray);
-        m_pTextArray->set_name("Text");
+        m_pTextArray->set_name("Texts");
         
         m_pSoundArray = new JSONNode(JSON_ARRAY);
         ASSERT(m_pSoundArray);

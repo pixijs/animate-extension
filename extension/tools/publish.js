@@ -1,34 +1,16 @@
 "use strict";
 
-// Node modules
-let fs = require('fs');
-let path = require('path');
+// Load the data file
+const dataFile = process.argv[2];
+const debug = process.argv[3] == "--debug";
 
-// Internal modules
-let Graphics = require('./graphics');
-let Bitmaps = require('./bitmaps');
-let Loader = require('./loader');
-let JSBuffer = require('./js-buffer');
+if (!dataFile) 
+{
+    console.log("Error: Second argument must be path to Flash output");
+    process.exit(1);
+}
 
-// Read in the datafile
-let args = process.argv;
-let dataFile = args[2];
-let data = JSON.parse(fs.readFileSync(dataFile, "utf8"));
-
-// Change the current directory
-process.chdir(path.dirname(dataFile));
-
-// The look for library assets (graphics and images)
-let library = {};
-
-// The list of assets to load in the HTML pages
-let assets = [];
-
-// Save the graphics
-Graphics(data, library, assets);
-Bitmaps(data, library, assets);
-Loader(assets, data._meta.htmlPath);
-JSBuffer(data, library);
-
-// Cleanup the datafile
-fs.unlinkSync(dataFile);
+// Main entry point for the application
+const Publisher = require('./lib/publisher');
+const publisher = new Publisher(dataFile, debug);
+publisher.run();

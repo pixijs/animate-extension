@@ -3,3 +3,4 @@ lib.${id} = MovieClip.extend(function()
     MovieClip.call(this);
     ${contents}
 });
+

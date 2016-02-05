@@ -98,9 +98,9 @@ namespace PixiJS
             return;
         }
 
-        Utils::GetModuleFilePath(featureXMLPath, pCallback);
+        Utils::GetExtensionPath(featureXMLPath, pCallback);
 
-        featureXMLPath += "../res/Features.xml";
+        featureXMLPath += "Features.xml";
 
         Utils::GetAppVersion(pCallback, m_appVersion);
 

@@ -1,5 +1,4 @@
-(function (lib) {
+(function (PIXI, lib) {
 
 var MovieClip = PIXI.animate.MovieClip;
-${classes}
-
+${content}
