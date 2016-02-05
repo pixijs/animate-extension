@@ -2,8 +2,8 @@
 
 let fs = require('fs');
 let path = require('path');
-let mkdirp = require('./libs/mkdirp');
-let BISON = require('./libs/bison.js');
+let mkdirp = require('mkdirp');
+let BISON = require('bisonjs');
 
 
 module.exports = function(data, library, assets)

@@ -41,7 +41,7 @@
 #define DOCTYPE_DESCRIPTION					"This document can be used to author content for Pixi.js."
 
 /* The value of RUNTIME_FOLDER_NAME must be the name of the runtime folder present in extension. */
-#define RUNTIME_ROOT_FOLDER_NAME            "vendor/public"
+#define RUNTIME_ROOT_FOLDER_NAME            "runtime"
 
 /** The directory inside of the extension to get the output templates */
 #define TEMPLATE_FOLDER_NAME                "templates/"

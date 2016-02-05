@@ -26,6 +26,8 @@
     "napa": "^2.2.0"
   },
   "dependencies": {
+    "bisonjs": "^2.0.2",
+    "mkdirp": "^0.5.1",
     "pixi-animate": "git+ssh//git@github.com:jiborobot/pixi-animate.git",
     "pixi.js": "^3.0.9"
   }
