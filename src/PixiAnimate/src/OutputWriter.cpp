@@ -122,11 +122,6 @@ namespace PixiJS
     
     FCM::Result OutputWriter::EndDocument()
     {
-        #ifdef _WINDOWS
-            Utils::Trace(pCallback, "ERROR: Publishing not yet supported on Windows");
-            return FCM_FAILURE;
-        #endif
-
         m_pRootNode->push_back(*m_pShapeArray);
         m_pRootNode->push_back(*m_pBitmapArray);
         m_pRootNode->push_back(*m_pSoundArray);
@@ -135,19 +130,31 @@ namespace PixiJS
 
         JSONNode meta(JSON_NODE);
         meta.set_name("_meta");
-        meta.push_back(JSONNode("imagesPath", m_imagesPath));
-        meta.push_back(JSONNode("stageName", m_stageName));
         meta.push_back(JSONNode("outputFile", m_outputFile));
-        meta.push_back(JSONNode("htmlPath", m_htmlPath));
-        meta.push_back(JSONNode("soundsPath", m_soundsPath));
+        meta.push_back(JSONNode("stageName", m_stageName));
         meta.push_back(JSONNode("compressJS", m_compressJS));
         meta.push_back(JSONNode("compactShapes", m_compactShapes));
         meta.push_back(JSONNode("nameSpace", m_nameSpace));
+        meta.push_back(JSONNode("imagesPath", m_images ? m_imagesPath : false));
+        meta.push_back(JSONNode("htmlPath", m_html ? m_htmlPath : false));
+        meta.push_back(JSONNode("soundsPath", m_sounds ? m_soundsPath : false));
+
+        std::string major = Utils::ToString(PIXIJS_PLUGIN_VERSION_MAJOR);
+        std::string minor = Utils::ToString(PIXIJS_PLUGIN_VERSION_MINOR);
+        std::string patch = Utils::ToString(PIXIJS_PLUGIN_VERSION_MAINTENANCE);
+
+        meta.push_back(JSONNode("version", (major) + "." + (minor) + "." + (patch)));
         m_pRootNode->push_back(meta);
 
         // Write the JSON file (overwrite file if it already exists)
-        Save(m_outputDataFile, m_pRootNode->write_formatted());
-        
+        #ifdef _DEBUG
+            // If we're in DEBUG mode, write the well-formated JSON with whitespace
+            Save(m_outputDataFile, m_pRootNode->write_formatted());
+        #else
+            // JSON with no whitespace
+            Save(m_outputDataFile, m_pRootNode->write());
+        #endif
+
         std::string extensionPath;
         Utils::GetExtensionPath(extensionPath, m_pCallback);
 

@@ -101,7 +101,7 @@ namespace PixiJS
 
     class CPublisher : public IPublisher, public FCMObjectBase
     {
-        BEGIN_INTERFACE_MAP(CPublisher, SAMPLE_PLUGIN_VERSION)
+        BEGIN_INTERFACE_MAP(CPublisher, PIXIJS_PLUGIN_VERSION)
             INTERFACE_ENTRY(IPublisher)
         END_INTERFACE_MAP
         
@@ -160,7 +160,7 @@ namespace PixiJS
     {
     public:
 
-        BEGIN_INTERFACE_MAP(ResourcePalette, SAMPLE_PLUGIN_VERSION)    
+        BEGIN_INTERFACE_MAP(ResourcePalette, PIXIJS_PLUGIN_VERSION)    
             INTERFACE_ENTRY(IResourcePalette)            
         END_INTERFACE_MAP    
 
@@ -255,7 +255,7 @@ namespace PixiJS
     {
     public:
 
-        BEGIN_INTERFACE_MAP(TimelineBuilder, SAMPLE_PLUGIN_VERSION)    
+        BEGIN_INTERFACE_MAP(TimelineBuilder, PIXIJS_PLUGIN_VERSION)    
             INTERFACE_ENTRY(ITimelineBuilder2)            
         END_INTERFACE_MAP    
 
@@ -348,7 +348,7 @@ namespace PixiJS
     {
     public:
 
-        BEGIN_INTERFACE_MAP(TimelineBuilderFactory, SAMPLE_PLUGIN_VERSION)    
+        BEGIN_INTERFACE_MAP(TimelineBuilderFactory, PIXIJS_PLUGIN_VERSION)    
             INTERFACE_ENTRY(ITimelineBuilderFactory)            
         END_INTERFACE_MAP    
 

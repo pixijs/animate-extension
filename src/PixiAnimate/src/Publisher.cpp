@@ -185,6 +185,18 @@ namespace PixiJS
         // Post-process the SWF
 
 #else
+
+        #ifdef _WINDOWS
+            Utils::Trace(GetCallback(), "ERROR: Publishing not yet supported on Windows");
+            return FCM_GENERAL_ERROR;
+        #endif
+
+        if (!Utils::Exists("/usr/local/bin/node"))
+        {
+            Utils::Trace(GetCallback(), "ERROR: NodeJS is required to be installed at /usr/local/bin/node");
+            return FCM_GENERAL_ERROR;
+        }
+
         DOM::Utils::COLOR color;
         FCM::U_Int32 stageHeight;
         FCM::U_Int32 stageWidth;
@@ -230,6 +242,12 @@ namespace PixiJS
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_NAMESPACE, nameSpace);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, stageName);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_ELECTRON_PATH, electronPath);
+
+        if (electron && !Utils::Exists("/usr/local/bin/electron"))
+        {
+            Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed at /usr/local/bin/electron");
+            return FCM_GENERAL_ERROR;
+        }
 
         #ifdef _DEBUG
             Utils::Trace(GetCallback(), "Export relative to %s\n", basePath.c_str());

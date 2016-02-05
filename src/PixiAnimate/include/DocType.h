@@ -75,7 +75,7 @@ namespace PixiJS
 {
     class CDocType : public DocType::IDocType, public FCM::FCMObjectBase
     {
-        BEGIN_INTERFACE_MAP(CDocType, SAMPLE_PLUGIN_VERSION)
+        BEGIN_INTERFACE_MAP(CDocType, PIXIJS_PLUGIN_VERSION)
             INTERFACE_ENTRY(IDocType)    
         END_INTERFACE_MAP
             
@@ -95,7 +95,7 @@ namespace PixiJS
     
     class FeatureMatrix : public DocType::IFeatureMatrix, public FCM::FCMObjectBase
     {
-        BEGIN_MULTI_INTERFACE_MAP(FeatureMatrix, SAMPLE_PLUGIN_VERSION)
+        BEGIN_MULTI_INTERFACE_MAP(FeatureMatrix, PIXIJS_PLUGIN_VERSION)
             INTERFACE_ENTRY(IFeatureMatrix)
         END_INTERFACE_MAP
 

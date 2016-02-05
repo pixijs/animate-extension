@@ -237,6 +237,8 @@ namespace PixiJS
 
         static void Log(const char* fmt, ...);
 
+        static bool Exists(const std::string& fileName);
+
         static void OpenFStream(
             const std::string& outputFile, 
             std::fstream &file, 

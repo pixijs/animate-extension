@@ -36,44 +36,44 @@
 /* -------------------------------------------------- Macros / Constants */
 
 /**
-     * @def   SAMPLE_PLUGIN_VERSION_MAJOR
+     * @def   PIXIJS_PLUGIN_VERSION_MAJOR
      *
      * @brief Major version of the plugin
      */
-    #define SAMPLE_PLUGIN_VERSION_MAJOR                 0x01
+    #define PIXIJS_PLUGIN_VERSION_MAJOR                 0x01
     
 
     /**
-     * @def   SAMPLE_PLUGIN_VERSION_MINOR
+     * @def   PIXIJS_PLUGIN_VERSION_MINOR
      *
      * @brief Minor version of the plugin
      */
-    #define SAMPLE_PLUGIN_VERSION_MINOR                 0x00
+    #define PIXIJS_PLUGIN_VERSION_MINOR                 0x00
     
 
     /**
-     * @def   SAMPLE_PLUGIN_VERSION_MAINTENANCE
+     * @def   PIXIJS_PLUGIN_VERSION_MAINTENANCE
      *
      * @brief Plugin version's maintenance number. 
      */
-    #define SAMPLE_PLUGIN_VERSION_MAINTENANCE           0x00
+    #define PIXIJS_PLUGIN_VERSION_MAINTENANCE           0x00
     
 
     /**
-     * @def   SAMPLE_PLUGIN_VERSION_BUILD
+     * @def   PIXIJS_PLUGIN_VERSION_BUILD
      *
      * @brief Plugin version's build number. 
      */
-    #define SAMPLE_PLUGIN_VERSION_BUILD                 0x00
+    #define PIXIJS_PLUGIN_VERSION_BUILD                 0x00
 
     
     /**
-     * @def   SAMPLE_PLUGIN_VERSION
+     * @def   PIXIJS_PLUGIN_VERSION
      *
      * @brief Complete plugin version.  
      */
-    #define SAMPLE_PLUGIN_VERSION ( (SAMPLE_PLUGIN_VERSION_MAJOR << 24) | (SAMPLE_PLUGIN_VERSION_MINOR << 16) | \
-                                    (SAMPLE_PLUGIN_VERSION_MAINTENANCE << 8) | (SAMPLE_PLUGIN_VERSION_BUILD) )
+    #define PIXIJS_PLUGIN_VERSION ( (PIXIJS_PLUGIN_VERSION_MAJOR << 24) | (PIXIJS_PLUGIN_VERSION_MINOR << 16) | \
+                                    (PIXIJS_PLUGIN_VERSION_MAINTENANCE << 8) | (PIXIJS_PLUGIN_VERSION_BUILD) )
 
 
 /* -------------------------------------------------- Structs / Unions */

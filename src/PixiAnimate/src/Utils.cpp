@@ -802,6 +802,14 @@ namespace PixiJS
         //printf(buffer);
     }
 
+    bool Utils::Exists(const std::string& fileName)
+    {
+        std::ifstream infile(fileName.c_str());
+        bool exists = infile.good();
+        infile.close();
+        return exists;
+    }
+
 
     // Removes the folder all its contents
     FCM::Result Utils::Remove(const std::string& folder, FCM::PIFCMCallback pCallback)
