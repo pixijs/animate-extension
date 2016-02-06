@@ -32,6 +32,8 @@
 		681CC6011AF8BF5C0041AEC0 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = 681CC6001AF8BF5C0041AEC0 /* mongoose.c */; };
 		681CC6021AF8BF5C0041AEC0 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = 681CC6001AF8BF5C0041AEC0 /* mongoose.c */; };
 		"6df97df6-cdcc-3eec-8b67-b64cb2bd3741" /* JSONValidator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "3e78f8ad-c8d1-3e1d-9fba-a1af81089f89" /* JSONValidator.cpp */; };
+		75DB104B1C6575F800E8A6A1 /* OutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD74531C6255BD00042B73 /* OutputWriter.cpp */; };
+		75DB104C1C65760300E8A6A1 /* TimelineWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD74541C6255BD00042B73 /* TimelineWriter.cpp */; };
 		75FD74551C6255BD00042B73 /* OutputWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD74531C6255BD00042B73 /* OutputWriter.cpp */; };
 		75FD74561C6255BD00042B73 /* TimelineWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD74541C6255BD00042B73 /* TimelineWriter.cpp */; };
 		"80eccaa8-142f-385a-a04f-942a76afb0bf" /* JSONIterators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "9bbfd7be-ac57-384d-984e-1afc2e0ed3b2" /* JSONIterators.cpp */; };
@@ -70,7 +72,7 @@
 		"11d6bc95-8183-33eb-99d4-152c30d9f62a" /* DocTypePublisherPlugin_Precomp.pch */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = DocTypePublisherPlugin_Precomp.pch; sourceTree = "<group>"; };
 		"12cad407-b42b-3fd9-afb2-7703a0006994" /* Utils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Utils.cpp; sourceTree = "<group>"; };
 		"18b8044a-5909-32aa-9155-c8c1788376b5" /* JSONChildren.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONChildren.cpp; sourceTree = "<group>"; };
-		"1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = CoreServices.framework; path = CoreServices.framework; sourceTree = "<group>"; };
+		"1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreServices.framework; sourceTree = "<group>"; };
 		"242250eb-c22a-31fb-b531-b0b9cb9b75e8" /* ApplicationServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ApplicationServices.framework; sourceTree = "<group>"; };
 		"37ac9b87-549b-3c4b-935a-8ff607750468" /* DocType.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = DocType.cpp; sourceTree = "<group>"; };
 		"3cdca8a2-9ab8-3515-bea5-e404f7131120" /* JSONMemory.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONMemory.cpp; sourceTree = "<group>"; };
@@ -270,8 +272,7 @@
 				"f3f52c21-85e0-3b05-9855-54fac0cf8db4" /* Foundation.framework */,
 				"7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */,
 			);
-			name = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks;
-			path = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks";
+			path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks;
 			sourceTree = "<absolute>";
 		};
 /* End PBXGroup section */
@@ -448,7 +449,9 @@
 				"c53b657e-d9cb-32ae-aafa-c9ecd389c492" /* Publisher.cpp in Sources */,
 				"12b2c04d-7e57-3257-95ec-c44ea79fff4b" /* Utils.cpp in Sources */,
 				"f77fdb47-d483-3c03-8a74-4c0138c180d6" /* MyXmlParser.cpp in Sources */,
+				75DB104B1C6575F800E8A6A1 /* OutputWriter.cpp in Sources */,
 				"157ca6f8-2e54-371b-8649-bb34db8f2d63" /* internalJSONNode.cpp in Sources */,
+				75DB104C1C65760300E8A6A1 /* TimelineWriter.cpp in Sources */,
 				"f7f31334-a317-32e3-a2ff-22b21f1da5e9" /* JSONAllocator.cpp in Sources */,
 				681CC5F81AF8BE630041AEC0 /* HTTPServer.cpp in Sources */,
 				"ac2e8f32-a38e-3738-ac31-7f1a20406449" /* JSONChildren.cpp in Sources */,
