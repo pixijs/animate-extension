@@ -70,7 +70,7 @@
 		"11d6bc95-8183-33eb-99d4-152c30d9f62a" /* DocTypePublisherPlugin_Precomp.pch */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = DocTypePublisherPlugin_Precomp.pch; sourceTree = "<group>"; };
 		"12cad407-b42b-3fd9-afb2-7703a0006994" /* Utils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Utils.cpp; sourceTree = "<group>"; };
 		"18b8044a-5909-32aa-9155-c8c1788376b5" /* JSONChildren.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONChildren.cpp; sourceTree = "<group>"; };
-		"1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreServices.framework; sourceTree = "<group>"; };
+		"1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = CoreServices.framework; path = CoreServices.framework; sourceTree = "<group>"; };
 		"242250eb-c22a-31fb-b531-b0b9cb9b75e8" /* ApplicationServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ApplicationServices.framework; sourceTree = "<group>"; };
 		"37ac9b87-549b-3c4b-935a-8ff607750468" /* DocType.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = DocType.cpp; sourceTree = "<group>"; };
 		"3cdca8a2-9ab8-3515-bea5-e404f7131120" /* JSONMemory.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONMemory.cpp; sourceTree = "<group>"; };
@@ -235,7 +235,7 @@
 		F5D3576909491A7D008C36CA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				"adf58979-2004-31c7-817d-0b8b57ad85ac" /* Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks */,
+				"adf58979-2004-31c7-817d-0b8b57ad85ac" /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -262,7 +262,7 @@
 			path = ../../src/ThirdParty/libjson_7.6.1/libjson/_internal/Source;
 			sourceTree = SOURCE_ROOT;
 		};
-		"adf58979-2004-31c7-817d-0b8b57ad85ac" /* Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks */ = {
+		"adf58979-2004-31c7-817d-0b8b57ad85ac" /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				"1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */,
@@ -270,9 +270,9 @@
 				"f3f52c21-85e0-3b05-9855-54fac0cf8db4" /* Foundation.framework */,
 				"7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */,
 			);
-			name = Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks;
-			path = ../../../../../../../../../../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks;
-			sourceTree = SOURCE_ROOT;
+			name = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks;
+			path = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks";
+			sourceTree = "<absolute>";
 		};
 /* End PBXGroup section */
 
