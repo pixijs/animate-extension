@@ -112,25 +112,33 @@ p.getInstances = function(renderer)
             let libraryItem = instance.libraryItem;
             let cmd = instance.cmd;
             let instanceName = "instance" + cmd.objectId;
-            console.log(cmd);
+            
+            // Add the local instance name
             children.push(instanceName);
+
+            // We have an instance name for this, probably movieclip
             if (cmd.instanceName)
             {
-                console.log("INSTNAC NAME", cmd.instanceName);
                 instanceName += " = this." + cmd.instanceName;
             }
+
+            // Add the instance name line
             buffer += "var " + instanceName + " = ";
 
             if (libraryItem instanceof Timeline)
             {
                 buffer += libraryItem.renderInstance(renderer, 0, 0, cmd.loop);
+                buffer += libraryItem.transform(cmd.transformMatrix);
             }
             else
             {
                 buffer += libraryItem.renderInstance(renderer);
+                buffer += libraryItem.transform(cmd.transformMatrix);
             }
+            buffer += ";";
         });
-        buffer += "this.ac(" + children.join(', ') + ");";
+        let func = renderer.library.meta.compressJS ? "ac" : "addChildren";
+        buffer += "this." + func + "(" + children.join(', ') + ");";
     }
     return buffer;
 };

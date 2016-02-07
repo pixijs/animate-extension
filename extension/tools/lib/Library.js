@@ -44,10 +44,10 @@ const Library = function(data)
     const map = this._mapById = {};
 
     /**
-     * Get if the main timeline should loop
-     * @property {Boolean} loopTimeline
+     * The build settings
+     * @property {Object} meta
      */
-    this.loopTimeline = data._meta.loopTimeline;
+    this.meta = data._meta;
 
     // Convert the bitmaps
     data.Bitmaps.forEach(function(bitmapData)

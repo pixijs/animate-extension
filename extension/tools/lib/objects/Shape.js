@@ -74,7 +74,10 @@ const p = Shape.prototype;
  */
 p.renderInstance = function(renderer)
 {
-    return renderer.template('shape-instance', this.name);
+    return renderer.template('shape-instance', {
+        name: this.name,
+        func: renderer.library.meta.compressJS ? "d" : "drawCommands"
+    });
 };
 
 module.exports = Shape;

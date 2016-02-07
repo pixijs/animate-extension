@@ -143,24 +143,23 @@ p.getTimelines = function()
  * @private
  * @return {string} Footer buffer
  */
-p.getFooter = function(nameSpace)
+p.getFooter = function()
 {
-    return this.template('footer', nameSpace);
+    return this.template('footer', this.library.meta.nameSpace);
 };
 
 /**
  * Create the buffer and save it
  * @method render
- * @param {String} stageName The name of the stage
- * @param {String} nameSpace The namespace to sue
+ * @return {string} buffer
  */
-p.render = function(nameSpace)
+p.render = function()
 {
     let buffer = "";
     buffer += this.getHeader();
     buffer += this.getBitmaps();
     buffer += this.getTimelines();
-    buffer += this.getFooter(nameSpace);
+    buffer += this.getFooter();
     return buffer;
 };
 

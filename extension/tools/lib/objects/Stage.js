@@ -33,7 +33,7 @@ p.render = function(renderer)
         id: this.name,
         labels: this.getLabels(),
         contents: this.getInstances(renderer),
-        loop: renderer.library.loopTimeline
+        loop: renderer.library.meta.loopTimeline
     });
 };
 

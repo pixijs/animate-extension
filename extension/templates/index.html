@@ -6,9 +6,13 @@
         <title>${stageName}</title>
         <meta name="generator" content="PixiAnimate Extension">
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <style>
+            body { margin:0 }
+            #stage { width: 100% }
+        </style>
     </head>
     <body>
-        <canvas id="stage" width="${width}" height="${height}" style="width:100%"></canvas>
+        <canvas id="stage" width="${width}" height="${height}"></canvas>
         <script src="${libsPath}pixi.min.js"></script>
         <script src="${libsPath}pixi-animate.min.js"></script>
         <script src="${outputFile}"></script>

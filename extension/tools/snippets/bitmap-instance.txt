@@ -1,1 +1,1 @@
-new lib.${content}();
+new lib.${content}()
