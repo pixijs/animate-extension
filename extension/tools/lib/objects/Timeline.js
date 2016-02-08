@@ -78,6 +78,7 @@ p.getLabels = function()
  */
 p.getInstances = function(renderer)
 {
+    const compress = renderer.compress;
     let instances = [];
     let foundItems = [];
     this.frames.forEach(function(frame)
@@ -128,16 +129,16 @@ p.getInstances = function(renderer)
             if (libraryItem instanceof Timeline)
             {
                 buffer += libraryItem.renderInstance(renderer, 0, 0, cmd.loop);
-                buffer += libraryItem.transform(cmd.transformMatrix);
+                buffer += libraryItem.transform(cmd.transformMatrix, compress);
             }
             else
             {
                 buffer += libraryItem.renderInstance(renderer);
-                buffer += libraryItem.transform(cmd.transformMatrix);
+                buffer += libraryItem.transform(cmd.transformMatrix, compress);
             }
             buffer += ";";
         });
-        let func = renderer.library.meta.compressJS ? "ac" : "addChildren";
+        let func = compress ? "ac" : "addChildren";
         buffer += "this." + func + "(" + children.join(', ') + ");";
     }
     return buffer;

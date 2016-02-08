@@ -76,7 +76,7 @@ p.renderInstance = function(renderer)
 {
     return renderer.template('shape-instance', {
         name: this.name,
-        func: renderer.library.meta.compressJS ? "d" : "drawCommands"
+        func: renderer.compress ? "d" : "drawCommands"
     });
 };
 

@@ -23,6 +23,18 @@ const Renderer = function(library)
      * @private
      */
     this._snippets = {};
+
+    /**
+     * If we should use the shortened compressed names
+     * @property {Boolean} compress
+     */
+    this.compress = library.meta.compressJS;
+
+    /** 
+     * The namespace for the javascript
+     * @property {String} nameSpace
+     */
+    this.nameSpace = library.meta.nameSpace;
 };
 
 // Reference to the prototype
@@ -145,7 +157,7 @@ p.getTimelines = function()
  */
 p.getFooter = function()
 {
-    return this.template('footer', this.library.meta.nameSpace);
+    return this.template('footer', this.nameSpace);
 };
 
 /**
