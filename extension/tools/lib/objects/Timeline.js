@@ -147,7 +147,7 @@ p.getInstances = function(renderer)
             }
             buffer += ";";
         });
-        let func = compress ? "ac" : "addChildren";
+        let func = compress ? "ac" : "addChild";
         buffer += "this." + func + "(" + children.join(', ') + ");";
     }
     return buffer;
