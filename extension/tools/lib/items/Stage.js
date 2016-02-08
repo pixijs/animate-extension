@@ -32,8 +32,8 @@ p.render = function(renderer)
     return renderer.template('stage', {
         id: this.name,
         labels: this.getLabels(),
-        contents: this.getInstances(renderer),
-        loop: renderer.library.meta.loopTimeline
+        contents: this.getContents(renderer),
+        loop: renderer.loopTimeline
     });
 };
 

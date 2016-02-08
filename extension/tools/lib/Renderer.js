@@ -35,6 +35,12 @@ const Renderer = function(library)
      * @property {String} nameSpace
      */
     this.nameSpace = library.meta.nameSpace;
+
+    /** 
+     * If the main stage should loop
+     * @property {Boolean} loopTimeline
+     */
+    this.loopTimeline = library.meta.loopTimeline;
 };
 
 // Reference to the prototype

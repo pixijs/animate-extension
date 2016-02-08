@@ -72,6 +72,7 @@ namespace PixiJS
     static const std::string electronPackage = "package.json";
     static const std::string electronMain = "main.js";
     static const std::string html = "index.html";
+    static const std::string electronHtml = "electron.html";
     
     static const FCM::Float GRADIENT_VECTOR_CONSTANT = 16384.0;
     
@@ -166,20 +167,24 @@ namespace PixiJS
         #endif
         popen(cmd.c_str(), "r");
 
-        // Get the path to the templates folder
-        std::string templatesPath(extensionPath + TEMPLATE_FOLDER_NAME);
-
         // Output the HTML templates
         if (m_html)
         {
-            SaveFromTemplate(templatesPath + html, m_basePath + m_htmlPath);
+            if (m_electron)
+            {
+                SaveFromTemplate(electronHtml, m_htmlPath);
+            }
+            else
+            {
+                SaveFromTemplate(html, m_htmlPath);
+            }
         }
 
         // Output the electron path
         if (m_electron)
         {
-            SaveFromTemplate(templatesPath + electronPackage, m_basePath + electronPackage);
-            SaveFromTemplate(templatesPath + electronMain, m_basePath + m_electronPath);
+            SaveFromTemplate(electronPackage, electronPackage);
+            SaveFromTemplate(electronMain, m_electronPath);
         }
 
         return FCM_SUCCESS;
@@ -1173,8 +1178,15 @@ namespace PixiJS
         m_imageMap.insert(std::pair<std::string, std::string>(libPathName, name));
     }
 
-    bool OutputWriter::SaveFromTemplate(const std::string &templatePath, const std::string &outputPath)
+    bool OutputWriter::SaveFromTemplate(const std::string &in, const std::string &out)
     {
+        std::string extensionPath;
+        Utils::GetExtensionPath(extensionPath, m_pCallback);
+
+        // Get the path to the templates folder
+        std::string templatePath(extensionPath + TEMPLATE_FOLDER_NAME + in);
+        std::string outputPath(m_basePath + out);
+
         std::ifstream inFile(templatePath.c_str());
         if (!inFile)
         {

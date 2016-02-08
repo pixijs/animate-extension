@@ -1,12 +1,13 @@
 "use strict";
 
 const util = require('util');
-const Renderable = require('./Renderable');
+const LibraryItem = require('./LibraryItem');
+const BitmapInstance = require('../instances/BitmapInstance');
 
 /**
  * The bitmap object
  * @class Bitmap
- * @extends Renderable
+ * @extends LibraryItem
  * @constructor
  * @param {Object} data The bitmap data
  * @param {int} data.id The resource id
@@ -17,11 +18,11 @@ const Renderable = require('./Renderable');
  */
 const Bitmap = function(data)
 {
-    Renderable.call(this, data);
+    LibraryItem.call(this, data);
 };
 
 // Extends the prototype
-util.inherits(Bitmap, Renderable);
+util.inherits(Bitmap, LibraryItem);
 const p = Bitmap.prototype;
 
 /**
@@ -36,14 +37,13 @@ p.render = function(renderer)
 };
 
 /**
- * Render the object as a string
- * @method renderInstance
- * @param {Renderer} renderer
- * @return {string} buffer
+ * Create a instance of this
+ * @method create
+ * @return {BitmapInstance} The new instance
  */
-p.renderInstance = function(renderer)
+p.create = function(commands)
 {
-    return renderer.template('bitmap-instance', this.name);
+    return new BitmapInstance(this, commands);
 };
 
 /** 
