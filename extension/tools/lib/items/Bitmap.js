@@ -37,15 +37,12 @@ p.create = function(commands)
 
 /** 
  * The path to load with the load
- * @property {string} loadPath
- * @readOnly
+ * @method render
+ * @return {string} buffer
  */
-Object.defineProperty(p, "loadPath", 
+p.render = function()
 {
-    get: function()
-    {
-        return "'" + this.name + "', '" + this.src + "'";
-    }
-});
+    return "'" + this.name + "', '" + this.src + "'";
+};
 
 module.exports = Bitmap;
