@@ -55,7 +55,9 @@ p.renderInstance = function(renderer, mode, startPosition, loop)
             startPosition: startPosition,
             loop: loop
         }):
-        renderer.template('container-instance', this.name);
+        renderer.template('container-instance', {
+            id: this.name
+        });
 };
 
 /**
