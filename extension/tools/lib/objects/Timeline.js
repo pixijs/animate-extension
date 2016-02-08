@@ -28,11 +28,16 @@ const p = Timeline.prototype;
  */
 p.render = function(renderer)
 {
-    return renderer.template('timeline', {
-        id: this.name,
-        labels: this.getLabels(),
-        contents: this.getInstances(renderer)
-    });
+    return this.totalFrames > 1 ? 
+        renderer.template('timeline', {
+            id: this.name,
+            labels: this.getLabels(),
+            contents: this.getInstances(renderer)
+        }):
+        renderer.template('container', {
+            id: this.name,
+            contents: this.getInstances(renderer)
+        });
 };
 
 /**
@@ -43,12 +48,14 @@ p.render = function(renderer)
  */
 p.renderInstance = function(renderer, mode, startPosition, loop)
 {
-    return renderer.template('timeline-instance', {
-        id: this.name,
-        mode: mode,
-        startPosition: startPosition,
-        loop: loop
-    });
+    return this.totalFrames > 1 ? 
+        renderer.template('timeline-instance', {
+            id: this.name,
+            mode: mode,
+            startPosition: startPosition,
+            loop: loop
+        }):
+        renderer.template('container-instance', this.name);
 };
 
 /**
