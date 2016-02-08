@@ -34,10 +34,6 @@ const Shape = function(data)
     // Conver the data into drawing commands
     for(let j = 0, len = this.paths.length; j < len; j++) 
     {
-        if (j > 0) 
-        {
-            draw.push("cp");
-        }
         let path = this.paths[j];
 
         // Adding a stroke

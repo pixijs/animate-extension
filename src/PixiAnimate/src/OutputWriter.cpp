@@ -67,6 +67,8 @@ namespace PixiJS
     static const std::string moveTo = "mt";
     static const std::string lineTo = "lt";
     static const std::string quadraticCurveTo = "qt";
+    static const std::string closePath = "cp";
+    static const std::string addHole = "ah";
 
     // Templates
     static const std::string electronPackage = "package.json";
@@ -170,14 +172,7 @@ namespace PixiJS
         // Output the HTML templates
         if (m_html)
         {
-            if (m_electron)
-            {
-                SaveFromTemplate(electronHtml, m_htmlPath);
-            }
-            else
-            {
-                SaveFromTemplate(html, m_htmlPath);
-            }
+            SaveFromTemplate(m_electron ? electronHtml : html, m_htmlPath);
         }
 
         // Output the electron path
@@ -210,6 +205,7 @@ namespace PixiJS
             if (pName)
             {
                 timelineName = Utils::ToString(pName, m_pCallback);
+                Utils::GetJavaScriptName(timelineName, timelineName);
             }
             else
             {
@@ -498,11 +494,45 @@ namespace PixiJS
         return FCM_SUCCESS;
     }*/
     
+    FCM::Result OutputWriter::StartDefinePath()
+    {       
+        // m_pathCmdArray->push_back(JSONNode("", "startPath"));
+        m_pathCmdArray->push_back(JSONNode("", moveTo));
+        m_firstSegment = true;
+        return FCM_SUCCESS;
+    }
+    
+    FCM::Result OutputWriter::EndDefinePath()
+    {
+        m_pathCmdArray->push_back(JSONNode("", closePath));
+        // m_pathCmdArray->push_back(JSONNode("", "endPath"));
+        return FCM_SUCCESS;
+    }
     
     // Start of fill region boundary
     FCM::Result OutputWriter::StartDefineBoundary()
     {
         return StartDefinePath();
+    }
+
+    // End of fill region boundary
+    FCM::Result OutputWriter::EndDefineBoundary()
+    {
+        // return EndDefinePath();
+        return FCM_SUCCESS;
+    }
+
+    // Start of fill region hole
+    FCM::Result OutputWriter::StartDefineHole()
+    {
+        return StartDefinePath();
+    }
+    
+    // End of fill region hole
+    FCM::Result OutputWriter::EndDefineHole()
+    {
+        m_pathCmdArray->push_back(JSONNode("", addHole));
+        return FCM_SUCCESS;
     }
     
     
@@ -542,35 +572,12 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
     
-    
-    // End of fill region boundary
-    FCM::Result OutputWriter::EndDefineBoundary()
-    {
-        return EndDefinePath();
-    }
-    
-    
-    // Start of fill region hole
-    FCM::Result OutputWriter::StartDefineHole()
-    {
-        return StartDefinePath();
-    }
-    
-    
-    // End of fill region hole
-    FCM::Result OutputWriter::EndDefineHole()
-    {
-        return EndDefinePath();
-    }
-    
-    
     // Start of stroke group
     FCM::Result OutputWriter::StartDefineStrokeGroup()
     {
         // No need to do anything
         return FCM_SUCCESS;
     }
-    
     
     // Start solid stroke style definition
     FCM::Result OutputWriter::StartDefineSolidStrokeStyle(
@@ -605,8 +612,10 @@ namespace PixiJS
         m_pathElem = new JSONNode(JSON_NODE);
         ASSERT(m_pathElem);
         
-        StartDefinePath();
-        
+        m_pathCmdArray = new JSONNode(JSON_ARRAY);
+        ASSERT(m_pathCmdArray);
+        m_pathCmdArray->set_name("d");
+
         return FCM_SUCCESS;
     }
     
@@ -614,6 +623,8 @@ namespace PixiJS
     // End of a stroke
     FCM::Result OutputWriter::EndDefineStroke()
     {
+        EndDefinePath();
+
         m_pathElem->push_back(*m_pathCmdArray);
         
         if (m_strokeStyle.type == SOLID_STROKE_STYLE_TYPE)
@@ -655,6 +666,8 @@ namespace PixiJS
     // End of fill style definition
     FCM::Result OutputWriter::EndDefineFill()
     {
+        EndDefinePath();
+
         m_pathElem->push_back(*m_pathCmdArray);
         m_pathElem->push_back(JSONNode("stroke", false));
         
@@ -1041,23 +1054,6 @@ namespace PixiJS
         delete m_pShapeArray;
         delete m_pTextArray;
         delete m_pRootNode;
-    }
-    
-    FCM::Result OutputWriter::StartDefinePath()
-    {
-        m_pathCmdArray = new JSONNode(JSON_ARRAY);
-        ASSERT(m_pathCmdArray);
-        m_pathCmdArray->set_name("d");
-        
-        m_pathCmdArray->push_back(JSONNode("", moveTo));
-        m_firstSegment = true;
-        return FCM_SUCCESS;
-    }
-    
-    FCM::Result OutputWriter::EndDefinePath()
-    {
-        // No need to do anything
-        return FCM_SUCCESS;
     }
     
     FCM::Result OutputWriter::StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback)
