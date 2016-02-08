@@ -1,1 +1,1 @@
-new lib.${content}()
+new Sprite(fromFrame("${content}"))

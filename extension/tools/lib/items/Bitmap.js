@@ -26,17 +26,6 @@ util.inherits(Bitmap, LibraryItem);
 const p = Bitmap.prototype;
 
 /**
- * Render the element
- * @method render
- * @param {Renderer} renderer
- * @return {string} Buffer of object
- */
-p.render = function(renderer)
-{
-    return renderer.template('bitmap', this.name);
-};
-
-/**
  * Create a instance of this
  * @method create
  * @return {BitmapInstance} The new instance

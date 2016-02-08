@@ -17,17 +17,6 @@ const p = LibraryItem.prototype;
 
 /**
  * Render the object as a string
- * @method render
- * @param {Renderer} renderer
- * @return {string} buffer
- */
-p.render = function()
-{
-    throw "Must override";
-};
-
-/**
- * Render the object as a string
  * @method create
  * @param {Array} commands
  * @return {Instance} The instance to create

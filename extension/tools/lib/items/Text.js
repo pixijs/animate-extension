@@ -22,18 +22,6 @@ util.inherits(Text, LibraryItem);
 const p = Text.prototype;
 
 /**
- * Render the element
- * @method render
- * @param {Renderer} renderer
- * @return {string} Buffer of object
- */
-p.render = function()
-{
-    // do nothing, text library items are not renderable
-    return '';
-};
-
-/**
  * Create a instance of this
  * @method create
  * @return {ShapeInstance} The new instance

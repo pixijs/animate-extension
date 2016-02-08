@@ -121,23 +121,6 @@ p.getHeader = function()
 };
 
 /**
- * Get the bitmaps as sprites
- * @method getBitmaps
- * @private
- * @return {string} Bitmaps buffer
- */
-p.getBitmaps = function()
-{
-    let buffer = "";
-    const renderer = this;
-    this.library.bitmaps.forEach(function(bitmap)
-    {
-        buffer += bitmap.render(renderer);
-    });
-    return buffer;
-};
-
-/**
  * Get the timelines
  * @method getTimelines
  * @private
@@ -175,7 +158,6 @@ p.render = function()
 {
     let buffer = "";
     buffer += this.getHeader();
-    buffer += this.getBitmaps();
     buffer += this.getTimelines();
     buffer += this.getFooter();
     return buffer;
