@@ -67,11 +67,14 @@ namespace PixiJS
     static const std::string moveTo = "mt";
     static const std::string lineTo = "lt";
     static const std::string quadraticCurveTo = "qt";
+    static const std::string closePath = "cp";
+    static const std::string addHole = "ah";
 
     // Templates
     static const std::string electronPackage = "package.json";
     static const std::string electronMain = "main.js";
     static const std::string html = "index.html";
+    static const std::string electronHtml = "electron.html";
     
     static const FCM::Float GRADIENT_VECTOR_CONSTANT = 16384.0;
     
@@ -166,20 +169,17 @@ namespace PixiJS
         #endif
         popen(cmd.c_str(), "r");
 
-        // Get the path to the templates folder
-        std::string templatesPath(extensionPath + TEMPLATE_FOLDER_NAME);
-
         // Output the HTML templates
         if (m_html)
         {
-            SaveFromTemplate(templatesPath + html, m_basePath + m_htmlPath);
+            SaveFromTemplate(m_electron ? electronHtml : html, m_htmlPath);
         }
 
         // Output the electron path
         if (m_electron)
         {
-            SaveFromTemplate(templatesPath + electronPackage, m_basePath + electronPackage);
-            SaveFromTemplate(templatesPath + electronMain, m_basePath + m_electronPath);
+            SaveFromTemplate(electronPackage, electronPackage);
+            SaveFromTemplate(electronMain, m_electronPath);
         }
 
         return FCM_SUCCESS;
@@ -205,6 +205,7 @@ namespace PixiJS
             if (pName)
             {
                 timelineName = Utils::ToString(pName, m_pCallback);
+                Utils::GetJavaScriptName(timelineName, timelineName);
             }
             else
             {
@@ -493,11 +494,45 @@ namespace PixiJS
         return FCM_SUCCESS;
     }*/
     
+    FCM::Result OutputWriter::StartDefinePath()
+    {       
+        // m_pathCmdArray->push_back(JSONNode("", "startPath"));
+        m_pathCmdArray->push_back(JSONNode("", moveTo));
+        m_firstSegment = true;
+        return FCM_SUCCESS;
+    }
+    
+    FCM::Result OutputWriter::EndDefinePath()
+    {
+        m_pathCmdArray->push_back(JSONNode("", closePath));
+        // m_pathCmdArray->push_back(JSONNode("", "endPath"));
+        return FCM_SUCCESS;
+    }
     
     // Start of fill region boundary
     FCM::Result OutputWriter::StartDefineBoundary()
     {
         return StartDefinePath();
+    }
+
+    // End of fill region boundary
+    FCM::Result OutputWriter::EndDefineBoundary()
+    {
+        // return EndDefinePath();
+        return FCM_SUCCESS;
+    }
+
+    // Start of fill region hole
+    FCM::Result OutputWriter::StartDefineHole()
+    {
+        return StartDefinePath();
+    }
+    
+    // End of fill region hole
+    FCM::Result OutputWriter::EndDefineHole()
+    {
+        m_pathCmdArray->push_back(JSONNode("", addHole));
+        return FCM_SUCCESS;
     }
     
     
@@ -537,35 +572,12 @@ namespace PixiJS
         return FCM_SUCCESS;
     }
     
-    
-    // End of fill region boundary
-    FCM::Result OutputWriter::EndDefineBoundary()
-    {
-        return EndDefinePath();
-    }
-    
-    
-    // Start of fill region hole
-    FCM::Result OutputWriter::StartDefineHole()
-    {
-        return StartDefinePath();
-    }
-    
-    
-    // End of fill region hole
-    FCM::Result OutputWriter::EndDefineHole()
-    {
-        return EndDefinePath();
-    }
-    
-    
     // Start of stroke group
     FCM::Result OutputWriter::StartDefineStrokeGroup()
     {
         // No need to do anything
         return FCM_SUCCESS;
     }
-    
     
     // Start solid stroke style definition
     FCM::Result OutputWriter::StartDefineSolidStrokeStyle(
@@ -600,8 +612,10 @@ namespace PixiJS
         m_pathElem = new JSONNode(JSON_NODE);
         ASSERT(m_pathElem);
         
-        StartDefinePath();
-        
+        m_pathCmdArray = new JSONNode(JSON_ARRAY);
+        ASSERT(m_pathCmdArray);
+        m_pathCmdArray->set_name("d");
+
         return FCM_SUCCESS;
     }
     
@@ -609,6 +623,8 @@ namespace PixiJS
     // End of a stroke
     FCM::Result OutputWriter::EndDefineStroke()
     {
+        EndDefinePath();
+
         m_pathElem->push_back(*m_pathCmdArray);
         
         if (m_strokeStyle.type == SOLID_STROKE_STYLE_TYPE)
@@ -650,6 +666,8 @@ namespace PixiJS
     // End of fill style definition
     FCM::Result OutputWriter::EndDefineFill()
     {
+        EndDefinePath();
+
         m_pathElem->push_back(*m_pathCmdArray);
         m_pathElem->push_back(JSONNode("stroke", false));
         
@@ -1038,23 +1056,6 @@ namespace PixiJS
         delete m_pRootNode;
     }
     
-    FCM::Result OutputWriter::StartDefinePath()
-    {
-        m_pathCmdArray = new JSONNode(JSON_ARRAY);
-        ASSERT(m_pathCmdArray);
-        m_pathCmdArray->set_name("d");
-        
-        m_pathCmdArray->push_back(JSONNode("", moveTo));
-        m_firstSegment = true;
-        return FCM_SUCCESS;
-    }
-    
-    FCM::Result OutputWriter::EndDefinePath()
-    {
-        // No need to do anything
-        return FCM_SUCCESS;
-    }
-    
     FCM::Result OutputWriter::StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback)
     {
         FCM::Result res = FCM_SUCCESS;
@@ -1173,8 +1174,15 @@ namespace PixiJS
         m_imageMap.insert(std::pair<std::string, std::string>(libPathName, name));
     }
 
-    bool OutputWriter::SaveFromTemplate(const std::string &templatePath, const std::string &outputPath)
+    bool OutputWriter::SaveFromTemplate(const std::string &in, const std::string &out)
     {
+        std::string extensionPath;
+        Utils::GetExtensionPath(extensionPath, m_pCallback);
+
+        // Get the path to the templates folder
+        std::string templatePath(extensionPath + TEMPLATE_FOLDER_NAME + in);
+        std::string outputPath(m_basePath + out);
+
         std::ifstream inFile(templatePath.c_str());
         if (!inFile)
         {

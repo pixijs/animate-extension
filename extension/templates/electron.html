@@ -6,6 +6,22 @@
         <title>${stageName}</title>
         <meta name="generator" content="PixiAnimate Extension">
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <style>
+            body {
+                margin: 0;
+                overflow: hidden 
+            }
+            #stage {
+                width: 100%;
+                position: absolute;
+                display: block;
+                top: 50%;
+                left: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+        </style>
     </head>
     <body>
         <canvas id="stage" width="${width}" height="${height}"></canvas>

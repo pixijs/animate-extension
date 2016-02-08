@@ -3,6 +3,7 @@ module.exports = function(gulp, options, plugins) {
         return plugins.del([
             options.bundleId,
             options.outputName,
+            options.outputDebugName,
             options.pluginFile
         ]);
     });  

@@ -1,7 +1,7 @@
 {
   "name": "PixiAnimateExtension",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "url": "https://github.com/jiborobot/pixi-animate-extension",
     "type": "git"
@@ -30,7 +30,7 @@
     "js-beautify": "^1.6.2",
     "mkdirp": "^0.5.1",
     "pixi-animate": "git+ssh//git@github.com:jiborobot/pixi-animate.git",
-    "pixi.js": "^3.0.9",
+    "pixi.js": "https://github.com/jiborobot/pixi.js.git#graphics-hole",
     "uglify-js": "^2.6.1"
   }
 }

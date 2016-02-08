@@ -31,6 +31,9 @@ var options = {
     // The name of the ZXP file
     outputName: 'PixiAnimate.zxp',
 
+    // The name of the ZXP file
+    outputDebugName: 'PixiAnimate.debug.zxp',
+
     // Remote debugging for panels in Flash
     remoteDebug: 'build/debug.xml',
     remoteDebugOutput: '.debug',

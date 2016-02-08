@@ -1,12 +1,14 @@
 "use strict";
 
 const util = require('util');
-const Renderable = require('./Renderable');
+const LibraryItem = require('./LibraryItem');
+const ShapeInstance = require('../instances/ShapeInstance');
+
 
 /**
  * The bitmap object
  * @class Shape
- * @extends Renderable
+ * @extends LibraryItem
  * @constructor
  * @param {Object} data The bitmap data
  * @param {int} data.id The resource id
@@ -15,7 +17,7 @@ const Renderable = require('./Renderable');
 const Shape = function(data)
 {
     // Add the data to this object
-    Renderable.call(this, data);
+    LibraryItem.call(this, data);
 
     /**
      * The name of this shape
@@ -32,10 +34,6 @@ const Shape = function(data)
     // Conver the data into drawing commands
     for(let j = 0, len = this.paths.length; j < len; j++) 
     {
-        if (j > 0) 
-        {
-            draw.push("cp");
-        }
         let path = this.paths[j];
 
         // Adding a stroke
@@ -63,21 +61,17 @@ const Shape = function(data)
 };
 
 // Reference to the prototype
-util.inherits(Shape, Renderable);
+util.inherits(Shape, LibraryItem);
 const p = Shape.prototype;
 
 /**
- * Render the element
- * @method renderInstance
- * @param {Renderer} renderer
- * @return {string} Buffer of object
+ * Create a instance of this
+ * @method create
+ * @return {ShapeInstance} The new instance
  */
-p.renderInstance = function(renderer)
+p.create = function(commands)
 {
-    return renderer.template('shape-instance', {
-        name: this.name,
-        func: renderer.compress ? "d" : "drawCommands"
-    });
+    return new ShapeInstance(this, commands);
 };
 
 module.exports = Shape;

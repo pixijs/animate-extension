@@ -1,34 +1,32 @@
 "use strict";
 
 const util = require('util');
-const Renderable = require('./Renderable');
+const Instance = require('./Instance');
 
 /**
  * The text object
- * @class Text
- * @extends Renderable
+ * @class TextInstance
+ * @extends Instance
  * @constructor
- * @param {Object} data The bitmap data
- * @param {int} data.id The resource id
- * @param {String} data.txt The text content
+ * @param {Array} commands
  */
-const Text = function(data)
+const TextInstance = function(commands)
 {
     // Add the data to this object
-    Renderable.call(this, data);
+    Instance.call(this, commands);
 };
 
 // Reference to the prototype
-util.inherits(Text, Renderable);
-const p = Text.prototype;
+util.inherits(TextInstance, Instance);
+const p = TextInstance.prototype;
 
 /**
  * Render the element
- * @method renderInstance
+ * @method render
  * @param {Renderer} renderer
  * @return {string} Buffer of object
  */
-p.renderInstance = function(renderer)
+p.renderContent = function(renderer)
 {
     const style = this.paras[0].textRun[0].style;
     return renderer.template('text-instance', {
@@ -39,4 +37,4 @@ p.renderInstance = function(renderer)
     });
 }
 
-module.exports = Text;
+module.exports = TextInstance;

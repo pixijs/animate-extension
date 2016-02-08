@@ -35,6 +35,12 @@ const Renderer = function(library)
      * @property {String} nameSpace
      */
     this.nameSpace = library.meta.nameSpace;
+
+    /** 
+     * If the main stage should loop
+     * @property {Boolean} loopTimeline
+     */
+    this.loopTimeline = library.meta.loopTimeline;
 };
 
 // Reference to the prototype
@@ -115,23 +121,6 @@ p.getHeader = function()
 };
 
 /**
- * Get the bitmaps as sprites
- * @method getBitmaps
- * @private
- * @return {string} Bitmaps buffer
- */
-p.getBitmaps = function()
-{
-    let buffer = "";
-    const renderer = this;
-    this.library.bitmaps.forEach(function(bitmap)
-    {
-        buffer += bitmap.render(renderer);
-    });
-    return buffer;
-};
-
-/**
  * Get the timelines
  * @method getTimelines
  * @private
@@ -169,7 +158,6 @@ p.render = function()
 {
     let buffer = "";
     buffer += this.getHeader();
-    buffer += this.getBitmaps();
     buffer += this.getTimelines();
     buffer += this.getFooter();
     return buffer;

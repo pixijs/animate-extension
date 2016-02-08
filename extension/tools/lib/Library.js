@@ -1,10 +1,11 @@
 "use strict";
 
-const Bitmap = require('./objects/Bitmap');
-const Shape = require('./objects/Shape');
-const Text = require('./objects/Text');
-const Timeline = require('./objects/Timeline');
-const Stage = require('./objects/Stage');
+const Bitmap = require('./items/Bitmap');
+const Shape = require('./items/Shape');
+const Text = require('./items/Text');
+const Timeline = require('./items/Timeline');
+const Container = require('./items/Container');
+const Stage = require('./items/Stage');
 
 /**
  * Handle the converting of data assets to typed objects
@@ -76,6 +77,8 @@ const Library = function(data)
     data.Timelines.forEach(function(timelineData)
     {
         let timeline;
+        if (timelineData.totalFrames <= 1)
+            timeline = new Container(timelineData);
         if (timelineData.type == "stage")
             timeline = new Stage(timelineData);
         else
@@ -90,13 +93,15 @@ const p = Library.prototype;
 
 /**
  * Get an object by id
- * @method getById
- * @param {int} id The id of the object
- * @return {Object} The object to get by id
+ * @method getInstanceByCommands
+ * @param {Array} commands The collection of commands
+ * @return {Instance} The instance object
  */
-p.getById = function(id)
+p.getInstanceByCommands = function(commands)
 {
-    return this._mapById[id] || null;
+    const id = commands[0].id; // first place command
+    const libraryItem = this._mapById[id];
+    return libraryItem.create(commands);
 };
 
 /**

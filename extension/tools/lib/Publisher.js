@@ -58,7 +58,7 @@ let Publisher = function(dataFile, debug)
     // Load the bitmaps
     this.library.bitmaps.forEach(function(bitmap)
     {
-        assetsToLoad.push(bitmap.loadPath);
+        assetsToLoad.push(bitmap.render());
     });
 };
 
