@@ -1,0 +1,36 @@
+{
+  "name": "PixiAnimateExtension",
+  "private": true,
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/jiborobot/pixi-animate-extension",
+    "type": "git"
+  },
+  "scripts": {
+    "install": "napa"
+  },
+  "napa": {
+    "cep": "Adobe-CEP/CEP-Resources"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "colors": "^1.1.2",
+    "del": "^2.2.0",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^1.1.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sequence": "^0.4.4",
+    "gulp-shell": "^0.5.2",
+    "gulp-util": "^3.0.7",
+    "load-gulp-tasks": "^0.1.0",
+    "napa": "^2.2.0"
+  },
+  "dependencies": {
+    "bisonjs": "^2.0.2",
+    "js-beautify": "^1.6.2",
+    "mkdirp": "^0.5.1",
+    "pixi-animate": "git+ssh//git@github.com:jiborobot/pixi-animate.git",
+    "pixi.js": "^3.0.9",
+    "uglify-js": "^2.6.1"
+  }
+}

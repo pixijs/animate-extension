@@ -1,0 +1,5 @@
+new Text("${text}", {
+    font: "${fontSize}px '${fontName}'", 
+    fill: 0x${fontColor},
+    padding: 10
+})

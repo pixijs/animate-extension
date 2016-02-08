@@ -1,4 +1,4 @@
-# Adobe Animate PixiJS Custom Platform Plugin
+# PixiAnimate Extension
 
 Creates a custom FLA document which support publishing to [PixiJS](http://pixijs.com) natively in Adobe Animate CC (formerly Flash CC 2015).
 
@@ -6,7 +6,7 @@ Creates a custom FLA document which support publishing to [PixiJS](http://pixijs
 
 The following dependencies are required in order to publishing FLA document created with this Plugin.
 
-* Adobe Flash CC 2015+ or Adobe Animte CC
+* Adobe Flash CC 2015+ or Adobe Animate CC
 * Mac OS X (Window not currently supported)
 * [Node & NPM](http://nodejs.org)
 * [Electron](http://electron.atom.io/) `npm install -g electron-prebuilt`
@@ -31,17 +31,14 @@ Add the entry `PlayerDebugMode` of type `"string"` with value set to `1` in the 
 
 ### Commands
 
-To build and install to Animate CC directly, run the script. This will rebuild the C++ code, copy the plugin go the Eclipse project and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/JiboPixiJSPlugin/`)
+To build and install to Animate CC directly, run the script. This will rebuild the C++ code, copy the plugin go the Eclipse project and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate/`)
 
 ```bash
-cd SampleCreateJSPlatform/Utils/
-./install_plugin.sh debug
+gulp
 ```
 
-To build the ZXP extention for other people to install:
+To build the extension in debug mode and allow for remote debugging, run this command. Navigate to http://localhost:8008 to get the DevTools for the Publish Settings dialog.
 
 ```bash
-cd SampleCreateJSPlatform/Utils/
-./build_plugin_standalone.sh release
+gulp --debug
 ```
-

@@ -1,0 +1,2 @@
+})(PIXI, ${content} = ${content} || {});
+var ${content};

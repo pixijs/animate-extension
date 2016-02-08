@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionList>
+    <Extension Id="com.jibo.PixiAnimate.PublishSettings">
+        <HostList>
+            <Host Name="FLPR" Port="8080"/>
+        </HostList>
+    </Extension>
+</ExtensionList>

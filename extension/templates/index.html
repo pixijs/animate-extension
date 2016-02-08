@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>${stageName}</title>
+        <meta name="generator" content="PixiAnimate Extension">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <style>
+            body { margin:0 }
+            #stage { width: 100% }
+        </style>
+    </head>
+    <body>
+        <canvas id="stage" width="${width}" height="${height}"></canvas>
+        <script src="${libsPath}pixi.min.js"></script>
+        <script src="${libsPath}pixi-animate.min.js"></script>
+        <script src="${outputFile}"></script>
+        <script>
+            var renderer = new PIXI.autoDetectRenderer(${width}, ${height}, {
+                view: document.getElementById("stage"),
+                backgroundColor: 0x${background},
+                antialias: true
+            });
+            var stage = new PIXI.Container();
+            var loader = new PIXI.loaders.Loader()
+                ${assets}
+                .once('complete', function(loader, resources) {
+                    var clip = new ${nameSpace}.${stageName}();
+                    clip.framerate = ${fps};
+                    stage.addChild(clip);
+                })
+                .load();
+            function update() {
+                renderer.render(stage);
+                requestAnimationFrame(update);
+            }
+            update();
+        </script>
+    </body>
+</html>
