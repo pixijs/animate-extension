@@ -34,14 +34,14 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("id", resId));
-        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("type", "Add"));
+        commandElement.push_back(JSONNode("assetId", resId));
+        commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
         
         if (pMatrix)
         {
-            commandElement.push_back(Utils::ToJSON("transformMatrix", *pMatrix));
+            commandElement.push_back(Utils::ToJSON("transform", *pMatrix));
         }
         
         if (pRect)
@@ -66,14 +66,14 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("id", resId));
-        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("type", "Add"));
+        commandElement.push_back(JSONNode("assetId", resId));
+        commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
         
         if (pMatrix)
         {
-            commandElement.push_back(Utils::ToJSON("transformMatrix", *pMatrix));
+            commandElement.push_back(Utils::ToJSON("transform", *pMatrix));
         }
 
         if (!instanceName.empty())
@@ -98,9 +98,9 @@ namespace PixiJS
         JSONNode commandElement(JSON_NODE);
         FCM::AutoPtr<DOM::FrameElement::ISound> pSound;
         
-        commandElement.push_back(JSONNode("cmdType", "Place"));
-        commandElement.push_back(JSONNode("id", resId));
-        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("type", "Add"));
+        commandElement.push_back(JSONNode("assetId", resId));
+        commandElement.push_back(JSONNode("instanceId", objectId));
         
         pSound = pUnknown;
         if (pSound)
@@ -148,8 +148,8 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("cmdType", "Remove"));
-        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("type", "Remove"));
+        commandElement.push_back(JSONNode("instanceId", objectId));
         
         m_pCommandArray->push_back(commandElement);
         
@@ -163,8 +163,8 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("cmdType", "UpdateZOrder"));
-        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("type", "UpdateZOrder"));
+        commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
         
         m_pCommandArray->push_back(commandElement);
@@ -193,8 +193,8 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("cmdType", "UpdateMask"));
-        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("type", "UpdateMask"));
+        commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(JSONNode("maskTill", Utils::ToString(maskTillObjectId)));
         
         m_pCommandArray->push_back(commandElement);
@@ -223,8 +223,8 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("cmdType", "UpdateBlendMode"));
-        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("type", "UpdateBlendMode"));
+        commandElement.push_back(JSONNode("instanceId", objectId));
         if(blendMode == 0)
             commandElement.push_back(JSONNode("blendMode","Normal"));
         else if(blendMode == 1)
@@ -265,8 +265,8 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("cmdType", "UpdateVisibility"));
-        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("type", "UpdateVisibility"));
+        commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(JSONNode("visibility", (bool)visible));
         
         m_pCommandArray->push_back(commandElement);
@@ -281,8 +281,8 @@ namespace PixiJS
     {
         FCM::Result res;
         JSONNode commandElement(JSON_NODE);
-        commandElement.push_back(JSONNode("cmdType", "UpdateFilter"));
-        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("type", "UpdateFilter"));
+        commandElement.push_back(JSONNode("instanceId", objectId));
         FCM::AutoPtr<DOM::GraphicFilter::IDropShadowFilter> pDropShadowFilter = pFilter;
         FCM::AutoPtr<DOM::GraphicFilter::IBlurFilter> pBlurFilter = pFilter;
         FCM::AutoPtr<DOM::GraphicFilter::IGlowFilter> pGlowFilter = pFilter;
@@ -776,9 +776,9 @@ namespace PixiJS
         JSONNode commandElement(JSON_NODE);
         std::string transformMat;
         
-        commandElement.push_back(JSONNode("cmdType", "Move"));
-        commandElement.push_back(JSONNode("objectId", objectId));
-        commandElement.push_back(Utils::ToJSON("transformMatrix", matrix));
+        commandElement.push_back(JSONNode("type", "Move"));
+        commandElement.push_back(JSONNode("instanceId", objectId));
+        commandElement.push_back(Utils::ToJSON("transform", matrix));
         
         m_pCommandArray->push_back(commandElement);
         
@@ -792,8 +792,8 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("cmdType", "UpdateColorTransform"));
-        commandElement.push_back(JSONNode("objectId", objectId));
+        commandElement.push_back(JSONNode("type", "UpdateColorTransform"));
+        commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(Utils::ToJSON("colorMatrix", colorMatrix));
         
         m_pCommandArray->push_back(commandElement);
@@ -924,7 +924,7 @@ namespace PixiJS
     {
         if (resId != 0)
         {
-            m_pTimelineElement->push_back(JSONNode("id", resId));
+            m_pTimelineElement->push_back(JSONNode("assetId", resId));
             
             if (!pName)
             {

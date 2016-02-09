@@ -12,10 +12,10 @@ const Matrix = require('../data/Matrix');
 const Instance = function(libraryItem, commands)
 {
     /**
-     * The unique objectId within a timeline
+     * The unique instanceId within a timeline
      * @property {int} id
      */
-    this.id = commands[0].objectId;
+    this.id = commands[0].instanceId;
 
     /** 
      * The name of the item
@@ -43,24 +43,24 @@ const Instance = function(libraryItem, commands)
 
     /** 
      * Initially place the item
-     * @property {Object} initPlace
+     * @property {Object} initAdd
      */
-    this.initPlace = null;
+    this.initAdd = null;
 
     /** 
      * The initial transform
-     * @property {Matrix} initMatrix
+     * @property {Matrix} initTransform
      */
-    this.initPlace = null;
+    this.initTransform = null;
 
     // Get the first place command
     for(let i = 0, cmd, len = commands.length; i < len; i++)
     {
         cmd = commands[i];
-        if (cmd.cmdType == "Place")
+        if (cmd.type == "Add")
         {
-            this.initPlace = cmd;
-            this.initMatrix = new Matrix(cmd.transformMatrix);
+            this.initAdd = cmd;
+            this.initTransform = new Matrix(cmd.transform);
             this.instanceName = cmd.instanceName || null;
             break;
         }
@@ -100,7 +100,7 @@ p.renderBegin = function()
 p.renderEnd = function(renderer)
 {
     let buffer = "";
-    const matrix = this.initMatrix;
+    const matrix = this.initTransform;
     if (matrix)
     {
         const func = renderer.compress ? 'tr' : 'setTransform';

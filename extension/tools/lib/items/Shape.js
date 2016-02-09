@@ -11,7 +11,7 @@ const ShapeInstance = require('../instances/ShapeInstance');
  * @extends LibraryItem
  * @constructor
  * @param {Object} data The bitmap data
- * @param {int} data.id The resource id
+ * @param {int} data.assetId The resource id
  * @param {int} data.paths The resource paths
  */
 const Shape = function(data)
@@ -23,7 +23,7 @@ const Shape = function(data)
      * The name of this shape
      * @property {string} name
      */
-    this.name = "Shape" + this.id;
+    this.name = "Shape" + this.assetId;
 
     /**
      * The list of draw commands
@@ -39,6 +39,7 @@ const Shape = function(data)
         // Adding a stroke
         if (path.stroke) 
         {
+            draw.push("f", 0, 0); // transparent fill
             draw.push("s", path.thickness, path.color, path.alpha);
         } 
         else 

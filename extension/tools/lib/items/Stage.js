@@ -9,7 +9,7 @@ const Timeline = require('./Timeline');
  * @extends Timeline
  * @constructor
  * @param {Object} data The bitmap data
- * @param {int} data.id The resource id
+ * @param {int} data.assetId The resource id
  */
 const Stage = function(data)
 {

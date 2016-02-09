@@ -64,11 +64,11 @@
 namespace PixiJS
 {
     // Keys for render to graphics
-    static const std::string moveTo = "mt";
-    static const std::string lineTo = "lt";
-    static const std::string quadraticCurveTo = "qt";
-    static const std::string closePath = "cp";
-    static const std::string addHole = "ah";
+    static const std::string moveTo = "m";
+    static const std::string lineTo = "l";
+    static const std::string quadraticCurveTo = "q";
+    static const std::string closePath = "c";
+    static const std::string addHole = "h";
 
     // Templates
     static const std::string electronPackage = "package.json";
@@ -239,7 +239,7 @@ namespace PixiJS
     // Marks the end of a shape
     FCM::Result OutputWriter::EndDefineShape(FCM::U_Int32 resId)
     {
-        m_shapeElem->push_back(JSONNode("id", resId));
+        m_shapeElem->push_back(JSONNode("assetId", resId));
         m_shapeElem->push_back(*m_pathArray);
         
         m_pShapeArray->push_back(*m_shapeElem);
@@ -616,7 +616,7 @@ namespace PixiJS
         ASSERT(m_pathCmdArray);
         m_pathCmdArray->set_name("d");
 
-        return FCM_SUCCESS;
+        return StartDefinePath();
     }
     
     
@@ -703,7 +703,7 @@ namespace PixiJS
         
         bitmapElem.set_name("image");
         
-        bitmapElem.push_back(JSONNode("id", resId));
+        bitmapElem.push_back(JSONNode("assetId", resId));
         bitmapElem.push_back(JSONNode("height", height));
         bitmapElem.push_back(JSONNode("width", width));
         
@@ -770,7 +770,7 @@ namespace PixiJS
         ASSERT(m_pTextElem != NULL);
         
         m_pTextElem->set_name("text");
-        m_pTextElem->push_back(JSONNode("id", resId));
+        m_pTextElem->push_back(JSONNode("assetId", resId));
         
         aaMode.set_name("aaMode");
         aaMode.push_back(JSONNode("mode", Utils::ToString(aaModeProp.aaMode)));
@@ -930,7 +930,7 @@ namespace PixiJS
         std::string ext;
         
         soundElem.set_name("sound");
-        soundElem.push_back(JSONNode("id", Utils::ToString(resId)));
+        soundElem.push_back(JSONNode("assetId", Utils::ToString(resId)));
         
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
         

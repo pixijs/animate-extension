@@ -9,7 +9,7 @@ const TimelineInstance = require('../instances/TimelineInstance');
  * @class Timeline
  * @constructor
  * @param {Object} data The bitmap data
- * @param {int} data.id The resource id
+ * @param {int} data.assetId The resource id
  */
 const Timeline = function(data)
 {
