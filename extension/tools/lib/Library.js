@@ -55,7 +55,7 @@ const Library = function(data)
     {
         const bitmap = new Bitmap(bitmapData);
         bitmaps.push(bitmap);
-        map[bitmap.id] = bitmap;
+        map[bitmap.assetId] = bitmap;
     });
 
     // Convert the shapes
@@ -63,7 +63,7 @@ const Library = function(data)
     {
         const shape = new Shape(shapeData);
         shapes.push(shape);
-        map[shape.id] = shape;
+        map[shape.assetId] = shape;
     });
 
     // Convert the shapes
@@ -71,7 +71,7 @@ const Library = function(data)
     {
         const text = new Text(textData);
         texts.push(text);
-        map[text.id] = text;
+        map[text.assetId] = text;
     });
 
     data.Timelines.forEach(function(timelineData)
@@ -84,7 +84,7 @@ const Library = function(data)
         else
             timeline = new Timeline(timelineData);
         timelines.push(timeline);
-        map[timeline.id] = timeline;
+        map[timeline.assetId] = timeline;
     });
 };
 
@@ -99,7 +99,7 @@ const p = Library.prototype;
  */
 p.getInstanceByCommands = function(commands)
 {
-    const id = commands[0].id; // first place command
+    const id = commands[0].assetId; // first place command
     const libraryItem = this._mapById[id];
     return libraryItem.create(commands);
 };

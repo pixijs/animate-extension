@@ -10,7 +10,7 @@ const ContainerInstance = require('../instances/ContainerInstance');
  * @extends LibraryItem
  * @constructor
  * @param {Object} data The bitmap data
- * @param {int} data.id The resource id
+ * @param {int} data.assetId The resource id
  */
 const Container = function(data)
 {
@@ -50,14 +50,18 @@ p.getInstances = function(renderer)
         frame.commands.forEach(function(cmd)
         {
             // Get only the unique children for this timeline
-            if (foundItems.indexOf(cmd.objectId) == -1)
+            if (foundItems.indexOf(cmd.instanceId) == -1)
             {                    
-                foundItems.push(cmd.objectId);
-                let commands = commandsMap[cmd.objectId];
+                foundItems.push(cmd.instanceId);
+                let commands = commandsMap[cmd.instanceId];
                 if (!commands)
                 {
-                    commands = commandsMap[cmd.objectId] = [];
+                    commands = commandsMap[cmd.instanceId] = [];
                 }
+                // Add the frame number to the command
+                cmd.frame = frame.frame;
+
+                // Add to the list of commands for this instance
                 commands.push(cmd);
             }
             
@@ -67,9 +71,9 @@ p.getInstances = function(renderer)
     let instances = [];
 
     // Loop through the commands by object
-    for (let objectId in commandsMap)
+    for (let instanceId in commandsMap)
     {
-        let commands = commandsMap[objectId];
+        let commands = commandsMap[instanceId];
         instances.push(renderer.library.getInstanceByCommands(commands));
     }
     return instances;

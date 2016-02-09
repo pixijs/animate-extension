@@ -10,7 +10,7 @@ const BitmapInstance = require('../instances/BitmapInstance');
  * @extends LibraryItem
  * @constructor
  * @param {Object} data The bitmap data
- * @param {int} data.id The resource id
+ * @param {int} data.assetId The resource id
  * @param {int} data.height The resource id
  * @param {int} data.width The resource id
  * @param {string} data.src The source file
