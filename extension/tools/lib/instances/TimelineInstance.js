@@ -43,7 +43,7 @@ p.renderContent = function(renderer)
         id: this.libraryItem.name,
         mode: this.mode,
         startPosition: 0,
-        loop: this.initPlace.loop
+        loop: this.initAdd.loop
     });
 };
 
