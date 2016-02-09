@@ -103,6 +103,7 @@ p.getChildren = function(renderer)
             buffer += instance.render(renderer);
         });
 
+        children.reverse(); // reverse add child order
         let func = compress ? "ac" : "addChild";
         buffer += "this." + func + "(" + children.join(', ') + ");";
     }

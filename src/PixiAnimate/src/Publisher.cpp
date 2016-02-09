@@ -214,6 +214,7 @@ namespace PixiJS
         bool compressJS(true);
         bool loopTimeline(true);
         bool electron(false);
+        bool previewNeeded(false);
         std::string htmlPath;
         std::string stageName;
         std::string libsPath("libs/");
@@ -227,6 +228,7 @@ namespace PixiJS
         htmlPath = stageName + ".html";
 
         // Read the output file name from the publish settings
+        Utils::ReadStringToBool(dictConfig, (FCM::StringRep8)kPublishSettingsKey_PreviewNeeded, previewNeeded);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_HTML, html);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LIBS, libs);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_IMAGES, images);
@@ -312,7 +314,7 @@ namespace PixiJS
         }
         
         // Start output
-        outputWriter->StartOutput();
+        // outputWriter->StartOutput();
 
         // Create a Timeline Builder Factory for the root timeline of the document
         res = GetCallback()->CreateInstance(
@@ -424,9 +426,6 @@ namespace PixiJS
             res = outputWriter->EndDocument();
             ASSERT(FCM_SUCCESS_CODE(res));
 
-            res = outputWriter->EndOutput();
-            ASSERT(FCM_SUCCESS_CODE(res));
-
             // Export the library items with linkages
             FCM::FCMListPtr pLibraryItemList;
             res = flaDocument->GetLibraryItems(pLibraryItemList.m_Ptr);
@@ -461,9 +460,6 @@ namespace PixiJS
 
             res = outputWriter->EndDocument();
             ASSERT(FCM_SUCCESS_CODE(res));
-
-            res = outputWriter->EndOutput();
-            ASSERT(FCM_SUCCESS_CODE(res));
         }
         
         // Stop preview
@@ -475,9 +471,16 @@ namespace PixiJS
             CopyRuntime(basePath + libsPath);
         }
         
-        if (IsPreviewNeeded(dictConfig))
+        if (previewNeeded)
         {
-            outputWriter->StartPreview(basePath + htmlPath, GetCallback());
+            if (!html || !images || !libs)
+            {
+                Utils::Trace(GetCallback(), "ERROR: Preview is only available if HTML, Libraries and Images are enabled.");
+            }
+            else
+            {
+                outputWriter->StartPreview(basePath + htmlPath, GetCallback());
+            }
         }
 
 #endif
@@ -585,30 +588,6 @@ namespace PixiJS
         // Remove the root path from the output file
         Utils::GetFileName(outputFile, outputFile);
 
-        return res;
-    }
-
-
-    FCM::Boolean CPublisher::IsPreviewNeeded(const PIFCMDictionary dictConfig)
-    {
-        FCM::Boolean found;
-        std::string previewNeeded;
-        FCM::Boolean res;
-
-        found = Utils::ReadString(dictConfig, (FCM::StringRep8)kPublishSettingsKey_PreviewNeeded, previewNeeded);
-
-        res = true;
-        if (found)
-        {
-            if (previewNeeded == "true")
-            {
-                res = true;
-            }
-            else
-            {
-                res = false;
-            }
-        }
         return res;
     }
 

@@ -141,8 +141,6 @@ namespace PixiJS
             const PIFCMDictionary publishSettings, 
             const PIFCMDictionary dictConfig);
 
-        FCM::Boolean IsPreviewNeeded(const PIFCMDictionary dictConfig);
-
         FCM::Result Init();
         
         FCM::Result ExportLibraryItems(FCM::FCMListPtr pLibraryItemList);

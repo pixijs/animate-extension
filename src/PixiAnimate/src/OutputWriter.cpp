@@ -80,16 +80,6 @@ namespace PixiJS
     
     /* -------------------------------------------------- OutputWriter */
     
-    FCM::Result OutputWriter::StartOutput()
-    {
-        return FCM_SUCCESS;
-    }
-    
-    FCM::Result OutputWriter::EndOutput()
-    {
-        return FCM_SUCCESS;
-    }
-    
     FCM::Result OutputWriter::StartDocument(const DOM::Utils::COLOR& background,
                                                 FCM::U_Int32 stageHeight,
                                                 FCM::U_Int32 stageWidth,
@@ -139,9 +129,21 @@ namespace PixiJS
         meta.push_back(JSONNode("compactShapes", m_compactShapes));
         meta.push_back(JSONNode("nameSpace", m_nameSpace));
         meta.push_back(JSONNode("loopTimeline", m_loopTimeline));
-        meta.push_back(JSONNode("imagesPath", m_imagesPath));
-        meta.push_back(JSONNode("htmlPath", m_html ? m_htmlPath : false));
-        meta.push_back(JSONNode("soundsPath", m_sounds ? m_soundsPath : false));
+
+        if (m_images)
+        {
+            meta.push_back(JSONNode("imagesPath", m_imagesPath));
+        }
+
+        if (m_html)
+        {
+            meta.push_back(JSONNode("htmlPath", m_htmlPath));
+        }
+
+        if (m_sounds)
+        {
+            meta.push_back(JSONNode("soundsPath", m_soundsPath));
+        }
 
         std::string major = Utils::ToString(PIXIJS_PLUGIN_VERSION_MAJOR);
         std::string minor = Utils::ToString(PIXIJS_PLUGIN_VERSION_MINOR);
