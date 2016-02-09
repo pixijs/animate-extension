@@ -64,11 +64,11 @@
 namespace PixiJS
 {
     // Keys for render to graphics
-    static const std::string moveTo = "mt";
-    static const std::string lineTo = "lt";
-    static const std::string quadraticCurveTo = "qt";
-    static const std::string closePath = "cp";
-    static const std::string addHole = "ah";
+    static const std::string moveTo = "m";
+    static const std::string lineTo = "l";
+    static const std::string quadraticCurveTo = "q";
+    static const std::string closePath = "c";
+    static const std::string addHole = "h";
 
     // Templates
     static const std::string electronPackage = "package.json";
