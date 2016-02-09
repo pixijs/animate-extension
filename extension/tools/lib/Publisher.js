@@ -72,9 +72,11 @@ let p = Publisher.prototype;
 p.exportGraphics = function()
 {
     const shapes = this.library.shapes;
+    const meta = this._data._meta;
+
 
     // No shapes, nothing to do here
-    if (!shapes.length) return;
+    if (!shapes.length || !meta.imagesPath) return;
 
     // The output map of graphics
     let graphics = {};
@@ -84,8 +86,6 @@ p.exportGraphics = function()
     {
         graphics[shape.name] = shape.draw;
     });
-
-    const meta = this._data._meta;
 
     // Create the directory if it doesn't exist
     const baseUrl = path.resolve(process.cwd(), meta.imagesPath);

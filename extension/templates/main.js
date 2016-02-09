@@ -15,7 +15,13 @@ app.on('window-all-closed', function() {
 app.on('ready', function() { 
     mainWindow = new BrowserWindow({
         width: ${width},
-        height: ${height}
+        height: ${height},
+        useContentSize: true,
+        center: true,
+        maximizable: false,
+        minimizable: false,
+        alwaysOnTop: true,
+        skipTaskbar: true
     }); 
     mainWindow.loadURL('file://' + __dirname + '/${htmlPath}'); 
     mainWindow.on('closed', function() { 

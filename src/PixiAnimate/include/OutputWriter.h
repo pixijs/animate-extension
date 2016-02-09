@@ -27,12 +27,6 @@ namespace PixiJS
     {
     public:
         
-        // Marks the begining of the output
-        virtual FCM::Result StartOutput();
-        
-        // Marks the end of the output
-        virtual FCM::Result EndOutput();
-        
         // Marks the begining of the Document
         virtual FCM::Result StartDocument(const DOM::Utils::COLOR& background,
                                           FCM::U_Int32 stageHeight,

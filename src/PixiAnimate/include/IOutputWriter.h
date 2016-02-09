@@ -112,12 +112,6 @@ namespace PixiJS
     {
     public:
 
-        // Marks the begining of the output
-        virtual FCM::Result StartOutput() = 0;
-
-        // Marks the end of the output
-        virtual FCM::Result EndOutput() = 0;
-
         // Marks the begining of the Document
         virtual FCM::Result StartDocument(
             const DOM::Utils::COLOR& background, 
