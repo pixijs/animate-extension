@@ -3,10 +3,10 @@
 // Node modules
 const fs = require('fs');
 const path = require('path');
-const BISON = require('bisonjs');
 const mkdirp = require('mkdirp');
 const Library = require('./Library');
 const Renderer = require('./Renderer');
+const LZString = require('lz-string');
 
 /**
  * The application to publish the JSON data to JS output buffer
@@ -74,39 +74,37 @@ p.exportGraphics = function()
     const shapes = this.library.shapes;
     const meta = this._data._meta;
 
-
     // No shapes, nothing to do here
     if (!shapes.length || !meta.imagesPath) return;
 
     // The output map of graphics
-    let graphics = {};
+    let buffer = "";
 
     // Loop through each graphic and add to the map
-    shapes.forEach(function(shape)
+    shapes.forEach(function(shape, i)
     {
-        graphics[shape.name] = shape.draw;
+        buffer += shape.toString();
+
+        // Separate each shape with a new line
+        if (i < shapes.length - 1)
+            buffer += "\n";
     });
 
     // Create the directory if it doesn't exist
     const baseUrl = path.resolve(process.cwd(), meta.imagesPath);
     mkdirp.sync(baseUrl);
 
-    let filename;
+    let filename = meta.stageName + ".shapes";
 
     // Check to see if we should compact the shapes (use BSON file insetad)
     if (meta.compactShapes)
     {
-        graphics = BISON.encode(graphics);
-        filename = meta.stageName + "_graphics_.bson";
-    }
-    else
-    {
-        graphics = JSON.stringify(graphics, null, '  ');
-        filename = meta.stageName + "_graphics_.json";
+        buffer = LZString.compress(buffer);
+        filename += ".lzw";
     }
 
     // Save the file data
-    fs.writeFileSync(path.join(baseUrl, filename), graphics);
+    fs.writeFileSync(path.join(baseUrl, filename), buffer);
 
     // Add to the assets
     this._assetsToLoad.push("'" + meta.imagesPath + filename + "'");

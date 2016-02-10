@@ -23,13 +23,9 @@ const Shape = function(data)
      * The name of this shape
      * @property {string} name
      */
-    this.name = "Shape" + this.assetId;
+    this.name = "";
 
-    /**
-     * The list of draw commands
-     * @property {Array} draw
-     */
-    let draw = this.draw = [];
+    let draw = [];
 
     // Conver the data into drawing commands
     for(let j = 0, len = this.paths.length; j < len; j++) 
@@ -59,6 +55,12 @@ const Shape = function(data)
         // Add the draw commands
         draw.push.apply(draw, path.d)
     }
+
+    /**
+     * The list of draw commands
+     * @property {Array} draw
+     */
+    this.draw = draw;
 };
 
 // Reference to the prototype
@@ -73,6 +75,15 @@ const p = Shape.prototype;
 p.create = function(commands)
 {
     return new ShapeInstance(this, commands);
+};
+
+/**
+ * @method toString
+ * @return {string} the string of this
+ */
+p.toString = function()
+{
+    return this.name + " " + this.draw.join(" ");
 };
 
 module.exports = Shape;

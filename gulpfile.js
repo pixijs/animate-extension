@@ -57,13 +57,13 @@ var options = {
         'node_modules/mkdirp/package.json',
         'node_modules/mkdirp/index.js',
         'node_modules/mkdirp/node_modules/**',
-        'node_modules/bisonjs/package.json',
-        'node_modules/bisonjs/lib/**',
         'node_modules/uglify-js/**',
         '!node_modules/uglify-js/bin',
         'node_modules/js-beautify/package.json',
         'node_modules/js-beautify/js/**',
-        'node_modules/js-beautify/node_modules/**'
+        'node_modules/js-beautify/node_modules/**',
+        'node_modules/lz-string/package.json',
+        'node_modules/lz-string/libs/lz-string.js'
     ],
 
     // The files to source when running watch

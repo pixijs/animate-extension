@@ -62,6 +62,7 @@ const Library = function(data)
     data.Shapes.forEach(function(shapeData)
     {
         const shape = new Shape(shapeData);
+        shape.name = data._meta.stageName + "_" + shape.assetId;
         shapes.push(shape);
         map[shape.assetId] = shape;
     });
