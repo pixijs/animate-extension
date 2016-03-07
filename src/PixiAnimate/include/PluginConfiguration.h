@@ -44,7 +44,7 @@
 #define RUNTIME_ROOT_FOLDER_NAME            "runtime"
 
 /** The directory inside of the extension to get the output templates */
-#define TEMPLATE_FOLDER_NAME                "templates/"
+#define TEMPLATE_FOLDER_NAME                "template/"
 
 /** The Node script to run to compile the output */
 #define NODE_COMPILER                       "tools/publish.js";

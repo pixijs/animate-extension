@@ -70,11 +70,8 @@ namespace PixiJS
     static const std::string closePath = "c";
     static const std::string addHole = "h";
 
-    // Templates
-    static const std::string electronPackage = "package.json";
-    static const std::string electronMain = "main.js";
+    // Template
     static const std::string html = "index.html";
-    static const std::string electronHtml = "electron.html";
     
     static const FCM::Float GRADIENT_VECTOR_CONSTANT = 16384.0;
     
@@ -103,7 +100,6 @@ namespace PixiJS
         m_substitutions["outputFile"] = m_outputFile;
         m_substitutions["outputName"] = outputName;
         m_substitutions["stageName"] = m_stageName;
-        m_substitutions["electronPath"] = m_electronPath;
         m_substitutions["width"] = Utils::ToString(stageWidth);
         m_substitutions["height"] = Utils::ToString(stageHeight);
         m_substitutions["background"] = sstream.str();
@@ -174,14 +170,7 @@ namespace PixiJS
         // Output the HTML templates
         if (m_html)
         {
-            SaveFromTemplate(m_electron ? electronHtml : html, m_htmlPath);
-        }
-
-        // Output the electron path
-        if (m_electron)
-        {
-            SaveFromTemplate(electronPackage, electronPackage);
-            SaveFromTemplate(electronMain, m_electronPath);
+            SaveFromTemplate(html, m_htmlPath);
         }
 
         return FCM_SUCCESS;
@@ -985,15 +974,13 @@ namespace PixiJS
         std::string& libsPath,
         std::string& stageName,
         std::string& nameSpace,
-        std::string& electronPath,
         bool html,
         bool libs,
         bool images,
         bool sounds,
         bool compactShapes,
         bool compressJS,
-        bool loopTimeline,
-        bool electron)
+        bool loopTimeline)
     : m_pCallback(pCallback),
     m_outputFile(outputFile),
     m_outputDataFile(basePath + outputFile + "on"),
@@ -1006,7 +993,6 @@ namespace PixiJS
     m_libsPath(libsPath),
     m_stageName(stageName),
     m_nameSpace(nameSpace),
-    m_electronPath(electronPath),
     m_html(html),
     m_libs(libs),
     m_images(images),
@@ -1014,7 +1000,6 @@ namespace PixiJS
     m_compactShapes(compactShapes),
     m_compressJS(compressJS),
     m_loopTimeline(loopTimeline),
-    m_electron(electron),
     m_shapeElem(NULL),
     m_pathArray(NULL),
     m_pathElem(NULL),
@@ -1062,56 +1047,13 @@ namespace PixiJS
     {
         FCM::Result res = FCM_SUCCESS;
         
-        if (m_electron)
-        {
-            #ifdef _WINDOWS
-                // currently this operation is not supported on windows!
-                Utils::Trace(pCallback, "ERROR: Previewing an Electron project is currently not supported under Windows");
-            #else
-                std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + m_basePath + "'";
-                popen(cmd.c_str(), "r");
-            #endif // _WINDOWS
-        }
-        else
-        {
-            #ifdef USE_HTTP_SERVER
-                    
-                // We are now about to start a web server
-                std::string fileName;
-                HTTPServer* server;
-                ServerConfigParam config;
-                
-                Utils::GetFileName(outFile, fileName);
-                
-                server = HTTPServer::GetInstance();
-                
-                int numTries = 0;
-                while (numTries < MAX_RETRY_ATTEMPT)
-                {
-                    // Configure the web server
-                    config.port = Utils::GetUnusedLocalPort();
-                    Utils::GetParent(outFile, config.root);
-                    server->SetConfig(config);
-                    
-                    // Start the web server
-                    res = server->Start();
-                    if (FCM_SUCCESS_CODE(res))
-                    {
-                        // Launch the browser
-                        Utils::LaunchBrowser(fileName, config.port, pCallback);
-                        break;
-                    }
-                    numTries++;
-                }
-                
-                if (numTries == MAX_RETRY_ATTEMPT)
-                {
-                    Utils::Trace(pCallback, "Failed to start web server\n");
-                    res = FCM_GENERAL_ERROR;
-                }
-                    
-            #endif // USE_HTTP_SERVER
-        }
+        #ifdef _WINDOWS
+            // currently this operation is not supported on windows!
+            Utils::Trace(pCallback, "ERROR: Previewing an Electron project is currently not supported under Windows");
+        #else
+            std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + m_basePath + "'";
+            popen(cmd.c_str(), "r");
+        #endif // _WINDOWS
         return res;
     }
     
@@ -1119,34 +1061,17 @@ namespace PixiJS
     {
         FCM::Result res = FCM_SUCCESS;
         
-        if (m_electron)
-        {
-            #ifdef _WINDOWS
-                // currently this operation is not supported on windows!
-            #else
-                // ps aux find's everything that's running
-                // grep is searching for any process with the string 'electron' followed by the parent directory.
-                //   (excluding the grep process itself)
-                // awk is printing the second string returned by the grep (which is the pid)
-                // kill is operating over all pids returned in this way
-                std::string cmd = "kill $(ps aux | grep '\\<.*[e]lectron.*\\> '" + m_basePath + "'' | awk '{print $2}')";
-                popen(cmd.c_str(), "r");
-            #endif // _WINDOWS
-        }
-        else
-        {
-            #ifdef USE_HTTP_SERVER
-                    
-                HTTPServer* server;
-                
-                server = HTTPServer::GetInstance();
-                if (server)
-                {
-                    // Stop the web server just in case it is running
-                    server->Stop();
-                }
-            #endif // USE_HTTP_SERVER
-        }        
+        #ifdef _WINDOWS
+            // currently this operation is not supported on windows!
+        #else
+            // ps aux find's everything that's running
+            // grep is searching for any process with the string 'electron' followed by the parent directory.
+            //   (excluding the grep process itself)
+            // awk is printing the second string returned by the grep (which is the pid)
+            // kill is operating over all pids returned in this way
+            std::string cmd = "kill $(ps aux | grep '\\<.*[e]lectron.*\\> '" + m_basePath + "'' | awk '{print $2}')";
+            popen(cmd.c_str(), "r");
+        #endif // _WINDOWS 
         return res;
     }
         

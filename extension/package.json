@@ -1,0 +1,13 @@
+{
+  "name": "pixi-animate-extension",
+  "private": true,
+  "dependencies": {
+    "js-beautify": "^1.6.2",
+    "lz-string": "^1.4.4",
+    "mkdirp": "^0.5.1",
+    "pixi-animate": "git+ssh//git@github.com:jiborobot/pixi-animate.git",
+    "pixi.js": "https://github.com/jiborobot/pixi.js.git#graphics-hole",
+    "uglify-js": "^2.6.1",
+    "yargs": "^4.2.0"
+  }
+}

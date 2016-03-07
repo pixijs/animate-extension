@@ -179,15 +179,13 @@ namespace PixiJS
             std::string& libsPath,
             std::string& stageName,
             std::string& nameSpace,
-            std::string& electronPath,
             bool html,
             bool libs,
             bool images,
             bool sounds,
             bool compactShapes,
             bool compressJS,
-            bool loopTimeline,
-            bool electron);
+            bool loopTimeline);
         
         virtual ~OutputWriter();
         
@@ -273,8 +271,6 @@ namespace PixiJS
 
         std::string m_nameSpace;
 
-        std::string m_electronPath;
-
         std::string m_outputFile;
         
         std::string m_outputDataFile;
@@ -298,8 +294,6 @@ namespace PixiJS
         bool m_compressJS;
 
         bool m_loopTimeline;
-
-        bool m_electron;
     };
 };
 

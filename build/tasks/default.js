@@ -23,8 +23,8 @@ module.exports = function(gulp, options, plugins) {
         }
 
         tasks.push(
+            'extension-modules',
             'runtime-copy',
-            'node-modules-copy',
             'move',
             'package',
             'clean-stage',

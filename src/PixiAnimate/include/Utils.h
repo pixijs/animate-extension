@@ -128,7 +128,6 @@ namespace PixiJS
 #define DICT_SOUNDS_PATH     "PublishSettings.PixiJS.SoundsPath"
 #define DICT_NAMESPACE       "PublishSettings.PixiJS.Namespace" 
 #define DICT_STAGE_NAME      "PublishSettings.PixiJS.StageName"
-#define DICT_ELECTRON_PATH   "PublishSettings.PixiJS.ElectronPath"
 
 #define DICT_COMPACT_SHAPES  "PublishSettings.PixiJS.CompactShapes"
 #define DICT_COMPRESS_JS     "PublishSettings.PixiJS.CompressJS"
@@ -137,7 +136,6 @@ namespace PixiJS
 #define DICT_IMAGES          "PublishSettings.PixiJS.Images"
 #define DICT_SOUNDS          "PublishSettings.PixiJS.Sounds"
 #define DICT_LOOP_TIMELINE   "PublishSettings.PixiJS.LoopTimeline"
-#define DICT_ELECTRON        "PublishSettings.PixiJS.Electron"
 
 /* -------------------------------------------------- Structs / Unions */
 

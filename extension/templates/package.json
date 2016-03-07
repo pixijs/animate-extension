@@ -1,6 +1,0 @@
-{ 
-    "name": "${outputName}", 
-    "version": "1.0.0",
-    "description": "${outputName} exported using PixiAnimate Extension", 
-    "main": "${electronPath}"
-}
