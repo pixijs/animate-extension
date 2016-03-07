@@ -55,7 +55,6 @@
 #include "Utils/ILinearColorGradient.h"
 #include <math.h>
 #include "TimelineWriter.h"
-#include "HTTPServer.h"
 
 #ifdef _WINDOWS
 #include "Windows.h"
