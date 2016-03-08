@@ -22,9 +22,6 @@
     <Filter Include="PixiAnimate\src">
       <UniqueIdentifier>{F50807DB-6135-EFB9-3F4D-ADBEAA47DE0D}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\mongoose">
-      <UniqueIdentifier>{6a3bc4be-e111-4dd8-9937-b9d1b78a7b7c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\PixiAnimate.mp">
@@ -117,13 +114,5 @@
     <CustomBuild Include="post_build.64.py">
       <Filter>PixiAnimate\project/win</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\PixiAnimate\src\HTTPServer.cpp">
-      <Filter>PixiAnimate\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ThirdParty\mongoose\mongoose.c">
-      <Filter>ThirdParty\mongoose</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
