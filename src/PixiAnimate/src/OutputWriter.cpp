@@ -160,6 +160,7 @@ namespace PixiJS
         Utils::GetExtensionPath(extensionPath, m_pCallback);
 
         std::string compiler = extensionPath + NODE_COMPILER;
+
         std::string cmd("/usr/local/bin/node '" + compiler + "' '" + m_outputDataFile + "'");
         #ifdef _DEBUG
             cmd += " --debug";
@@ -1050,7 +1051,17 @@ namespace PixiJS
             // currently this operation is not supported on windows!
             Utils::Trace(pCallback, "ERROR: Previewing an Electron project is currently not supported under Windows");
         #else
-            std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + m_basePath + "'";
+            std::string extensionPath;
+            Utils::GetExtensionPath(extensionPath, m_pCallback);
+            std::string preview = extensionPath + PREVIEW_APP;
+            std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + preview + 
+                "' --src='" + m_basePath + m_htmlPath + 
+                "' --title='" + m_stageName + 
+                "' --width=" + m_substitutions["width"] + 
+                " --height=" + m_substitutions["height"];
+            #ifdef _DEBUG
+                cmd += " --devTools";
+            #endif
             popen(cmd.c_str(), "r");
         #endif // _WINDOWS
         return res;
@@ -1068,7 +1079,10 @@ namespace PixiJS
             //   (excluding the grep process itself)
             // awk is printing the second string returned by the grep (which is the pid)
             // kill is operating over all pids returned in this way
-            std::string cmd = "kill $(ps aux | grep '\\<.*[e]lectron.*\\> '" + m_basePath + "'' | awk '{print $2}')";
+            std::string extensionPath;
+            Utils::GetExtensionPath(extensionPath, m_pCallback);
+            std::string preview = extensionPath + PREVIEW_APP;
+            std::string cmd = "kill $(ps aux | grep '\\<.*[e]lectron.*\\> " + preview + "' | awk '{print $2}')";
             popen(cmd.c_str(), "r");
         #endif // _WINDOWS 
         return res;

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(app, actions) {
+module.exports = function(app, actions, defaults) {
   var template = [
     {
       label: 'Edit',
@@ -47,6 +47,21 @@ module.exports = function(app, actions) {
           label: 'Reload',
           accelerator: 'CmdOrCtrl+R',
           click: actions.reload
+        },
+        {
+          label: 'Actual Size',
+          accelerator: 'CmdOrCtrl+0',
+          click: actions.actualSize
+        },
+        {
+          label: 'Scale To Fit',
+          accelerator: 'CmdOrCtrl+F',
+          type: 'checkbox',
+          checked: defaults.scaleToFit,
+          click: actions.scaleToFit
+        },
+        {
+          type: 'separator'
         },
         {
           label: 'Toggle Developer Tools',

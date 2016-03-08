@@ -43,11 +43,14 @@
 /* The value of RUNTIME_FOLDER_NAME must be the name of the runtime folder present in extension. */
 #define RUNTIME_ROOT_FOLDER_NAME            "runtime"
 
-/** The directory inside of the extension to get the output templates */
+/* The directory inside of the extension to get the output templates */
 #define TEMPLATE_FOLDER_NAME                "template/"
 
-/** The Node script to run to compile the output */
+/* The Node script to run to compile the output */
 #define NODE_COMPILER                       "tools/publish.js";
+
+/* Electron application to run preview */
+#define PREVIEW_APP                         "preview";
 
 namespace PixiJS
 {

@@ -8,25 +8,31 @@
             body {
                 margin:0;
                 padding:0;
-            }
-            #frame {
                 position:absolute;
                 width:100%;
                 height:100%;
             }
+            body.scaleToFit {
+                min-width: auto !important;
+                min-height: auto !important;
+            }
             #preview {
                 display:block;
                 position:absolute;
+            }
+            .scaleToFit #preview {
+                width:100% !important;
+                height:100% !important;
+            }
+            .noScale #preview {
                 left:50%;
                 top:50%;
                 transform:translate(-50%,-50%);
             }
         </style>
     </head>
-    <body>
-        <div id="frame">
-            <webview id="preview" nodeintegration></webview>
-        </div>
+    <body class="scaleToFit">
+        <webview id="preview" nodeintegration></webview>
         <script src="preview.js"></script>
     </body>
 </html>

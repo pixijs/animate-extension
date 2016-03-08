@@ -14,16 +14,31 @@ preview.style.width = config.width + "px";
 preview.style.height = config.height + "px";
 
 // For scrolling
-let frame = $("#frame");
-frame.style.minWidth = config.width + "px";
-frame.style.minHeight = config.height + "px";
-
-// Set the background color
-document.body.style.backgroundColor = "#" + config.background;
+let body = document.body;
+body.style.minWidth = config.width + "px";
+body.style.minHeight = config.height + "px";
+body.style.backgroundColor = "#" + config.background;
 
 // Listen when the preview is complete
 preview.addEventListener('did-finish-load', function() {
     ipc.send('init');
+
+    // Insert CSS to improve the preview
+    preview.insertCSS(`
+        body{
+            margin:0;
+            overflow:hidden;
+        } 
+        canvas{
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }`);
+
+    // Show after reload
+    preview.style.display = "block";
 });
 
 // Auto-show the dev-tools if console error
@@ -44,7 +59,13 @@ ipc.on('toggle-dev-tools', function() {
 
 // Menu reload action
 ipc.on('reload', function() {
+    preview.style.display = "none";
     preview.reload();
+});
+
+// Set any saved settings
+ipc.on('settings', function(event, settings) {
+    body.className = settings.scaleToFit ? 'scaleToFit' : 'noScale';
 });
 
 // Load the preview
