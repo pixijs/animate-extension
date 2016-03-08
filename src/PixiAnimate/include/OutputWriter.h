@@ -197,10 +197,10 @@ namespace PixiJS
         virtual FCM::Result EndDefinePath();
         
         // Start a preview for the output content for this writer
-        virtual FCM::Result StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback);
+        virtual FCM::Result StartPreview(FCM::PIFCMCallback pCallback);
         
         // Stop a preview for the output content for this writer
-        virtual FCM::Result StopPreview(const std::string& outFile);
+        virtual FCM::Result StopPreview();
         
     private:
                         

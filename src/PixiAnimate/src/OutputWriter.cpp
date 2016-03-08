@@ -1046,7 +1046,7 @@ namespace PixiJS
         delete m_pRootNode;
     }
     
-    FCM::Result OutputWriter::StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback)
+    FCM::Result OutputWriter::StartPreview(FCM::PIFCMCallback pCallback)
     {
         FCM::Result res = FCM_SUCCESS;
         
@@ -1061,7 +1061,8 @@ namespace PixiJS
                 "' --src='" + m_basePath + m_htmlPath + 
                 "' --title='" + m_stageName + 
                 "' --width=" + m_substitutions["width"] + 
-                " --height=" + m_substitutions["height"];
+                " --height=" + m_substitutions["height"] + 
+                " --background=" + m_substitutions["background"];
             #ifdef _DEBUG
                 cmd += " --devTools";
             #endif
@@ -1070,7 +1071,7 @@ namespace PixiJS
         return res;
     }
     
-    FCM::Result OutputWriter::StopPreview(const std::string& outFile)
+    FCM::Result OutputWriter::StopPreview()
     {
         FCM::Result res = FCM_SUCCESS;
         

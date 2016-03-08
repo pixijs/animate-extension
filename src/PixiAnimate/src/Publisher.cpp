@@ -456,7 +456,7 @@ namespace PixiJS
         }
         
         // Stop preview
-        outputWriter->StopPreview(outputFile);
+        outputWriter->StopPreview();
 
         if (libs)
         {
@@ -472,7 +472,7 @@ namespace PixiJS
             }
             else
             {
-                outputWriter->StartPreview(basePath + htmlPath, GetCallback());
+                outputWriter->StartPreview(GetCallback());
             }
         }
 

@@ -28,6 +28,7 @@ preview.addEventListener('did-finish-load', function() {
         body{
             margin:0;
             overflow:hidden;
+            background:#${config.background}
         } 
         canvas{
             width: 100%;
