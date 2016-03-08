@@ -9,11 +9,11 @@ const Instance = require('./Instance');
  * @extends Instance
  * @constructor
  * @param {LibraryItem} libraryItem The bitmap data
- * @param {Array} commands
+ * @param {int} id
  */
-const ContainerInstance = function(libraryItem, commands)
+const ContainerInstance = function(libraryItem, id)
 {
-    Instance.call(this, libraryItem, commands);
+    Instance.call(this, libraryItem, id);
 };
 
 // Extends the prototype

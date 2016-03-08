@@ -16,9 +16,9 @@ const BitmapInstance = require('../instances/BitmapInstance');
  * @param {string} data.src The source file
  * @param {string} data.name The bitmap name
  */
-const Bitmap = function(data)
+const Bitmap = function(library, data)
 {
-    LibraryItem.call(this, data);
+    LibraryItem.call(this, library, data);
 };
 
 // Extends the prototype
@@ -29,10 +29,11 @@ const p = Bitmap.prototype;
  * Create a instance of this
  * @method create
  * @return {BitmapInstance} The new instance
+ * @param {int} id Instance id
  */
-p.create = function(commands)
+p.create = function(id)
 {
-    return new BitmapInstance(this, commands);
+    return new BitmapInstance(this, id);
 };
 
 /** 

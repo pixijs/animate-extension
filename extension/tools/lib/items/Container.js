@@ -2,6 +2,7 @@
 
 const util = require('util');
 const LibraryItem = require('./LibraryItem');
+const Command = require('../commands/Command');
 const ContainerInstance = require('../instances/ContainerInstance');
 
 /**
@@ -12,10 +13,16 @@ const ContainerInstance = require('../instances/ContainerInstance');
  * @param {Object} data The bitmap data
  * @param {int} data.assetId The resource id
  */
-const Container = function(data)
+const Container = function(library, data)
 {
     // Add the data to this object
-    LibraryItem.call(this, data);
+    LibraryItem.call(this, library, data);
+
+    /**
+     * Collection of instances to render
+     * @property {Array} instance
+     */
+    this.instances = this.getInstances();
 };
 
 // Reference to the prototype
@@ -41,41 +48,34 @@ p.render = function(renderer)
  * @method getInstances
  * @return {array} Collection of instance objects 
  */
-p.getInstances = function(renderer)
+p.getInstances = function()
 {
-    let commandsMap = {};
-    let foundItems = [];
+    const library = this.library;
+    const instancesMap = {};
+    const instances = [];
     this.frames.forEach(function(frame)
     {
-        frame.commands.forEach(function(cmd)
+        frame.commands.forEach(function(command)
         {
-            // Get only the unique children for this timeline
-            if (foundItems.indexOf(cmd.instanceId) == -1)
-            {                    
-                foundItems.push(cmd.instanceId);
-                let commands = commandsMap[cmd.instanceId];
-                if (!commands)
-                {
-                    commands = commandsMap[cmd.instanceId] = [];
-                }
-                // Add the frame number to the command
-                cmd.frame = frame.frame;
+            let instance = instancesMap[command.instanceId];
 
-                // Add to the list of commands for this instance
-                commands.push(cmd);
+            if (!instance)
+            {
+                instance = library.createInstance(command.assetId, command.instanceId);
+                instancesMap[command.instanceId] = instance;
             }
-            
+
+            // Add to the list of commands for this instance
+            instance.addCommand(Command.create(command, frame.frame));
+
+            // Add it if it hasn't been added already
+            if (instances.indexOf(instance) == -1) 
+            {
+                instances.push(instance);
+            }
         });
     });
 
-    let instances = [];
-
-    // Loop through the commands by object
-    for (let instanceId in commandsMap)
-    {
-        let commands = commandsMap[instanceId];
-        instances.push(renderer.library.getInstanceByCommands(commands));
-    }
     return instances;
 };
 
@@ -87,7 +87,7 @@ p.getInstances = function(renderer)
 p.getChildren = function(renderer)
 {
     const compress = renderer.compress;
-    let instances = this.getInstances(renderer);
+    let instances = this.getInstances();
     let buffer = "";
 
     // We have children to place
@@ -114,10 +114,11 @@ p.getChildren = function(renderer)
  * Create a instance of this
  * @method create
  * @return {ContainerInstance} The new instance
+ * @param {int} id Instance id
  */
-p.create = function(commands)
+p.create = function(id)
 {
-    return new ContainerInstance(this, commands);
+    return new ContainerInstance(this, id);
 };
 
 module.exports = Container;

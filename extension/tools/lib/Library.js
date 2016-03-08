@@ -50,10 +50,12 @@ const Library = function(data)
      */
     this.meta = data._meta;
 
+    const library = this;
+
     // Convert the bitmaps
     data.Bitmaps.forEach(function(bitmapData)
     {
-        const bitmap = new Bitmap(bitmapData);
+        const bitmap = new Bitmap(library, bitmapData);
         bitmaps.push(bitmap);
         map[bitmap.assetId] = bitmap;
     });
@@ -61,7 +63,7 @@ const Library = function(data)
     // Convert the shapes
     data.Shapes.forEach(function(shapeData)
     {
-        const shape = new Shape(shapeData);
+        const shape = new Shape(library, shapeData);
         shape.name = data._meta.stageName + "_" + shape.assetId;
         shapes.push(shape);
         map[shape.assetId] = shape;
@@ -70,7 +72,7 @@ const Library = function(data)
     // Convert the shapes
     data.Texts.forEach(function(textData)
     {
-        const text = new Text(textData);
+        const text = new Text(library, textData);
         texts.push(text);
         map[text.assetId] = text;
     });
@@ -79,11 +81,11 @@ const Library = function(data)
     {
         let timeline;
         if (timelineData.totalFrames <= 1)
-            timeline = new Container(timelineData);
+            timeline = new Container(library, timelineData);
         if (timelineData.type == "stage")
-            timeline = new Stage(timelineData);
+            timeline = new Stage(library, timelineData);
         else
-            timeline = new Timeline(timelineData);
+            timeline = new Timeline(library, timelineData);
         timelines.push(timeline);
         map[timeline.assetId] = timeline;
     });
@@ -94,15 +96,14 @@ const p = Library.prototype;
 
 /**
  * Get an object by id
- * @method getInstanceByCommands
- * @param {Array} commands The collection of commands
+ * @method createInstance
+ * @param {int} assetId The Global asset id
  * @return {Instance} The instance object
  */
-p.getInstanceByCommands = function(commands)
+p.createInstance = function(assetId, instanceId)
 {
-    const id = commands[0].assetId; // first place command
-    const libraryItem = this._mapById[id];
-    return libraryItem.create(commands);
+    const libraryItem = this._mapById[assetId];
+    return libraryItem.create(instanceId);
 };
 
 /**

@@ -11,10 +11,10 @@ const Timeline = require('./Timeline');
  * @param {Object} data The bitmap data
  * @param {int} data.assetId The resource id
  */
-const Stage = function(data)
+const Stage = function(library, data)
 {
     // Add the data to this object
-    Timeline.call(this, data);
+    Timeline.call(this, library, data);
 };
 
 // Reference to the prototype

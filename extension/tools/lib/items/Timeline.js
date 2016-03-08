@@ -11,10 +11,10 @@ const TimelineInstance = require('../instances/TimelineInstance');
  * @param {Object} data The bitmap data
  * @param {int} data.assetId The resource id
  */
-const Timeline = function(data)
+const Timeline = function(library, data)
 {
     // Add the data to this object
-    Container.call(this, data);
+    Container.call(this, library, data);
 };
 
 // Reference to the prototype
@@ -107,10 +107,11 @@ p.getLabels = function()
  * Create a instance of this
  * @method create
  * @return {TimelineInstance} The new instance
+ * @param {int} id Instance id
  */
-p.create = function(commands)
+p.create = function(id)
 {
-    return new TimelineInstance(this, commands);
+    return new TimelineInstance(this, id);
 };
 
 module.exports = Timeline;

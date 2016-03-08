@@ -8,12 +8,13 @@ const Instance = require('./Instance');
  * @class TextInstance
  * @extends Instance
  * @constructor
- * @param {Array} commands
+ * @param {Text} libraryItem
+ * @param {int} id
  */
-const TextInstance = function(commands)
+const TextInstance = function(libraryItem, id)
 {
     // Add the data to this object
-    Instance.call(this, commands);
+    Instance.call(this, libraryItem, id);
 };
 
 // Reference to the prototype

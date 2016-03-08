@@ -14,10 +14,10 @@ const ShapeInstance = require('../instances/ShapeInstance');
  * @param {int} data.assetId The resource id
  * @param {int} data.paths The resource paths
  */
-const Shape = function(data)
+const Shape = function(library, data)
 {
     // Add the data to this object
-    LibraryItem.call(this, data);
+    LibraryItem.call(this, library, data);
 
     /**
      * The name of this shape
@@ -71,10 +71,11 @@ const p = Shape.prototype;
  * Create a instance of this
  * @method create
  * @return {ShapeInstance} The new instance
+ * @param {int} id Instance id
  */
-p.create = function(commands)
+p.create = function(id)
 {
-    return new ShapeInstance(this, commands);
+    return new ShapeInstance(this, id);
 };
 
 /**

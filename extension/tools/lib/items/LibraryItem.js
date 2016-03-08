@@ -6,10 +6,16 @@
  * @constructor
  * @param {Object} data The bitmap data
  */
-const LibraryItem = function(data)
+const LibraryItem = function(library, data)
 {
     // Add the data to this object
     Object.assign(this, data);
+
+    /**
+     * Reference to the library
+     * @property Library
+     */
+    this.library = library;
 };
 
 // Reference the prototype

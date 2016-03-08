@@ -1,27 +1,26 @@
 "use strict";
 
-const Matrix = require('../data/Matrix');
+const Place = require('../commands/Place');
 
 /**
  * The instance renderable object
  * @class Instance
  * @constructor
  * @param {LibraryItem} libraryItem
- * @param {Array} commands
  */
-const Instance = function(libraryItem, commands)
+const Instance = function(libraryItem, id)
 {
     /**
      * The unique instanceId within a timeline
      * @property {int} id
      */
-    this.id = commands[0].instanceId;
+    this.id = id;
 
     /** 
      * The name of the item
      * @property {string} name
      */
-    this.localName = "instance" + this.id;
+    this.localName = "instance" + id;
 
     /** 
      * The instance name, if named
@@ -33,7 +32,7 @@ const Instance = function(libraryItem, commands)
      * The collection of animation commands
      * @property {Array} commands
      */
-    this.commands = commands;
+    this.commands = [];
 
     /**
      * The library reference
@@ -43,32 +42,28 @@ const Instance = function(libraryItem, commands)
 
     /** 
      * Initially place the item
-     * @property {Object} initAdd
+     * @property {Object} initPlace
      */
-    this.initAdd = null;
-
-    /** 
-     * The initial transform
-     * @property {Matrix} initTransform
-     */
-    this.initTransform = null;
-
-    // Get the first place command
-    for(let i = 0, cmd, len = commands.length; i < len; i++)
-    {
-        cmd = commands[i];
-        if (cmd.type == "Add")
-        {
-            this.initAdd = cmd;
-            this.initTransform = new Matrix(cmd.transform);
-            this.instanceName = cmd.instanceName || null;
-            break;
-        }
-    }
+    this.initPlace = null;
 };
 
 // Reference the prototype
 const p = Instance.prototype;
+
+/**
+ * Add an command to the object
+ * @method addCommand
+ * @param {Object} command
+ */
+p.addCommand = function(command)
+{
+    if (!this.initPlace && command instanceof Place)
+    {
+        this.initPlace = command;
+        this.instanceName = command.instanceName;
+    }
+    this.commands.push(command);
+};
 
 /**
  * Render the object as a string
@@ -100,7 +95,7 @@ p.renderBegin = function()
 p.renderEnd = function(renderer)
 {
     let buffer = "";
-    const matrix = this.initTransform;
+    const matrix = this.initPlace.transform;
     if (matrix)
     {
         const func = renderer.compress ? 'tr' : 'setTransform';

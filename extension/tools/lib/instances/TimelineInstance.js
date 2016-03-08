@@ -13,11 +13,11 @@ const SYNCHED = 2;
  * @extends Instance
  * @constructor
  * @param {LibraryItem} libraryItem The bitmap data
- * @param {Array} commands
+ * @param {int} id
  */
-const TimelineInstance = function(libraryItem, commands)
+const TimelineInstance = function(libraryItem, id)
 {
-    Instance.call(this, libraryItem, commands);
+    Instance.call(this, libraryItem, id);
 
     this.mode = INDEPENDENT;
 
@@ -43,7 +43,7 @@ p.renderContent = function(renderer)
         id: this.libraryItem.name,
         mode: this.mode,
         startPosition: 0,
-        loop: this.initAdd.loop
+        loop: this.initPlace.loop
     });
 };
 
