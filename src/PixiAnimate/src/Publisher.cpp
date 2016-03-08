@@ -212,6 +212,7 @@ namespace PixiJS
         bool sounds(true);
         bool compactShapes(true);
         bool compressJS(true);
+        bool commonJS(false);
         bool loopTimeline(true);
         bool previewNeeded(false);
         std::string htmlPath;
@@ -233,6 +234,7 @@ namespace PixiJS
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_SOUNDS, sounds);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPACT_SHAPES, compactShapes);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPRESS_JS, compressJS);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMMON_JS, commonJS);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LOOP_TIMELINE, loopTimeline);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_LIBS_PATH, libsPath);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_IMAGES_PATH, imagesPath);
@@ -254,6 +256,7 @@ namespace PixiJS
             Utils::Trace(GetCallback(), " -> Stage Name : %s\n", stageName.c_str());
             Utils::Trace(GetCallback(), " -> Compact Shapes : %s\n", Utils::ToString(compactShapes).c_str());
             Utils::Trace(GetCallback(), " -> Compress JS : %s\n", Utils::ToString(compressJS).c_str());
+            Utils::Trace(GetCallback(), " -> Common JS : %s\n", Utils::ToString(commonJS).c_str());
             Utils::Trace(GetCallback(), " -> Loop Timeline : %s\n", Utils::ToString(loopTimeline).c_str());
             if (html)
             {
@@ -295,6 +298,7 @@ namespace PixiJS
             sounds,
             compactShapes,
             compressJS,
+            commonJS,
             loopTimeline));
         
         if (outputWriter.get() == NULL)

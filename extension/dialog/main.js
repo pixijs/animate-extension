@@ -20,6 +20,7 @@
     var $libsPath = $("#libsPath");
     var $compactShapes = $("#compactShapes");
     var $compressJS = $("#compressJS");
+    var $commonJS = $("#commonJS");
     var $namespace = $("#namespace");
     var $stageName = $("#stageName");
     var $html = $("#html");
@@ -115,6 +116,7 @@
             // Booleans options
             $compactShapes.checked = data[SETTINGS + "CompactShapes"] == "true";
             $compressJS.checked = data[SETTINGS + "CompressJS"] == "true";
+            $commonJS.checked = data[SETTINGS + "CommonJS"] == "true";
             $html.checked = data[SETTINGS + "HTML"] == "true";
             $libs.checked = data[SETTINGS + "Libs"] == "true";
             $images.checked = data[SETTINGS + "Images"] == "true";
@@ -159,6 +161,7 @@
         // Booleans
         data[SETTINGS + "CompactShapes"] = $compactShapes.checked.toString();
         data[SETTINGS + "CompressJS"] = $compressJS.checked.toString();
+        data[SETTINGS + "CommonJS"] = $commonJS.checked.toString();
         data[SETTINGS + "HTML"] = $html.checked.toString();
         data[SETTINGS + "Libs"] = $libs.checked.toString();
         data[SETTINGS + "Images"] = $images.checked.toString();

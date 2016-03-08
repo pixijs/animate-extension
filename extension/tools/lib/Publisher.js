@@ -175,10 +175,10 @@ p.run = function()
  */
 p.publish = function()
 {
-    let meta = this._data._meta;
+    const meta = this._data._meta;
 
     // Get the javascript buffer
-    let buffer = this.renderer.render(meta.nameSpace);
+    let buffer = this.renderer.render();
 
     if (meta.compressJS)
     {

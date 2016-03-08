@@ -121,6 +121,7 @@ namespace PixiJS
         meta.push_back(JSONNode("outputFile", m_outputFile));
         meta.push_back(JSONNode("stageName", m_stageName));
         meta.push_back(JSONNode("compressJS", m_compressJS));
+        meta.push_back(JSONNode("commonJS", m_commonJS));
         meta.push_back(JSONNode("compactShapes", m_compactShapes));
         meta.push_back(JSONNode("nameSpace", m_nameSpace));
         meta.push_back(JSONNode("loopTimeline", m_loopTimeline));
@@ -980,6 +981,7 @@ namespace PixiJS
         bool sounds,
         bool compactShapes,
         bool compressJS,
+        bool commonJS,
         bool loopTimeline)
     : m_pCallback(pCallback),
     m_outputFile(outputFile),
@@ -999,6 +1001,7 @@ namespace PixiJS
     m_sounds(sounds),
     m_compactShapes(compactShapes),
     m_compressJS(compressJS),
+    m_commonJS(commonJS),
     m_loopTimeline(loopTimeline),
     m_shapeElem(NULL),
     m_pathArray(NULL),

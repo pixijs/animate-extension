@@ -36,6 +36,12 @@ const Renderer = function(library)
      */
     this.nameSpace = library.meta.nameSpace;
 
+    /**
+     * If the output should be Common JavaScript compatible
+     * @property {Boolean} commonJS
+     */
+    this.commonJS = library.meta.commonJS;
+
     /** 
      * If the main stage should loop
      * @property {Boolean} loopTimeline
@@ -160,6 +166,9 @@ p.render = function()
     buffer += this.getHeader();
     buffer += this.getTimelines();
     buffer += this.getFooter();
+    if (this.commonJS) {
+        buffer += this.template('commonjs', this.nameSpace);
+    }
     return buffer;
 };
 

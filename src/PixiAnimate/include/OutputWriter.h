@@ -185,6 +185,7 @@ namespace PixiJS
             bool sounds,
             bool compactShapes,
             bool compressJS,
+            bool commonJS,
             bool loopTimeline);
         
         virtual ~OutputWriter();
@@ -292,6 +293,8 @@ namespace PixiJS
         bool m_compactShapes;
 
         bool m_compressJS;
+
+        bool m_commonJS;
 
         bool m_loopTimeline;
     };
