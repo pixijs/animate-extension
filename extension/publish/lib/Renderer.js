@@ -105,6 +105,11 @@ p.getHeader = function()
 {
     let classes = "";
 
+    if (this.library.hasContainer)
+    {
+        classes += "var Container = PIXI.Container;\n";
+    }
+
     if (this.library.bitmaps.length)
     {
         classes += "var Sprite = PIXI.Sprite;\n";

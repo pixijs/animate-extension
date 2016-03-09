@@ -168,7 +168,7 @@ p.getFrames = function()
         }
 
         // De-duplicate the animated properties
-        for (let i = 0, key, len = allKeys.length; i < len; i++) 
+        for (let i = 0, len = allKeys.length; i < len; i++) 
         {
             let k = allKeys[i];
             if (prevFrame[k] === frame[k]) 

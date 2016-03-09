@@ -86,7 +86,6 @@ p.getInstances = function()
 p.getChildren = function(renderer)
 {
     const compress = renderer.compress;
-    const totalFrames = this.totalFrames;
     let buffer = "";
 
     // We have children to place

@@ -2,6 +2,7 @@ module.exports = function(gulp, options, plugins) {
     gulp.task('default', function(done){
 
         var debug = options.argv.debug;
+        var install = options.argv.install;
 
         plugins.gutil.log("+-------------------+".green);
         plugins.gutil.log("|    PixiAnimate    |".green);
@@ -22,8 +23,11 @@ module.exports = function(gulp, options, plugins) {
             tasks.push('remote-debug');
         }
 
+        if (install) {
+            tasks.push('extension-modules');
+        }
+
         tasks.push(
-            'extension-modules',
             'runtime-copy',
             'move',
             'package',

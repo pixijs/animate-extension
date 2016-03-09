@@ -50,6 +50,13 @@ const Library = function(data)
      */
     this.meta = data._meta;
 
+    /**
+     * If there are non-animated display containers
+     * @property {Boolean} hasContainer
+     * @default
+     */
+    this.hasContainer = false;
+
     const library = this;
 
     // Convert the bitmaps
@@ -77,11 +84,13 @@ const Library = function(data)
         map[text.assetId] = text;
     });
 
+    let self = this;
     data.Timelines.forEach(function(timelineData)
     {
         let timeline;
         if (timelineData.totalFrames <= 1)
         {
+            self.hasContainer = true;
             timeline = new Container(library, timelineData);
         }
         else if (timelineData.type == "stage")

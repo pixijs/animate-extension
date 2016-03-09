@@ -43,7 +43,6 @@ p.render = function(renderer)
  */
 p.getChildren = function(renderer)
 {
-    const compress = renderer.compress;
     const totalFrames = this.totalFrames;
     let buffer = "";
     let postBuffer = "";
