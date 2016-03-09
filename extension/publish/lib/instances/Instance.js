@@ -142,7 +142,7 @@ p.getFrames = function()
         v: true
     };
 
-    let allKeys = [
+    const allKeys = [
         'a', // alpha
         'r', // rotation
         'x', // x position
@@ -158,7 +158,7 @@ p.getFrames = function()
     for (let index in this.frames)
     {
         let frame = this.frames[index];
-        let cloneFrame = Object.assign({}, frame);
+        let cloneFrame = Object.assign({}, prevFrame, frame);
         
         // Copy the first frame so we can prune after we figure
         // all the properties that animate
@@ -194,7 +194,6 @@ p.getFrames = function()
                 }
             }
         }
-
 
         // Property remember all the values of the current frame
         prevFrame = cloneFrame;

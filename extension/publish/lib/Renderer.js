@@ -87,7 +87,7 @@ p.template = function(type, subs)
 
             if (typeof value == "object")
             {
-                value = JSON.stringify(value);
+                value = JSON.stringify(value).replace(/\"([^(\")"\d]+)\":/g,"$1:");
             }
             buffer = buffer.replace(search, value);
         }

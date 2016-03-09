@@ -29,11 +29,13 @@ const p = Timeline.prototype;
  */
 p.render = function(renderer)
 {
-    let options = '';
+    const options = {
+        duration: this.totalFrames
+    };
     const labels = this.getLabels();
     if (Object.keys(labels).length) 
     {
-        options = {label: labels};
+        options.labels = labels;
     }
     return renderer.template('timeline', {
         id: this.name,
@@ -49,6 +51,7 @@ p.render = function(renderer)
  */
 p.getChildren = function(renderer)
 {
+    const compress = renderer.compress;
     const totalFrames = this.totalFrames;
     let buffer = "";
     let postBuffer = "";
@@ -66,8 +69,9 @@ p.getChildren = function(renderer)
                 instance.endFrame - instance.startFrame : 
                 totalFrames - instance.startFrame;
 
-            let func = renderer.compress ? 'af' : 'addChildFrames';
-            let frames = JSON.stringify(instance.getFrames(), null, "  ");
+            let func = compress ? 'af' : 'addChildFrames';
+            let frames = JSON.stringify(instance.getFrames(), null, compress ? '' : '  ')
+                .replace(/\"([^(\")"\d]+)\":/g,"$1:");
             postBuffer += `.${func}(${instance.localName}, ${instance.startFrame}, ${duration}, ${frames})`;
         });
         postBuffer += ';';
