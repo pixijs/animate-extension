@@ -29,11 +29,24 @@ const p = Stage.prototype;
  */
 p.render = function(renderer)
 {
+    const options = {};
+    const labels = this.getLabels();
+
+    if (!renderer.loopTimeline) {
+        options.loop = false;
+    }
+
+    if (Object.keys(labels).length) {
+        options.labels = labels;
+    }
+
+    const hasOptions = Object.keys(options).length;
+
     return renderer.template('stage', {
         id: this.name,
-        labels: this.getLabels(),
+        options: hasOptions ? options : '',
+        hasOptions: hasOptions ? ', ' : '',
         contents: this.getContents(renderer),
-        loop: renderer.loopTimeline
     });
 };
 

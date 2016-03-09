@@ -39,11 +39,18 @@ const p = TimelineInstance.prototype;
  */
 p.renderContent = function(renderer)
 {
+    const options = {};
+
+    if (this.mode != INDEPENDENT) {
+        options.mode = this.mode;
+    }
+    if (!this.initPlace.loop) {
+        options.loop = false;
+    }
+
     return renderer.template('timeline-instance', {
         id: this.libraryItem.name,
-        mode: this.mode,
-        startPosition: 0,
-        loop: this.initPlace.loop
+        options: Object.keys(options).length ? options : ''
     });
 };
 

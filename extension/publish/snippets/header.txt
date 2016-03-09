@@ -1,4 +1,5 @@
 (function (PIXI, lib){
 
 var MovieClip = PIXI.animate.MovieClip;
+var assign = Object.assign;
 ${content}

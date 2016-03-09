@@ -29,9 +29,15 @@ const p = Timeline.prototype;
  */
 p.render = function(renderer)
 {
+    let options = '';
+    const labels = this.getLabels();
+    if (Object.keys(labels).length) 
+    {
+        options = {label: labels};
+    }
     return renderer.template('timeline', {
         id: this.name,
-        labels: this.getLabels(),
+        options: options,
         contents: this.getContents(renderer)
     });
 };

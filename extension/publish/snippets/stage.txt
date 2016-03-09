@@ -1,5 +1,5 @@
 lib.${id} = MovieClip.extend(function(){
-    MovieClip.call(this, 0, 0, ${loop}, ${labels});
+    MovieClip.call(this${hasOptions}${options});
     ${contents}
 });
 
