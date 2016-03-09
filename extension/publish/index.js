@@ -15,7 +15,7 @@ app.on('ready', function() {
     else {
         // Main entry point for the application
         const Publisher = require('./lib/publisher');
-        const publisher = new Publisher(argv.src, argv.debug);
+        const publisher = new Publisher(argv.src, argv.compress, argv.debug);
 
         try {
             publisher.run();

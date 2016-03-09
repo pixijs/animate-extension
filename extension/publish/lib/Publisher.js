@@ -12,7 +12,7 @@ const LZString = require('lz-string');
  * The application to publish the JSON data to JS output buffer
  * @class Publisher
  */
-let Publisher = function(dataFile, debug)
+let Publisher = function(dataFile, compress, debug)
 {
     // Change the current directory
     process.chdir(path.dirname(dataFile));
@@ -47,6 +47,12 @@ let Publisher = function(dataFile, debug)
      * @property {Boolean} debug
      */
     this.debug = debug == undefined ? false : debug;
+
+    /**
+     * If output should be compressed
+     * @property {Boolean} compress
+     */
+    this.compress = compress || this._data._meta.compressJS;
 
     /**
      * The collection of assets to inject in the HTML page
@@ -180,7 +186,7 @@ p.publish = function()
     // Get the javascript buffer
     let buffer = this.renderer.render();
 
-    if (meta.compressJS)
+    if (this.compress)
     {
         // Run through uglify
         const UglifyJS = require('uglify-js');
