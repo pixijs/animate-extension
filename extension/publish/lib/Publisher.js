@@ -30,6 +30,12 @@ let Publisher = function(dataFile, compress, debug)
      */
     this._data = JSON.parse(fs.readFileSync(dataFile, "utf8"));
 
+    // override the compress
+    if (compress)
+    {
+        this._data._meta.compressJS = true;
+    }
+
     /**
      * The library of assets to publish
      * @property {Library} library
@@ -47,12 +53,6 @@ let Publisher = function(dataFile, compress, debug)
      * @property {Boolean} debug
      */
     this.debug = debug == undefined ? false : debug;
-
-    /**
-     * If output should be compressed
-     * @property {Boolean} compress
-     */
-    this.compress = compress || this._data._meta.compressJS;
 
     /**
      * The collection of assets to inject in the HTML page
@@ -186,7 +186,7 @@ p.publish = function()
     // Get the javascript buffer
     let buffer = this.renderer.render();
 
-    if (this.compress)
+    if (meta.compressJS)
     {
         // Run through uglify
         const UglifyJS = require('uglify-js');

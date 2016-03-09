@@ -124,13 +124,12 @@ p.addCommand = function(command)
 /**
  * Remove values duplicated from the previous frame
  * @method getFrames
- * @private
+ * @param {Boolean} compress
  * @return {Array} frames
  */
-p.getFrames = function()
+p.getFrames = function(compress)
 {
     let initFrame, initFrameNum;
-    let result = [];
     let prevFrame = {
         a: 1,
         r: 0,
@@ -212,11 +211,21 @@ p.getFrames = function()
         this.frames[initFrameNum] = initFrame;
     }
 
-    for (var i in this.frames)
+    if (compress)
     {
-        result.push(i + this.serializeFrame(this.frames[i]));
+        let result = [];
+        for (let i in this.frames)
+        {
+            result.push(i + this.serializeFrame(this.frames[i]));
+        }
+        return `"${result.join(',')}"`;
     }
-    return result;
+    else 
+    {
+        // Clean up the keys to reduce overhead
+        return JSON.stringify(this.frames, null, '  ')
+            .replace(/\"([^(\")"\d]+)\":/g,"$1:");
+    }    
 };
 
 /**

@@ -70,8 +70,7 @@ p.getChildren = function(renderer)
                 totalFrames - instance.startFrame;
 
             let func = compress ? 'af' : 'addChildFrames';
-            let frames = JSON.stringify(instance.getFrames(), null, compress ? '' : '  ')
-                .replace(/\"([^(\")"\d]+)\":/g,"$1:");
+            let frames = instance.getFrames(compress);
             postBuffer += `.${func}(${instance.localName}, ${instance.startFrame}, ${duration}, ${frames})`;
         });
         postBuffer += ';';
