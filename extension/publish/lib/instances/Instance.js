@@ -125,11 +125,12 @@ p.addCommand = function(command)
  * Remove values duplicated from the previous frame
  * @method getFrames
  * @private
- * @return {Object} frames
+ * @return {Array} frames
  */
 p.getFrames = function()
 {
     let initFrame, initFrameNum;
+    let result = [];
     let prevFrame = {
         a: 1,
         r: 0,
@@ -211,7 +212,27 @@ p.getFrames = function()
         this.frames[initFrameNum] = initFrame;
     }
 
-    return this.frames;
+    for (var i in this.frames)
+    {
+        result.push(i + this.serializeFrame(this.frames[i]));
+    }
+    return result;
+};
+
+/**
+ * Serialize the frame properties
+ * @method serializeFrame
+ * @param {Object} frame properties
+ * @return {string} buffer out
+ */
+p.serializeFrame = function(frame)
+{
+    let buffer = "";
+    for(let k in frame)
+    {
+        buffer += k + frame[k];
+    }
+    return buffer.replace(/([a-z])0\./g, "$1.");
 };
 
 /**
