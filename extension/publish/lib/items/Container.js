@@ -46,7 +46,7 @@ p.render = function(renderer)
 /**
  * Get the collection of children to place
  * @method getInstances
- * @return {array} Collection of instance objects 
+ * @return {array<Instance>} Collection of instance objects 
  */
 p.getInstances = function()
 {
@@ -75,7 +75,6 @@ p.getInstances = function()
             }
         });
     });
-
     return instances;
 };
 
@@ -87,16 +86,16 @@ p.getInstances = function()
 p.getChildren = function(renderer)
 {
     const compress = renderer.compress;
-    let instances = this.getInstances();
+    const totalFrames = this.totalFrames;
     let buffer = "";
 
     // We have children to place
-    if (instances.length)
+    if (this.instances.length)
     {
         let children = [];
-        instances.forEach(function(instance)
+        this.instances.forEach(function(instance)
         {
-            // TODO: replace with frames
+            // Add the static child instance
             children.push(instance.localName);
 
             // Render the instance
@@ -105,7 +104,7 @@ p.getChildren = function(renderer)
 
         children.reverse(); // reverse add child order
         let func = compress ? "ac" : "addChild";
-        buffer += "this." + func + "(" + children.join(', ') + ");";
+        buffer += `this.${func}(${children.join(', ')});`;
     }
     return buffer;
 };

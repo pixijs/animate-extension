@@ -36,6 +36,40 @@ p.render = function(renderer)
     });
 };
 
+/** 
+ * Convert instance to add child calls
+ * @method getChildren
+ * @return {string} Buffer of add children calls
+ */
+p.getChildren = function(renderer)
+{
+    const compress = renderer.compress;
+    const totalFrames = this.totalFrames;
+    let buffer = "";
+    let postBuffer = "";
+
+    // We have children to place
+    if (this.instances.length)
+    {
+        postBuffer += "this";
+        this.instances.forEach(function(instance)
+        {
+            buffer += instance.render(renderer);
+
+            // Get the duration of the instance (how long it's on stage)
+            let duration = instance.endFrame > 0 ? 
+                instance.endFrame - instance.startFrame : 
+                totalFrames - instance.startFrame;
+
+            let func = renderer.compress ? 'af' : 'addChildFrames';
+            let frames = JSON.stringify(instance.getFrames(), null, "  ");
+            postBuffer += `.${func}(${instance.localName}, ${instance.startFrame}, ${duration}, ${frames})`;
+        });
+        postBuffer += ';';
+    }
+    return buffer + postBuffer;
+};
+
 /**
  * Get all contents
  * @method getContents 

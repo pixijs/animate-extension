@@ -2,6 +2,8 @@
 
 const util = require('util');
 const Command = require('./Command');
+const Matrix = require('../data/Matrix');
+
 
 /**
  * The command object
@@ -15,6 +17,9 @@ const Command = require('./Command');
 const Move = function(data, frame)
 {
     Command.call(this, data, frame);
+
+    // Convert to matrix
+    this.transform = new Matrix(this.transform);
 };
 
 util.inherits(Move, Command);

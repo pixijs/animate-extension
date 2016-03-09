@@ -21,7 +21,7 @@ app.on('ready', function() {
             publisher.run();
         }
         catch(e) {
-            alert(e.message);
+            alert(e);
         }
     }
     app.quit();
@@ -33,7 +33,7 @@ function alert(message) {
     dialog.showMessageBox({
         type: 'error',
         message: 'A publishing error occured', 
-        detail: message,
+        detail: argv.debug && message instanceof Error ? message.stack : String(message),
         buttons: ['Close'],
         icon: nativeImage.createFromPath(__dirname + '/assets/icon.png')
     });

@@ -81,11 +81,17 @@ const Library = function(data)
     {
         let timeline;
         if (timelineData.totalFrames <= 1)
+        {
             timeline = new Container(library, timelineData);
-        if (timelineData.type == "stage")
+        }
+        else if (timelineData.type == "stage")
+        {
             timeline = new Stage(library, timelineData);
-        else
+        }
+        else 
+        {
             timeline = new Timeline(library, timelineData);
+        }
         timelines.push(timeline);
         map[timeline.assetId] = timeline;
     });
