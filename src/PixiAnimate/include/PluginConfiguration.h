@@ -47,7 +47,7 @@
 #define TEMPLATE_FOLDER_NAME                "template/"
 
 /* The Node script to run to compile the output */
-#define NODE_COMPILER                       "tools/publish.js";
+#define NODE_COMPILER                       "publish/index.js";
 
 /* Electron application to run preview */
 #define PREVIEW_APP                         "preview";

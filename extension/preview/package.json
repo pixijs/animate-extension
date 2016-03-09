@@ -1,4 +1,4 @@
 { 
     "name": "PixiAnimatePreview", 
-    "main": "main.js"
+    "main": "index.js"
 }

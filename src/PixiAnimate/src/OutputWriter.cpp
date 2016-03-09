@@ -159,10 +159,10 @@ namespace PixiJS
 
         std::string extensionPath;
         Utils::GetExtensionPath(extensionPath, m_pCallback);
-
         std::string compiler = extensionPath + NODE_COMPILER;
 
-        std::string cmd("/usr/local/bin/node '" + compiler + "' '" + m_outputDataFile + "'");
+        std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + compiler + "'"
+            + " --src '" + m_outputDataFile + "'";
         #ifdef _DEBUG
             cmd += " --debug";
         #endif
