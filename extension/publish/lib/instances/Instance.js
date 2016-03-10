@@ -238,7 +238,7 @@ p.getFrames = function(compress)
         {
             result.push(i + this.serializeFrame(this.frames[i]));
         }
-        return `"${result.join(',')}"`;
+        return `"${result.join(' ')}"`;
     }
     else 
     {
@@ -257,11 +257,23 @@ p.getFrames = function(compress)
 p.serializeFrame = function(frame)
 {
     let buffer = "";
+
+    // Convert to single characters
+    let keyMap = {
+        x: 'X',
+        y: 'Y',
+        sx: 'A',
+        sy: 'B',
+        kx: 'C',
+        ky: 'D',
+        r: 'R'
+    };
     for(let k in frame)
     {
-        buffer += k + frame[k];
+        buffer += keyMap[k] + frame[k];
     }
-    return buffer.replace(/([a-z])(\-)?0\./g, "$1$2.");
+    return buffer.replace(/([a-z])(\-)?0\./g, "$1$2.") // remove 0 from floats 0.12 => .12
+        
 };
 
 /**
@@ -294,14 +306,17 @@ p.renderBegin = function()
 p.renderEnd = function(renderer)
 {
     let buffer = "";
-    const matrix = this.initPlace.transform;
-    if (matrix)
+    if (!this.isAnimated)
     {
-        const func = renderer.compress ? 'tr' : 'setTransform';
-        const args = matrix.toTransform();
-        if (args.length)
+        const matrix = this.initPlace.transform;
+        if (matrix)
         {
-            buffer = `.${func}(${args.join(', ')})`; 
+            const func = renderer.compress ? 'tr' : 'setTransform';
+            const args = matrix.toTransform();
+            if (args.length)
+            {
+                buffer = `.${func}(${args.join(', ')})`; 
+            }
         }
     }
     return buffer;
