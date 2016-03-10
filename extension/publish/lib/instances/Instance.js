@@ -261,7 +261,7 @@ p.serializeFrame = function(frame)
     {
         buffer += k + frame[k];
     }
-    return buffer.replace(/([a-z])0\./g, "$1.");
+    return buffer.replace(/([a-z])(\-)?0\./g, "$1$2.");
 };
 
 /**

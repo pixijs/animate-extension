@@ -33,13 +33,16 @@ p.render = function(renderer)
         duration: this.totalFrames
     };
     const labels = this.getLabels();
-    if (Object.keys(labels).length) 
+    let hasLabels = !!Object.keys(labels).length;
+    if (hasLabels) 
     {
         options.labels = labels;
     }
-    return renderer.template('timeline', {
+    return renderer.template(renderer.compress ? 'timeline-tiny' : 'timeline', {
         id: this.name,
         options: options,
+        duration: this.totalFrames,
+        labels: hasLabels ? ', ' + JSON.stringify(labels) : '',
         contents: this.getContents(renderer)
     });
 };

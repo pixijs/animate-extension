@@ -43,19 +43,12 @@ p.render = function(renderer)
         options.labels = labels;
     }
 
-    // Represent the arguments as (mode, duration, loop, labels)
-    // this is more compressed than using the JSON object with verbose keys
-    if (renderer.compress)
-    {
-        options = '0, ' + this.totalFrames + ', ' + renderer.loopTimeline;
-        if (hasLabels) {
-            options += ', ' + JSON.stringify(labels);
-        }
-    }
-
-    return renderer.template('stage', {
+    return renderer.template(renderer.compress ? 'stage-tiny': 'stage', {
         id: this.name,
         options: options,
+        duration: this.totalFrames,
+        loop: renderer.loopTimeline,
+        labels: hasLabels ? ', ' + JSON.stringify(labels) : '',
         contents: this.getContents(renderer)
     });
 };
