@@ -179,15 +179,14 @@ namespace PixiJS
             std::string& libsPath,
             std::string& stageName,
             std::string& nameSpace,
-            std::string& electronPath,
             bool html,
             bool libs,
             bool images,
             bool sounds,
             bool compactShapes,
             bool compressJS,
-            bool loopTimeline,
-            bool electron);
+            bool commonJS,
+            bool loopTimeline);
         
         virtual ~OutputWriter();
         
@@ -198,10 +197,10 @@ namespace PixiJS
         virtual FCM::Result EndDefinePath();
         
         // Start a preview for the output content for this writer
-        virtual FCM::Result StartPreview(const std::string& outFile, FCM::PIFCMCallback pCallback);
+        virtual FCM::Result StartPreview(FCM::PIFCMCallback pCallback);
         
         // Stop a preview for the output content for this writer
-        virtual FCM::Result StopPreview(const std::string& outFile);
+        virtual FCM::Result StopPreview();
         
     private:
                         
@@ -273,8 +272,6 @@ namespace PixiJS
 
         std::string m_nameSpace;
 
-        std::string m_electronPath;
-
         std::string m_outputFile;
         
         std::string m_outputDataFile;
@@ -297,9 +294,9 @@ namespace PixiJS
 
         bool m_compressJS;
 
-        bool m_loopTimeline;
+        bool m_commonJS;
 
-        bool m_electron;
+        bool m_loopTimeline;
     };
 };
 

@@ -212,8 +212,8 @@ namespace PixiJS
         bool sounds(true);
         bool compactShapes(true);
         bool compressJS(true);
+        bool commonJS(false);
         bool loopTimeline(true);
-        bool electron(false);
         bool previewNeeded(false);
         std::string htmlPath;
         std::string stageName;
@@ -221,7 +221,6 @@ namespace PixiJS
         std::string nameSpace("lib");
         std::string imagesPath("images/");
         std::string soundsPath("sounds/");
-        std::string electronPath("main.js");
 
         // Sanitize the stage name for JavaScript
         Utils::GetJavaScriptName(outputFile, stageName);
@@ -235,17 +234,16 @@ namespace PixiJS
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_SOUNDS, sounds);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPACT_SHAPES, compactShapes);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPRESS_JS, compressJS);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMMON_JS, commonJS);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LOOP_TIMELINE, loopTimeline);
-        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_ELECTRON, electron);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_LIBS_PATH, libsPath);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_IMAGES_PATH, imagesPath);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_SOUNDS_PATH, soundsPath);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_HTML_PATH, htmlPath);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_NAMESPACE, nameSpace);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, stageName);
-        Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_ELECTRON_PATH, electronPath);
 
-        if (electron && !Utils::Exists("/usr/local/bin/electron"))
+        if (!Utils::Exists("/usr/local/bin/electron"))
         {
             Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed at /usr/local/bin/electron");
             return FCM_GENERAL_ERROR;
@@ -258,6 +256,7 @@ namespace PixiJS
             Utils::Trace(GetCallback(), " -> Stage Name : %s\n", stageName.c_str());
             Utils::Trace(GetCallback(), " -> Compact Shapes : %s\n", Utils::ToString(compactShapes).c_str());
             Utils::Trace(GetCallback(), " -> Compress JS : %s\n", Utils::ToString(compressJS).c_str());
+            Utils::Trace(GetCallback(), " -> Common JS : %s\n", Utils::ToString(commonJS).c_str());
             Utils::Trace(GetCallback(), " -> Loop Timeline : %s\n", Utils::ToString(loopTimeline).c_str());
             if (html)
             {
@@ -279,11 +278,6 @@ namespace PixiJS
                 Utils::Trace(GetCallback(), " -> Sounds path : %s\n", soundsPath.c_str());
                 Utils::Trace(GetCallback(), " -> Export Sounds : %s\n", Utils::ToString(sounds).c_str());
             }
-            if (electron)
-            {
-                Utils::Trace(GetCallback(), " -> Electron path : %s\n", electronPath.c_str());
-                Utils::Trace(GetCallback(), " -> Electron : %s\n", Utils::ToString(electron).c_str());
-            }
         #endif
 
         // Temporary
@@ -298,15 +292,14 @@ namespace PixiJS
             libsPath, 
             stageName, 
             nameSpace,
-            electronPath,
             html,
             libs,
             images,
             sounds,
             compactShapes,
             compressJS,
-            loopTimeline,
-            electron));
+            commonJS,
+            loopTimeline));
         
         if (outputWriter.get() == NULL)
         {
@@ -463,7 +456,7 @@ namespace PixiJS
         }
         
         // Stop preview
-        outputWriter->StopPreview(outputFile);
+        outputWriter->StopPreview();
 
         if (libs)
         {
@@ -479,7 +472,7 @@ namespace PixiJS
             }
             else
             {
-                outputWriter->StartPreview(basePath + htmlPath, GetCallback());
+                outputWriter->StartPreview(GetCallback());
             }
         }
 

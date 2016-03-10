@@ -65,15 +65,6 @@
                     <label for="sounds">Sounds</label>
                 </div>
                 <input type="text" id="soundsPath" class="text editable" value="sounds/">
-                <div class="side">
-                    <div class="checkbox">
-                        <input type="checkbox" class="toggle" data-toggle="#electronPath" id="electron" />
-                        <label for="electron"></label> 
-                    </div> 
-                    <label for="electron">Electron*</label>
-                </div>
-                <input type="text" id="electronPath" disabled="true" class="disabled text editable" value="main.js">
-                <div class="indent note">* Electron must be installed globally (OSX only).</div>
                 <!--<div class="indent">
                     <div class="checkbox">
                         <input type="checkbox" checked="true" id="spritesheets" />
@@ -129,6 +120,12 @@
                         <label for="compressJS"></label> 
                     </div> 
                     <label for="compressJS">Compress Output JavaScript</label>
+                    <br>
+                    <div class="checkbox">
+                        <input type="checkbox" id="commonJS" />
+                        <label for="commonJS"></label> 
+                    </div> 
+                    <label for="commonJS">CommonJS Compatible Output</label>
                 </div>
             </div>
             <hr>
@@ -138,7 +135,7 @@
                 <button class="button action" id="cancelButton">Cancel</button>
             </div>
         </div>
-        <script src="../node_modules/cep/CEP_6.x/CSInterface.js"></script>
+        <script src="cep/CSInterface.js"></script>
         <script src="main.js"></script>
     </body>
 </html>

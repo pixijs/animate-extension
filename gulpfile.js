@@ -46,31 +46,17 @@ var options = {
     // Vendor release for the runtime
     runtimeOutput: 'com.jibo.PixiAnimate/runtime',
     runtimeResources: [
-        'node_modules/pixi.js/bin/pixi.min.js',
-        'node_modules/pixi-animate/dist/pixi-animate.min.js'
-    ], 
-
-    privateOutput: 'com.jibo.PixiAnimate/node_modules',
-    privateResources: [
-        'node_modules/cep/CEP_6.x/CSInterface.js',
-        'node_modules/bson/**',
-        'node_modules/mkdirp/package.json',
-        'node_modules/mkdirp/index.js',
-        'node_modules/mkdirp/node_modules/**',
-        'node_modules/uglify-js/**',
-        '!node_modules/uglify-js/bin',
-        'node_modules/js-beautify/package.json',
-        'node_modules/js-beautify/js/**',
-        'node_modules/js-beautify/node_modules/**',
-        'node_modules/lz-string/package.json',
-        'node_modules/lz-string/libs/lz-string.js'
+        'extension/node_modules/pixi.js/bin/pixi.min.js',
+        'extension/node_modules/pixi-animate/dist/pixi-animate.min.js'
     ],
 
     // The files to source when running watch
     watchFiles: [
         './**/*.*',
         '!node_modules/**',
+        '!extension/node_modules/**',
         '!com.jibo.PixiAnimate',
+        '!extension/dialog/cep/**',
         '!extension/bin'
     ],
     
@@ -79,7 +65,9 @@ var options = {
         '**/*.js',
         '!node_modules/**',
         '!extension/bin/**',
+        '!extension/node_modules/**',
         '!extension/templates/**',
+        '!extension/dialog/cep/**',
         '!src/**'
     ]
 };
@@ -94,7 +82,8 @@ var plugins = {
     sequence: require('gulp-sequence').use(gulp),
     gutil: require('gulp-util'),
     rename: require('gulp-rename'),
-    eslint: require('gulp-eslint')
+    eslint: require('gulp-eslint'),
+    install: require('gulp-install')
 };
 
 require('load-gulp-tasks')(gulp, options, plugins);

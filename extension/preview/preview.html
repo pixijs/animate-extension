@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <style>
+            body {
+                margin:0;
+                padding:0;
+                position:absolute;
+                width:100%;
+                height:100%;
+            }
+            body.scaleToFit {
+                min-width: auto !important;
+                min-height: auto !important;
+            }
+            #preview {
+                display:block;
+                position:absolute;
+            }
+            .scaleToFit #preview {
+                width:100% !important;
+                height:100% !important;
+            }
+            .noScale #preview {
+                left:50%;
+                top:50%;
+                transform:translate(-50%,-50%);
+            }
+        </style>
+    </head>
+    <body class="scaleToFit">
+        <webview id="preview" nodeintegration></webview>
+        <script src="preview.js"></script>
+    </body>
+</html>

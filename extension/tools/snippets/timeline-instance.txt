@@ -1,1 +1,0 @@
-new lib.${id}(${mode}, ${startPosition}, ${loop})

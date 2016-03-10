@@ -1,0 +1,4 @@
+lib.${content} = Sprite.${extend}(function(){
+    Sprite.call(this, fromFrame("${content}"));
+});
+

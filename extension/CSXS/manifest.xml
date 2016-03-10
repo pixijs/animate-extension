@@ -22,6 +22,10 @@
 				<Resources>
     				<MainPath>./dialog/index.html</MainPath>
                     <ScriptPath>./dialog/host.jsx</ScriptPath>
+                    <CEFCommandLine>
+                        <Parameter>--enable-nodejs</Parameter>
+                        <Parameter>--mixed-context</Parameter>
+                    </CEFCommandLine>
 				</Resources>
 				<Lifecycle>
 					<AutoVisible>true</AutoVisible>
@@ -30,7 +34,7 @@
 					<Type>ModalDialog</Type>
 					<Geometry>
 						<Size>
-							<Height>485</Height>
+							<Height>450</Height>
 							<Width>400</Width>
 						</Size>
 					</Geometry>

@@ -1,0 +1,5 @@
+var ${id} = MovieClip.e(function(mode) {
+    MovieClip.call(this, mode, ${duration}, false);
+    ${contents}
+});
+

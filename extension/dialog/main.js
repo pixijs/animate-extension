@@ -18,9 +18,9 @@
     var $imagesPath = $("#imagesPath");
     var $soundsPath = $("#soundsPath");
     var $libsPath = $("#libsPath");
-    var $electronPath = $("#electronPath");
     var $compactShapes = $("#compactShapes");
     var $compressJS = $("#compressJS");
+    var $commonJS = $("#commonJS");
     var $namespace = $("#namespace");
     var $stageName = $("#stageName");
     var $html = $("#html");
@@ -28,7 +28,6 @@
     var $images = $("#images");
     var $sounds = $("#sounds");
     var $loopTimeline = $("#loopTimeline");
-    var $electron = $("#electron");
     var $hiddenLayers = $("#hiddenLayers");
     var $publishButton = $("#publishButton");
     var $browseButton = $("#browseButton");
@@ -117,25 +116,23 @@
             // Booleans options
             $compactShapes.checked = data[SETTINGS + "CompactShapes"] == "true";
             $compressJS.checked = data[SETTINGS + "CompressJS"] == "true";
+            $commonJS.checked = data[SETTINGS + "CommonJS"] == "true";
             $html.checked = data[SETTINGS + "HTML"] == "true";
             $libs.checked = data[SETTINGS + "Libs"] == "true";
             $images.checked = data[SETTINGS + "Images"] == "true";
             $sounds.checked = data[SETTINGS + "Sounds"] == "true";
             $loopTimeline.checked = data[SETTINGS + "LoopTimeline"] == "true";
-            $electron.checked = data[SETTINGS + "Electron"] == "true";
 
             onToggleInput.call($html);
             onToggleInput.call($images);
             onToggleInput.call($libs);
             onToggleInput.call($sounds);
-            onToggleInput.call($electron);
 
             // String options
             $htmlPath.value = data[SETTINGS + "HTMLPath"];
             $libsPath.value = data[SETTINGS + "LibsPath"];
             $imagesPath.value = data[SETTINGS + "ImagesPath"];
             $soundsPath.value = data[SETTINGS + "SoundsPath"];
-            $electronPath.value = data[SETTINGS + "ElectronPath"];
             $namespace.value = data[SETTINGS + "Namespace"];
             $outputFile.value = data[SETTINGS + "OutputFile"];
             $stageName.value = data[SETTINGS + "StageName"];
@@ -164,12 +161,12 @@
         // Booleans
         data[SETTINGS + "CompactShapes"] = $compactShapes.checked.toString();
         data[SETTINGS + "CompressJS"] = $compressJS.checked.toString();
+        data[SETTINGS + "CommonJS"] = $commonJS.checked.toString();
         data[SETTINGS + "HTML"] = $html.checked.toString();
         data[SETTINGS + "Libs"] = $libs.checked.toString();
         data[SETTINGS + "Images"] = $images.checked.toString();
         data[SETTINGS + "Sounds"] = $sounds.checked.toString();
         data[SETTINGS + "LoopTimeline"] = $loopTimeline.checked.toString();
-        data[SETTINGS + "Electron"] = $electron.checked.toString();
 
         // Strings
         data[SETTINGS + "OutputFile"] = $outputFile.value.toString();
@@ -177,7 +174,6 @@
         data[SETTINGS + "LibsPath"] = $libsPath.value.toString();
         data[SETTINGS + "ImagesPath"] = $imagesPath.value.toString();
         data[SETTINGS + "SoundsPath"] = $soundsPath.value.toString();
-        data[SETTINGS + "ElectronPath"] = $electronPath.value.toString();
         data[SETTINGS + "Namespace"] = $namespace.value.toString();
         data[SETTINGS + "StageName"] = $stageName.value.toString();
 

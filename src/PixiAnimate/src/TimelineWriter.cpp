@@ -34,7 +34,7 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("type", "Add"));
+        commandElement.push_back(JSONNode("type", "Place"));
         commandElement.push_back(JSONNode("assetId", resId));
         commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
@@ -66,7 +66,7 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("type", "Add"));
+        commandElement.push_back(JSONNode("type", "Place"));
         commandElement.push_back(JSONNode("assetId", resId));
         commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
@@ -98,7 +98,7 @@ namespace PixiJS
         JSONNode commandElement(JSON_NODE);
         FCM::AutoPtr<DOM::FrameElement::ISound> pSound;
         
-        commandElement.push_back(JSONNode("type", "Add"));
+        commandElement.push_back(JSONNode("type", "Place"));
         commandElement.push_back(JSONNode("assetId", resId));
         commandElement.push_back(JSONNode("instanceId", objectId));
         
@@ -163,7 +163,7 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("type", "UpdateZOrder"));
+        commandElement.push_back(JSONNode("type", "ZOrder"));
         commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(JSONNode("placeAfter", placeAfterObjectId));
         
@@ -193,7 +193,7 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("type", "UpdateMask"));
+        commandElement.push_back(JSONNode("type", "Mask"));
         commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(JSONNode("maskTill", Utils::ToString(maskTillObjectId)));
         
@@ -223,7 +223,7 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("type", "UpdateBlendMode"));
+        commandElement.push_back(JSONNode("type", "BlendMode"));
         commandElement.push_back(JSONNode("instanceId", objectId));
         if(blendMode == 0)
             commandElement.push_back(JSONNode("blendMode","Normal"));
@@ -265,7 +265,7 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("type", "UpdateVisibility"));
+        commandElement.push_back(JSONNode("type", "Visibility"));
         commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(JSONNode("visibility", (bool)visible));
         
@@ -281,7 +281,7 @@ namespace PixiJS
     {
         FCM::Result res;
         JSONNode commandElement(JSON_NODE);
-        commandElement.push_back(JSONNode("type", "UpdateFilter"));
+        commandElement.push_back(JSONNode("type", "Filter"));
         commandElement.push_back(JSONNode("instanceId", objectId));
         FCM::AutoPtr<DOM::GraphicFilter::IDropShadowFilter> pDropShadowFilter = pFilter;
         FCM::AutoPtr<DOM::GraphicFilter::IBlurFilter> pBlurFilter = pFilter;
@@ -792,7 +792,7 @@ namespace PixiJS
     {
         JSONNode commandElement(JSON_NODE);
         
-        commandElement.push_back(JSONNode("type", "UpdateColorTransform"));
+        commandElement.push_back(JSONNode("type", "ColorTransform"));
         commandElement.push_back(JSONNode("instanceId", objectId));
         commandElement.push_back(Utils::ToJSON("colorMatrix", colorMatrix));
         
