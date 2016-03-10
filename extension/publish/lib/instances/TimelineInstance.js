@@ -4,8 +4,8 @@ const util = require('util');
 const Instance = require('./Instance');
 
 const INDEPENDENT = 0;
-const SINGLE_FRAME = 1;
-const SYNCHED = 2;
+// const SINGLE_FRAME = 1;
+// const SYNCHED = 2;
 
 /**
  * The bitmap object
@@ -18,13 +18,7 @@ const SYNCHED = 2;
 const TimelineInstance = function(libraryItem, id)
 {
     Instance.call(this, libraryItem, id);
-
     this.mode = INDEPENDENT;
-
-    if (libraryItem.type == 'graphic')
-    {
-        this.mode = this.libraryItem.frames.length > 1 ? SYNCHED : SINGLE_FRAME;
-    }
 };
 
 // Extends the prototype
@@ -41,9 +35,6 @@ p.renderContent = function(renderer)
 {
     const options = {};
 
-    if (this.mode != INDEPENDENT) {
-        options.mode = this.mode;
-    }
     if (!this.initPlace.loop) {
         options.loop = false;
     }

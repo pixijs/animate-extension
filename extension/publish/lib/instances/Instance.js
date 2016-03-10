@@ -97,11 +97,6 @@ p.addCommand = function(command)
     if (command instanceof Remove) {
         this.endFrame = command.frame;
     }
-    // Something happens after the start frame
-    if (command.frame > this.startFrame)
-    {
-        this.isAnimated = true;
-    }
 
     let frame = this.frames[command.frame];
     if (!frame)
@@ -109,6 +104,7 @@ p.addCommand = function(command)
         frame = this.frames[command.frame] = {};
     }
 
+    // Implement the place and move command
     if (command instanceof Place || command instanceof Move)
     {
         let frame = this.frames[command.frame];
@@ -118,6 +114,19 @@ p.addCommand = function(command)
         }
         Object.assign(frame, command.transform.toTween());
     }
+
+    // Remove empty frames
+    if (!Object.keys(frame).length) 
+    {
+        delete this.frames[command.frame];
+    }
+
+    // Check to see if this is animated
+    if (Object.keys(this.frames).length > 1)
+    {
+        this.isAnimated = true;
+    }
+
     this.commands.push(command);
 };
 
@@ -125,10 +134,16 @@ p.addCommand = function(command)
  * Remove values duplicated from the previous frame
  * @method getFrames
  * @param {Boolean} compress
- * @return {Array} frames
+ * @return {String|null} Either the collection of frames or null if no frames
  */
 p.getFrames = function(compress)
 {
+    // If we're not animated, don't do anything
+    if (!this.isAnimated)
+    {
+        return null;
+    }
+
     let initFrame, initFrameNum;
     let prevFrame = {
         a: 1,
@@ -211,6 +226,11 @@ p.getFrames = function(compress)
         this.frames[initFrameNum] = initFrame;
     }
 
+    // No keyframes are animated
+    if (!Object.keys(initFrame).length) {
+        return null;
+    }
+
     if (compress)
     {
         let result = [];
@@ -274,17 +294,14 @@ p.renderBegin = function()
 p.renderEnd = function(renderer)
 {
     let buffer = "";
-    if (!this.isAnimated)
+    const matrix = this.initPlace.transform;
+    if (matrix)
     {
-        const matrix = this.initPlace.transform;
-        if (matrix)
+        const func = renderer.compress ? 'tr' : 'setTransform';
+        const args = matrix.toTransform();
+        if (args.length)
         {
-            const func = renderer.compress ? 'tr' : 'setTransform';
-            const args = matrix.toTransform();
-            if (args.length)
-            {
-                buffer = `.${func}(${args.join(', ')})`; 
-            }
+            buffer = `.${func}(${args.join(', ')})`; 
         }
     }
     return buffer;

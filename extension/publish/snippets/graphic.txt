@@ -1,0 +1,5 @@
+var ${id} = MovieClip.${extend}(function(mode) {
+    MovieClip.call(this, { mode: mode, duration: ${duration}, loop: false });
+    ${contents}
+});
+

@@ -6,6 +6,7 @@ const Text = require('./items/Text');
 const Timeline = require('./items/Timeline');
 const Container = require('./items/Container');
 const Stage = require('./items/Stage');
+const Graphic = require('./items/Graphic');
 
 /**
  * Handle the converting of data assets to typed objects
@@ -92,6 +93,10 @@ const Library = function(data)
         {
             self.hasContainer = true;
             timeline = new Container(library, timelineData);
+        }
+        else if (timelineData.type == "graphic")
+        {
+            timeline = new Graphic(library, timelineData);
         }
         else if (timelineData.type == "stage")
         {

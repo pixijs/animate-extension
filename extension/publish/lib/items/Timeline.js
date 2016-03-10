@@ -59,6 +59,7 @@ p.getChildren = function(renderer)
     // We have children to place
     if (this.instances.length)
     {
+        let addChildren = [];
         postBuffer += "this";
         this.instances.forEach(function(instance)
         {
@@ -69,10 +70,29 @@ p.getChildren = function(renderer)
                 instance.endFrame - instance.startFrame : 
                 totalFrames - instance.startFrame;
 
-            let func = compress ? 'af' : 'addChildFrames';
+            
             let frames = instance.getFrames(compress);
-            postBuffer += `.${func}(${instance.localName}, ${instance.startFrame}, ${duration}, ${frames})`;
+
+            // If the child doesn't change
+            if (!frames && instance.startFrame === 0 && duration == totalFrames)
+            {
+                addChildren.push(instance.localName);
+            }
+            else
+            {
+                let func = compress ? 'at' : 'addTimedChild';
+                postBuffer += `.${func}(${instance.localName}, ${instance.startFrame}, ${duration}`;
+                postBuffer += !frames ? `)` : `, ${frames})`;
+            }
         });
+
+        // Add static children
+        if (addChildren.length)
+        {
+            addChildren.reverse();
+            let func = compress ? 'ac' : 'addChild';
+            postBuffer += `.${func}(${addChildren.join(', ')})`;
+        }
         postBuffer += ';';
     }
     return buffer + postBuffer;

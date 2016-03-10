@@ -1,4 +1,4 @@
-lib.${content} = Sprite.extend(function(){
+lib.${content} = Sprite.${extend}(function(){
     Sprite.call(this, fromFrame("${content}"));
 });
 

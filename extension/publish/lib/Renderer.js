@@ -79,6 +79,9 @@ p.template = function(type, subs)
 
     if (subs)
     {
+        // Add a global extend method
+        subs.extend = this.compress ? 'e' : 'extend';
+
         // Replace the variables with the map
         for (let prop in subs)
         {
@@ -124,7 +127,7 @@ p.getHeader = function()
     if (this.library.shapes.length)
     {
         classes += "var Graphics = PIXI.Graphics;\n";
-        classes += "var graphics = PIXI.animate.GraphicsCache;\n"
+        classes += "var shapes = PIXI.animate.ShapesCache;\n"
     }
 
     // Get the header

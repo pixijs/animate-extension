@@ -29,7 +29,7 @@ const p = Stage.prototype;
  */
 p.render = function(renderer)
 {
-    const options = {
+    let options = {
         duration: this.totalFrames
     };
     const labels = this.getLabels();
@@ -38,8 +38,19 @@ p.render = function(renderer)
         options.loop = false;
     }
 
-    if (Object.keys(labels).length) {
+    let hasLabels = !!Object.keys(labels).length;
+    if (hasLabels) {
         options.labels = labels;
+    }
+
+    // Represent the arguments as (mode, duration, loop, labels)
+    // this is more compressed than using the JSON object with verbose keys
+    if (renderer.compress)
+    {
+        options = '0, ' + this.totalFrames + ', ' + renderer.loopTimeline;
+        if (hasLabels) {
+            options += ', ' + JSON.stringify(labels);
+        }
     }
 
     return renderer.template('stage', {

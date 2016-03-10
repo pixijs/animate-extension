@@ -1,1 +1,1 @@
-new Graphics().${func}(graphics.${name})
+new Graphics().${func}(shapes.${name})
