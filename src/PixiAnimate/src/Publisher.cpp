@@ -1202,26 +1202,26 @@ namespace PixiJS
         if (pGradientFillStyle)
         {
             Utils::Trace(GetCallback(), "Warning: Gradient fills are not supported by Pixi.js");
-            // pGradientFillStyle->GetColorGradient(pGrad.m_Ptr);
+            pGradientFillStyle->GetColorGradient(pGrad.m_Ptr);
 
-            // if (AutoPtr<DOM::Utils::IRadialColorGradient>(pGrad))
-            // {
-            //     res = ExportRadialGradientFillStyle(pGradientFillStyle);
-            //     ASSERT(FCM_SUCCESS_CODE(res));
-            // }
-            // else if (AutoPtr<DOM::Utils::ILinearColorGradient>(pGrad))
-            // {
-            //     res = ExportLinearGradientFillStyle(pGradientFillStyle);
-            //     ASSERT(FCM_SUCCESS_CODE(res));
-            // }
+            if (AutoPtr<DOM::Utils::IRadialColorGradient>(pGrad))
+            {
+                res = ExportRadialGradientFillStyle(pGradientFillStyle);
+                ASSERT(FCM_SUCCESS_CODE(res));
+            }
+            else if (AutoPtr<DOM::Utils::ILinearColorGradient>(pGrad))
+            {
+                res = ExportLinearGradientFillStyle(pGradientFillStyle);
+                ASSERT(FCM_SUCCESS_CODE(res));
+            }
         }
 
         pBitmapFillStyle = pFillStyle;
         if (pBitmapFillStyle)
         {
             Utils::Trace(GetCallback(), "Warning: Bitmap fills are not supported by Pixi.js");
-            // res = ExportBitmapFillStyle(pBitmapFillStyle);
-            // ASSERT(FCM_SUCCESS_CODE(res));
+            res = ExportBitmapFillStyle(pBitmapFillStyle);
+            ASSERT(FCM_SUCCESS_CODE(res));
         }
 
         return res;
@@ -1467,7 +1467,7 @@ namespace PixiJS
     }
 
 
-    /*FCM::Result ResourcePalette::ExportRadialGradientFillStyle(DOM::FillStyle::IGradientFillStyle* pGradientFillStyle)
+    FCM::Result ResourcePalette::ExportRadialGradientFillStyle(DOM::FillStyle::IGradientFillStyle* pGradientFillStyle)
     {
         DOM::FillStyle::GradientSpread spread;
 
@@ -1513,10 +1513,10 @@ namespace PixiJS
         ASSERT(FCM_SUCCESS_CODE(res));
 
         return res;
-    }*/
+    }
 
 
-    /*FCM::Result ResourcePalette::ExportLinearGradientFillStyle(DOM::FillStyle::IGradientFillStyle* pGradientFillStyle)
+    FCM::Result ResourcePalette::ExportLinearGradientFillStyle(DOM::FillStyle::IGradientFillStyle* pGradientFillStyle)
     {
         DOM::FillStyle::GradientSpread spread;
         AutoPtr<FCM::IFCMUnknown> pGrad;
@@ -1557,10 +1557,10 @@ namespace PixiJS
         ASSERT(FCM_SUCCESS_CODE(res));
 
         return res;
-    }*/
+    }
 
 
-    /*FCM::Result ResourcePalette::ExportBitmapFillStyle(DOM::FillStyle::IBitmapFillStyle* pBitmapFillStyle)
+    FCM::Result ResourcePalette::ExportBitmapFillStyle(DOM::FillStyle::IBitmapFillStyle* pBitmapFillStyle)
     {
         DOM::AutoPtr<DOM::ILibraryItem> pLibItem;
         DOM::AutoPtr<DOM::LibraryItem::IMediaItem> pMediaItem;
@@ -1624,7 +1624,7 @@ namespace PixiJS
         callocService->Free((FCM::PVoid)pName);
 
         return res;
-    }*/
+    }
 
 
     FCM::Result ResourcePalette::GetTextStyle(DOM::FrameElement::ITextStyle* pTextStyleItem, TEXT_STYLE& textStyle)

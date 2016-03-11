@@ -55,34 +55,34 @@ namespace PixiJS
         virtual FCM::Result DefineSolidFillStyle(const DOM::Utils::COLOR& color);
         
         // Bitmap fill style definition
-        // virtual FCM::Result DefineBitmapFillStyle(
-        //                                           FCM::Boolean clipped,
-        //                                           const DOM::Utils::MATRIX2D& matrix,
-        //                                           FCM::S_Int32 height,
-        //                                           FCM::S_Int32 width,
-        //                                           const std::string& libPathName,
-        //                                           DOM::LibraryItem::PIMediaItem pMediaItem);
+        virtual FCM::Result DefineBitmapFillStyle(
+                                                  FCM::Boolean clipped,
+                                                  const DOM::Utils::MATRIX2D& matrix,
+                                                  FCM::S_Int32 height,
+                                                  FCM::S_Int32 width,
+                                                  const std::string& libPathName,
+                                                  DOM::LibraryItem::PIMediaItem pMediaItem);
         
         // Start Linear Gradient fill style definition
-        // virtual FCM::Result StartDefineLinearGradientFillStyle(
-        //                                                        DOM::FillStyle::GradientSpread spread,
-        //                                                        const DOM::Utils::MATRIX2D& matrix);
+        virtual FCM::Result StartDefineLinearGradientFillStyle(
+                                                               DOM::FillStyle::GradientSpread spread,
+                                                               const DOM::Utils::MATRIX2D& matrix);
         
         // Sets a specific key point in a color ramp (for both radial and linear gradient)
-        // virtual FCM::Result SetKeyColorPoint(
-        //                                      const DOM::Utils::GRADIENT_COLOR_POINT& colorPoint);
+        virtual FCM::Result SetKeyColorPoint(
+                                             const DOM::Utils::GRADIENT_COLOR_POINT& colorPoint);
         
         // End Linear Gradient fill style definition
-        // virtual FCM::Result EndDefineLinearGradientFillStyle();
+        virtual FCM::Result EndDefineLinearGradientFillStyle();
         
         // Start Radial Gradient fill style definition
-        // virtual FCM::Result StartDefineRadialGradientFillStyle(
-        //                                                        DOM::FillStyle::GradientSpread spread,
-        //                                                        const DOM::Utils::MATRIX2D& matrix,
-        //                                                        FCM::S_Int32 focalPoint);
+        virtual FCM::Result StartDefineRadialGradientFillStyle(
+                                                               DOM::FillStyle::GradientSpread spread,
+                                                               const DOM::Utils::MATRIX2D& matrix,
+                                                               FCM::S_Int32 focalPoint);
         
         // End Radial Gradient fill style definition
-        // virtual FCM::Result EndDefineRadialGradientFillStyle();
+        virtual FCM::Result EndDefineRadialGradientFillStyle();
         
         // Start of fill region boundary
         virtual FCM::Result StartDefineBoundary();
@@ -238,7 +238,7 @@ namespace PixiJS
         
         JSONNode*  m_pTextRunArray;
         
-        // JSONNode*  m_gradientColor;
+        JSONNode*  m_gradientColor;
         
         JSONNode*  m_stopPointArray;
         

@@ -21,14 +21,14 @@
         <Property name="Filltype" default="Solid" supported="true">
             <Value name="NoFill" supported="true"/>
             <Value name="SolidFill" supported="true"/>
-            <Value name="LinearGradientFill" supported="false"/>
-            <Value name="RadialGradientFill" supported="false"/>
-            <Value name="BitmapFill" supported="false"/>
+            <Value name="LinearGradientFill" supported="true"/>
+            <Value name="RadialGradientFill" supported="true"/>
+            <Value name="BitmapFill" supported="true"/>
         </Property>
-        <Property name="GradientFlow" default="Extend" supported="false">
-            <Value name="Extend" supported="false"/>
-            <Value name="Reflect" supported="false"/>
-            <Value name="Repeat" supported="false"/>
+        <Property name="GradientFlow" default="Extend" supported="true">
+            <Value name="Extend" supported="true"/>
+            <Value name="Reflect" supported="true"/>
+            <Value name="Repeat" supported="true"/>
         </Property>
         <Property name="LinearRGB" default="false" supported="true"/>
     </Feature>
@@ -46,7 +46,7 @@
             <Value name="CentreAlign" supported="true"/>
         </Property>
         <Property name="FontEmbed" supported="false"/>
-        <Property name="LetterSpacing" default="0.0" supported="false"/>
+        <Property name="LetterSpacing" default="0.0" supported="true"/>
         <Property name="AutoKern" default="false" supported="false"/>
         <Property name="AntiAlias" supported="false"/>
         <Property name="Selectable" default="true" supported="false"/>

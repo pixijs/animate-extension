@@ -268,7 +268,7 @@ namespace PixiJS
     }
     
     
-    /*// Bitmap fill style definition
+    // Bitmap fill style definition
     FCM::Result OutputWriter::DefineBitmapFillStyle(
                                                         FCM::Boolean clipped,
                                                         const DOM::Utils::MATRIX2D& matrix,
@@ -347,10 +347,10 @@ namespace PixiJS
         m_pathElem->push_back(bitmapElem);
         
         return FCM_SUCCESS;
-    }*/
+    }
     
     
-    /*// Start Linear Gradient fill style definition
+    // Start Linear Gradient fill style definition
     FCM::Result OutputWriter::StartDefineLinearGradientFillStyle(
                                                                      DOM::FillStyle::GradientSpread spread,
                                                                      const DOM::Utils::MATRIX2D& matrix)
@@ -382,10 +382,10 @@ namespace PixiJS
         m_stopPointArray->set_name("stop");
         
         return FCM_SUCCESS;
-    }*/
+    }
     
     
-    /*// Sets a specific key point in a color ramp (for both radial and linear gradient)
+    // Sets a specific key point in a color ramp (for both radial and linear gradient)
     FCM::Result OutputWriter::SetKeyColorPoint(
                                                    const DOM::Utils::GRADIENT_COLOR_POINT& colorPoint)
     {
@@ -401,10 +401,10 @@ namespace PixiJS
         m_stopPointArray->push_back(stopEntry);
         
         return FCM_SUCCESS;
-    }*/
+    }
     
     
-    /*// End Linear Gradient fill style definition
+    // End Linear Gradient fill style definition
     FCM::Result OutputWriter::EndDefineLinearGradientFillStyle()
     {
         m_gradientColor->push_back(*m_stopPointArray);
@@ -414,10 +414,10 @@ namespace PixiJS
         delete m_gradientColor;
         
         return FCM_SUCCESS;
-    }*/
+    }
     
     
-    /*// Start Radial Gradient fill style definition
+    // Start Radial Gradient fill style definition
     FCM::Result OutputWriter::StartDefineRadialGradientFillStyle(
                                                                      DOM::FillStyle::GradientSpread spread,
                                                                      const DOM::Utils::MATRIX2D& matrix,
@@ -471,10 +471,10 @@ namespace PixiJS
         m_stopPointArray->set_name("stop");
         
         return FCM_SUCCESS;
-    }*/
+    }
     
     
-    /*// End Radial Gradient fill style definition
+    // End Radial Gradient fill style definition
     FCM::Result OutputWriter::EndDefineRadialGradientFillStyle()
     {
         m_gradientColor->push_back(*m_stopPointArray);
@@ -484,7 +484,7 @@ namespace PixiJS
         delete m_gradientColor;
         
         return FCM_SUCCESS;
-    }*/
+    }
     
     FCM::Result OutputWriter::StartDefinePath()
     {       
@@ -615,8 +615,6 @@ namespace PixiJS
     // End of a stroke
     FCM::Result OutputWriter::EndDefineStroke()
     {
-        EndDefinePath();
-
         m_pathElem->push_back(*m_pathCmdArray);
         
         if (m_strokeStyle.type == SOLID_STROKE_STYLE_TYPE)

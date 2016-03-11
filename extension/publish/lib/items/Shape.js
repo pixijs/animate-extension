@@ -31,6 +31,7 @@ const Shape = function(library, data)
     for(let j = 0, len = this.paths.length; j < len; j++) 
     {
         let path = this.paths[j];
+        let gradient = path.radialGradient || path.linearGradient;
 
         // Adding a stroke
         if (path.stroke) 
@@ -38,12 +39,20 @@ const Shape = function(library, data)
             draw.push("f", 0, 0); // transparent fill
             draw.push("s", path.thickness, path.color, path.alpha);
         } 
-        else 
+        else if (gradient)
         {
             draw.push("f", 
-                path.color === undefined ? 0 : path.color, 
-                path.alpha === undefined ? 1 : path.alpha
+                gradient.stop[0].stopColor, 
+                gradient.stop[0].stopOpacity
             );
+        }
+        else if (path.image) // bitmap fill as black
+        {
+            draw.push("f", 0, 1);
+        }
+        else // normal fills
+        {
+            draw.push("f", path.color, path.alpha);
         }
 
         path.d.forEach(function(command, k, commands) 
