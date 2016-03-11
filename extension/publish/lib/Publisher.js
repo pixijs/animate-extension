@@ -6,7 +6,6 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const Library = require('./Library');
 const Renderer = require('./Renderer');
-const LZString = require('lz-string');
 
 /**
  * The application to publish the JSON data to JS output buffer
@@ -85,29 +84,41 @@ p.exportGraphics = function()
 
     // The output map of graphics
     let buffer = "";
+    let filename;
 
-    // Loop through each graphic and add to the map
-    shapes.forEach(function(shape, i)
+    if (!meta.compactShapes)
     {
-        buffer += shape.toString();
+        filename = meta.stageName + ".shapes.json";
+        let results = {};
+        shapes.forEach(function(shape)
+        {
+            results[shape.name] = shape.draw;
+        });
+        buffer = JSON.stringify(results)
+            // Custom render for pretty graphics lib
+            .replace("{", "{\n  ")
+            .replace("]}", "\n  ]\n}")
+            .replace(/\:/g, ': ')
+            .replace(/,/g, ', ')
+            .replace(/(\"[a-z])/g, "\n    $1")
+            .replace(/\],/g, "],\n  ");
+    }
+    else
+    {
+        filename = meta.stageName + ".shapes.txt";
+        shapes.forEach(function(shape, i)
+        {
+            buffer += shape.toString();
 
-        // Separate each shape with a new line
-        if (i < shapes.length - 1)
-            buffer += "\n";
-    });
+            // Separate each shape with a new line
+            if (i < shapes.length - 1)
+                buffer += "\n";
+        });
+    }
 
     // Create the directory if it doesn't exist
     const baseUrl = path.resolve(process.cwd(), meta.imagesPath);
     mkdirp.sync(baseUrl);
-
-    let filename = meta.stageName + ".shapes";
-
-    // Check to see if we should compact the shapes (use BSON file insetad)
-    if (meta.compactShapes)
-    {
-        buffer = LZString.compress(buffer);
-        filename += ".lzw";
-    }
 
     // Save the file data
     fs.writeFileSync(path.join(baseUrl, filename), buffer);
