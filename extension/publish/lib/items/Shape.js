@@ -40,7 +40,10 @@ const Shape = function(library, data)
         } 
         else 
         {
-            draw.push("f", path.color, path.alpha);
+            draw.push("f", 
+                path.color === undefined ? 0 : path.color, 
+                path.alpha === undefined ? 1 : path.alpha
+            );
         }
 
         path.d.forEach(function(command, k, commands) 
