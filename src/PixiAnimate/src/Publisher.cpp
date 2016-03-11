@@ -1201,7 +1201,7 @@ namespace PixiJS
 
         if (pGradientFillStyle)
         {
-            Utils::Trace(GetCallback(), "Warning: Gradient fills are not supported by Pixi.js");
+            Utils::Trace(GetCallback(), "Warning: Gradient fills are not supported by Pixi.js\n");
             pGradientFillStyle->GetColorGradient(pGrad.m_Ptr);
 
             if (AutoPtr<DOM::Utils::IRadialColorGradient>(pGrad))
@@ -1219,7 +1219,7 @@ namespace PixiJS
         pBitmapFillStyle = pFillStyle;
         if (pBitmapFillStyle)
         {
-            Utils::Trace(GetCallback(), "Warning: Bitmap fills are not supported by Pixi.js");
+            Utils::Trace(GetCallback(), "Warning: Bitmap fills are not supported by Pixi.js\n");
             res = ExportBitmapFillStyle(pBitmapFillStyle);
             ASSERT(FCM_SUCCESS_CODE(res));
         }
