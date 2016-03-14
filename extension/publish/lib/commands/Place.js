@@ -26,4 +26,16 @@ const Place = function(data, frame)
 
 util.inherits(Place, Command);
 
+const p = Place.prototype;
+
+/**
+ * Add values to a frame
+ * @method toFrame
+ * @param {Frame} frame
+ */
+p.toFrame = function(frame)
+{
+    Object.assign(frame, this.transform.toTween());
+};
+
 module.exports = Place;

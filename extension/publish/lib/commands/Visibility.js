@@ -19,4 +19,16 @@ const Visibility = function(data, frame)
 
 util.inherits(Visibility, Command);
 
+const p = Visibility.prototype;
+
+/**
+ * Add values to a frame
+ * @method toFrame
+ * @param {Frame} frame
+ */
+p.toFrame = function(frame)
+{
+    frame.v = this.visibility ? 1 : 0;
+};
+
 module.exports = Visibility;

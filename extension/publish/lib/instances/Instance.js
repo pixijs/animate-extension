@@ -1,8 +1,7 @@
 "use strict";
 
-const Place = require('../commands/Place');
-const Remove = require('../commands/Remove');
-const Move = require('../commands/Move');
+const Command = require('../commands/Command');
+const Frame = require('./Frame');
 
 /**
  * The instance renderable object
@@ -30,12 +29,6 @@ const Instance = function(libraryItem, id)
      */
     this.instanceName = null;
 
-    /** 
-     * The collection of animation commands
-     * @property {Array} commands
-     */
-    this.commands = [];
-
     /**
      * The first frame to start showing
      * @property {int} startFrame
@@ -58,9 +51,9 @@ const Instance = function(libraryItem, id)
 
     /** 
      * Initially place the item
-     * @property {Object} initPlace
+     * @property {Frame} initFrame
      */
-    this.initPlace = null;
+    this.initFrame = null;
 
     /**
      * The collection of keyframes
@@ -68,6 +61,12 @@ const Instance = function(libraryItem, id)
      * @private
      */
     this.frames = {};
+
+    /**
+     * If this should loop
+     * @property {Boolean} loop
+     */
+    this.loop = false;
 
     /** 
      * If this instance is animated
@@ -83,42 +82,43 @@ const p = Instance.prototype;
 
 /**
  * Add an command to the object
- * @method addCommand
- * @param {Object} command
+ * @method addToFrame
+ * @param {int} frame Frame to add to
+ * @param {Object} command Current command data
  */
-p.addCommand = function(command)
+p.addToFrame = function(frameIndex, command)
 {
-    if (!this.initPlace && command instanceof Place)
+    // Convert into a typed command
+    command = Command.create(command);
+
+    if (command.type == "Place")
     {
-        this.initPlace = command;
-        this.startFrame = command.frame;
+        this.loop = !!command.loop;
+        this.startFrame = frameIndex;
         this.instanceName = command.instanceName;
     }
-    if (command instanceof Remove) {
-        this.endFrame = command.frame;
+    else if (command.type == "Remove")
+    {
+        this.endFrame = frameIndex;
     }
 
-    let frame = this.frames[command.frame];
+    let frame = this.frames[frameIndex];
     if (!frame)
     {
-        frame = this.frames[command.frame] = {};
+        frame = this.frames[frameIndex] = new Frame();
     }
 
-    // Implement the place and move command
-    if (command instanceof Place || command instanceof Move)
-    {
-        let frame = this.frames[command.frame];
-        if (!frame)
-        {
-            frame = this.frames[command.frame] = {};
-        }
-        Object.assign(frame, command.transform.toTween());
-    }
+    // The command should add properties to the current frame
+    frame.addCommand(command);
 
     // Remove empty frames
     if (!Object.keys(frame).length) 
     {
-        delete this.frames[command.frame];
+        delete this.frames[frameIndex];
+    }
+    else if (!this.initFrame)
+    {
+        this.initFrame = frame;
     }
 
     // Check to see if this is animated
@@ -126,8 +126,19 @@ p.addCommand = function(command)
     {
         this.isAnimated = true;
     }
+};
 
-    this.commands.push(command);
+/**
+ * Get the duration of this item on the stage
+ * @method getDuration
+ * @param {int} totalFrames The total frames of parent
+ * @return {int} Duration in frames
+ */
+p.getDuration = function(totalFrames)
+{
+    return this.endFrame > 0 ? 
+        this.endFrame - this.startFrame : 
+        totalFrames - this.startFrame;
 };
 
 /**
@@ -144,42 +155,32 @@ p.getFrames = function(compress)
         return null;
     }
 
-    let initFrame, initFrameNum;
-    let prevFrame = {
-        a: 1,
-        r: 0,
-        x: 0,
-        y: 0,
-        sx: 1,
-        sy: 1,
-        kx: 0,
-        ky: 0,
-        v: true
-    };
+    let firstFrame;
+    let prevFrame = Frame.DEFAULT_VALUES;
 
-    const allKeys = [
-        'a', // alpha
-        'r', // rotation
-        'x', // x position
-        'y', // y position
-        'sx', // scale x
-        'sy', // scale y
-        'kx', // skew x
-        'ky', // skew y
-        'v' // visibility
-    ];
+    const allKeys = Object.keys(prevFrame);
 
     let animProps = [];
     for (let index in this.frames)
     {
         let frame = this.frames[index];
-        let cloneFrame = Object.assign({}, prevFrame, frame);
+        let cloneFrame = Object.assign({}, prevFrame, frame.toJSON());
         
-        // Copy the first frame so we can prune after we figure
-        // all the properties that animate
-        if (!initFrame) {
-            initFrame = cloneFrame;
-            initFrameNum  = index;
+        // Don't touch the first frame
+        if (!firstFrame) {
+            firstFrame = frame;
+
+            // Check for non-default properties and add to the list of valid
+            // animation properties
+            frame.validKeys.forEach(function(k)
+            {
+                if (prevFrame[k] !== frame[k])
+                {
+                    animProps.push(k);
+                }
+            });
+            prevFrame = cloneFrame;
+            continue;
         }
 
         // De-duplicate the animated properties
@@ -188,11 +189,11 @@ p.getFrames = function(compress)
             let k = allKeys[i];
             if (prevFrame[k] === frame[k]) 
             {
-                delete frame[k];
+                frame[k] = null;
             }
         }
         // Remove frames with no properties
-        let keys = Object.keys(frame);
+        let keys = frame.validKeys;
         if (!keys.length)
         {
             delete this.frames[index];
@@ -214,20 +215,12 @@ p.getFrames = function(compress)
         prevFrame = cloneFrame;
     }
 
-    // Update the initial frame with all the properites that are animated
-    for (let k in initFrame)
-    {
-        // If not in the properties we're animate
-        // then mreove
-        if (animProps.indexOf(k) == -1)
-        {
-            delete initFrame[k];
-        }
-        this.frames[initFrameNum] = initFrame;
-    }
+    // Clean props that we don't use
+    firstFrame.clean(animProps);
 
     // No keyframes are animated
-    if (!Object.keys(initFrame).length) {
+    if (!firstFrame.hasValues)
+    {
         return null;
     }
 
@@ -236,7 +229,7 @@ p.getFrames = function(compress)
         let result = [];
         for (let i in this.frames)
         {
-            result.push(i + this.serializeFrame(this.frames[i]));
+            result.push(i + this.frames[i].serialize());
         }
         return `"${result.join(' ')}"`;
     }
@@ -244,36 +237,9 @@ p.getFrames = function(compress)
     {
         // Clean up the keys to reduce overhead
         return JSON.stringify(this.frames, null, '  ')
+            // Replace the key names with empty strings
             .replace(/\"([^(\")"\d]+)\":/g,"$1:");
     }    
-};
-
-/**
- * Serialize the frame properties
- * @method serializeFrame
- * @param {Object} frame properties
- * @return {string} buffer out
- */
-p.serializeFrame = function(frame)
-{
-    let buffer = "";
-
-    // Convert to single characters
-    let keyMap = {
-        x: 'X',
-        y: 'Y',
-        sx: 'A',
-        sy: 'B',
-        kx: 'C',
-        ky: 'D',
-        r: 'R'
-    };
-    for(let k in frame)
-    {
-        buffer += keyMap[k] + frame[k];
-    }
-    return buffer.replace(/([a-z])(\-)?0\./g, "$1$2.") // remove 0 from floats 0.12 => .12
-        
 };
 
 /**
@@ -305,21 +271,11 @@ p.renderBegin = function()
  */
 p.renderEnd = function(renderer)
 {
-    let buffer = "";
-    if (!this.isAnimated)
+    if (!this.isAnimated && this.initFrame)
     {
-        const matrix = this.initPlace.transform;
-        if (matrix)
-        {
-            const func = renderer.compress ? 'tr' : 'setTransform';
-            const args = matrix.toTransform();
-            if (args.length)
-            {
-                buffer = `.${func}(${args.join(', ')})`; 
-            }
-        }
+        return this.initFrame.render(renderer);
     }
-    return buffer;
+    return '';
 };  
 
 /**

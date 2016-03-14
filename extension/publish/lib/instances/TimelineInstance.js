@@ -35,7 +35,7 @@ p.renderContent = function(renderer)
 {
     const options = {};
 
-    if (!this.initPlace.loop) {
+    if (!this.loop) {
         options.loop = false;
     }
 

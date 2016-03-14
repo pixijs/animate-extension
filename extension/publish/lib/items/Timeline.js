@@ -69,11 +69,7 @@ p.getChildren = function(renderer)
             buffer += instance.render(renderer);
 
             // Get the duration of the instance (how long it's on stage)
-            let duration = instance.endFrame > 0 ? 
-                instance.endFrame - instance.startFrame : 
-                totalFrames - instance.startFrame;
-
-            
+            let duration = instance.getDuration(totalFrames);           
             let frames = instance.getFrames(compress);
 
             // If the child doesn't change

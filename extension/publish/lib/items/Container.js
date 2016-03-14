@@ -2,7 +2,6 @@
 
 const util = require('util');
 const LibraryItem = require('./LibraryItem');
-const Command = require('../commands/Command');
 const ContainerInstance = require('../instances/ContainerInstance');
 
 /**
@@ -66,7 +65,7 @@ p.getInstances = function()
             }
 
             // Add to the list of commands for this instance
-            instance.addCommand(Command.create(command, frame.frame));
+            instance.addToFrame(frame.frame, command);
 
             // Add it if it hasn't been added already
             if (instances.indexOf(instance) == -1) 

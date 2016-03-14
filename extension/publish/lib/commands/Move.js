@@ -24,4 +24,16 @@ const Move = function(data, frame)
 
 util.inherits(Move, Command);
 
+const p = Move.prototype;
+
+/**
+ * Add values to a frame
+ * @method toFrame
+ * @param {Frame} frame
+ */
+p.toFrame = function(frame)
+{
+    Object.assign(frame, this.transform.toTween());
+};
+
 module.exports = Move;

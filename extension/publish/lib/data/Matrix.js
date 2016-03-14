@@ -60,48 +60,8 @@ const Matrix = function(matrix)
     }
 };
 
-// The default values for transform
-const defaults = [0, 0, 1, 1, 0, 0, 0];
-
 // Extends the prototype
 const p = Matrix.prototype;
-
-/**
- * Render the object as a string
- * @method toArray
- * @return {Array} list of arguments in x, y, scaleX, scaleY, rotation, skewX, skewY
- */
-p.toTransform = function()
-{
-    // Order of arguments for DisplayObject.setTransform
-    let args = [
-        this.x,
-        this.y,
-        this.scaleX,
-        this.scaleY,
-        this.rotation,
-        this.skewX,
-        this.skewY
-    ];
-
-    let toRemove = 0;
-    for (let i = defaults.length - 1; i >= 0; i--)
-    {
-        if (args[i] == defaults[i])
-        {
-            toRemove++;
-            continue;
-        }
-        break;
-    }
-    
-    // Remove the default arguments
-    if (toRemove > 0 && toRemove <= args.length)
-    {
-        args.splice(args.length - toRemove, toRemove);
-    }
-    return args;
-};
 
 /**
  * Render the object as a string
