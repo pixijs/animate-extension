@@ -2,6 +2,11 @@
 
 Creates a custom FLA document which support publishing to [PixiJS](http://pixijs.com) natively in Adobe Animate CC (formerly Flash CC 2015).
 
+## Examples
+
+See [examples](https://github.com/jiborobot/pixi-animate-examples) for sample FLA document to test features of PixiAnimate.
+
+
 ## Dependencies
 
 The following dependencies are required in order to publishing FLA document created with this Plugin.
