@@ -15,18 +15,7 @@ const Command = require('./Command');
 const ColorTransform = function(data, frame)
 {
     Command.call(this, data, frame);
-
-    var matrix = this.colorMatrix;
-
-    // Transform
-    this.r = matrix[0];
-    this.r0 = matrix[1];
-    this.b = matrix[2];
-    this.b0 = matrix[3];
-    this.g = matrix[4];
-    this.g0 = matrix[5];
-    this.a = matrix[6];
-    this.a0 = matrix[7];
+    Object.assign(this, this.colorMatrix);
 };
 
 util.inherits(ColorTransform, Command);
@@ -50,12 +39,13 @@ Object.defineProperty(p, 'tint',
 
 /**
  * If we have additive color and should use a ColorFilter
- * @property {Boolean} hasAdditive
+ * @property {Boolean} isSimpleTint
  */
-Object.defineProperty(p, 'hasAdditive', 
+Object.defineProperty(p, 'isSimpleTint', 
 {
     get: function() {
-        return this.r0 !== 0 || this.g0 !== 0 || this.b0 !== 0;
+        return this.rA === 0 && this.gA === 0 && this.bA === 0 &&
+            this.r >= 0 && this.g >= 0 && this.b >= 0;
     }
 });
 
@@ -66,7 +56,7 @@ Object.defineProperty(p, 'hasAdditive',
 Object.defineProperty(p, 'alpha', 
 {
     get: function() {
-        return Math.max(0, Math.min(1, this.a + this.a0));
+        return Math.max(0, Math.min(1, this.a + this.aA));
     }
 });
 
@@ -77,25 +67,28 @@ Object.defineProperty(p, 'alpha',
  */
 p.toFrame = function(frame)
 {
-    // if (!this.hasAdditive)
-    // {
+    if (this.isSimpleTint)
+    {
         frame.a = this.alpha;
-    //     frame.t = this.tint;
-    // }
-    // else
-    // {
-        // colorTransform
-        // frame.c = [
-        //     this.r,
-        //     this.r0,
-        //     this.g,
-        //     this.g0,
-        //     this.b,
-        //     this.b0,
-        //     this.a,
-        //     this.a0
-        // ];
-    // }
+        frame.t = this.tint;
+    }
+    else
+    {
+        frame.c = [
+            this.r,
+            round(this.rA),
+            this.g,
+            round(this.gA),
+            this.b,
+            round(this.bA)
+        ];
+        frame.a = this.alpha;
+    }
 };
+
+function round(val)
+{
+    return Math.round(val * 100) / 100;
+}
 
 module.exports = ColorTransform;

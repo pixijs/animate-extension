@@ -100,10 +100,10 @@
         </Property>
         <Property name="ColorEffect" default="None" supported="true">
             <Value name="None" supported="true"/>
-            <Value name="Brightness" supported="false"/>
-            <Value name="Tint" supported="false"/>
+            <Value name="Brightness" supported="true"/>
+            <Value name="Tint" supported="true"/>
             <Value name="Alpha" supported="true"/> 
-            <Value name="Advanced" supported="false"/>
+            <Value name="Advanced" supported="true"/>
         </Property>
         <Property name="Render" default="Original" supported="true">
             <Value name="Original" supported="true"/>

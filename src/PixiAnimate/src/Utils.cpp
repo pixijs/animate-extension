@@ -259,18 +259,17 @@ namespace PixiJS
 
     JSONNode Utils::ToJSON(const std::string& name, const DOM::Utils::COLOR_MATRIX& colorMatrix)
     {
-        JSONNode arr(JSON_ARRAY);
-        arr.set_name(name);
-
-        for (FCM::U_Int32 i = 0; i < 4; i++)
-        {
-            // Multiplicative factor
-            arr.push_back(JSONNode("", colorMatrix.matrix[i][i]));
-
-            // Additive factor
-            arr.push_back(JSONNode("", colorMatrix.matrix[i][4]));
-        }
-        return arr;
+        JSONNode json;
+        json.set_name(name);
+        json.push_back(JSONNode("r", colorMatrix.matrix[0][0]));
+        json.push_back(JSONNode("rA", colorMatrix.matrix[0][4] / 255 ));
+        json.push_back(JSONNode("g", colorMatrix.matrix[1][1]));
+        json.push_back(JSONNode("gA", colorMatrix.matrix[1][4] / 255 ));
+        json.push_back(JSONNode("b", colorMatrix.matrix[2][2]));
+        json.push_back(JSONNode("bA", colorMatrix.matrix[2][4] / 255 ));
+        json.push_back(JSONNode("a", colorMatrix.matrix[3][3]));
+        json.push_back(JSONNode("aA", colorMatrix.matrix[3][4] / 255 ));
+        return json;
     }
 
     std::string Utils::ToString(const DOM::Utils::CapType& capType)

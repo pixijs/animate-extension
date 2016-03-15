@@ -148,16 +148,16 @@ p.render = function(renderer)
         const func = compress ? 'a' : 'setAlpha';
         buffer += `.${func}(${this.a})`;        
     }
-    // if (this.t !== null)
-    // {
-    //     const func = compress ? 'i': 'setTint';
-    //     buffer += `.${func}(0x${this.t.slice(1)})`;
-    // }
-    // if (this.c !== null)
-    // {
-    //     const func = compress ? 'c': 'setColorTransform';
-    //     buffer += `.${func}(${JSON.stringify(this.c)})`;  
-    // }
+    if (this.t !== null)
+    {
+        const func = compress ? 'i': 'setTint';
+        buffer += `.${func}(0x${this.t.slice(1)})`;
+    }
+    else if (this.c !== null)
+    {
+        const func = compress ? 'c': 'setColorTransform';
+        buffer += `.${func}(${this.c.join(',')})`;  
+    }
     return buffer;
 };
 
