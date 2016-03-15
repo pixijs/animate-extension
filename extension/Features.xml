@@ -39,11 +39,11 @@
             <Value name="DynamicText" supported="true"/>
             <Value name="InputText" supported="false"/>
         </Property>
-        <Property name="TextFormat" default="LeftAlign" supported="true">
-            <Value name="LeftAlign" supported="true"/>
-            <Value name="Justify" supported="true"/>
-            <Value name="RightAlign" supported="true"/>
-            <Value name="CentreAlign" supported="true"/>
+        <Property name="TextFormat" default="LeftAlign" supported="false">
+            <Value name="LeftAlign" supported="false"/>
+            <Value name="Justify" supported="false"/>
+            <Value name="RightAlign" supported="false"/>
+            <Value name="CentreAlign" supported="false"/>
         </Property>
         <Property name="FontEmbed" supported="false"/>
         <Property name="LetterSpacing" default="0.0" supported="true"/>
@@ -55,8 +55,8 @@
         <Property name="SuperScript" default="false" supported="false"/>
         <Property name="SubScript" default="false" supported="false"/>
         <Property name="Margins" default="0.0" supported="false"/>
-        <Property name="LineType" default="SingleLine" supported="false">
-            <Value name="SingleLine" supported="false"/>
+        <Property name="LineType" default="SingleLine" supported="true">
+            <Value name="SingleLine" supported="true"/>
             <Value name="MultiLine" supported="false"/>
             <Value name="MultiLineNoWrap" supported="false"/>
             <Value name="Password" supported="false"/>

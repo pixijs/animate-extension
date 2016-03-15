@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const DataUtils = require('./utils/DataUtils');
 
 /**
  * Buffer our the javascript
@@ -90,7 +91,7 @@ p.template = function(type, subs)
 
             if (typeof value == "object")
             {
-                value = JSON.stringify(value).replace(/\"([^(\")"\d]+)\":/g,"$1:");
+                value = DataUtils.stringifySimple(value);
             }
             buffer = buffer.replace(search, value);
         }

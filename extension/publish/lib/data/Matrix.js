@@ -1,5 +1,7 @@
 "use strict";
 
+const DataUtils = require('../utils/DataUtils');
+
 /**
  * The matrix object
  * @class Matrix
@@ -83,7 +85,7 @@ p.toTween = function()
 
 function round(val)
 {
-    return Math.round(val * 1000) / 1000;
+    return DataUtils.toPrecision(val, 3);
 }
 
 module.exports = Matrix;

@@ -2,6 +2,7 @@
 
 const util = require('util');
 const Command = require('./Command');
+const DataUtils = require('../utils/DataUtils');
 
 /**
  * The command object
@@ -88,7 +89,7 @@ p.toFrame = function(frame)
 
 function round(val)
 {
-    return Math.round(val * 100) / 100;
+    return DataUtils.toPrecision(val);
 }
 
 module.exports = ColorTransform;

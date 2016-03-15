@@ -2,6 +2,7 @@
 
 const Command = require('../commands/Command');
 const Frame = require('./Frame');
+const DataUtils = require('../utils/DataUtils');
 
 /**
  * The instance renderable object
@@ -95,7 +96,8 @@ p.addToFrame = function(frameIndex, command)
     {
         this.loop = !!command.loop;
         this.startFrame = frameIndex;
-        this.instanceName = command.instanceName;
+        if (!this.instanceName && command.instanceName)
+            this.instanceName = command.instanceName;
     }
     else if (command.type == "Remove")
     {
@@ -235,10 +237,7 @@ p.getFrames = function(compress)
     }
     else 
     {
-        // Clean up the keys to reduce overhead
-        return JSON.stringify(this.frames, null, '  ')
-            // Replace the key names with empty strings
-            .replace(/\"([^(\")"\d]+)\":/g,"$1:");
+        return DataUtils.stringifySimple(this.frames);
     }    
 };
 

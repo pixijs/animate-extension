@@ -6,6 +6,7 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const Library = require('./Library');
 const Renderer = require('./Renderer');
+const DataUtils = require('./utils/DataUtils');
 
 /**
  * The application to publish the JSON data to JS output buffer
@@ -94,14 +95,7 @@ p.exportGraphics = function()
         {
             results[shape.name] = shape.draw;
         });
-        buffer = JSON.stringify(results)
-            // Custom render for pretty graphics lib
-            .replace("{", "{\n  ")
-            .replace("]}", "\n  ]\n}")
-            .replace(/\:/g, ': ')
-            .replace(/,/g, ', ')
-            .replace(/(\"[a-z])/g, "\n    $1")
-            .replace(/\],/g, "],\n  ");
+        buffer = DataUtils.readableShapes(results);
     }
     else
     {
@@ -136,19 +130,22 @@ p.updateLoader = function()
     let meta = this._data._meta;
 
     // Update the html if we have exported it
-    if (meta.htmlPath && this._assetsToLoad.length)
+    if (meta.htmlPath)
     {
         let htmlPath = path.join(process.cwd(), meta.htmlPath);
         let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
-        // Add the indentation to the output HTML file
-        let split = ")\n                .add(";
-
-        // Replace the assets token with the assets to load
-        htmlContent = htmlContent.replace(
-            '${assets}', 
-            ".add(" + this._assetsToLoad.join(split) + ")"
-        );
+        if (this._assetsToLoad.length)
+        {
+            htmlContent = DataUtils.addAssetsToLoader(
+                htmlContent, 
+                this._assetsToLoad
+            );
+        }
+        else
+        {
+            htmlContent = DataUtils.htmlRemoveLoader(htmlContent);
+        }
 
         // Overwrite the file
         fs.writeFileSync(htmlPath, htmlContent);
