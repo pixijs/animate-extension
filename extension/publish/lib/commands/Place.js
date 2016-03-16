@@ -3,6 +3,7 @@
 const util = require('util');
 const Command = require('./Command');
 const Matrix = require('../data/Matrix');
+const Rectangle = require('../data/Rectangle');
 
 /**
  * The command object
@@ -20,6 +21,12 @@ const Place = function(data, frame)
     // Convert to matrix
     this.transform = new Matrix(this.transform);
 
+    // Check for bounds and convert to rectangle
+    if (this.bounds)
+    {
+        this.bounds = new Rectangle(this.bounds);
+    }
+
     // Default to null for the instance name
     this.instanceName = this.instanceName || null;
 };
@@ -36,6 +43,7 @@ const p = Place.prototype;
 p.toFrame = function(frame)
 {
     Object.assign(frame, this.transform.toTween());
+    frame.bounds = this.bounds;
 };
 
 module.exports = Place;

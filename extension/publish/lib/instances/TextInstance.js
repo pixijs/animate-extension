@@ -32,16 +32,37 @@ const TextInstance = function(libraryItem, id)
 util.inherits(TextInstance, Instance);
 const p = TextInstance.prototype;
 
+const STYLE_PROPS = {
+    font : 'o',
+    fill : 'i',
+    align : 'a',
+    stroke : 's',
+    strokeThickness : 't',
+    wordWrap : 'w',
+    wordWrapWidth : 'd',
+    lineHeight : 'l',
+    dropShadow : 'h',
+    dropShadowColor : 'c',
+    dropShadowAngle : 'n',
+    dropShadowBlur : 'b',
+    padding : 'p',
+    textBaseline : 'x',
+    lineJoin : 'j',
+    miterLimit : 'm',
+    letterSpacing : 'e'
+};
+
 /**
  * Render the element
  * @method render
  * @param {Renderer} renderer
  * @return {string} Buffer of object
  */
-p.renderContent = function(renderer)
+p.renderContent = function(renderer, undefined)
 {
     const style = this.style;
     const options = {};
+    const compress = renderer.compress;
 
     let fontStyle = style.fontStyle.replace("Style", "");
 
@@ -65,13 +86,38 @@ p.renderContent = function(renderer)
     if (style.letterSpacing)
         options.letterSpacing = style.letterSpacing;
 
-    if (this.align != 'left')
-        options.align = this.align;
+    // Replace the long names with the shortened names
+    if (compress)
+    {
+        for(var k in STYLE_PROPS)
+        {
+            if (options[k] !== undefined)
+            {
+                options[STYLE_PROPS[k]] = options[k];
+                delete options[k];
+            }
+        }
+    }
 
-    return renderer.template('text-instance', {
+    let buffer = renderer.template('text-instance', {
         text: this.libraryItem.txt || "",
         options: DataUtils.stringifySimple(options)
     });
+
+    if (this.align != 'left')
+    {
+        // Add the special alignment
+        const isCenter = this.align == 'center';
+        const alignValue = isCenter ? 0 : 1;
+        const func = compress ? 'g' : 'setAlign';
+        const align = compress ? `${alignValue}` : `"${this.align}"`;
+        buffer += `.${func}(${align})`;
+
+        // Adjust the x position based on the bounds
+        const width = this.initFrame.bounds.width;
+        this.initFrame.x += isCenter ? width / 2 : width; 
+    }
+    return buffer;
 }
 
 module.exports = TextInstance;
