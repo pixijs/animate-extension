@@ -6,7 +6,7 @@
     "js-beautify": "^1.6.2",
     "mkdirp": "^0.5.1",
     "pixi-animate": "git+ssh//git@github.com:jiborobot/pixi-animate.git",
-    "pixi.js": "https://github.com/jiborobot/pixi.js.git#graphics-hole",
+    "pixi.js": "https://github.com/jiborobot/pixi.js.git#dev",
     "uglify-js": "^2.6.1",
     "yargs": "^4.2.0"
   }
