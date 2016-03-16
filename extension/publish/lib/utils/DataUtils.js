@@ -70,13 +70,13 @@ var DataUtils = {
 
     /**
      * Add assets to the html
-     * @method addAssetToLoader
+     * @method addAssetsToLoader
      * @static
      * @param {String} htmlContent
      * @param {Array} assets
      * @return {String} output
      */
-    addAssetToLoader: function(htmlContent, assets)
+    addAssetsToLoader: function(htmlContent, assets)
     {
         // Add the indentation to the output HTML file
         let split = ")\n                .add(";
