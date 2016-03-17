@@ -39,11 +39,11 @@ p.create = function(id)
 /** 
  * The path to load with the load
  * @method render
- * @return {string} buffer
+ * @return {Array} buffer
  */
-p.render = function()
-{
-    return "'" + this.name + "', '" + this.src + "'";
-};
+// p.render = function()
+// {
+//     return "'" + this.name + "', '" + this.src + "'";
+// };
 
 module.exports = Bitmap;

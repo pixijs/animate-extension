@@ -245,6 +245,8 @@ namespace PixiJS
         JSONNode*  m_pathCmdArray;
         
         bool       m_firstSegment;
+
+        FCM::U_Int32 m_framerate;
         
         STROKE_STYLE m_strokeStyle;
         

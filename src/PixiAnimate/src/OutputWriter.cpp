@@ -105,6 +105,8 @@ namespace PixiJS
         m_substitutions["fps"] = Utils::ToString(fps);
         m_substitutions["nameSpace"] = m_nameSpace;
 
+        m_framerate = fps;
+
         return FCM_SUCCESS;
     }
     
@@ -125,6 +127,7 @@ namespace PixiJS
         meta.push_back(JSONNode("compactShapes", m_compactShapes));
         meta.push_back(JSONNode("nameSpace", m_nameSpace));
         meta.push_back(JSONNode("loopTimeline", m_loopTimeline));
+        meta.push_back(JSONNode("framerate", m_framerate));
 
         if (m_images)
         {

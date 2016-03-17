@@ -3,3 +3,4 @@ lib.${id} = MovieClip.extend(function(){
     ${contents}
 });
 
+lib.${id}.assets = ${assets};

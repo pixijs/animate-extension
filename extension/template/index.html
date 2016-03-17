@@ -19,14 +19,7 @@
                 antialias: true
             });
             var stage = new PIXI.Container();
-            var loader = new PIXI.loaders.Loader()
-                ${assets}
-                .once('complete', function(loader, resources) {
-                    var clip = new ${nameSpace}.${stageName}();
-                    clip.framerate = ${fps};
-                    stage.addChild(clip);
-                })
-                .load();
+            PIXI.animate.load(${nameSpace}.${stageName}, stage);
             function update() {
                 renderer.render(stage);
                 requestAnimationFrame(update);

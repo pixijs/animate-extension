@@ -11,10 +11,22 @@ const Timeline = require('./Timeline');
  * @param {Object} data The bitmap data
  * @param {int} data.assetId The resource id
  */
-const Stage = function(library, data)
+const Stage = function(library, data, framerate)
 {
     // Add the data to this object
     Timeline.call(this, library, data);
+
+    /**
+     * The default framerate
+     * @property {int} framerate
+     */
+    this.framerate = framerate;
+
+    /**
+     * The list of assets to load
+     * @property {Array} assets
+     */
+    this.assets = [];
 };
 
 // Reference to the prototype
@@ -30,7 +42,8 @@ const p = Stage.prototype;
 p.render = function(renderer)
 {
     let options = {
-        duration: this.totalFrames
+        duration: this.totalFrames,
+        framerate: this.framerate
     };
     const labels = this.getLabels();
 
@@ -47,7 +60,9 @@ p.render = function(renderer)
         id: this.name,
         options: options,
         duration: this.totalFrames,
+        framerate: this.framerate,
         loop: renderer.loopTimeline,
+        assets: JSON.stringify(this.assets, null, '  '),
         labels: hasLabels ? ', ' + JSON.stringify(labels) : '',
         contents: this.getContents(renderer)
     });

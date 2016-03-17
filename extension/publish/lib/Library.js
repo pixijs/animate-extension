@@ -46,6 +46,12 @@ const Library = function(data)
     const map = this._mapById = {};
 
     /**
+     * Instance of the main stage to use
+     * @property {Stage} stage
+     */
+    this.stage = null;
+
+    /**
      * The build settings
      * @property {Object} meta
      */
@@ -89,7 +95,7 @@ const Library = function(data)
     data.Timelines.forEach(function(timelineData)
     {
         let timeline;
-        if (timelineData.totalFrames <= 1)
+        if (timelineData.totalFrames <= 1 && timelineData.type != "stage")
         {
             self.hasContainer = true;
             timeline = new Container(library, timelineData);
@@ -100,7 +106,7 @@ const Library = function(data)
         }
         else if (timelineData.type == "stage")
         {
-            timeline = new Stage(library, timelineData);
+            self.stage = timeline = new Stage(library, timelineData, data._meta.framerate);
         }
         else 
         {

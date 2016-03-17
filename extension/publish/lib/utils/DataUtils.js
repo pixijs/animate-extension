@@ -47,45 +47,6 @@ var DataUtils = {
             .replace(/,/g, ', ')
             .replace(/(\"[a-z])/g, "\n    $1")
             .replace(/\],/g, "],\n  ");
-    },
-
-    /**
-     * Remove the PIXI load from the output HTML
-     * @method htmlRemoveLoader
-     * @static
-     * @param {String} htmlContent
-     * @return {String} output
-     */
-    htmlRemoveLoader: function(htmlContent)
-    {
-        return htmlContent.replace(/\n\s+\$\{assets\}/, '')
-                .replace(/\n\s+var loader \= new PIXI\.loaders\.Loader\(\)/, '')
-                .replace(/\n\s+\.once\('complete', function\(loader, resources\) \{/, '')
-                .replace(/\}\)\n\s+\.load\(\);/, '')
-                .replace(/\n\s+\n/, '\n')
-                .replace("\n                    ", '\n            ')
-                .replace("\n                    ", '\n            ')
-                .replace("\n                    ", '\n            ');
-    },
-
-    /**
-     * Add assets to the html
-     * @method addAssetsToLoader
-     * @static
-     * @param {String} htmlContent
-     * @param {Array} assets
-     * @return {String} output
-     */
-    addAssetsToLoader: function(htmlContent, assets)
-    {
-        // Add the indentation to the output HTML file
-        let split = ")\n                .add(";
-
-        // Replace the assets token with the assets to load
-        return htmlContent.replace(
-            '${assets}', 
-            `.add(${assets.join(split)})`
-        );
     }
 };
 

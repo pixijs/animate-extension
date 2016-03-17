@@ -1,5 +1,6 @@
-lib.${id} = MovieClip.e(function(){
-    MovieClip.call(this, 0, ${duration}, ${loop} ${labels});
+var Stage = lib.${id} = MovieClip.e(function(){
+    MovieClip.call(this, 0, ${duration}, ${loop}, ${framerate} ${labels});
     ${contents}
 });
 
+Stage.assets = ${assets};

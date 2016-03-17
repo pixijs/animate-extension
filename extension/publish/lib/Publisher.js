@@ -53,19 +53,6 @@ let Publisher = function(dataFile, compress, debug)
      * @property {Boolean} debug
      */
     this.debug = debug == undefined ? false : debug;
-
-    /**
-     * The collection of assets to inject in the HTML page
-     * @property {Array} _assetsToLoad
-     * @private
-     */
-    let assetsToLoad = this._assetsToLoad = [];
-
-    // Load the bitmaps
-    this.library.bitmaps.forEach(function(bitmap)
-    {
-        assetsToLoad.push(bitmap.render());
-    });
 };
 
 // Reference to the prototype
@@ -73,10 +60,18 @@ let p = Publisher.prototype;
 
 /**
  * Export the graphics
- * @method exportGraphics
+ * @method exportImages
  */
-p.exportGraphics = function()
+p.exportImages = function()
 {
+    let assetsToLoad = this.library.stage.assets;
+
+    // Get the images to export
+    this.library.bitmaps.forEach(function(bitmap)
+    {
+        assetsToLoad.push([bitmap.name, bitmap.src]);
+    });
+
     const shapes = this.library.shapes;
     const meta = this._data._meta;
 
@@ -118,38 +113,7 @@ p.exportGraphics = function()
     fs.writeFileSync(path.join(baseUrl, filename), buffer);
 
     // Add to the assets
-    this._assetsToLoad.push("'" + meta.imagesPath + filename + "'");
-};
-
-/**
- * Update the PixiJS loader in the HTML page
- * @method updateLoader
- */
-p.updateLoader = function()
-{
-    let meta = this._data._meta;
-
-    // Update the html if we have exported it
-    if (meta.htmlPath)
-    {
-        let htmlPath = path.join(process.cwd(), meta.htmlPath);
-        let htmlContent = fs.readFileSync(htmlPath, 'utf8');
-
-        if (this._assetsToLoad.length)
-        {
-            htmlContent = DataUtils.addAssetsToLoader(
-                htmlContent, 
-                this._assetsToLoad
-            );
-        }
-        else
-        {
-            htmlContent = DataUtils.htmlRemoveLoader(htmlContent);
-        }
-
-        // Overwrite the file
-        fs.writeFileSync(htmlPath, htmlContent);
-    }
+    assetsToLoad.push(meta.imagesPath + filename);
 };
 
 /**
@@ -177,8 +141,7 @@ p.destroy = function()
  */
 p.run = function()
 {
-    this.exportGraphics();
-    this.updateLoader();
+    this.exportImages();
     this.publish();
     this.destroy();
 };
