@@ -159,6 +159,7 @@ p.getFrames = function(compress)
 
     let firstFrame;
     let prevFrame = Frame.DEFAULT_VALUES;
+    let tintable = false;
 
     const allKeys = Object.keys(prevFrame);
 
@@ -178,6 +179,8 @@ p.getFrames = function(compress)
             {
                 if (prevFrame[k] !== frame[k])
                 {
+                    if (k == "t" && frame[k] != "#ffffff")
+                        tintable = true;
                     animProps.push(k);
                 }
             });
@@ -219,6 +222,11 @@ p.getFrames = function(compress)
 
     // Clean props that we don't use
     firstFrame.clean(animProps);
+
+    if (!tintable)
+    {
+        firstFrame.t = null;
+    }
 
     // No keyframes are animated
     if (!firstFrame.hasValues)
