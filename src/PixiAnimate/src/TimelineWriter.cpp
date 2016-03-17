@@ -842,12 +842,12 @@ namespace PixiJS
         std::string script = Utils::ToString(pScript, m_pCallback);
         Utils::ReplaceAll(script, "\n", "\\n");
         
-        JSONNode textElem(JSON_NODE);
+        // JSONNode textElem(JSON_NODE);
 
-        textElem.push_back(JSONNode("layer", layerNum));
-        textElem.push_back(JSONNode("script", script));
+        // textElem.push_back(JSONNode("layer", layerNum));
+        // textElem.push_back(JSONNode("", script));
         
-        m_pFrameScripts->push_back(textElem);
+        m_pFrameScripts->push_back(JSONNode("", script));
 
         return FCM_SUCCESS;
     }
@@ -855,7 +855,7 @@ namespace PixiJS
 
     FCM::Result TimelineWriter::RemoveFrameScript(FCM::U_Int32 layerNum)
     {
-        Utils::Trace(m_pCallback, "[RemoveFrameScript] (Layer: %d)\n", layerNum);
+        Utils::Trace(m_pCallback, "Warning: Frame scripts cannot be added to empty keyframes. (Layer: %d)\n", layerNum);
         
         return FCM_SUCCESS;
     }

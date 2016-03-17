@@ -2059,6 +2059,8 @@ namespace PixiJS
     {
         FCM::Result res = FCM_SUCCESS;
 
+        // Utils::Trace(GetCallback(), "[AddFrameScript] LayerNum: %d\n", layerNum);
+
         LOG(("[AddFrameScript] LayerNum: %d\n", layerNum));
 
         if (pScript != NULL)

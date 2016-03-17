@@ -64,6 +64,11 @@ p.getChildren = function(renderer)
     {
         let addChildren = [];
         postBuffer += "this";
+
+        // Add the frame scripts frame scripts cannot be added without
+        // instances
+        postBuffer += this.getFrameScripts(renderer);
+
         this.instances.forEach(function(instance)
         {
             buffer += instance.render(renderer);
@@ -92,6 +97,7 @@ p.getChildren = function(renderer)
             let func = compress ? 'ac' : 'addChild';
             postBuffer += `.${func}(${addChildren.join(', ')})`;
         }
+
         postBuffer += ';';
     }
     return buffer + postBuffer;
@@ -105,7 +111,7 @@ p.getChildren = function(renderer)
  */
 p.getContents = function(renderer)
 {
-    return this.getChildren(renderer) + this.getFrameScripts(renderer);
+    return this.getChildren(renderer);
 };
 
 /**
@@ -130,16 +136,14 @@ p.getFrameScripts = function(renderer)
     {
         let addAction = renderer.compress ? 'aa' : 'addAction';
 
-        buffer += "this";
         scriptFrames.forEach(function(f)
         {
             f.scripts.forEach(function(s)
             {
-                let script = s.script.replace(/\\n/g, "\n");
+                let script = s.replace(/\\n/g, "\n");
                 buffer += "." + addAction + "(function(){\n" + script + "}, " + f.frame + ")";
             });
         });
-        buffer += ";";
     }
     return buffer;
 };

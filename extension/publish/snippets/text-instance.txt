@@ -1,1 +1,1 @@
-new Text("${text}", ${options})
+new Text("${text}")

@@ -100,9 +100,12 @@ p.renderContent = function(renderer, undefined)
     }
 
     let buffer = renderer.template('text-instance', {
-        text: this.libraryItem.txt || "",
-        options: DataUtils.stringifySimple(options)
+        text: this.libraryItem.txt || ""
     });
+
+    // Add the style setter
+    let setStyle = compress ? 'ss' : 'setStyle';
+    buffer += `.${setStyle}(${DataUtils.stringifySimple(options)})`;
 
     if (this.align != 'left')
     {
