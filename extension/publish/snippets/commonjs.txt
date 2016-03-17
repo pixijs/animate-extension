@@ -1,3 +1,6 @@
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = ${content};
+    module.exports = {
+        stage: ${nameSpace}.${stageName},
+        library: ${nameSpace}
+    };
 }

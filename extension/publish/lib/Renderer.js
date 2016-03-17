@@ -176,7 +176,10 @@ p.render = function()
     buffer += this.getTimelines();
     buffer += this.getFooter();
     if (this.commonJS) {
-        buffer += this.template('commonjs', this.nameSpace);
+        buffer += this.template('commonjs', {
+            nameSpace: this.nameSpace,
+            stageName: this.library.meta.stageName
+        });
     }
     return buffer;
 };
