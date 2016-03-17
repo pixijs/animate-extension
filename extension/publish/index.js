@@ -13,15 +13,35 @@ app.on('ready', function() {
         alert("Data file must be valid JSON.");
     }
     else {
-        // Main entry point for the application
-        const Publisher = require('./lib/publisher');
-        const publisher = new Publisher(argv.src, argv.compress, argv.debug);
+
+        // For measuring performance
+        const startTime = process.hrtime()[1];
+
+        // Include classes
+        const Publisher = require('./lib/Publisher');
+        const DataUtils = require('./lib/utils/DataUtils');
+
+        // Create a new publisher
+        const publisher = new Publisher(
+            argv.src, // path to the javascript file
+            argv.compress, // If the output should be compressed
+            argv.debug // Don't delete the source file
+        );
 
         try {
-            publisher.run();
+            console.log(publisher.run());
         }
         catch(e) {
             alert(e);
+        }
+
+        // Output performance information
+        if (argv.perf)
+        {
+            let executionTime = DataUtils.toPrecision(
+                (process.hrtime()[1] - startTime) / Math.pow(10, 9), 4
+            );
+            console.log(`\nExecuted in ${executionTime} seconds\n`);
         }
     }
     app.quit();

@@ -142,8 +142,9 @@ p.destroy = function()
 p.run = function()
 {
     this.exportImages();
-    this.publish();
+    const buffer = this.publish();
     this.destroy();
+    return buffer;
 };
 
 /**
@@ -183,7 +184,7 @@ p.publish = function()
     let outputFile = path.join(process.cwd(), meta.outputFile);
     fs.writeFileSync(outputFile, buffer);
 
-    console.log(buffer);
+    return buffer;
 };
 
 module.exports = Publisher;
