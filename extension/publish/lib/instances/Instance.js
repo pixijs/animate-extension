@@ -159,7 +159,7 @@ p.getFrames = function(compress)
 
     let firstFrame;
     let prevFrame = Frame.DEFAULT_VALUES;
-    let tintable = false;
+    let tintCount = 0;
 
     const allKeys = Object.keys(prevFrame);
 
@@ -179,8 +179,6 @@ p.getFrames = function(compress)
             {
                 if (prevFrame[k] !== frame[k])
                 {
-                    if (k == "t" && frame[k] != "#ffffff")
-                        tintable = true;
                     animProps.push(k);
                 }
             });
@@ -192,11 +190,18 @@ p.getFrames = function(compress)
         for (let i = 0, len = allKeys.length; i < len; i++) 
         {
             let k = allKeys[i];
+
             if (prevFrame[k] === frame[k]) 
             {
                 frame[k] = null;
             }
         }
+
+        if (frame.t && frame.t !== "#ffffff")
+        {
+            tintCount++;
+        }
+
         // Remove frames with no properties
         let keys = frame.validKeys;
         if (!keys.length)
@@ -223,7 +228,7 @@ p.getFrames = function(compress)
     // Clean props that we don't use
     firstFrame.clean(animProps);
 
-    if (!tintable)
+    if (!tintCount)
     {
         firstFrame.t = null;
     }
