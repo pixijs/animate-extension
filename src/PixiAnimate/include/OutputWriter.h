@@ -247,6 +247,12 @@ namespace PixiJS
         bool       m_firstSegment;
 
         FCM::U_Int32 m_framerate;
+
+        FCM::U_Int32 m_stageHeight;
+
+        FCM::U_Int32 m_stageWidth;
+
+        std::string m_background;
         
         STROKE_STYLE m_strokeStyle;
         

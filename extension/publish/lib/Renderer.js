@@ -171,6 +171,7 @@ p.getFooter = function()
  */
 p.render = function()
 {
+    const meta = this.library.meta;
     let buffer = "";
     buffer += this.getHeader();
     buffer += this.getTimelines();
@@ -178,7 +179,10 @@ p.render = function()
     if (this.commonJS) {
         buffer += this.template('commonjs', {
             nameSpace: this.nameSpace,
-            stageName: this.library.meta.stageName
+            stageName: meta.stageName,
+            width: meta.width,
+            height: meta.height,
+            background: "0x" + meta.background
         });
     }
     return buffer;

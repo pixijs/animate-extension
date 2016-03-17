@@ -1,6 +1,9 @@
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         stage: ${nameSpace}.${stageName},
+        background: ${background},
+        width: ${width},
+        height: ${height},
         library: ${nameSpace}
     };
 }
