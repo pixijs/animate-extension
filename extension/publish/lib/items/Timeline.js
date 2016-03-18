@@ -103,8 +103,10 @@ p.getChildren = function(renderer)
         // instances
         postBuffer += this.getFrameScripts(renderer);
 
-        this.instances.forEach(function(instance)
+        // Do in reverse order
+        for(let i = this.instances.length - 1; i >= 0; i--)
         {
+            let instance = this.instances[i];
             let masks = this.getMaskFrames(instance);
             let isSingleMask = (masks instanceof Instance);
             let maskInstance = null;
@@ -150,7 +152,6 @@ p.getChildren = function(renderer)
                 postBuffer += `})`;
             }
         }
-        .bind(this));
 
         // Add static children this needs to happen at the end
         // because addChild doesn't return the instance of the container
