@@ -2,6 +2,7 @@ module.exports = function(gulp, options, plugins) {
     gulp.task('default', function(done){
 
         var debug = options.argv.debug;
+        var modules = options.argv.modules;
         var install = options.argv.install;
 
         plugins.gutil.log("+-------------------+".green);
@@ -23,7 +24,7 @@ module.exports = function(gulp, options, plugins) {
             tasks.push('remote-debug');
         }
 
-        if (install) {
+        if (modules) {
             tasks.push('extension-modules');
         }
 
@@ -31,12 +32,21 @@ module.exports = function(gulp, options, plugins) {
             'runtime-copy',
             'move',
             'package',
-            'clean-stage',
-            'uninstall',
-            'pre-install',
-            'install',
-            done
+            'clean-stage'
         );
+
+
+        if (install)
+        {
+            tasks.push(
+                'uninstall',
+                'pre-install',
+                'install'
+            );
+        }
+
+
+        tasks.push(done);
 
         plugins.sequence.apply(plugins.sequence, tasks);
     });  

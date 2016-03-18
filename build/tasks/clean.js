@@ -1,9 +1,9 @@
 module.exports = function(gulp, options, plugins) {
     gulp.task('clean', function(){
+        var debug = options.argv.debug;
         return plugins.del([
             options.bundleId,
-            options.outputName,
-            options.outputDebugName,
+            debug ? options.outputDebugName : options.outputName,
             options.pluginFile
         ]);
     });  
