@@ -150,7 +150,7 @@ p.render = function(renderer)
         const func = compress ? 'a' : 'setAlpha';
         buffer += `.${func}(${this.a})`;        
     }
-    if (this.t !== null)
+    if (this.t !== null && this.t != "#ffffff")
     {
         const func = compress ? 'i': 'setTint';
         buffer += `.${func}(0x${this.t.slice(1)})`;
