@@ -4,6 +4,8 @@ if (typeof module !== 'undefined' && module.exports) {
         background: ${background},
         width: ${width},
         height: ${height},
+        framerate: ${framerate},
+        totalFrames: ${totalFrames},
         library: ${nameSpace}
     };
 }

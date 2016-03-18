@@ -182,6 +182,8 @@ p.render = function()
             stageName: meta.stageName,
             width: meta.width,
             height: meta.height,
+            framerate: meta.framerate,
+            totalFrames: this.library.stage.totalFrames,
             background: "0x" + meta.background
         });
     }
