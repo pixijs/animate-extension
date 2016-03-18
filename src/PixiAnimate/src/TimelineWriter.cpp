@@ -195,7 +195,7 @@ namespace PixiJS
         
         commandElement.push_back(JSONNode("type", "Mask"));
         commandElement.push_back(JSONNode("instanceId", objectId));
-        commandElement.push_back(JSONNode("maskTill", Utils::ToString(maskTillObjectId)));
+        commandElement.push_back(JSONNode("maskTill", maskTillObjectId));
         
         m_pCommandArray->push_back(commandElement);
         

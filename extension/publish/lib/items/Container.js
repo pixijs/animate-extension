@@ -18,8 +18,20 @@ const Container = function(library, data)
     LibraryItem.call(this, library, data);
 
     /**
+     * Get the instances by id
+     * @property {Object} instancesMap
+     */
+    this.instancesMap = {};
+
+    /**
+     * The collection of masks
+     * @property {Array} masks
+     */
+    this.masks = [];
+
+    /**
      * Collection of instances to render
-     * @property {Array} instance
+     * @property {Array} instances
      */
     this.instances = this.getInstances();
 };
@@ -43,6 +55,43 @@ p.render = function(renderer)
 };
 
 /**
+ * Handler for the mask added event
+ * @method onMaskAdded
+ * @param {Mask} command Mask command
+ * @param {int} frame index
+ */
+p.onMaskAdded = function(command, frame)
+{
+    const mask = this.instancesMap[command.instanceId];
+    const instance = this.instancesMap[command.maskTill];
+    // console.log("maskAdded", instance, mask, frame);
+    this.masks.push({
+        instance: instance,
+        mask: mask,
+        frame: frame
+    });
+};
+
+/**
+ * Handler for the mask removed event
+ * @method onMaskRemoved
+ * @param {Mask} command Mask command
+ * @param {int} frame index
+ */
+p.onMaskRemoved = function(command, frame)
+{
+    const mask = this.instancesMap[command.instanceId];
+    // console.log("maskRemoved", command, frame);
+    this.masks.forEach(function(entry)
+    {
+        if (entry.mask === mask)
+        {
+            entry.duration = frame - entry.frame;
+        }
+    });
+};
+
+/**
  * Get the collection of children to place
  * @method getInstances
  * @return {array<Instance>} Collection of instance objects 
@@ -50,8 +99,10 @@ p.render = function(renderer)
 p.getInstances = function()
 {
     const library = this.library;
-    const instancesMap = {};
+    const instancesMap = this.instancesMap;
     const instances = [];
+    const onMaskAdded = this.onMaskAdded.bind(this);
+    const onMaskRemoved = this.onMaskRemoved.bind(this);
     this.frames.forEach(function(frame)
     {
         frame.commands.forEach(function(command)
@@ -62,6 +113,9 @@ p.getInstances = function()
             {
                 instance = library.createInstance(command.assetId, command.instanceId);
                 instancesMap[command.instanceId] = instance;
+
+                instance.on('maskAdded', onMaskAdded);
+                instance.on('maskRemoved', onMaskRemoved); 
             }
 
             // Add to the list of commands for this instance

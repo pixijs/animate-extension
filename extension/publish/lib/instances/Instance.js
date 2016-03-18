@@ -3,6 +3,8 @@
 const Command = require('../commands/Command');
 const Frame = require('./Frame');
 const DataUtils = require('../utils/DataUtils');
+const util = require('util');
+const EventEmitter = require('events');
 
 /**
  * The instance renderable object
@@ -12,6 +14,8 @@ const DataUtils = require('../utils/DataUtils');
  */
 const Instance = function(libraryItem, id)
 {
+    EventEmitter.call(this);
+
     /**
      * The unique instanceId within a timeline
      * @property {int} id
@@ -69,6 +73,13 @@ const Instance = function(libraryItem, id)
      */
     this.loop = false;
 
+    /**
+     * If this instance is serving as a mask
+     * @property {Boolean} renderable
+     * @default true
+     */
+    this.renderable = true;
+
     /** 
      * If this instance is animated
      * @property {Boolean} isAnimated
@@ -79,6 +90,8 @@ const Instance = function(libraryItem, id)
 };
 
 // Reference the prototype
+// Extends the prototype
+util.inherits(Instance, EventEmitter);
 const p = Instance.prototype;
 
 /**
@@ -102,6 +115,15 @@ p.addToFrame = function(frameIndex, command)
     else if (command.type == "Remove")
     {
         this.endFrame = frameIndex;
+        if (!this.renderable)
+        {
+            this.emit('maskRemoved', command, frameIndex);
+        }
+    }
+    else if (command.type == "Mask")
+    {
+        this.renderable = false;
+        this.emit('maskAdded', command, frameIndex);
     }
 
     let frame = this.frames[frameIndex];
@@ -283,11 +305,17 @@ p.renderBegin = function()
  */
 p.renderEnd = function(renderer)
 {
+    let buffer = '';
+    if (!this.renderable)
+    {
+        const func = renderer.compress ? 're' : 'setRenderable';
+        buffer += `.${func}(false)`;
+    }
     if (!this.isAnimated && this.initFrame)
     {
-        return this.initFrame.render(renderer);
+        buffer += this.initFrame.render(renderer);
     }
-    return '';
+    return buffer;
 };  
 
 /**
@@ -305,15 +333,22 @@ p.renderContent = function()
  * Render the object as a string
  * @method render
  * @param {Renderer} renderer
- * @param {Boolean} isAnimated
+ * @param {String} mask Mask if we're single mode
  * @return {string} buffer
  */
-p.render = function(renderer)
+p.render = function(renderer, mask)
 {
     let buffer = "";
     buffer += this.renderBegin(renderer);
     buffer += this.renderContent(renderer);
     buffer += this.renderEnd(renderer);
+
+    // Add a single frame mask
+    if (mask) 
+    {
+        const func = renderer.compress ? 'ma' : 'setMask';
+        buffer += `.${func}(${mask})`;
+    }
     return `${buffer};`;
 };
 
