@@ -104,23 +104,25 @@ namespace PixiJS
 
         Utils::GetAppVersion(pCallback, m_appVersion);
 
-        // trace
-        FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
-        FCM::Result res = pCallback->GetService(Application::Service::FLASHAPP_OUTPUT_CONSOLE_SERVICE, pUnk.m_Ptr);
-        ASSERT(FCM_SUCCESS_CODE(res));
-        
-        // FCM::AutoPtr<Application::Service::IOutputConsoleService> outputConsoleService = pUnk;
-        // FCM::StringRep16 path = Utils::ToString16(featureXMLPath,pCallback);
-        // FCM::StringRep16 outputString = Utils::ToString16(std::string("\nThe feature settings for the SamplePlugin document type is read from "),GetCallback());
-        // outputConsoleService->Trace(outputString);
-        // outputConsoleService->Trace(path);
+        #ifdef _DEBUG
+            // trace
+            FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
+            FCM::Result res = pCallback->GetService(Application::Service::FLASHAPP_OUTPUT_CONSOLE_SERVICE, pUnk.m_Ptr);
+            ASSERT(FCM_SUCCESS_CODE(res));
+            
+            FCM::AutoPtr<Application::Service::IOutputConsoleService> outputConsoleService = pUnk;
+            FCM::StringRep16 path = Utils::ToString16(featureXMLPath,pCallback);
+            FCM::StringRep16 outputString = Utils::ToString16(std::string("\nThe feature settings for the PixiAnimate document type is read from "),GetCallback());
+            outputConsoleService->Trace(outputString);
+            outputConsoleService->Trace(path);
 
-        // FCM::AutoPtr<FCM::IFCMCalloc> pCalloc = PixiJS::Utils::GetCallocService(pCallback);
-        // ASSERT(pCalloc.m_Ptr != NULL);
-  
-        // pCalloc->Free(outputString);
-        // pCalloc->Free(path);
-        // path = outputString = NULL;
+            FCM::AutoPtr<FCM::IFCMCalloc> pCalloc = PixiJS::Utils::GetCallocService(pCallback);
+            ASSERT(pCalloc.m_Ptr != NULL);
+      
+            pCalloc->Free(outputString);
+            pCalloc->Free(path);
+            path = outputString = NULL;
+        #endif
         
         std::ifstream xmlFile(featureXMLPath.c_str(), std::ifstream::in | std::ifstream::binary);
 
