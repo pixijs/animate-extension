@@ -23,6 +23,36 @@ util.inherits(Timeline, Container);
 const p = Timeline.prototype;
 
 /**
+ * The stage type identifier
+ * @property {String} STAGE
+ * @static
+ * @final
+ * @readOnly
+ * @default "stage"
+ */
+Timeline.STAGE = "stage";
+
+/**
+ * The graphic type identifier
+ * @property {String} GRAPHIC
+ * @static
+ * @final
+ * @readOnly
+ * @default "graphic"
+ */
+Timeline.GRAPHIC = "graphic";
+
+/**
+ * The movieclip type identifier
+ * @property {String} MOVIE_CLIP
+ * @static
+ * @final
+ * @readOnly
+ * @default "movieclip"
+ */
+Timeline.MOVIE_CLIP = "movieclip";
+
+/**
  * Render the element
  * @method render
  * @param {Renderer} renderer

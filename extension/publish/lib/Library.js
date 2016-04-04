@@ -46,6 +46,13 @@ const Library = function(data)
     const map = this._mapById = {};
 
     /**
+     * The look-up of the asset by name
+     * @property {Object} _mapByName
+     * @private
+     */
+    const names = this._mapByName = {};
+
+    /**
      * Instance of the main stage to use
      * @property {Stage} stage
      */
@@ -95,16 +102,17 @@ const Library = function(data)
     data.Timelines.forEach(function(timelineData)
     {
         let timeline;
-        if (timelineData.totalFrames <= 1 && timelineData.type != "stage")
+        
+        if (timelineData.totalFrames <= 1 && timelineData.type != Timeline.STAGE)
         {
             self.hasContainer = true;
             timeline = new Container(library, timelineData);
         }
-        else if (timelineData.type == "graphic")
+        else if (timelineData.type == Timeline.GRAPHIC)
         {
             timeline = new Graphic(library, timelineData);
         }
-        else if (timelineData.type == "stage")
+        else if (timelineData.type == Timeline.STAGE)
         {
             self.stage = timeline = new Stage(library, timelineData, data._meta.framerate);
         }
@@ -113,6 +121,39 @@ const Library = function(data)
             timeline = new Timeline(library, timelineData);
         }
         timelines.push(timeline);
+
+        // Graphic names are local, we only care about global names
+        // so that we don't create conflicts
+        if (timeline.type == Timeline.MOVIE_CLIP)
+        {
+            const exp = /_[0-9]+$/;
+
+            let name = timeline.name;
+
+            // See if timeline exists or if name is the same as stage
+            while(names[name] || name == data._meta.stageName) 
+            {
+                let version;
+
+                // Increment the version
+                if (exp.test(name))
+                {
+                    name = name.split('_');
+                    version = parseInt(name.pop()) + 1;
+                    name = name.join('_');
+                }
+                else
+                {
+                    version = 1;
+                }
+                name += "_" + version.toString();
+            }
+            // Remember the names for the next
+            names[name] = timeline;
+
+            // Update the name, just in case
+            timeline.name = name;
+        }
         map[timeline.assetId] = timeline;
     });
 };
