@@ -1,3 +1,6 @@
+/*global fl, FLfile */
+
+/*eslint-disable no-unused-vars */
 
 // Publish the application
 function publish() {
@@ -26,3 +29,5 @@ function browseOutputFile() {
     }
     return null;
 }
+
+/*eslint-enable no-unused-vars */

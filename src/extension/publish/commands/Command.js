@@ -41,7 +41,24 @@ p.toFrame = function()
  */
 Command.create = function(data)
 {
-    var ClassRef = require('./' + data.type);
+    const commands = {
+        BlendMode: require('./BlendMode'),
+        ColorTransform: require('./ColorTransform'),
+        Command: require('./Command'),
+        Filter: require('./Filter'),
+        Mask: require('./Mask'),
+        Move: require('./Move'),
+        Place: require('./Place'),
+        Remove: require('./Remove'),
+        Visibility: require('./Visibility'),
+        ZOrder: require('./ZOrder')
+    };
+
+    var ClassRef = commands[data.type];
+    if (!ClassRef)
+    {
+        throw new Error(`${data.type} is not a valid timeline command`);
+    }
     return new ClassRef(data);
 };
 

@@ -46,8 +46,8 @@ var options = {
     // Vendor release for the runtime
     runtimeOutput: 'com.jibo.PixiAnimate/runtime',
     runtimeResources: [
-        'extension/node_modules/pixi.js/bin/pixi.min.js',
-        'extension/node_modules/pixi-animate/dist/pixi-animate.min.js'
+        'node_modules/pixi.js/bin/pixi.min.js',
+        'node_modules/pixi-animate/dist/pixi-animate.min.js'
     ],
 
     // The files to source when running watch
@@ -62,14 +62,32 @@ var options = {
     
     // The files to include for JS linting
     lintFiles: [
-        '**/*.js',
-        '!node_modules/**',
-        '!extension/bin/**',
-        '!extension/node_modules/**',
-        '!extension/templates/**',
-        '!extension/dialog/cep/**',
-        '!src/**'
-    ]
+        'build/**/*.js',
+        'src/extension/**/*.js',
+        'gulpfile.js'
+    ],
+
+    buildPublish: {
+        src: 'src/extension/publish',
+        dest: 'com.jibo.PixiAnimate/publish'
+    },
+
+    buildPreview: {
+        src: 'src/extension/preview/preview.js',
+        name: 'preview.js',
+        dest: 'com.jibo.PixiAnimate/preview'
+    },
+
+    buildPreviewApp: {
+        src: 'src/extension/preview',
+        dest: 'com.jibo.PixiAnimate/preview'
+    },
+
+    buildDialog: {
+        src: 'src/extension/dialog',
+        name: 'main.js',
+        dest: 'com.jibo.PixiAnimate/dialog'
+    }
 };
 
 // Gulp plugins for tasks to use
@@ -83,7 +101,31 @@ var plugins = {
     gutil: require('gulp-util'),
     rename: require('gulp-rename'),
     eslint: require('gulp-eslint'),
-    install: require('gulp-install')
+    install: require('gulp-install'),
+    browserify: require('browserify'),
+    buffer: require('vinyl-buffer'),
+    strip: require('gulp-strip-comments'),
+    whitespace: require('gulp-whitespace'),
+    source: require('vinyl-source-stream'),
+    build: function(gulp, options, plugins) {
+        return plugins.browserify({
+                entries: options.src, //'./src/extension/publish/index.js',
+                ignoreMissing: true,
+                detectGlobals: false,
+                bare: true,
+                debug: false,
+                builtins: false
+            })
+            .bundle()
+            .pipe(plugins.source(options.name || 'index.js'))
+            .pipe(plugins.buffer())
+            .pipe(plugins.strip())
+            .pipe(plugins.whitespace({
+                removeLeading: true,
+                removeTrailing: true
+            }))
+            .pipe(gulp.dest(options.dest));
+    }
 };
 
 require('load-gulp-tasks')(gulp, options, plugins);

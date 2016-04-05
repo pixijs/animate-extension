@@ -2,7 +2,6 @@ module.exports = function(gulp, options, plugins) {
     gulp.task('default', function(done){
 
         var debug = options.argv.debug;
-        var modules = options.argv.modules;
         var install = options.argv.install;
 
         plugins.gutil.log("+-------------------+".green);
@@ -24,11 +23,11 @@ module.exports = function(gulp, options, plugins) {
             tasks.push('remote-debug');
         }
 
-        if (modules) {
-            tasks.push('extension-modules');
-        }
-
         tasks.push(
+            'build-publish',
+            'build-dialog',
+            'build-preview-app',
+            'build-preview',
             'runtime-copy',
             'move',
             'package',

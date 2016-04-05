@@ -67,7 +67,7 @@ p.template = function(type, subs)
     if (!buffer)
     {
         // Load the snippet from the file system
-        let dir = path.resolve(__dirname, '..', 'snippets');
+        let dir = path.resolve(__dirname, 'snippets');
         buffer = fs.readFileSync(path.join(dir, type + '.txt'), 'utf8');
         this._snippets[type] = buffer;
     }

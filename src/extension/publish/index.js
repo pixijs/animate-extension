@@ -18,8 +18,8 @@ app.on('ready', function() {
         const startTime = process.hrtime()[1];
 
         // Include classes
-        const Publisher = require('./lib/Publisher');
-        const DataUtils = require('./lib/utils/DataUtils');
+        const Publisher = require('./Publisher');
+        const DataUtils = require('./utils/DataUtils');
 
         // Create a new publisher
         const publisher = new Publisher(
