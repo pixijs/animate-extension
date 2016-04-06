@@ -191,9 +191,9 @@ namespace PixiJS
             return FCM_GENERAL_ERROR;
         #endif
 
-        if (!Utils::Exists("/usr/local/bin/node"))
+        if (!Utils::Exists("/usr/local/bin/electron"))
         {
-            Utils::Trace(GetCallback(), "ERROR: NodeJS is required to be installed at /usr/local/bin/node");
+            Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed at /usr/local/bin/electron\nInstall by running the following from a commandline:\n\n\tnpm install electron-prebuilt -g");
             return FCM_GENERAL_ERROR;
         }
 
@@ -242,12 +242,6 @@ namespace PixiJS
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_HTML_PATH, htmlPath);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_NAMESPACE, nameSpace);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, stageName);
-
-        if (!Utils::Exists("/usr/local/bin/electron"))
-        {
-            Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed at /usr/local/bin/electron");
-            return FCM_GENERAL_ERROR;
-        }
 
         #ifdef _DEBUG
             Utils::Trace(GetCallback(), "Export relative to %s\n", basePath.c_str());

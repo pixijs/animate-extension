@@ -39,7 +39,7 @@ preview.addEventListener('did-finish-load', function() {
         }`);
 
     // Show after reload
-    preview.style.display = "block";
+    preview.style.display = "flex";
 });
 
 // Auto-show the dev-tools if console error
