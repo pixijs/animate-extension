@@ -47,6 +47,18 @@ var DataUtils = {
             .replace(/,/g, ', ')
             .replace(/(\"[a-z])/g, "\n    $1")
             .replace(/\],/g, "],\n  ");
+    },
+
+    /**
+     * Optimize 8 bit colors to be shorthand hex values (e.g., "#ffcc99" => "#fc9")
+     * @static
+     * @method compressColors
+     * @param {String} hex The hex color
+     * @return {String}
+     */
+    compressColors: function(hex)
+    {
+        return hex.replace(/([a-f0-9])\1([a-f0-9])\2([a-f0-9])\3/, "$1$2$3");
     }
 };
 

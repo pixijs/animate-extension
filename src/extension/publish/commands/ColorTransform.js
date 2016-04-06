@@ -34,7 +34,8 @@ Object.defineProperty(p, 'tint',
         const r = Math.round(this.r * max);
         const b = Math.round(this.g * max);
         const g = Math.round(this.b * max);
-        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        const hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        return DataUtils.compressColors(hex);
     }
 });
 

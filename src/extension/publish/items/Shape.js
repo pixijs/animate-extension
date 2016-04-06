@@ -3,6 +3,7 @@
 const util = require('util');
 const LibraryItem = require('./LibraryItem');
 const ShapeInstance = require('../instances/ShapeInstance');
+const DataUtils = require('../utils/DataUtils');
 
 
 /**
@@ -37,12 +38,12 @@ const Shape = function(library, data)
         if (path.stroke) 
         {
             draw.push("f", 0, 0); // transparent fill
-            draw.push("s", path.thickness, path.color, path.alpha);
+            draw.push("s", path.thickness, this.toColor(path.color), path.alpha);
         } 
         else if (gradient)
         {
             draw.push("f", 
-                gradient.stop[0].stopColor, 
+                this.toColor(gradient.stop[0].stopColor), 
                 gradient.stop[0].stopOpacity
             );
         }
@@ -52,7 +53,7 @@ const Shape = function(library, data)
         }
         else // normal fills
         {
-            draw.push("f", path.color, path.alpha);
+            draw.push("f", this.toColor(path.color), path.alpha);
         }
 
         path.d.forEach(function(command, k, commands) 
@@ -78,6 +79,17 @@ const Shape = function(library, data)
 // Reference to the prototype
 util.inherits(Shape, LibraryItem);
 const p = Shape.prototype;
+
+/**
+ * Compress colors
+ * @method toColor
+ * @private
+ * @see DataUtils.compressColors
+ */
+p.toColor = function(hex)
+{
+    return DataUtils.compressColors(hex);
+};
 
 /**
  * Create a instance of this
