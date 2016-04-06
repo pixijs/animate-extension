@@ -319,6 +319,11 @@ namespace PixiJS
             Utils::GetFileExtension(libPathName, ext);
             Utils::GetJavaScriptName(libPathName, name);
             SetImageExportFileName(libPathName, name);
+
+            if (ext == "")
+            {
+                ext = "png";
+            }
         }
         
         std::string bitmapExportPath(m_outputImageFolder + name + "." + ext);
@@ -724,6 +729,11 @@ namespace PixiJS
             Utils::GetFileExtension(libPathName, ext);
             Utils::GetJavaScriptName(libPathName, name);
             SetImageExportFileName(libPathName, name);
+            
+            if (ext == "")
+            {
+                ext = "png";
+            }
         }
         
         std::string bitmapExportPath(m_outputImageFolder + name + "." + ext);
