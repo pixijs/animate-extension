@@ -150,10 +150,10 @@ p.render = function(renderer)
         const func = compress ? 'a' : 'setAlpha';
         buffer += `.${func}(${this.a})`;        
     }
-    if (this.t !== null && this.t != "#ffffff")
+    if (this.t !== null && this.t != "#fff")
     {
         const func = compress ? 'i': 'setTint';
-        buffer += `.${func}(0x${this.t.slice(1)})`;
+        buffer += `.${func}("${this.t}")`;
     }
     else if (this.c !== null)
     {
