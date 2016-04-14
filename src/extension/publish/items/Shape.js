@@ -38,7 +38,18 @@ const Shape = function(library, data)
         if (path.stroke) 
         {
             draw.push("f", 0, 0); // transparent fill
-            draw.push("s", path.thickness, this.toColor(path.color), path.alpha);
+            let color, alpha;
+            if (gradient)
+            {
+                color = this.toColor(gradient.stop[0].stopColor);
+                alpha = gradient.stop[0].stopOpacity;
+            }
+            else
+            {
+                color = this.toColor(path.color);
+                alpha = path.alpha;
+            }
+            draw.push("s", path.thickness, color, alpha);
         } 
         else if (gradient)
         {
