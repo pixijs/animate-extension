@@ -39,7 +39,7 @@ const Matrix = function(matrix)
      * The skewX amount in radians
      * @property {Number} skewX
      */
-    this.skewX = round(Math.atan2(matrix.d, matrix.c) - Math.PI / 2);
+    this.skewX = round(Math.atan2(matrix.d, matrix.c) - Math.PI / 2) * -1;
     
     /**
      * The skewY amount in radians
@@ -54,9 +54,9 @@ const Matrix = function(matrix)
     this.rotation = 0;
 
     // if the skew x and y are the same, this is rotation
-    if (this.skewX - this.skewY === 0)
+    if (this.skewX + this.skewY === 0)
     {
-        this.rotation = this.skewX;
+        this.rotation = this.skewY;
         this.skewX = 0;
         this.skewY = 0;
     }
