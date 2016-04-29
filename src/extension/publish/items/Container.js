@@ -31,10 +31,18 @@ const Container = function(library, data)
     this.masks = [];
 
     /**
-     * Collection of instances to render
-     * @property {Array} instances
+     * Collection of instances to render (excluding masks)
+     * @property {Array} children
      */
-    this.instances = this.getInstances();
+    this.children = this.getChildren();
+
+    /**
+     * The children to add using .addChild()
+     * these are static/non-animated
+     * @property {Array} addChildren
+     * @private
+     */
+    this.addChildren = [];
 };
 
 // Reference to the prototype
@@ -51,7 +59,7 @@ p.render = function(renderer)
 {
     return renderer.template('container', {
         id: this.name,
-        contents: this.getChildren(renderer)
+        contents: this.getContents(renderer)
     });
 };
 
@@ -94,14 +102,14 @@ p.onMaskRemoved = function(command, frame)
 
 /**
  * Get the collection of children to place
- * @method getInstances
+ * @method getChildren
  * @return {array<Instance>} Collection of instance objects 
  */
-p.getInstances = function()
+p.getChildren = function()
 {
     const library = this.library;
     const instancesMap = this.instancesMap;
-    const instances = [];
+    const children = [];
     const onMaskAdded = this.onMaskAdded.bind(this);
     const onMaskRemoved = this.onMaskRemoved.bind(this);
     this.frames.forEach(function(frame)
@@ -123,43 +131,122 @@ p.getInstances = function()
             instance.addToFrame(frame.frame, command);
 
             // Add it if it hasn't been added already
-            if (!(instance instanceof SoundInstance) && instances.indexOf(instance) == -1) 
+            if (!(instance instanceof SoundInstance) && children.indexOf(instance) == -1) 
             {
-                instances.push(instance);
+                children.push(instance);
             }
         });
     });
-    return instances;
+
+    // Remove all the masks from the instances
+    // we will render these with this.masks
+    for(let i = children.length -1; i >= 0 ; i--)
+    {
+        if(!children[i].renderable)
+        {
+            children.splice(i, 1);
+        }
+    }
+
+    // TODO: replace with proper depth-sorting
+    children.reverse();
+
+    return children;
+};
+
+/**
+ * Renderer to use
+ * @method getContents
+ * @param {Renderer} renderer
+ */
+p.getContents = function(renderer)
+{
+    let preBuffer = this.renderChildrenMasks(renderer);
+    let buffer = this.renderChildren(renderer);
+    let postBuffer = this.renderAddChildren(renderer);
+
+    return preBuffer + buffer + postBuffer;
+};
+
+p.renderAddChildren = function(renderer)
+{
+    let buffer = '';
+    // Add the static children using addChild
+    if (this.addChildren.length)
+    {
+        let func = renderer.compress ? 'ac' : 'addChild';
+        buffer += `this.${func}(${this.addChildren.join(', ')});`;
+    }
+    return buffer;
 };
 
 /** 
  * Convert instance to add child calls
- * @method getChildren
- * @return {string} Buffer of add children calls
+ * @method renderChildrenMasks
+ * @param {Renderer} renderer The reference to renderer
  */
-p.getChildren = function(renderer)
+p.renderChildrenMasks = function(renderer)
 {
-    const compress = renderer.compress;
-    let buffer = "";
-
-    // We have children to place
-    if (this.instances.length)
+    const len = this.masks.length;
+    let buffer = '';
+    for(let i = 0; i < len; i++)
     {
-        let children = [];
-        this.instances.forEach(function(instance)
-        {
-            // Add the static child instance
-            children.push(instance.localName);
-
-            // Render the instance
-            buffer += instance.render(renderer);
-        });
-
-        children.reverse(); // reverse add child order
-        let func = compress ? "ac" : "addChild";
-        buffer += `this.${func}(${children.join(', ')});`;
+        buffer += this.renderInstance(
+            renderer,
+            this.masks[i].mask
+        );
     }
     return buffer;
+};
+
+/** 
+ * Convert instance to add child calls
+ * @method renderChildren
+ * @param {Renderer} renderer The reference to renderer
+ * @return {string} Buffer of add children calls
+ */
+p.renderChildren = function(renderer)
+{
+    const len = this.children.length;
+    let buffer = '';
+    if (len)
+    {
+        for(let i = 0; i < len; i++)
+        {
+            let instance = this.children[i];
+            buffer += this.renderInstance(renderer, instance);
+        }
+    }
+    return buffer;
+};
+
+/**
+ * Render either a mask or normal instance
+ * @method renderInstance
+ * @return {string}
+ */
+p.renderInstance = function(renderer, instance)
+{
+    this.addChildren.push(instance.localName);
+    return instance.render(renderer, this.getMaskByInstance(instance));
+};
+
+/**
+ * Get a mask for an instance
+ * @method getMask
+ * @param {Instance} instance
+ * @return {Instance} The mask to use for instance
+ */
+p.getMaskByInstance = function(instance)
+{
+    for(let i = 0; i < this.masks.length; i++)
+    {
+        if (this.masks[i].instance === instance)
+        {
+            return this.masks[i].mask.localName;
+        }
+    }
+    return null;
 };
 
 /**

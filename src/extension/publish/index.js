@@ -3,6 +3,7 @@
 const electron = require('electron');
 const app = electron.app;
 const argv = require('yargs').argv;
+const path = require('path');
 
 app.on('ready', function() {
 
@@ -28,6 +29,11 @@ app.on('ready', function() {
             argv.debug // Don't delete the source file
         );
 
+        // Allow override of snippets for debugging purposes
+        publisher.renderer.snippetsPath = path.resolve(
+            argv.assets || __dirname, 'snippets'
+        );
+
         try {
             console.log(publisher.run());
         }
@@ -50,11 +56,15 @@ app.on('ready', function() {
 function alert(message) {
     const dialog = require('dialog');
     const nativeImage = require('electron').nativeImage;
+
+    // Use the assets if it's setup, debugging purposes
+    const icon = path.resolve(argv.assets || __dirname, 'assets/icon.png');
+
     dialog.showMessageBox({
         type: 'error',
         message: 'A publishing error occured', 
         detail: argv.debug && message instanceof Error ? message.stack : String(message),
         buttons: ['Close'],
-        icon: nativeImage.createFromPath(__dirname + '/assets/icon.png')
+        icon: nativeImage.createFromPath(icon)
     });
 }

@@ -16,6 +16,13 @@ const Timeline = function(library, data)
 {
     // Add the data to this object
     Container.call(this, library, data);
+
+    /**
+     * Buffer to end with like addChild and addTimedChild
+     * @property {String} postBuffer
+     * @private
+     */
+    this.postBuffer = '';
 };
 
 // Reference to the prototype
@@ -78,6 +85,95 @@ p.render = function(renderer)
     });
 };
 
+/**
+ * Override, get the contents
+ * @method getContents
+ * @param {Renderer} renderer
+ * @return {string}
+ */
+p.getContents = function(renderer)
+{
+    const buffer = Container.prototype.getContents.call(this, renderer);
+
+    this.getFrameScripts(renderer);
+
+    if (this.postBuffer)
+    {
+        this.postBuffer = `this${this.postBuffer};`;
+    }
+    return buffer + this.postBuffer;
+};
+
+/**
+ * Render either a mask or normal instance
+ * @method renderInstance
+ */
+p.renderInstance = function(renderer, instance)
+{
+    const compress = renderer.compress;
+    const totalFrames = this.totalFrames;
+
+    // Get the masks for this instance
+    let masks = this.getMaskFrames(instance);
+
+    // If we only have one mask and it covers everything
+    let isSingleMask = (masks instanceof Instance);
+    let maskInstance = null;
+
+    // Add the mask instance for this
+    if (isSingleMask)
+    {
+        maskInstance = masks.localName;
+    }
+
+    // Add multiple masks for this instance
+    if (masks && !isSingleMask)
+    {
+        console.log(masks);
+        let maskFunc = compress ? 'am' : 'addTimedMask';
+        this.postBuffer += `.${maskFunc}(${instance.localName}, {\n`
+        for(let i in masks)
+        {
+            let name = masks[i] !== null ? masks[i].localName : null;
+            this.postBuffer += `"${i}": ${name},`;
+        }
+        // Remove the comma-dangle!
+        this.postBuffer = this.postBuffer.slice(0, -1);
+        this.postBuffer += `})`;
+    }
+
+    // Get the duration of the instance (how long it's on stage)
+    let duration = instance.getDuration(totalFrames);           
+    let frames = instance.getFrames(renderer.compress);
+    const func = compress ? 'at' : 'addTimedChild';
+
+    // If the child doesn't change
+    if (!frames && instance.startFrame === 0 && duration == totalFrames)
+    {
+        // Don't mix addChild and addTimedChild, z-index gets all messed
+        if (totalFrames > 1)
+        {
+            this.postBuffer += `.${func}(${instance.localName})`;
+        }
+        else
+        {
+            this.addChildren.push(instance.localName);
+        }
+    }
+    else
+    {
+        this.postBuffer += `.${func}(${instance.localName}, ${instance.startFrame}, ${duration}`;
+        this.postBuffer += !frames ? `)` : `, ${frames})`;
+    }
+    return instance.render(renderer, maskInstance);
+};
+
+/**
+ * Get the mask frames for an instance
+ * @method getMaskFrames
+ * @param {Instance} instance
+ * @return {Instance|Object|null} Either the single mask instance, or the object
+ */
 p.getMaskFrames = function(instance)
 {
     const result = {};
@@ -110,105 +206,6 @@ p.getMaskFrames = function(instance)
     }
 };
 
-/** 
- * Convert instance to add child calls
- * @method getChildren
- * @return {string} Buffer of add children calls
- */
-p.getChildren = function(renderer)
-{    
-    const compress = renderer.compress;
-    const totalFrames = this.totalFrames;
-    const isAnimated = totalFrames > 1;
-    let buffer = "";
-    let postBuffer = "";
-
-    // We have children to place
-    if (this.instances.length)
-    {
-        let addChildren = [];
-        postBuffer += "this";
-
-        // Add the frame scripts frame scripts cannot be added without
-        // instances
-        postBuffer += this.getFrameScripts(renderer);
-
-        // Do in reverse order
-        for(let i = this.instances.length - 1; i >= 0; i--)
-        {
-            let instance = this.instances[i];
-            let masks = this.getMaskFrames(instance);
-            let isSingleMask = (masks instanceof Instance);
-            let maskInstance = null;
-            if (isSingleMask)
-                maskInstance = masks.localName;
-            buffer += instance.render(renderer, maskInstance);
-
-            // Get the duration of the instance (how long it's on stage)
-            let duration = instance.getDuration(totalFrames);           
-            let frames = instance.getFrames(compress);
-            const func = compress ? 'at' : 'addTimedChild';
-
-            // If the child doesn't change
-            if (!frames && instance.startFrame === 0 && duration == totalFrames)
-            {
-                // Don't mix addChild and addTimedChild, z-index gets all messed
-                if (isAnimated)
-                {
-                    postBuffer += `.${func}(${instance.localName})`;
-                }
-                else
-                {
-                    addChildren.push(instance.localName);
-                }
-            }
-            else
-            {
-                postBuffer += `.${func}(${instance.localName}, ${instance.startFrame}, ${duration}`;
-                postBuffer += !frames ? `)` : `, ${frames})`;
-            }
-
-            if (masks && !isSingleMask)
-            {
-                let maskFunc = compress ? 'am' : 'addTimedMask';
-                postBuffer += `.${maskFunc}(${instance.localName}, {\n`
-                for(let i in masks)
-                {
-                    let name = masks[i] ? masks[i].localName : null;
-                    postBuffer += `"${i}": ${name},`;
-                }
-                // Remove the comma-dangle!
-                postBuffer = postBuffer.slice(0, -1);
-                postBuffer += `})`;
-            }
-        }
-
-        // Add static children this needs to happen at the end
-        // because addChild doesn't return the instance of the container
-        // it returns the first instance
-        if (addChildren.length)
-        {
-            addChildren.reverse();
-            const func = compress ? 'ac' : 'addChild';
-            postBuffer += `.${func}(${addChildren.join(', ')})`;
-        }
-
-        postBuffer += ';';
-    }
-    return buffer + postBuffer;
-};
-
-/**
- * Get all contents
- * @method getContents 
- * @param {Renderer} renderer
- * @return {string} buffer
- */
-p.getContents = function(renderer)
-{
-    return this.getChildren(renderer);
-};
-
 /**
  * Get all the frame scripts
  * @method getFrameScripts 
@@ -217,7 +214,6 @@ p.getContents = function(renderer)
  */
 p.getFrameScripts = function(renderer)
 {
-    let buffer = "";
     let scriptFrames = [];
     this.frames.forEach(function(f)
     {
@@ -231,16 +227,17 @@ p.getFrameScripts = function(renderer)
     {
         let addAction = renderer.compress ? 'aa' : 'addAction';
 
-        scriptFrames.forEach(function(f)
+        for(let i = 0; i < scriptFrames.length; i++)
         {
-            f.scripts.forEach(function(s)
+            let frame = scriptFrames[i];
+            let scripts = frame.scripts;
+            for (let j = 0; j < scripts.length; j++)
             {
-                let script = s.replace(/\\n/g, "\n");
-                buffer += "." + addAction + "(function(){\n" + script + "}, " + f.frame + ")";
-            });
-        });
+                let script = scripts[j].replace(/\\n/g, "\n");
+                this.postBuffer += `.${addAction}(function(){\n${script}}, ${frame.frame})`;
+            }
+        }
     }
-    return buffer;
 };
 
 /**
