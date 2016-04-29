@@ -3,6 +3,7 @@
 const util = require('util');
 const LibraryItem = require('./LibraryItem');
 const ContainerInstance = require('../instances/ContainerInstance');
+const SoundInstance = require('../instances/SoundInstance');
 
 /**
  * The single frame timeline
@@ -122,7 +123,7 @@ p.getInstances = function()
             instance.addToFrame(frame.frame, command);
 
             // Add it if it hasn't been added already
-            if (instances.indexOf(instance) == -1) 
+            if (!(instance instanceof SoundInstance) && instances.indexOf(instance) == -1) 
             {
                 instances.push(instance);
             }

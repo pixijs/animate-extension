@@ -939,7 +939,7 @@ namespace PixiJS
         std::string ext;
         
         soundElem.set_name("sound");
-        soundElem.push_back(JSONNode("assetId", Utils::ToString(resId)));
+        soundElem.push_back(JSONNode("assetId", resId));
         
         FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
         

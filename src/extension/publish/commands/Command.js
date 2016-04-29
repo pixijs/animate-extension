@@ -49,6 +49,7 @@ Command.create = function(data)
         Mask: require('./Mask'),
         Move: require('./Move'),
         Place: require('./Place'),
+        SoundPlace: require('./SoundPlace'),
         Remove: require('./Remove'),
         Visibility: require('./Visibility'),
         ZOrder: require('./ZOrder')

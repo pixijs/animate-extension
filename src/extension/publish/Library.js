@@ -7,6 +7,7 @@ const Timeline = require('./items/Timeline');
 const Container = require('./items/Container');
 const Stage = require('./items/Stage');
 const Graphic = require('./items/Graphic');
+const Sound = require('./items/Sound');
 
 /**
  * Handle the converting of data assets to typed objects
@@ -19,6 +20,12 @@ const Library = function(data)
      * @property {Array} bitmaps
      */
     const bitmaps = this.bitmaps = [];
+
+    /**
+     * The collection of Sound objects
+     * @property {Array} sounds
+     */
+    const sounds = this.sounds = [];
 
     /**
      * The collection of Shape objects
@@ -88,6 +95,14 @@ const Library = function(data)
         shape.name = data._meta.stageName + "_" + shape.assetId;
         shapes.push(shape);
         map[shape.assetId] = shape;
+    });
+
+    // Convert the sounds
+    data.Sounds.forEach(function(soundData)
+    {
+        const sound = new Sound(library, soundData);
+        sounds.push(sound);
+        map[sound.assetId] = sound;
     });
 
     // Convert the shapes
