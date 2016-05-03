@@ -18,7 +18,6 @@ const Frame = function()
     this.ky = null; // skew y value
     this.r = null; // rotation value
     this.v = null; // visibility
-    
     this.bounds = null; // bounds
 };
 

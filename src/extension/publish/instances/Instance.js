@@ -60,6 +60,12 @@ const Instance = function(libraryItem, id)
      */
     this.initFrame = null;
 
+    /** 
+     * Instance id to place after
+     * @property {int} placeAfter
+     */
+    this.placeAfter = 0;
+
     /**
      * The collection of keyframes
      * @property {Object} frames
@@ -111,6 +117,7 @@ p.addToFrame = function(frameIndex, command)
         this.startFrame = frameIndex;
         if (!this.instanceName && command.instanceName)
             this.instanceName = command.instanceName;
+        this.placeAfter = command.placeAfter;
     }
     else if (command.type == "Remove")
     {

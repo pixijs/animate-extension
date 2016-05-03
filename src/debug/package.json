@@ -1,0 +1,4 @@
+{ 
+    "name": "PixiAnimatePublish", 
+    "main": "../extension/publish/index.js"
+}

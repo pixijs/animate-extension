@@ -199,6 +199,34 @@ p.renderChildrenMasks = function(renderer)
     return buffer;
 };
 
+/**
+ *
+ *
+ */
+const flattenDepthItems = function(items)
+{
+    const result = [];
+
+    // Pre-sort the items by startFrame
+    items.sort(function(a, b)
+    {
+        return a.instance.startFrame - b.instance.startFrame;
+    }); 
+
+    for(let i = 0; i < items.length; i++)
+    {
+        let item = items[i];
+        result.push(item.instance);
+
+        if (item.children.length)
+        {
+            let children = flattenDepthItems(item.children);
+            result.push.apply(result, children);
+        }
+    }
+    return result;
+};
+
 /** 
  * Convert instance to add child calls
  * @method renderChildren
@@ -211,10 +239,69 @@ p.renderChildren = function(renderer)
     let buffer = '';
     if (len)
     {
-        for(let i = 0; i < len; i++)
-        {
+        let items = [];
+        let cloned = this.children.slice(0);
+        let map = {};
+        for(let i = 0; i < len; i++) {
             let instance = this.children[i];
-            buffer += this.renderInstance(renderer, instance);
+            if (!instance.placeAfter)
+            {
+                // Remove from the temporary list
+                cloned.splice(cloned.indexOf(instance), 1);
+
+                // Create a list item to link together instances
+                let item = {
+                    instance: instance.id,
+                    children: [] 
+                };
+                map[instance.id] = item;
+                items.push(item);
+            }
+        }
+
+        // Go through the rest of the items and 
+        // add them to the depth sorted
+        while(cloned.length)
+        {
+            for(let i = 0; i < cloned.length; i++)
+            {
+                let instance = cloned[i];
+                let parent = map[instance.placeAfter];
+
+                if (parent)
+                {
+                    // Remove from the list
+                    cloned.splice(i, 1);
+
+                    // Create a new linked item
+                    let item = {
+                        instance: instance.id,
+                        children: [] 
+                    };
+
+                    // nest under the parent
+                    parent.children.push(item);
+
+                    // Sort the children by startTime
+                    parent.children.sort(this.sortByStartFrame);
+
+                    // Add to the map
+                    map[instance.id] = item;
+                    break;
+                }
+            }
+        }
+
+        // Flatted all the items to a single array of instances
+        let depthSorted = flattenDepthItems(items);
+
+        // Reverse the items to add in reverse order
+        depthSorted.reverse();
+        
+        // Render to the stage
+        for(let i = 0; i < depthSorted.length; i++)
+        {
+            buffer += this.renderInstance(renderer, this.instancesMap[depthSorted[i]]);
         }
     }
     return buffer;
