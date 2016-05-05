@@ -5,6 +5,8 @@ const app = electron.app;
 const argv = require('yargs').argv;
 const path = require('path');
 
+app.dock.hide();
+
 app.on('ready', function() {
 
     if (!argv.src) {

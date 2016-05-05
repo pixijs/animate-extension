@@ -13,6 +13,8 @@ const BrowserWindow = electron.BrowserWindow;
 // Window to preview in
 let mainWindow = null;
 
+app.dock.hide();
+
 // Quit when all windows are closed. 
 app.on('window-all-closed', function() { 
     app.quit(); 
