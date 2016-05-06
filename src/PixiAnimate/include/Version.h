@@ -56,7 +56,7 @@
      *
      * @brief Plugin version's maintenance number. 
      */
-    #define PIXIJS_PLUGIN_VERSION_MAINTENANCE           0x0e
+    #define PIXIJS_PLUGIN_VERSION_MAINTENANCE           0x0f
     
 
     /**

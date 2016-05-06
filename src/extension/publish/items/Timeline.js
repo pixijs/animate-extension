@@ -129,7 +129,6 @@ p.renderInstance = function(renderer, instance)
     // Add multiple masks for this instance
     if (masks && !isSingleMask)
     {
-        console.log(masks);
         let maskFunc = compress ? 'am' : 'addTimedMask';
         this.postBuffer += `.${maskFunc}(${instance.localName}, {\n`
         for(let i in masks)

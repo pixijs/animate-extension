@@ -34,7 +34,7 @@ const Container = function(library, data)
      * Collection of instances to render (excluding masks)
      * @property {Array} children
      */
-    this.children = this.getChildren();
+    this.children = [];
 
     /**
      * The children to add using .addChild()
@@ -43,6 +43,9 @@ const Container = function(library, data)
      * @private
      */
     this.addChildren = [];
+
+    // Get the children for this
+    this.getChildren();
 };
 
 // Reference to the prototype
@@ -109,7 +112,7 @@ p.getChildren = function()
 {
     const library = this.library;
     const instancesMap = this.instancesMap;
-    const children = [];
+    const children = this.children;
     const onMaskAdded = this.onMaskAdded.bind(this);
     const onMaskRemoved = this.onMaskRemoved.bind(this);
     this.frames.forEach(function(frame)
@@ -137,21 +140,6 @@ p.getChildren = function()
             }
         });
     });
-
-    // Remove all the masks from the instances
-    // we will render these with this.masks
-    for(let i = children.length -1; i >= 0 ; i--)
-    {
-        if(!children[i].renderable)
-        {
-            children.splice(i, 1);
-        }
-    }
-
-    // TODO: replace with proper depth-sorting
-    children.reverse();
-
-    return children;
 };
 
 /**
@@ -242,7 +230,10 @@ p.renderChildren = function(renderer)
         let items = [];
         let cloned = this.children.slice(0);
         let map = {};
-        for(let i = 0; i < len; i++) {
+
+        // Find all of the top nodes with no layer
+        for(let i = 0; i < len; i++) 
+        {
             let instance = this.children[i];
             if (!instance.placeAfter)
             {
@@ -258,7 +249,6 @@ p.renderChildren = function(renderer)
                 items.push(item);
             }
         }
-
         // Go through the rest of the items and 
         // add them to the depth sorted
         while(cloned.length)
@@ -301,7 +291,12 @@ p.renderChildren = function(renderer)
         // Render to the stage
         for(let i = 0; i < depthSorted.length; i++)
         {
-            buffer += this.renderInstance(renderer, this.instancesMap[depthSorted[i]]);
+            let instance = this.instancesMap[depthSorted[i]];
+            
+            if (!instance.renderable) continue;
+
+            buffer += this.renderInstance(renderer, instance);
+            
         }
     }
     return buffer;
