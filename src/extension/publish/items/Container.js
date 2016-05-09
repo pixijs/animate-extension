@@ -18,6 +18,12 @@ const Container = function(library, data)
     // Add the data to this object
     LibraryItem.call(this, library, data);
 
+    // If the name start with a number, we should
+    // prepend an underscore so uglify doesn't choke
+    if (/^\d$/.test(this.name[0])) {
+        this.name = "_" + this.name;
+    }
+
     /**
      * Get the instances by id
      * @property {Object} instancesMap
