@@ -197,14 +197,14 @@ p.renderChildrenMasks = function(renderer)
  *
  *
  */
-const flattenDepthItems = function(items)
+p.flattenDepthItems = function(items)
 {
     const result = [];
 
     // Pre-sort the items by startFrame
     items.sort(function(a, b)
     {
-        return a.instance.startFrame - b.instance.startFrame;
+        return b.startFrame - a.startFrame;
     }); 
 
     for(let i = 0; i < items.length; i++)
@@ -214,7 +214,7 @@ const flattenDepthItems = function(items)
 
         if (item.children.length)
         {
-            let children = flattenDepthItems(item.children);
+            let children = this.flattenDepthItems(item.children);
             result.push.apply(result, children);
         }
     }
@@ -249,6 +249,8 @@ p.renderChildren = function(renderer)
                 // Create a list item to link together instances
                 let item = {
                     instance: instance.id,
+                    startFrame: instance.startFrame,
+                    placeAfter: 0,
                     children: [] 
                 };
                 map[instance.id] = item;
@@ -272,6 +274,8 @@ p.renderChildren = function(renderer)
                     // Create a new linked item
                     let item = {
                         instance: instance.id,
+                        startFrame: instance.startFrame,
+                        placeAfter: instance.placeAfter,
                         children: [] 
                     };
 
@@ -289,7 +293,7 @@ p.renderChildren = function(renderer)
         }
 
         // Flatted all the items to a single array of instances
-        let depthSorted = flattenDepthItems(items);
+        let depthSorted = this.flattenDepthItems(items);
 
         // Reverse the items to add in reverse order
         depthSorted.reverse();
