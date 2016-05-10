@@ -4,7 +4,6 @@ const util = require('util');
 const Instance = require('./Instance');
 
 // const INDEPENDENT = 0;
-const SINGLE_FRAME = 1;
 const SYNCHED = 2;
 
 /**
@@ -19,7 +18,7 @@ const GraphicInstance = function(libraryItem, id)
 {
     Instance.call(this, libraryItem, id);
 
-    this.mode = this.libraryItem.frames.length > 1 ? SYNCHED : SINGLE_FRAME;
+    this.mode = SYNCHED;
 };
 
 // Extends the prototype
@@ -37,7 +36,7 @@ p.renderContent = function(renderer)
     let mode = this.mode;
     if (!renderer.compress)
     {
-        mode = mode == SYNCHED ? "MovieClip.SYNCHED" : "MovieClip.SINGLE_FRAME";
+        mode = "MovieClip.SYNCHED";
     }
     return renderer.template('graphic-instance', {
         id: this.libraryItem.name,
