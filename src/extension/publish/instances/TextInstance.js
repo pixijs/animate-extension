@@ -33,7 +33,10 @@ util.inherits(TextInstance, Instance);
 const p = TextInstance.prototype;
 
 const STYLE_PROPS = {
-    font : 'o',
+    fontSize: 'z',
+    fontFamily: 'f',
+    fontStyle: 'y',
+    fontWeight: 'g',
     fill : 'i',
     align : 'a',
     stroke : 's',
@@ -64,23 +67,24 @@ p.renderContent = function(renderer, undefined)
     const options = {};
     const compress = renderer.compress;
 
-    let fontStyle = style.fontStyle.replace("Style", "");
+    // Get the font style, remove the "Style"
+    let fontStyle = style.fontStyle.replace('Style', '');
 
     // Convert names like "Arial Bold" to just "Arial"
-    let fontName = style.fontName.replace(" " + fontStyle, '');
+    options.fontFamily = style.fontName.replace(' ' + fontStyle, '');
+    options.fontSize = style.fontSize;
 
-    // If the style is regular, ignore, else convert to "italic" or "bold"
-    fontStyle = (fontStyle == "Regular") ? '' : fontStyle.toLowerCase() + " ";
+    fontStyle = fontStyle.toLowerCase();
 
-    // If the font name has 
-    fontName = fontName.indexOf(' ') > -1 ? `'${fontName}'` : fontName;
+    if (fontStyle == "italic")
+        options.fontStyle = fontStyle;
 
-    // Construct the font name
-    options.font = `${fontStyle}${style.fontSize}px ${fontName}`;
+    if (fontStyle == "bold")
+        options.fontWeight = fontStyle;
     
     // Check for default color
     if (style.fontColor != "#000000")
-        options.fill = style.fontColor;
+        options.fill = DataUtils.compressColors(style.fontColor);
     
     // Add letterSpacing if we have it
     if (style.letterSpacing)

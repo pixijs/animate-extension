@@ -127,7 +127,7 @@ p.addToFrame = function(frameIndex, command)
             this.emit('maskRemoved', command, frameIndex);
         }
     }
-    else if (command.type == "Mask")
+    else if (command.type == "Mask" && command.instanceId != command.maskTill)
     {
         this.renderable = false;
         this.emit('maskAdded', command, frameIndex);
