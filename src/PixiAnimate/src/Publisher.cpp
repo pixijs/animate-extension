@@ -243,6 +243,9 @@ namespace PixiJS
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_NAMESPACE, nameSpace);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, stageName);
 
+        // Filter the stagename
+        Utils::GetJavaScriptName(stageName, stageName);
+
         #ifdef _DEBUG
             Utils::Trace(GetCallback(), "Export relative to %s\n", basePath.c_str());
             Utils::Trace(GetCallback(), " -> Output file : %s\n", outputFile.c_str());

@@ -40,6 +40,7 @@
     #include <copyfile.h>
 #endif
 
+#include <cctype>
 #include <iomanip>
 #include <algorithm>
 #include <sstream>
@@ -598,6 +599,9 @@ namespace PixiJS
         ReplaceAll(name, "-", rep);
         ReplaceAll(name, " ", rep);
         ReplaceAll(name, ".", rep);
+        if (isdigit(name[0])) {
+            name = "_" + name;
+        }
     }
 
     void Utils::GetFileExtension(const std::string& path, std::string& extension)
