@@ -39,7 +39,7 @@ const Matrix = function(matrix)
      * The skewX amount in radians
      * @property {Number} skewX
      */
-    this.skewX = round(Math.atan2(matrix.d, matrix.c) - Math.PI / 2);
+    this.skewX = round(Math.atan2(matrix.d, matrix.c) - Math.PI / 2) * -1;
     
     /**
      * The skewY amount in radians
