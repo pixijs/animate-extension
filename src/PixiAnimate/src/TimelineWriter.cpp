@@ -838,6 +838,7 @@ namespace PixiJS
     {
         std::string script = Utils::ToString(pScript, m_pCallback);
         Utils::ReplaceAll(script, "\n", "\\n");
+        Utils::ReplaceAll(script, "\t", "");
         
         // JSONNode textElem(JSON_NODE);
 
