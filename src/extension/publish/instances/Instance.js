@@ -188,7 +188,6 @@ p.getFrames = function(compress)
 
     let firstFrame;
     let prevFrame = Frame.DEFAULT_VALUES;
-    let tintCount = 0;
 
     const allKeys = Object.keys(prevFrame);
 
@@ -199,14 +198,15 @@ p.getFrames = function(compress)
         let cloneFrame = Object.assign({}, prevFrame, frame.toJSON());
         
         // Don't touch the first frame
-        if (!firstFrame) {
+        if (!firstFrame)
+        {
             firstFrame = frame;
 
             // Check for non-default properties and add to the list of valid
             // animation properties
             frame.validKeys.forEach(function(k)
             {
-                if (prevFrame[k] !== frame[k])
+                if (!equals(prevFrame[k], frame[k]))
                 {
                     animProps.push(k);
                 }
@@ -220,15 +220,10 @@ p.getFrames = function(compress)
         {
             let k = allKeys[i];
 
-            if (prevFrame[k] === frame[k]) 
+            if (equals(prevFrame[k], frame[k])) 
             {
                 frame[k] = null;
             }
-        }
-
-        if (frame.t && frame.t !== "#ffffff")
-        {
-            tintCount++;
         }
 
         // Remove frames with no properties
@@ -257,16 +252,14 @@ p.getFrames = function(compress)
     // Clean props that we don't use
     firstFrame.clean(animProps);
 
-    if (!tintCount)
-    {
-        firstFrame.t = null;
-    }
-
     // No keyframes are animated
     if (!firstFrame.hasValues)
     {
         return null;
     }
+
+    // Optimize the color transforms into simple tints
+    DataUtils.optimizeColorTransforms(this.frames);
 
     if (compress)
     {
@@ -282,6 +275,42 @@ p.getFrames = function(compress)
         return DataUtils.stringifySimple(this.frames);
     }    
 };
+
+/**
+ * Check that two values are equal.
+ * @function equals
+ * @private
+ * @param {*} a
+ * @param {*} b
+ * @return {Boolean} Are equal
+ */
+function equals(a, b)
+{
+    if (a === b)
+    {
+        return true;
+    }
+    if (a === null || b === null)
+    {
+        return false;
+    }
+
+    if (!Array.isArray(a))
+    {
+        return a === b;
+    }
+    else
+    {
+        for(let i = 0; i < a.length; i++)
+        {
+            if (!equals(a[i], b[i]))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 /**
  * Render the object as a string

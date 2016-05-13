@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ExtensionManifest Version="6.0" ExtensionBundleId="com.jibo.PixiAnimate" ExtensionBundleVersion="1.0.22"
+<ExtensionManifest Version="6.0" ExtensionBundleId="com.jibo.PixiAnimate" ExtensionBundleVersion="1.0.23"
 		ExtensionBundleName="PixiAnimate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ExtensionList>
-		<Extension Id="com.jibo.PixiAnimate.PublishSettings" Version="1.0.22" />
-		<Extension Id="com.jibo.PixiAnimate.Plugin" Version="1.0.22" />
+		<Extension Id="com.jibo.PixiAnimate.PublishSettings" Version="1.0.23" />
+		<Extension Id="com.jibo.PixiAnimate.Plugin" Version="1.0.23" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>

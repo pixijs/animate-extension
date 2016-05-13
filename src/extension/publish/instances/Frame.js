@@ -50,8 +50,7 @@ const GLOBAL_MAP = {
  * @static
  */
 Frame.DEFAULT_VALUES = {
-    t: undefined, // tint
-    c: undefined, // colorTransform
+    c: [1,0,1,0,1,0], // colorTransform
     a: 1, // alpha
     r: 0, // rotation
     x: 0, // x position

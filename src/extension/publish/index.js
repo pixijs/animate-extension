@@ -54,8 +54,14 @@ app.on('ready', function() {
 });
 
 function alert(message) {
-    const dialog = require('dialog');
-    const nativeImage = require('electron').nativeImage;
+    const nativeImage = electron.nativeImage;
+    let dialog;
+    try {
+        dialog = require('dialog');
+    }
+    catch(e) {
+        dialog = electron.dialog;
+    }
 
     // Use the assets if it's setup, debugging purposes
     const icon = path.resolve(argv.assets || __dirname, 'assets/icon.png');
