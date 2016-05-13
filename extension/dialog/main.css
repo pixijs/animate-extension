@@ -158,16 +158,22 @@ body.light .select.disabled {
     color:rgba(0,0,0,0.2) !important;
 }
 
+.text.focus,
+.select.focus,
 .text:focus,
 .select:focus {
     outline:none;
 }
 
+body.dark .text.focus,
+body.dark .select.focus,
 body.dark .text:focus,
 body.dark .select:focus {
     box-shadow: 0 0 0 1px #c5901c;
 }
 
+body.light .text.focus,
+body.light .select.focus,
 body.light .text:focus,
 body.light .select:focus {
     box-shadow: 0 0 0 1px #0071d6;

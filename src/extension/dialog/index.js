@@ -69,46 +69,41 @@
         });
     }
 
-    // function isNumber(event) {
-    //   if (event) {
-    //     var charCode = (event.which) ? event.which : event.keyCode;
-    //     if (charCode != 190 && charCode > 31 && 
-    //        (charCode < 48 || charCode > 57) && 
-    //        (charCode < 96 || charCode > 105) && 
-    //        (charCode < 37 || charCode > 40) && 
-    //         charCode != 110 && charCode != 8 && charCode != 46 )
-    //        return false;
-    //   }
-    //   return true;
-    // }
-
-    function isReadyToPublish()
-    { 
-        var success = true;
-        var error;
-
-        var outFile = $outputFile.value;
-
-        if (!outFile.match(/\S/))
-        {
-            error = 'Output file path cannot be empty.';
-            success = false;
+    // Filters based
+    function isValidInput(input) {
+        var disabled = input.className.indexOf('disabled') > -1;
+        if (disabled) return true;
+        var regex = new RegExp(input.dataset.validate, 'i');
+        var success = regex.test(input.value);
+        if (!success) {
+            input.className += ' focus';
+            exec('alert', input.dataset.error || 'Validation error');
         }
-        else if (!outFile.match(/\.js$/))
-        {
-            error = 'Output file must be an JavaScript file.';
-            success = false;
-        }
-
-        // Show the error message
-        if (!success) exec("alert", error);
         return success;
+    }
+
+    // Remove focus style on click
+    document.addEventListener('mouseup', function(){
+        var inputs = $$('input');
+        for (var n = 0; n < inputs.length; n++)
+        {
+            var input = inputs[n];
+            input.className = input.className.replace('focus', '');
+        }
+    });
+
+    function isReadyToPublish() { 
+        return isValidInput($outputFile)
+            && isValidInput($htmlPath)
+            && isValidInput($namespace)
+            && isValidInput($stageName);
     }
 
     // The prepend name of the settings object keys
     var SETTINGS = "PublishSettings.PixiJS.";
 
-    function restoreState(event) {
+    function restoreState(event)
+    {
         var data = event.data;
 
         if (data[SETTINGS + "OutputFile"])

@@ -10,7 +10,7 @@
             <h2>JavaScript Options</h2>
             <div class="dialog-row">
                 <div class="side">Output File</div>
-                <input type="text" id="outputFile" class="text">
+                <input type="text" id="outputFile" class="text" data-validate=".+\.js$" data-error="Output file must be an JavaScript file.">
                 <button class="button icon-open" id="browseButton">
                     <svg class="dark" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="10" viewBox="0 0 512 512">
                         <path fill="#a0a0a0" d="M416 480l96-256h-416l-96 256zM64 192l-64 288v-416h144l64 64h208v64z"></path>
@@ -20,9 +20,9 @@
                     </svg>
                 </button>
                 <div class="side">Stage Name</div>
-                <input type="text" class="text editable" id="stageName">
+                <input type="text" class="text editable" id="stageName" data-validate="^[a-zA-Z_][a-zA-Z0-9_]*$" data-error="Stage name is not valid, can only contain a-z, A-Z, 0-9, _ characters and cannot start with a number">
                 <div class="side">Namespace</div>
-                <input type="text" class="text editable" value="lib" id="namespace">
+                <input type="text" class="text editable" value="lib" id="namespace" data-validate="^[a-zA-Z_][a-zA-Z0-9_]*$" data-error="Namespace is not valid, can only contain a-z, A-Z, 0-9, _ characters and cannot start with a number">
                 <div class="indent">
                     <div class="checkbox">
                         <input type="checkbox" checked="true" id="loopTimeline" />
@@ -40,7 +40,7 @@
                     </div>
                     <label for="html">HTML</label>
                 </div>
-                <input type="text" id="htmlPath" class="text editable">
+                <input type="text" id="htmlPath" class="text editable" data-validate="\.html?$" data-error="HTML path must have a .html or .htm extension">
                 <div class="side">
                     <div class="checkbox">
                         <input type="checkbox" class="toggle" data-toggle="#libsPath" checked="true" id="libs" />
