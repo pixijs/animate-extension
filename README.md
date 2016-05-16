@@ -36,7 +36,7 @@ Add the entry `PlayerDebugMode` of type `"string"` with value set to `1` in the 
 
 ### Commands
 
-To build and install to Animate CC directly, run the script. This will rebuild the C++ code, copy the plugin and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate/`)
+To build and install to Animate CC directly, run the script. This will copy the plugin and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate/`)
 
 ```bash
 gulp --install
@@ -46,4 +46,16 @@ To build the extension in debug mode and allow for remote debugging, run this co
 
 ```bash
 gulp --debug --install
+```
+
+To rebuild the C++ code on the current platform, use the `--plugin` flag. This will build the plugin for both debug and release.
+
+```bash
+gulp --debug --install --plugin
+```
+
+Or to ONLY build the plugin without building the rest of the extension.
+
+```bash
+gulp plugin
 ```

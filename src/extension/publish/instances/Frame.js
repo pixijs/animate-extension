@@ -228,7 +228,7 @@ p.serialize = function()
     let buffer = "";
     for (let k in GLOBAL_MAP)
     {
-        if (this[k] !== null)
+        if (this[k] !== null && this[k] !== undefined)
         {
             buffer += GLOBAL_MAP[k] + this[k];
         }

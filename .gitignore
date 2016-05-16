@@ -3,8 +3,7 @@
 .idea/
 *.zxp
 temp/
-src/PixiAnimate/lib/
-src/project/mac/build/
+src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin.dSYM
 project/mac/PixiAnimate.mp.xcodeproj/xcuserdata/
 project/mac/PixiAnimate.mp.xcodeproj/project.xcworkspace/xcuserdata/
 node_modules

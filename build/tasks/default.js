@@ -2,6 +2,7 @@ module.exports = function(gulp, options, plugins) {
     gulp.task('default', function(done){
 
         var debug = options.argv.debug;
+        var plugin = options.argv.plugin;
         var install = options.argv.install;
 
         plugins.gutil.log("+-------------------+".green);
@@ -11,10 +12,13 @@ module.exports = function(gulp, options, plugins) {
         
         var tasks = [];
 
+        if (plugin) {
+            tasks.push('plugin');
+        }
+
         tasks.push(
             'clean', 
-            'lint', 
-            'xcodebuild',
+            'lint',
             'stage'
         );
 
@@ -29,6 +33,7 @@ module.exports = function(gulp, options, plugins) {
             'build-preview-app',
             'build-preview',
             'runtime-copy',
+            'runtime-copy-debug',
             'move',
             'package',
             'clean-stage'

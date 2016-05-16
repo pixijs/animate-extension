@@ -71,6 +71,7 @@ namespace PixiJS
 
     // Template
     static const std::string html = "index.html";
+    static const std::string htmlDebug = "index-debug.html";
     
     static const FCM::Float GRADIENT_VECTOR_CONSTANT = 16384.0;
     
@@ -180,7 +181,14 @@ namespace PixiJS
         // Output the HTML templates
         if (m_html)
         {
-            SaveFromTemplate(html, m_htmlPath);
+            if (m_compressJS)
+            {
+                SaveFromTemplate(html, m_htmlPath);
+            }
+            else
+            {
+                SaveFromTemplate(htmlDebug, m_htmlPath);
+            }
         }
 
         return FCM_SUCCESS;

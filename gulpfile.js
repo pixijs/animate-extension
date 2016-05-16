@@ -45,9 +45,16 @@ var options = {
 
     // Vendor release for the runtime
     runtimeOutput: 'com.jibo.PixiAnimate/runtime',
+    runtimeDebugOutput: 'com.jibo.PixiAnimate/runtime-debug',
     runtimeResources: [
         'node_modules/pixi.js/bin/pixi.min.js',
         'node_modules/pixi-animate/dist/pixi-animate.min.js'
+    ],
+    runtimeDebugResources: [
+        'node_modules/pixi.js/bin/pixi.js',
+        'node_modules/pixi.js/bin/pixi.js.map',
+        'node_modules/pixi-animate/dist/pixi-animate.js',
+        'node_modules/pixi-animate/dist/pixi-animate.js.map'
     ],
 
     // The files to source when running watch

@@ -458,7 +458,7 @@ namespace PixiJS
         if (libs)
         {
             // We are now going to copy the runtime from the zxp package to the output folder.
-            CopyRuntime(basePath + libsPath);
+            CopyRuntime(basePath + libsPath, compressJS);
         }
         
         if (previewNeeded)
@@ -711,9 +711,10 @@ namespace PixiJS
     }
 
 
-    FCM::Result CPublisher::CopyRuntime(const std::string& outputFolder)
+    FCM::Result CPublisher::CopyRuntime(const std::string& outputFolder, const bool& compressJS)
     {
         FCM::Result res;
+        std::string runtimeFolder;
         std::string sourceFolder;
 
         // Get the source folder
@@ -722,10 +723,16 @@ namespace PixiJS
         // First let us remove the existing runtime folder (if any)
         Utils::Remove(outputFolder, GetCallback());
 
-        // Jibo (mlb) - the following is how the createJS adobe example did things. 
-        // we may want to investigate the minifying functionality at some point in the future.
         // Copy the runtime folder
-        res = Utils::CopyDir(sourceFolder + RUNTIME_ROOT_FOLDER_NAME, outputFolder, GetCallback());
+        if (!compressJS)
+        {
+            runtimeFolder = RUNTIME_ROOT_FOLDER_NAME_DEBUG;
+        }
+        else
+        {
+            runtimeFolder = RUNTIME_ROOT_FOLDER_NAME;
+        }
+        res = Utils::CopyDir(sourceFolder + runtimeFolder, outputFolder, GetCallback());
         
         return res;
     }
