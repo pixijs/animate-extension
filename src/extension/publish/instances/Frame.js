@@ -153,13 +153,22 @@ p.render = function(renderer)
         const func = compress ? 'i': 'setTint';
         buffer += `.${func}("${this.t}")`;
     }
-    else if (this.c !== null)
+    else if (this.c && !isDefaultColorTransform(this.c))
     {
         const func = compress ? 'c': 'setColorTransform';
         buffer += `.${func}(${this.c.join(',')})`;  
     }
     return buffer;
 };
+
+function isDefaultColorTransform(c) {
+    for(let i = 0; i < c.length; i++) {
+        if (c[i] !== Frame.DEFAULT_VALUES.c[i]) {
+            return false;
+        }
+    }
+    return true;
+}
 
 /**
  * Render the object as a string
