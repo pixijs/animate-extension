@@ -69,7 +69,7 @@ p.exportImages = function()
     // Get the images to export
     this.library.bitmaps.forEach(function(bitmap)
     {
-        assetsToLoad.push([bitmap.name, bitmap.src]);
+        assetsToLoad[bitmap.name] = bitmap.src;
     });
 
     const shapes = this.library.shapes;
@@ -85,10 +85,10 @@ p.exportImages = function()
     if (!meta.compactShapes)
     {
         filename = meta.stageName + ".shapes.json";
-        let results = {};
+        let results = [];
         shapes.forEach(function(shape)
         {
-            results[shape.name] = shape.draw;
+            results.push(shape.draw);
         });
         buffer = DataUtils.readableShapes(results);
     }
@@ -113,7 +113,7 @@ p.exportImages = function()
     fs.writeFileSync(path.join(baseUrl, filename), buffer);
 
     // Add to the assets
-    assetsToLoad.push(meta.imagesPath + filename);
+    assetsToLoad[meta.stageName] = meta.imagesPath + filename;
 };
 
 /**

@@ -1,1 +1,1 @@
-new Graphics().${func}(shapes.${name})
+new Graphics().${func}(shapes.${stageName}[${id}])

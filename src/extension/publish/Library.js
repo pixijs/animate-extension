@@ -89,10 +89,10 @@ const Library = function(data)
     });
 
     // Convert the shapes
-    data.Shapes.forEach(function(shapeData)
+    data.Shapes.forEach(function(shapeData, id)
     {
         const shape = new Shape(library, shapeData);
-        shape.name = data._meta.stageName + "_" + shape.assetId;
+        shape.id = id;
         shapes.push(shape);
         map[shape.assetId] = shape;
     });

@@ -26,7 +26,7 @@ const Stage = function(library, data, framerate)
      * The list of assets to load
      * @property {Array} assets
      */
-    this.assets = [];
+    this.assets = {};
 };
 
 // Reference to the prototype

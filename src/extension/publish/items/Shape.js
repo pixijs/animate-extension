@@ -119,7 +119,7 @@ p.create = function(id)
  */
 p.toString = function()
 {
-    return this.name + " " + this.draw.join(" ");
+    return this.draw.join(" ");
 };
 
 module.exports = Shape;

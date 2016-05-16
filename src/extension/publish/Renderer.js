@@ -38,6 +38,12 @@ const Renderer = function(library)
     this.nameSpace = library.meta.nameSpace;
 
     /**
+     * The name of the stage item
+     * @property {String} stageName
+     */
+    this.stageName = library.meta.stageName;
+
+    /**
      * If the output should be Common JavaScript compatible
      * @property {Boolean} commonJS
      */

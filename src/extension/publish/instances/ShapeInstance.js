@@ -29,7 +29,8 @@ const p = ShapeInstance.prototype;
 p.renderContent = function(renderer)
 {
     return renderer.template('shape-instance', {
-        name: this.libraryItem.name,
+        id: this.libraryItem.id,
+        stageName: renderer.stageName,
         func: renderer.compress ? "d" : "drawCommands"
     });
 };

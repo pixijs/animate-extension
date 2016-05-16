@@ -317,8 +317,7 @@ namespace PixiJS
                 m_imageFolderCreated = true;
             }
             Utils::GetFileExtension(libPathName, ext);
-            // Utils::GetJavaScriptName(libPathName, name);
-            name = libPathName;
+            Utils::GetFileNameWithoutExtension(libPathName, name);
             SetImageExportFileName(libPathName, name);
 
             if (ext == "")
@@ -728,8 +727,7 @@ namespace PixiJS
                 m_imageFolderCreated = true;
             }
             Utils::GetFileExtension(libPathName, ext);
-            // Utils::GetJavaScriptName(libPathName, name);
-            name = libPathName;
+            Utils::GetFileNameWithoutExtension(libPathName, name);
             SetImageExportFileName(libPathName, name);
             
             if (ext == "")
