@@ -610,7 +610,7 @@ namespace PixiJS
         extension = "";
         if (index != std::string::npos)
         {
-            extension = path.substr(index + 1, path.length());
+            extension = path.substr(index + 1, 3);
         }
     }
 
