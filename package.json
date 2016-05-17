@@ -1,7 +1,7 @@
 {
   "name": "pixi-animate-extension",
   "private": true,
-  "version": "1.0.25",
+  "version": "1.0.26",
   "repository": {
     "url": "https://github.com/jiborobot/pixi-animate-extension",
     "type": "git"
