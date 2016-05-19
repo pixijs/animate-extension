@@ -139,6 +139,8 @@ namespace PixiJS
         if (m_images)
         {
             meta.push_back(JSONNode("imagesPath", m_imagesPath));
+            meta.push_back(JSONNode("spritesheets", m_spritesheets));
+            meta.push_back(JSONNode("spritesheetSize", m_spritesheetSize));
         }
 
         if (m_html)
@@ -294,11 +296,6 @@ namespace PixiJS
                                                         const std::string& libPathName,
                                                         DOM::LibraryItem::PIMediaItem pMediaItem)
     {
-        if (!m_images)
-        {
-            return FCM_SUCCESS;
-        }
-
         FCM::Result res;
         std::string name;
         std::string ext;
@@ -314,7 +311,7 @@ namespace PixiJS
         FCM::Boolean alreadyExported = GetImageExportFileName(libPathName, name);
         if (!alreadyExported)
         {
-            if (!m_imageFolderCreated)
+            if (m_images && !m_imageFolderCreated)
             {
                 res = Utils::CreateDir(m_outputImageFolder, m_pCallback);
                 if (!(FCM_SUCCESS_CODE(res)))
@@ -341,7 +338,7 @@ namespace PixiJS
         ASSERT(FCM_SUCCESS_CODE(res));
         
         FCM::AutoPtr<DOM::Service::Image::IBitmapExportService> bitmapExportService = pUnk;
-        if (bitmapExportService)
+        if (m_images && bitmapExportService)
         {
             FCM::AutoPtr<FCM::IFCMCalloc> pCalloc;
             FCM::StringRep16 pFilePath = Utils::ToString16(bitmapExportPath, m_pCallback);
@@ -703,11 +700,6 @@ namespace PixiJS
                                                const std::string& libPathName,
                                                DOM::LibraryItem::PIMediaItem pMediaItem)
     {
-        if (!m_images)
-        {
-            return FCM_SUCCESS;
-        }
-
         FCM::Result res;
         JSONNode bitmapElem(JSON_NODE);
         std::string name;
@@ -724,7 +716,7 @@ namespace PixiJS
         FCM::Boolean alreadyExported = GetImageExportFileName(libPathName, name);
         if (!alreadyExported)
         {
-            if (!m_imageFolderCreated)
+            if (m_images && !m_imageFolderCreated)
             {
                 res = Utils::CreateDir(m_outputImageFolder, m_pCallback);
                 if (!(FCM_SUCCESS_CODE(res)))
@@ -751,7 +743,7 @@ namespace PixiJS
         ASSERT(FCM_SUCCESS_CODE(res));
         
         FCM::AutoPtr<DOM::Service::Image::IBitmapExportService> bitmapExportService = pUnk;
-        if (bitmapExportService)
+        if (m_images && bitmapExportService)
         {
             FCM::AutoPtr<FCM::IFCMCalloc> pCalloc;
             FCM::StringRep16 pFilePath = Utils::ToString16(bitmapExportPath, m_pCallback);
@@ -1007,7 +999,9 @@ namespace PixiJS
         bool compactShapes,
         bool compressJS,
         bool commonJS,
-        bool loopTimeline)
+        bool loopTimeline,
+        bool spritesheets,
+        int spritesheetSize)
     : m_pCallback(pCallback),
     m_outputFile(outputFile),
     m_outputDataFile(basePath + outputFile + "on"),
@@ -1028,6 +1022,8 @@ namespace PixiJS
     m_compressJS(compressJS),
     m_commonJS(commonJS),
     m_loopTimeline(loopTimeline),
+    m_spritesheets(spritesheets),
+    m_spritesheetSize(spritesheetSize),
     m_shapeElem(NULL),
     m_pathArray(NULL),
     m_pathElem(NULL),

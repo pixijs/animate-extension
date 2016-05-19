@@ -33,6 +33,8 @@
     var $browseButton = $("#browseButton");
     var $cancelButton = $("#cancelButton");
     var $okButton = $("#okButton");
+    var $spritesheets = $("#spritesheets");
+    var $spritesheetSize = $("#spritesheetSize");
 
     // Execute JSFL scripts
     function exec(script, callback)
@@ -102,6 +104,11 @@
     // The prepend name of the settings object keys
     var SETTINGS = "PublishSettings.PixiJS.";
 
+    function ifBoolOr(arg, defaultValue)
+    {
+        return typeof arg !== "undefined" ? arg == "true" : defaultValue;
+    }
+
     function restoreState(event)
     {
         var data = event.data;
@@ -109,14 +116,15 @@
         if (data[SETTINGS + "OutputFile"])
         {
             // Booleans options
-            $compactShapes.checked = data[SETTINGS + "CompactShapes"] == "true";
-            $compressJS.checked = data[SETTINGS + "CompressJS"] == "true";
+            $compactShapes.checked = ifBoolOr(data[SETTINGS + "CompactShapes"], true);
+            $compressJS.checked = ifBoolOr(data[SETTINGS + "CompressJS"], true);
             $commonJS.checked = data[SETTINGS + "CommonJS"] == "true";
-            $html.checked = data[SETTINGS + "HTML"] == "true";
-            $libs.checked = data[SETTINGS + "Libs"] == "true";
-            $images.checked = data[SETTINGS + "Images"] == "true";
-            $sounds.checked = data[SETTINGS + "Sounds"] == "true";
-            $loopTimeline.checked = data[SETTINGS + "LoopTimeline"] == "true";
+            $html.checked = ifBoolOr(data[SETTINGS + "HTML"], true);
+            $libs.checked = ifBoolOr(data[SETTINGS + "Libs"], true);
+            $images.checked = ifBoolOr(data[SETTINGS + "Images"], true);
+            $sounds.checked = ifBoolOr(data[SETTINGS + "Sounds"], true);
+            $loopTimeline.checked = ifBoolOr(data[SETTINGS + "LoopTimeline"], true);
+            $spritesheets.checked = ifBoolOr(data[SETTINGS + "Spritesheets"], true);
 
             onToggleInput.call($html);
             onToggleInput.call($images);
@@ -131,6 +139,7 @@
             $namespace.value = data[SETTINGS + "Namespace"];
             $outputFile.value = data[SETTINGS + "OutputFile"];
             $stageName.value = data[SETTINGS + "StageName"];
+            $spritesheetSize.value = data[SETTINGS + "SpritesheetSize"] || 1024;
             
             // Global options
             $hiddenLayers.checked = data["PublishSettings.IncludeInvisibleLayer"] == "true";
@@ -162,6 +171,7 @@
         data[SETTINGS + "Images"] = $images.checked.toString();
         data[SETTINGS + "Sounds"] = $sounds.checked.toString();
         data[SETTINGS + "LoopTimeline"] = $loopTimeline.checked.toString();
+        data[SETTINGS + "Spritesheets"] = $spritesheets.checked.toString();
 
         // Strings
         data[SETTINGS + "OutputFile"] = $outputFile.value.toString();
@@ -171,6 +181,7 @@
         data[SETTINGS + "SoundsPath"] = $soundsPath.value.toString();
         data[SETTINGS + "Namespace"] = $namespace.value.toString();
         data[SETTINGS + "StageName"] = $stageName.value.toString();
+        data[SETTINGS + "SpritesheetSize"] = $spritesheetSize.value.toString();
 
         // Global options
         data["PublishSettings.IncludeInvisibleLayer"] = $hiddenLayers.checked.toString();

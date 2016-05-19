@@ -186,7 +186,9 @@ namespace PixiJS
             bool compactShapes,
             bool compressJS,
             bool commonJS,
-            bool loopTimeline);
+            bool loopTimeline,
+            bool spritesheets,
+            int spritesheetSize);
         
         virtual ~OutputWriter();
         
@@ -289,6 +291,10 @@ namespace PixiJS
         std::string m_outputSoundFolder;
 
         std::map<std::string, std::string> m_substitutions;
+
+        int m_spritesheetSize;
+
+        bool m_spritesheets;
 
         bool m_html;
 

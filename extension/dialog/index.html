@@ -51,34 +51,37 @@
                 <input type="text" id="libsPath" class="text editable" value="libs/">
                 <div class="side">
                     <div class="checkbox">
-                        <input type="checkbox" class="toggle" data-toggle="#imagesPath" checked="true" id="images" />
-                        <label for="images"></label>
-                    </div>
-                    <label for="images">Images</label>
-                </div>
-                <input type="text" id="imagesPath" class="text editable" value="images/">
-                <div class="side">
-                    <div class="checkbox">
                         <input type="checkbox" class="toggle" data-toggle="#soundsPath" checked="true" id="sounds" />
                         <label for="sounds"></label>
                     </div>
                     <label for="sounds">Sounds</label>
                 </div>
                 <input type="text" id="soundsPath" class="text editable" value="sounds/">
-                <!--<div class="indent">
+                <div class="side">
                     <div class="checkbox">
-                        <input type="checkbox" checked="true" id="spritesheets" />
+                        <input type="checkbox" class="toggle" data-toggle="#imagesPath" checked="true" id="images" />
+                        <label for="images"></label>
+                    </div>
+                    <label for="images">Images</label>
+                </div>
+                <input type="text" id="imagesPath" class="text editable" value="images/">
+                <div class="indent">
+                    <div class="checkbox">
+                        <input type="checkbox" checked="true" class="toggle" data-toggle="#spritesheetSize" id="spritesheets" />
                         <label for="spritesheets"></label>
                     </div>
-                    <label for="spritesheets">Export all bitmaps as Spritesheets</label>
+                    <label for="spritesheets">Export as Spritesheets</label>
                     <br>
-
-                    <h2>Spritesheet Options</h2>
-
                     <div class="sub-options">
-                        Maximum spritesheet size <input type="text" value="2048" class="small text editable" id="maxWidth"> &times; <input type="text" value="2048" class="small text" id="maxHeight">
-                        <br>
-                        Base spritesheet scale <input type="text" value="1.0" class="xsmall text editable" id="baseScale">
+                        Spritesheet Size: <select class="small select editable" id="spritesheetSize">
+                            <option>4096</option>
+                            <option>2048</option>
+                            <option selected>1024</option>
+                            <option>512</option>
+                            <option>256</option>
+                        </select>
+                        <!--<br>
+                        Base spritesheet scale <input type="text" value="1.0" class="xsmall text editable" id="spritesheetSizeScale">
                         <br>
                         Scales variants
                         <div class="checkbox">
@@ -95,9 +98,9 @@
                             <input type="checkbox" id="variantCustom" />
                             <label for="variantCustom"></label>
                         </div>
-                        <label for="variantCustom">&times;&frac14;</label>
+                        <label for="variantCustom">&times;&frac14;</label>-->
                     </div>
-                </div>-->
+                </div>
             </div>
 
             <h2>Advanced Options</h2>

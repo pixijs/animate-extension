@@ -79,6 +79,12 @@ var options = {
         dest: 'com.jibo.PixiAnimate/publish'
     },
 
+    buildSpritesheets: {
+        src: 'src/extension/publish/spritesheets/',
+        name: 'spritesheets.js',
+        dest: 'com.jibo.PixiAnimate/publish'
+    },
+
     buildPreview: {
         src: 'src/extension/preview/preview.js',
         name: 'preview.js',

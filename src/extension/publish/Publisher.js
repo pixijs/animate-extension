@@ -7,12 +7,13 @@ const mkdirp = require('mkdirp');
 const Library = require('./Library');
 const Renderer = require('./Renderer');
 const DataUtils = require('./utils/DataUtils');
+const SpritesheetBuilder = require('./SpritesheetBuilder');
 
 /**
  * The application to publish the JSON data to JS output buffer
  * @class Publisher
  */
-let Publisher = function(dataFile, compress, debug)
+let Publisher = function(dataFile, compress, debug, assetsPath)
 {
     // Change the current directory
     process.chdir(path.dirname(dataFile));
@@ -53,6 +54,12 @@ let Publisher = function(dataFile, compress, debug)
      * @property {Boolean} debug
      */
     this.debug = debug == undefined ? false : debug;
+
+    /**
+     * The path to the assets
+     * @property {String} assetsPath
+     */
+    this.assetsPath = assetsPath;
 };
 
 // Reference to the prototype
@@ -62,7 +69,7 @@ let p = Publisher.prototype;
  * Export the graphics
  * @method exportImages
  */
-p.exportImages = function()
+p.exportImages = function(done)
 {
     let assetsToLoad = this.library.stage.assets;
 
@@ -76,44 +83,70 @@ p.exportImages = function()
     const meta = this._data._meta;
 
     // No shapes, nothing to do here
-    if (!shapes.length || !meta.imagesPath) return;
+    if (!meta.imagesPath) {
+        return done();
+    }
 
-    // The output map of graphics
-    let buffer = "";
-    let filename;
-
-    if (!meta.compactShapes)
+    if (shapes.length)
     {
-        filename = meta.stageName + ".shapes.json";
-        let results = [];
-        shapes.forEach(function(shape)
+        // The output map of graphics
+        let buffer = "";
+        let filename;
+
+        if (!meta.compactShapes)
         {
-            results.push(shape.draw);
-        });
-        buffer = DataUtils.readableShapes(results);
+            filename = meta.stageName + ".shapes.json";
+            let results = [];
+            shapes.forEach(function(shape)
+            {
+                results.push(shape.draw);
+            });
+            buffer = DataUtils.readableShapes(results);
+        }
+        else
+        {
+            filename = meta.stageName + ".shapes.txt";
+            shapes.forEach(function(shape, i)
+            {
+                buffer += shape.toString();
+
+                // Separate each shape with a new line
+                if (i < shapes.length - 1)
+                    buffer += "\n";
+            });
+        }
+
+        // Create the directory if it doesn't exist
+        const baseUrl = path.resolve(process.cwd(), meta.imagesPath);
+        mkdirp.sync(baseUrl);
+
+        // Save the file data
+        fs.writeFileSync(path.join(baseUrl, filename), buffer);
+
+        // Add to the assets
+        assetsToLoad[meta.stageName] = meta.imagesPath + filename;
+    }
+
+    if (meta.spritesheets)
+    {
+        // Create the builder
+        new SpritesheetBuilder({
+                assets: assetsToLoad,
+                output: meta.imagesPath + meta.stageName + '_atlas_',
+                size: meta.spritesheetSize,
+                debug: this.debug
+            },
+            this.assetsPath,
+            (assets) => {
+                this.library.stage.assets = assets;
+                done();
+            }
+        );
     }
     else
     {
-        filename = meta.stageName + ".shapes.txt";
-        shapes.forEach(function(shape, i)
-        {
-            buffer += shape.toString();
-
-            // Separate each shape with a new line
-            if (i < shapes.length - 1)
-                buffer += "\n";
-        });
+        done();
     }
-
-    // Create the directory if it doesn't exist
-    const baseUrl = path.resolve(process.cwd(), meta.imagesPath);
-    mkdirp.sync(baseUrl);
-
-    // Save the file data
-    fs.writeFileSync(path.join(baseUrl, filename), buffer);
-
-    // Add to the assets
-    assetsToLoad[meta.stageName] = meta.imagesPath + filename;
 };
 
 /**
@@ -139,12 +172,26 @@ p.destroy = function()
  * The main entry point for the publisher
  * @method run
  */
-p.run = function()
+p.run = function(done)
 {
-    this.exportImages();
-    const buffer = this.publish();
-    this.destroy();
-    return buffer;
+    try {
+        this.exportImages(() => {
+            try {
+                const buffer = this.publish();
+                this.destroy();
+                if (this.debug) {
+                    console.log(buffer);
+                }
+                done();
+            }
+            catch(e) {
+                done(e);
+            }
+        });
+    }
+    catch(e) {
+        done(e);
+    }
 };
 
 /**

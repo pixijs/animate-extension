@@ -32,6 +32,7 @@ module.exports = function(gulp, options, plugins) {
             'build-dialog',
             'build-preview-app',
             'build-preview',
+            'build-spritesheets',
             'runtime-copy',
             'runtime-copy-debug',
             'move',
