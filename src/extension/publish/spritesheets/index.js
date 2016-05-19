@@ -19,13 +19,8 @@ ipc.on('settings', (ev, data) => {
         let src = assets[id];
 
         // Ignore non png files
-        if (/\.(gif|jpg)$/i.test(src)) {
-            results[id] = src;
-            continue;
-        }
-
-        // Ignore JSON, .DS_Store and other non PNG files
         if (!/\.(png)$/i.test(src)) {
+            results[id] = src;
             continue;
         }
 
