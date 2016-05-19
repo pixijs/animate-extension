@@ -4,19 +4,27 @@ const electron = require('electron');
 const app = electron.app;
 const argv = require('yargs').argv;
 const path = require('path');
+const semver = require('semver');
 
 app.on('ready', function() {
 
-    if (!argv.src) {
+    if (!semver.gt(process.versions.electron, '1.0.0'))
+    {
+        alert("Must use Electron v1.0.0 or greater. Install using 'npm install -g electron-prebuilt'");
+        quit();
+    }
+    else if (!argv.src) 
+    {
         alert("Source must be path to data output.");
         quit();
     }
-    else if (!/\.json$/i.test(argv.src)) {
+    else if (!/\.json$/i.test(argv.src))
+    {
         alert("Data file must be valid JSON.");
         quit();
     }
-    else {
-
+    else 
+    {
         // For measuring performance
         const startTime = process.hrtime()[1];
 
@@ -59,13 +67,16 @@ function quit() {
     app.quit();
 }
 
-function alert(message) {
+function alert(message) 
+{
     const nativeImage = electron.nativeImage;
     let dialog;
-    try {
+    try 
+    {
         dialog = require('dialog');
     }
-    catch(e) {
+    catch(e) 
+    {
         dialog = electron.dialog;
     }
 
