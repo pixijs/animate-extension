@@ -37,9 +37,9 @@ const Spritesheet = function(size, debug) {
     this.data = {
         frames: {},
         meta: {
-            app: "PixiAnimate Extension",
-            version: "1.0.0",
-            format: "RGBA8888",
+            // app: "PixiAnimate Extension",
+            // version: "1.0.0",
+            // format: "RGBA8888",
             image: '',
             size: {w: size, h: size},
             scale: 1
@@ -53,9 +53,9 @@ const p = Spritesheet.prototype;
  * Padding around each image.
  * @property {int} PADDING
  * @static
- * @default 2
+ * @default 1
  */
-Spritesheet.PADDING = 2;
+Spritesheet.PADDING = 1;
 
 /**
  * Push additional images, images that are packed, are removed.
@@ -91,11 +91,11 @@ p.addImages = function(images)
         let h = uvs[id][2][1] * this.size - y - Spritesheet.PADDING;
         this.data.frames[id] = {
             frame: {x:x, y:y, w:w, h:h},
-            rotate: false,
-            trimmed: false,
-            spriteSourceSize: {x:0, y:0, w:w, h:h},
-            sourceSize: {w:w, h:h},
-            pivot: {x:0.5,y:0.5}
+            // rotate: false,
+            // trimmed: false,
+            // spriteSourceSize: {x:0, y:0, w:w, h:h},
+            sourceSize: {w:w, h:h}//,
+            // pivot: {x:0.5,y:0.5}
         };
     }
 };
