@@ -48,7 +48,7 @@
      *
      * @brief Minor version of the plugin
      */
-    #define PIXIJS_PLUGIN_VERSION_MINOR                 0x00
+    #define PIXIJS_PLUGIN_VERSION_MINOR                 0x01
     
 
     /**
@@ -56,7 +56,7 @@
      *
      * @brief Plugin version's maintenance number. 
      */
-    #define PIXIJS_PLUGIN_VERSION_MAINTENANCE           0x1a
+    #define PIXIJS_PLUGIN_VERSION_MAINTENANCE           0x00
     
 
     /**
