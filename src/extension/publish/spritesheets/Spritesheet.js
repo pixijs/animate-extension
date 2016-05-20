@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const Atlas = require('./Atlas');
+const Atlas = require('atlaspack').Atlas;
 
 const Spritesheet = function(size, debug) {
 

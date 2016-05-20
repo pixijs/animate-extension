@@ -8,6 +8,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
+    "atlaspack": "^1.0.0",
     "electron-json-storage": "^2.0.0",
     "js-beautify": "^1.6.2",
     "mkdirp": "^0.5.1",
