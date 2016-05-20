@@ -215,6 +215,8 @@ namespace PixiJS
         bool commonJS(false);
         bool loopTimeline(true);
         bool previewNeeded(false);
+        bool spritesheets(true);
+        int spritesheetSize(1024);
         std::string htmlPath;
         std::string stageName;
         std::string libsPath("libs/");
@@ -236,12 +238,14 @@ namespace PixiJS
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPRESS_JS, compressJS);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMMON_JS, commonJS);
         Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LOOP_TIMELINE, loopTimeline);
+        Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_SPRITESHEETS, spritesheets);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_LIBS_PATH, libsPath);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_IMAGES_PATH, imagesPath);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_SOUNDS_PATH, soundsPath);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_HTML_PATH, htmlPath);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_NAMESPACE, nameSpace);
         Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, stageName);
+        Utils::ReadStringToInt(publishSettings, (FCM::StringRep8)DICT_SPRITESHEET_SIZE, spritesheetSize);
 
         // Filter the stagename
         Utils::GetJavaScriptName(stageName, stageName);
@@ -269,6 +273,10 @@ namespace PixiJS
             {
                 Utils::Trace(GetCallback(), " -> Images path : %s\n", imagesPath.c_str());
                 Utils::Trace(GetCallback(), " -> Export Images : %s\n", Utils::ToString(images).c_str());
+                if (spritesheets)
+                {
+                    Utils::Trace(GetCallback(), " -> Spritesheet size : %s\n", Utils::ToString(spritesheetSize).c_str());
+                }
             }
             if (sounds)
             {
@@ -296,7 +304,9 @@ namespace PixiJS
             compactShapes,
             compressJS,
             commonJS,
-            loopTimeline));
+            loopTimeline,
+            spritesheets,
+            spritesheetSize));
         
         if (outputWriter.get() == NULL)
         {

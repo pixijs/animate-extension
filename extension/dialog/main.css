@@ -26,7 +26,8 @@
 }
 
 .dialog-row .select {
-    width:120px;
+    width:40px;
+    text-align: center;
     margin-bottom:5px;
 }
 .dialog-row .indent {
@@ -52,6 +53,7 @@
     padding:10px 10px 5px;
     background-color: rgba(0, 0, 0, 0.1);
     box-shadow: 0 1px 0 0 rgba(255,255,255,0.1);
+    margin-top:10px;
 }
 
 .sub-options .checkbox {

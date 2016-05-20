@@ -959,6 +959,16 @@ namespace PixiJS
         return true;
     }
 
+    void Utils::ReadStringToInt(
+        const FCM::PIFCMDictionary pDict,
+        FCM::StringRep8 key,
+        int &result)
+    {
+        std::string str;
+        Utils::ReadString(pDict, key, str);
+        result = atoi(str.c_str());
+    }
+
     bool Utils::ReadStringToBool(
         const FCM::PIFCMDictionary pDict,
         FCM::StringRep8 key,
@@ -969,7 +979,9 @@ namespace PixiJS
         if (!str.empty())
         {
             result = Utils::ToBool(str);
+            return true;
         }
+        return false;
     }
 
     void Utils::ReplaceAll(std::string &content, const std::string &from, const std::string &to)
