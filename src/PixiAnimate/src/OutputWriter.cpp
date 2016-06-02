@@ -790,7 +790,11 @@ namespace PixiJS
         }
         m_pTextElem->push_back(aaMode);
         
-        m_pTextElem->push_back(JSONNode("txt", displayText));
+        std::string txt = displayText;
+        Utils::ReplaceAll(txt, "\n", "\\n");
+        Utils::ReplaceAll(txt, "\r", "\\n");
+        Utils::ReplaceAll(txt, "\t", "");
+        m_pTextElem->push_back(JSONNode("txt", txt));
         
         behaviour.set_name("behaviour");
         
