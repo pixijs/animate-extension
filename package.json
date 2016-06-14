@@ -1,7 +1,7 @@
 {
   "name": "pixi-animate-extension",
   "private": true,
-  "version": "1.1.1",
+  "version": "1.1.2",
   "repository": {
     "url": "https://github.com/jiborobot/pixi-animate-extension",
     "type": "git"
@@ -12,8 +12,7 @@
     "electron-json-storage": "^2.0.0",
     "js-beautify": "^1.6.2",
     "mkdirp": "^0.5.1",
-    "pixi-animate": "^0.3.1",
-    "pixi.js": "https://github.com/jiborobot/pixi.js.git#dev",
+    "pixi-animate": "^0.5.3",
     "semver": "^5.1.0",
     "uglify-js": "^2.6.1",
     "yargs": "^4.2.0"
