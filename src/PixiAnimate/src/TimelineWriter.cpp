@@ -803,15 +803,29 @@ namespace PixiJS
     {
         DeferUpdateMasks();
         
+        bool showFrame = false;
+
+        m_pFrameElement->push_back(JSONNode("frame", frameNum));
+        if (!m_pLabelElement->empty())
+        {
+            m_pLabelElement->set_name("label");
+            m_pFrameElement->push_back(*m_pLabelElement);
+            showFrame = true;
+        }
         if (!m_pCommandArray->empty())
         {
-            m_pFrameElement->push_back(JSONNode("frame", frameNum));
             m_pFrameElement->push_back(*m_pCommandArray);
-            if (!m_pFrameScripts->empty())
-            {
-                m_pFrameScripts->set_name("scripts");
-                m_pFrameElement->push_back(*m_pFrameScripts);
-            }
+            showFrame = true;
+        }
+        if (!m_pFrameScripts->empty())
+        {
+            m_pFrameScripts->set_name("scripts");
+            m_pFrameElement->push_back(*m_pFrameScripts);
+            showFrame = true;
+        }
+
+        if (showFrame)
+        {
             m_pFrameArray->push_back(*m_pFrameElement);
         }
         
@@ -820,12 +834,16 @@ namespace PixiJS
         delete m_pCommandArray;
         delete m_pFrameElement;
         delete m_pFrameScripts;
+        delete m_pLabelElement;
 
         m_pCommandArray = new JSONNode(JSON_ARRAY);
         m_pCommandArray->set_name("commands");
         
         m_pFrameElement = new JSONNode(JSON_NODE);
         ASSERT(m_pFrameElement);
+
+        m_pLabelElement = new JSONNode(JSON_NODE);
+        ASSERT(m_pLabelElement);
 
         m_pFrameScripts = new JSONNode(JSON_ARRAY);
         ASSERT(m_pFrameScripts);
@@ -861,16 +879,15 @@ namespace PixiJS
     FCM::Result TimelineWriter::SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType)
     {
         std::string label = Utils::ToString(pLabel, m_pCallback);
-        // Utils::Trace(m_pCallback, "[SetFrameLabel] (Type: %d): %s\n", labelType, label.c_str());
-        
+        // #ifdef _DEBUG
+        //     Utils::Trace(m_pCallback, "[SetFrameLabel] (Type: %d): %s\n", labelType, label.c_str());
+        // #endif
         if(labelType == 1)
-            m_pFrameElement->push_back(JSONNode("label:name",label));
+            m_pLabelElement->push_back(JSONNode("name",label));
         else if(labelType == 2)
-            m_pFrameElement->push_back(JSONNode("label:comment",label));
+            m_pLabelElement->push_back(JSONNode("comment",label));
         else if(labelType == 3)
-            m_pFrameElement->push_back(JSONNode("label:ancor",label));
-        else if(labelType == 0)
-            m_pFrameElement->push_back(JSONNode("label","none"));
+            m_pLabelElement->push_back(JSONNode("anchor",label));
         
         return FCM_SUCCESS;
     }
@@ -893,6 +910,9 @@ namespace PixiJS
         
         m_pFrameElement = new JSONNode(JSON_NODE);
         ASSERT(m_pFrameElement);
+
+        m_pLabelElement = new JSONNode(JSON_NODE);
+        ASSERT(m_pLabelElement);
         
         m_pFrameScripts = new JSONNode(JSON_ARRAY);
         ASSERT(m_pFrameScripts);
@@ -906,6 +926,7 @@ namespace PixiJS
         delete m_pCommandArray;
         delete m_pFrameArray;
         delete m_pTimelineElement;
+        delete m_pLabelElement;
         delete m_pFrameElement;
         delete m_pFrameScripts;
     }

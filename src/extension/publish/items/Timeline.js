@@ -250,10 +250,10 @@ p.getLabels = function()
 
     this.frames.forEach(function(frame)
     {
-        let label = frame["label:name"];
-        if (label)
+        let label = frame.label;
+        if (label && label.name)
         {
-            labels[label] = frame.frame;
+            labels[label.name] = frame.frame;
         }
     });
     return labels;

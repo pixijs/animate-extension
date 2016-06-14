@@ -109,6 +109,8 @@ namespace PixiJS
         
         JSONNode* m_pFrameElement;
 
+        JSONNode* m_pLabelElement;
+
         JSONNode* m_pFrameScripts;
         
         std::vector<MaskInfo> maskInfoList;

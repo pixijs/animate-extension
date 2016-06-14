@@ -117,6 +117,11 @@ p.getChildren = function()
     const onMaskRemoved = this.onMaskRemoved.bind(this);
     this.frames.forEach(function(frame)
     {
+        // Ignore frames without commands
+        if (!frame.commands)
+        {
+            return;
+        }
         frame.commands.forEach(function(command)
         {
             let instance = instancesMap[command.instanceId];

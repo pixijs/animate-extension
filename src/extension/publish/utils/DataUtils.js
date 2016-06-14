@@ -30,7 +30,7 @@ var DataUtils = {
     stringifySimple: function(json)
     {
         return JSON.stringify(json, null, '  ')
-            .replace(/\"([^(\")"\d]+)\":/g,"$1:");
+            .replace(/\"([^(\")"\d\s\-]+)\":/g,"$1:");
     },
 
     /**
