@@ -808,7 +808,6 @@ namespace PixiJS
         m_pFrameElement->push_back(JSONNode("frame", frameNum));
         if (!m_pLabelElement->empty())
         {
-            m_pLabelElement->set_name("label");
             m_pFrameElement->push_back(*m_pLabelElement);
             showFrame = true;
         }
@@ -819,7 +818,6 @@ namespace PixiJS
         }
         if (!m_pFrameScripts->empty())
         {
-            m_pFrameScripts->set_name("scripts");
             m_pFrameElement->push_back(*m_pFrameScripts);
             showFrame = true;
         }
@@ -842,10 +840,12 @@ namespace PixiJS
         m_pFrameElement = new JSONNode(JSON_NODE);
         ASSERT(m_pFrameElement);
 
-        m_pLabelElement = new JSONNode(JSON_NODE);
+        m_pLabelElement = new JSONNode(JSON_ARRAY);
+        m_pLabelElement->set_name("labels");
         ASSERT(m_pLabelElement);
 
         m_pFrameScripts = new JSONNode(JSON_ARRAY);
+        m_pFrameScripts->set_name("scripts");
         ASSERT(m_pFrameScripts);
         
         return FCM_SUCCESS;
@@ -879,16 +879,12 @@ namespace PixiJS
     FCM::Result TimelineWriter::SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType)
     {
         std::string label = Utils::ToString(pLabel, m_pCallback);
-        // #ifdef _DEBUG
-        //     Utils::Trace(m_pCallback, "[SetFrameLabel] (Type: %d): %s\n", labelType, label.c_str());
-        // #endif
         if(labelType == 1)
-            m_pLabelElement->push_back(JSONNode("name",label));
+            m_pLabelElement->push_back(JSONNode("",label));
         else if(labelType == 2)
-            m_pLabelElement->push_back(JSONNode("comment",label));
+            Utils::Trace(m_pCallback, "Warning: Comment frame label type is ignored: '%s'\n", label.c_str());
         else if(labelType == 3)
-            m_pLabelElement->push_back(JSONNode("anchor",label));
-        
+            Utils::Trace(m_pCallback, "Warning: Anchor frame label type is ignored: '%s'\n", label.c_str());
         return FCM_SUCCESS;
     }
 
@@ -911,10 +907,12 @@ namespace PixiJS
         m_pFrameElement = new JSONNode(JSON_NODE);
         ASSERT(m_pFrameElement);
 
-        m_pLabelElement = new JSONNode(JSON_NODE);
+        m_pLabelElement = new JSONNode(JSON_ARRAY);
+        m_pLabelElement->set_name("labels");
         ASSERT(m_pLabelElement);
         
         m_pFrameScripts = new JSONNode(JSON_ARRAY);
+        m_pFrameScripts->set_name("scripts");
         ASSERT(m_pFrameScripts);
 
         m_FrameCount = 0;

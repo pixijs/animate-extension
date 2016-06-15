@@ -246,17 +246,19 @@ p.getFrameScripts = function(renderer)
  */
 p.getLabels = function()
 {
-    let labels = {};
+    let result = {};
 
     this.frames.forEach(function(frame)
     {
-        let label = frame.label;
-        if (label && label.name)
+        if (frame.labels)
         {
-            labels[label.name] = frame.frame;
+            frame.labels.forEach(function(label)
+            {
+                result[label] = frame.frame;
+            });
         }
     });
-    return labels;
+    return result;
 };
 
 /**
