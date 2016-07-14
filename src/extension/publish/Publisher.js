@@ -127,7 +127,7 @@ p.exportImages = function(done)
         assetsToLoad[meta.stageName] = meta.imagesPath + filename;
     }
 
-    if (meta.spritesheets)
+    if (meta.spritesheets && this.library.bitmaps.length)
     {
         // Create the builder
         new SpritesheetBuilder({
