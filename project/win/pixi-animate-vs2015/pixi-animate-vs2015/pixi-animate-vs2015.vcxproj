@@ -81,10 +81,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src\xercesc\xinclude;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src\xercesc\xinclude;..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\..\..\src\SDK\app\include\common;..\..\..\..\src\SDK\core\include\common;..\..\..\..\src\SDK\app\include\interfaces;..\..\..\..\src\SDK\core\include\interfaces;..\..\..\..\src\PixiAnimate\include;..\..\..\..\src\SDK\app\include\interfaces\DOM;..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source;..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINDOWS;USE_HTTP_SERVER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\Build\Win64\VC10\Release\xerces-c_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\Build\Win64\VC10\Release\xerces-c_3.lib;statLibJson.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

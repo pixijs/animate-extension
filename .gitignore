@@ -14,3 +14,7 @@ com.jibo.PixiAnimate
 *.db
 *.opendb
 *.suo
+src/ThirdParty/libjson_7.6.1/libjson/Debug/
+project/win/pixi-animate-vs2015/pixi-animate-vs2015/x64/Debug/
+project/win/pixi-animate-vs2015/Debug/statLibJson.lib
+project/win/pixi-animate-vs2015/Debug/statLibJson.pdb
