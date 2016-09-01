@@ -10,3 +10,7 @@ node_modules
 project/mac/build
 project/libxerces-c-3.1.dylib
 com.jibo.PixiAnimate
+*.user
+*.db
+*.opendb
+*.suo

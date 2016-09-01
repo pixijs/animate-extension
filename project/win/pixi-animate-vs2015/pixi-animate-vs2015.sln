@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pixi-animate-vs2015", "pixi-animate-vs2015\pixi-animate-vs2015.vcxproj", "{FC335319-C157-4369-8E78-4AE46720E535}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC335319-C157-4369-8E78-4AE46720E535}.Debug|x64.ActiveCfg = Debug|x64
+		{FC335319-C157-4369-8E78-4AE46720E535}.Debug|x64.Build.0 = Debug|x64
+		{FC335319-C157-4369-8E78-4AE46720E535}.Release|x64.ActiveCfg = Release|x64
+		{FC335319-C157-4369-8E78-4AE46720E535}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
