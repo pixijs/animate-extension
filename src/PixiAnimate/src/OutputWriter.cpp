@@ -176,7 +176,7 @@ namespace PixiJS
         std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + compiler + "'"
             + " --src '" + m_outputDataFile + "'";
         #ifdef _DEBUG
-            cmd + =" --debug";
+            cmd +=" --debug";
         #endif
 
 #ifndef _WINDOWS
