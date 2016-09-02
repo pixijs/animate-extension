@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Json">
+      <UniqueIdentifier>{b8952326-9985-4b62-b6dd-be60194eff7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\src\PixiAnimate\src\DocType.cpp">
@@ -35,6 +38,48 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\PixiAnimate\src\Utils.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\internalJSONNode.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONAllocator.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONChildren.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDebug.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONIterators.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONMemory.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode_Mutex.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONPreparse.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONStream.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONValidator.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONWorker.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONWriter.cpp">
+      <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\libjson.cpp">
+      <Filter>Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +109,81 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\PixiAnimate\include\Version.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\JSONOptions.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\libjson.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\internalJSONNode.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSON_Base64.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONAllocator.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONChildren.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDebug.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDefs.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONGlobals.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONMemory.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONMemoryPool.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONNode.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONPreparse.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONSharedString.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONSingleton.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONStats.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONStream.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONValidator.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONWorker.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\NumberToString.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDefs\GNU_C.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDefs\Strings_Defs.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDefs\Unknown_C.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source\JSONDefs\Visual_C.h">
+      <Filter>Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Dependencies\mempool++\mempool.h">
+      <Filter>Json</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

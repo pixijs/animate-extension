@@ -290,9 +290,9 @@ namespace PixiJS
     private:
 
         static void InitSockAddr(sockaddr_in* sockAddr);
-
-        static void RemoveTrailingZeroes(char *str);
 #endif
+
+		static void RemoveTrailingZeroes(char *str);
 	
     };
 };

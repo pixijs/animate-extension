@@ -632,7 +632,7 @@ namespace PixiJS
 
         ASSERT(pFilePath);
 
-        ::GetModuleFileName((HINSTANCE)&__ImageBase, pFilePath, MAX_PATH);
+        ::GetModuleFileName((HINSTANCE)&__ImageBase, *(LPWSTR *)pFilePath, MAX_PATH);
         
         fullPath = Utils::ToString(pFilePath, pCallback);
 
@@ -670,7 +670,7 @@ namespace PixiJS
         pFullPath = Utils::ToString16(path, pCallback);
         ASSERT(pFullPath);
 
-        ret = ::CreateDirectory(pFullPath, NULL);
+        ret = ::CreateDirectory(*(LPCWSTR *)pFullPath, NULL);
         if (ret == FALSE)
         {
             DWORD err = GetLastError();
@@ -829,7 +829,7 @@ namespace PixiJS
         sf.wFunc = FO_DELETE;
         sf.fFlags = FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI | FOF_SILENT;
         FCM::StringRep16 folderStr = Utils::ToString16(folder, pCallback);;
-        wstr = folderStr;
+        wstr = *(wchar_t*)&folderStr;
         wstr.append(1, '\0');
         sf.pFrom = wstr.c_str();
         sf.pTo = NULL;
@@ -871,11 +871,11 @@ namespace PixiJS
         sf.fFlags = FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI | FOF_SILENT;
 
         FCM::StringRep16 srcFolderStr = Utils::ToString16(srcFolder, pCallback);
-        srcWstr = srcFolderStr;
+        srcWstr = *(wchar_t*)&srcFolderStr;
         srcWstr.append(1, '\0');
         sf.pFrom = srcWstr.c_str();
         FCM::StringRep16 dstFolderStr = Utils::ToString16(dstFolder, pCallback);
-        dstWstr = dstFolderStr;
+        dstWstr = *(wchar_t*)&dstFolderStr;
         dstWstr.append(1, '\0');
         sf.pFrom = srcWstr.c_str();
         sf.pTo = dstWstr.c_str();
@@ -908,11 +908,11 @@ namespace PixiJS
         std::wstring dstWstr;
 
         FCM::StringRep16 srcFileStr = Utils::ToString16(srcFile, pCallback);
-        srcWstr = srcFileStr;
+        srcWstr = *(wchar_t*)&srcFileStr;
         srcWstr.append(1, '\0');
 
         FCM::StringRep16 dstFolderStr = Utils::ToString16(dstFolder, pCallback);
-        dstWstr = dstFolderStr;
+        dstWstr = *(wchar_t*)&dstFolderStr;
         dstWstr.append(1, '\0');
 
         ::CopyFile(srcWstr.c_str(), dstWstr.c_str(), false);
@@ -1035,7 +1035,7 @@ namespace PixiJS
         std::wstring tail;
         tail.assign(outputFile.begin(), outputFile.end());
         FCM::StringRep16 portStr = Utils::ToString16(Utils::ToString(port), pCallback);
-        output += portStr;
+        output += *(wchar_t*)&portStr;
         output += L"/";
         output += tail;
         ShellExecute(NULL, L"open", output.c_str(), NULL, NULL, SW_SHOWNORMAL);
@@ -1055,7 +1055,7 @@ namespace PixiJS
 
     }
 
-    int Utils::GetUnusedLocalPort()
+	int Utils::GetUnusedLocalPort()
     {
         sockaddr_in client;
 

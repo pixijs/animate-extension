@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pixi-animate-vs2015", "pixi-animate-vs2015\pixi-animate-vs2015.vcxproj", "{FC335319-C157-4369-8E78-4AE46720E535}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "statLibJson", "..\..\..\src\ThirdParty\libjson_7.6.1\libjson\libjson.vcxproj", "{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -35,18 +33,6 @@ Global
 		{FC335319-C157-4369-8E78-4AE46720E535}.Template|x64.Build.0 = Release|x64
 		{FC335319-C157-4369-8E78-4AE46720E535}.Template|x86.ActiveCfg = Release|Win32
 		{FC335319-C157-4369-8E78-4AE46720E535}.Template|x86.Build.0 = Release|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.Debug|x64.ActiveCfg = Debug|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.Debug|x86.ActiveCfg = Debug|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.Debug|x86.Build.0 = Debug|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.Release|x64.ActiveCfg = Release|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.Release|x86.ActiveCfg = Release|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.Release|x86.Build.0 = Release|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.small|x64.ActiveCfg = small|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.small|x86.ActiveCfg = small|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.small|x86.Build.0 = small|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.Template|x64.ActiveCfg = Template|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.Template|x86.ActiveCfg = Template|Win32
-		{153A6FE5-40A9-4C31-B0C2-1C68D2E37BEA}.Template|x86.Build.0 = Template|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
