@@ -9,7 +9,7 @@ module.exports = function(gulp, options, plugins) {
         plugins.gutil.log("|    PixiAnimate    |".green);
         plugins.gutil.log("+-------------------+".green);
         plugins.gutil.log("Mode: ".gray, (debug ? "Debug" : "Release").yellow);
-        
+
         var tasks = [];
 
         if (plugin) {
@@ -17,8 +17,8 @@ module.exports = function(gulp, options, plugins) {
         }
 
         tasks.push(
-            'clean', 
-            'lint',
+            'clean',
+            //'lint',
             'stage'
         );
 
@@ -54,5 +54,5 @@ module.exports = function(gulp, options, plugins) {
         tasks.push(done);
 
         plugins.sequence.apply(plugins.sequence, tasks);
-    });  
+    });
 };

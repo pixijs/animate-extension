@@ -1,4 +1,8 @@
 var gulp = require('gulp');
+var process = require('process');
+
+/* This flag is used to detect windows systems */
+var isWin = /^win/.test(process.platform);
 
 // Options for the load-gulp-tasks
 var options = {
@@ -15,19 +19,22 @@ var options = {
     // XCode project for building the plugin
     xcodeproj: 'project/mac/PixiAnimate.mp.xcodeproj',
 
+    // VS2015 Solution file for building the win32 plugin
+    vs2015: 'project/win/pixi-animate-vs2015/pixi-animate-vs2015.sln',
+
     // Temporary build target
     pluginTempDebug:'src/PixiAnimate/lib/mac/debug/PixiAnimate.fcm.plugin',
     pluginTempRelease: 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin',
-    
+
     // The target location for the plugin
     pluginFile: 'com.jibo.PixiAnimate/plugin/lib/mac/PixiAnimate.fcm.plugin',
-    
+
     // Temporary staging folder
     bundleId: 'com.jibo.PixiAnimate',
-    
+
     // Local location to install the plugin for Adobe CEP
     installFolder: '/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate',
-    
+
     // The name of the ZXP file
     outputName: 'PixiAnimate.zxp',
 
@@ -37,9 +44,9 @@ var options = {
     // Remote debugging for panels in Flash
     remoteDebug: 'build/debug.xml',
     remoteDebugOutput: '.debug',
-    
+
     // ZXP plugin packaging options
-    packager: 'build/ZXPSignCmd',
+    packager: isWin ? '.\\build\\ZXPSignCmd.exe' : './build/ZXPSignCmd',
     packagerCert: 'build/certificate.p12',
     packagerPass: 'password',
 
@@ -66,7 +73,7 @@ var options = {
         '!extension/dialog/cep/**',
         '!extension/bin'
     ],
-    
+
     // The files to include for JS linting
     lintFiles: [
         'build/**/*.js',

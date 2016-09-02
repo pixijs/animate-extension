@@ -2,7 +2,7 @@ module.exports = function(gulp, options, plugins) {
     gulp.task('lint', function(){
         return gulp.src(options.lintFiles)
             .pipe(plugins.eslint({
-                extends: 'eslint:recommended', 
+                extends: 'eslint:recommended',
                 rules: {
                     "no-console": 0
                 },
@@ -17,5 +17,5 @@ module.exports = function(gulp, options, plugins) {
             }))
             .pipe(plugins.eslint.format())
             .pipe(plugins.eslint.failAfterError());
-    });  
+    });
 };
