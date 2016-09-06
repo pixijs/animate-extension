@@ -40,6 +40,10 @@ module.exports = function(gulp, options, plugins) {
             'clean-stage'
         );
 
+        if (options.isWin) {
+            tasks.push('dllcopy');
+        }
+
 
         if (install)
         {

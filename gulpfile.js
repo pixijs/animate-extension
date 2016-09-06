@@ -22,16 +22,16 @@ var options = {
     xcodeproj: 'project/mac/PixiAnimate.mp.xcodeproj',
 
     // VS2015 Solution file for building the win32 plugin
-    vs2015: './project/win/pixi-animate-vs2015/pixi-animate-vs2015.sln',
+    vs2015: './project/win/pixi-animate-vs2015',
 
     // Temporary build target
-    pluginTempDebug: !isWin ? 'src/PixiAnimate/lib/mac/debug/PixiAnimate.fcm.plugin' : 'src/PixiAnimate/lib/win32/debug/PixiAnimate.fcm.plugin',
-    pluginTempRelease: !isWin ? 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin' : 'src/PixiAnimate/lib/win32/release/PixiAnimate.fcm.plugin',
+    pluginTempDebug: !isWin ? 'src/PixiAnimate/lib/mac/debug/PixiAnimate.fcm.plugin' : 'src/PixiAnimate/lib/win/debug/PixiAnimate.fcm',
+    pluginTempRelease: !isWin ? 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin' : 'src/PixiAnimate/lib/win/release/PixiAnimate.fcm',
 
     // The target location for the plugin
     pluginFile: !isWin ?
         'com.jibo.PixiAnimate/plugin/lib/mac/PixiAnimate.fcm.plugin' :
-        'com.jibo.PixiAnimate/plugin/lib/win32/PixiAnimate.fcm.plugin',
+        'com.jibo.PixiAnimate/plugin/lib/win/PixiAnimate.fcm',
 
     // Temporary staging folder
     bundleId: 'com.jibo.PixiAnimate',
