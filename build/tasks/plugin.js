@@ -11,8 +11,8 @@ module.exports = function(gulp, options, plugins) {
         // TODO Add window building process
         else if (/^win/.test(platform)) {
             plugins.sequence(
-                'plugin-win32',
-                'plugin-win32-debug',
+                'vsvars',
+                options.argv.debug ? 'plugin-win32-debug' : 'plugin-win32',
                 done
             );
         }

@@ -20,20 +20,22 @@ var options = {
     xcodeproj: 'project/mac/PixiAnimate.mp.xcodeproj',
 
     // VS2015 Solution file for building the win32 plugin
-    vs2015: 'project/win/pixi-animate-vs2015/pixi-animate-vs2015.sln',
+    vs2015: './project/win/pixi-animate-vs2015/pixi-animate-vs2015.sln',
 
     // Temporary build target
-    pluginTempDebug:'src/PixiAnimate/lib/mac/debug/PixiAnimate.fcm.plugin',
-    pluginTempRelease: 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin',
+    pluginTempDebug: !isWin ? 'src/PixiAnimate/lib/mac/debug/PixiAnimate.fcm.plugin' : 'src/PixiAnimate/lib/win32/debug/PixiAnimate.fcm.plugin',
+    pluginTempRelease: !isWin ? 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin' : 'src/PixiAnimate/lib/win32/release/PixiAnimate.fcm.plugin',
 
     // The target location for the plugin
-    pluginFile: 'com.jibo.PixiAnimate/plugin/lib/mac/PixiAnimate.fcm.plugin',
+    pluginFile: !isWin ?
+        'com.jibo.PixiAnimate/plugin/lib/mac/PixiAnimate.fcm.plugin' :
+        'com.jibo.PixiAnimate/plugin/lib/win32/PixiAnimate.fcm.plugin',
 
     // Temporary staging folder
     bundleId: 'com.jibo.PixiAnimate',
 
     // Local location to install the plugin for Adobe CEP
-    installFolder: '/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate',
+    installFolder: !isWin ? '/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate' : 'C:\\Program Files\\Common Files\\Adobe\\CEP\\extensions',
 
     // The name of the ZXP file
     outputName: 'PixiAnimate.zxp',
@@ -127,6 +129,7 @@ var plugins = {
     strip: require('gulp-strip-comments'),
     whitespace: require('gulp-whitespace'),
     source: require('vinyl-source-stream'),
+    msbuild: require('gulp-msbuild'),
     build: function(gulp, options, plugins) {
         return plugins.browserify({
                 entries: options.src, //'./src/extension/publish/index.js',
