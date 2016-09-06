@@ -10,6 +10,8 @@ var options = {
     // Name
     name: 'PixiAnimate',
 
+    isWin: isWin,
+
     // Pattern for loading tasks
     pattern: ['build/tasks/*.js'],
 
@@ -35,7 +37,7 @@ var options = {
     bundleId: 'com.jibo.PixiAnimate',
 
     // Local location to install the plugin for Adobe CEP
-    installFolder: !isWin ? '/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate' : 'C:\\Program Files\\Common Files\\Adobe\\CEP\\extensions',
+    installFolder: !isWin ? '/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate' : 'C:\\Program Files\\Common Files\\Adobe\\CEP\\extensions\\com.jibo.PixiAnimate',
 
     // The name of the ZXP file
     outputName: 'PixiAnimate.zxp',

@@ -88,7 +88,7 @@
       <AdditionalDependencies>..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\Build\Win64\VC10\Debug\xerces-c_3_1D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy ..\$(IntDir)pixi-animate-vs2015.dll ..\..\..\..\src\PixiAnimate\lib\win32\debug\PixiAnimate.fcm.plugin</Command>
+      <Command>copy ..\$(IntDir)pixi-animate-vs2015.dll ..\..\..\..\src\PixiAnimate\lib\win32\debug\PixiAnimate.fcm</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -120,7 +120,7 @@
       <AdditionalDependencies>..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\Build\Win64\VC10\Release\xerces-c_3_1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy ..\$(IntDir)pixi-animate-vs2015.dll ..\..\..\..\src\PixiAnimate\lib\win32\release\PixiAnimate.fcm.plugin</Command>
+      <Command>copy ..\$(IntDir)pixi-animate-vs2015.dll ..\..\..\..\src\PixiAnimate\lib\win32\release\PixiAnimate.fcm</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
