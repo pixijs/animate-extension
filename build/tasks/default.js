@@ -18,7 +18,7 @@ module.exports = function(gulp, options, plugins) {
 
         tasks.push(
             'clean',
-            //'lint',
+            'lint',
             'stage'
         );
 
