@@ -173,14 +173,24 @@ namespace PixiJS
         Utils::GetExtensionPath(extensionPath, m_pCallback);
         std::string compiler = extensionPath + NODE_COMPILER;
 
+
+#ifndef _WINDOWS
         std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + compiler + "'"
             + " --src '" + m_outputDataFile + "'";
         #ifdef _DEBUG
             cmd +=" --debug";
         #endif
 
-#ifndef _WINDOWS
+
         popen(cmd.c_str(), "r");
+
+#else
+		std::string cmd = "electron \"" + compiler + "\" --src \"" + m_outputDataFile + "\"";
+
+#ifdef _DEBUG
+		cmd += " --debug";
+#endif
+		system(cmd.c_str());
 #endif
 
         // Output the HTML templates

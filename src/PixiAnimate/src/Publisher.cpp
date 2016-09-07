@@ -187,15 +187,24 @@ namespace PixiJS
 #else
 
         #ifdef _WINDOWS
-            Utils::Trace(GetCallback(), "ERROR: Publishing not yet supported on Windows");
-            return FCM_GENERAL_ERROR;
-        #endif
 
-        if (!Utils::Exists("/usr/local/bin/electron"))
-        {
-            Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed at /usr/local/bin/electron\nInstall by running the following from a commandline:\n\n\tnpm install electron-prebuilt -g");
-            return FCM_GENERAL_ERROR;
-        }
+		if (Utils::Exists("%APPDATA%\Roaming\npm\electron.cmd"))
+		{
+			Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed at Roaming/npm\nInstall by running the following from a commandline:\n\n\tnpm install electron-prebuilt -g");
+			return FCM_GENERAL_ERROR;
+		}
+
+		#else
+
+		if (!Utils::Exists("/usr/local/bin/electron"))
+		{
+			Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed at /usr/local/bin/electron\nInstall by running the following from a commandline:\n\n\tnpm install electron-prebuilt -g");
+			return FCM_GENERAL_ERROR;
+		}
+
+		#endif
+
+
 
         DOM::Utils::COLOR color;
         FCM::U_Int32 stageHeight;
