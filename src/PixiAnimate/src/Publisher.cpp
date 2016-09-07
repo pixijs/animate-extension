@@ -188,9 +188,9 @@ namespace PixiJS
 
         #ifdef _WINDOWS
 
-		if (Utils::Exists("%APPDATA%\Roaming\npm\electron.cmd"))
+		if (system("electron --version") != 0)
 		{
-			Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed at Roaming/npm\nInstall by running the following from a commandline:\n\n\tnpm install electron-prebuilt -g");
+			Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed in your global NPM package repository. Install by running the following from a commandline:\n\n\tnpm install electron-prebuilt -g");
 			return FCM_GENERAL_ERROR;
 		}
 
