@@ -12,7 +12,7 @@ See [examples](https://github.com/jiborobot/pixi-animate-examples) for sample FL
 The following dependencies are required in order to publishing FLA document created with this Plugin.
 
 * Adobe Flash CC 2015+ or Adobe Animate CC
-* Mac OS X (Window not currently supported)
+* Mac OS X or Windows x64
 * [Node & NPM](http://nodejs.org)
 * [Electron](http://electron.atom.io/) `npm install -g electron-prebuilt`
 
@@ -66,3 +66,32 @@ Or to ONLY build the plugin without building the rest of the extension.
 ```bash
 gulp plugin
 ```
+
+### Windows Instructions
+* Microsoft Windows 7 64-bit or higher required
+* Adobe Animate CC 2015 x64 w/ ZXP utility for windows
+* Microsoft Visual Studio 2015 Community or higher
+* Latest NodeJS
+
+Update your npm first
+```
+npm install -g npm
+```
+
+Install global npm packages
+```
+npm install -g electron-prebuilt gulp-cli
+```
+
+Install or restore local packages
+```
+npm update
+```
+
+Build plugin and install plugin
+```
+gulp --plugin --install
+```
+
+
+Use the ZXP utility for windows to install the PixiAnimate.zxp plugin for Adobe Animate CC 2015, make sure to remove the existing plugin before install
