@@ -66,6 +66,18 @@ namespace PixiJS
     static std::string comma = ",";
 }
 
+const std::string FixSlashes(const std::string& path) {
+
+#ifdef _WINDOWS
+	std::string newString = std::string(path);
+	std::replace(newString.begin(), newString.end(), '/', '\\');
+	return newString;
+#else
+	return path;
+#endif
+
+}
+
 
 /* -------------------------------------------------- Static Functions */
 
@@ -85,7 +97,6 @@ namespace PixiJS
         FCM::AutoPtr<FCM::IFCMStringUtils> pIFCMStringUtils = pIFCMStringUtilsUnknown;
         return pIFCMStringUtils;
     }
-    
 
     FCM::AutoPtr<FCM::IFCMCalloc> Utils::GetCallocService(FCM::PIFCMCallback pCallback)
     {
@@ -98,7 +109,6 @@ namespace PixiJS
         FCM::AutoPtr<FCM::IFCMCalloc> pIFCMCalloc = pIFCMCallocUnknown;
         return pIFCMCalloc;
     }
-    
 
     void Utils::GetLanguageCode(FCM::PIFCMCallback pCallback, std::string& langCode)
     {
@@ -174,7 +184,6 @@ namespace PixiJS
         return guid_str;
     }
 
-    
     std::string Utils::ToString(FCM::CStringRep16 pStr16, FCM::PIFCMCallback pCallback)
     {
         FCM::StringRep8 pStr8 = NULL;
@@ -350,7 +359,6 @@ namespace PixiJS
         return str;
     }
 
-
     std::string Utils::ToString(const DOM::FrameElement::OrientationMode& mode)
     {
         std::string str;
@@ -418,7 +426,6 @@ namespace PixiJS
         return str;
     }
     
-
     std::string Utils::ToString(const DOM::FrameElement::AlignMode& mode)
     {
         std::string str;
@@ -484,7 +491,6 @@ namespace PixiJS
         return pStrFeatureName;
     }
 
-
     // It is assumed that the versionStr is of the form "a.b.c.d".
     FCM::U_Int32 Utils::ToVersion(const std::string& versionStr)
     {
@@ -532,7 +538,6 @@ namespace PixiJS
         return res;
     }
 
-
     std::string Utils::ToString(const DOM::Utils::COLOR& color)
     {
         char cstr[5];
@@ -548,7 +553,6 @@ namespace PixiJS
 
         return colorStr;
     }
-
 
     void Utils::TransformPoint(
             const DOM::Utils::MATRIX2D& matrix, 
@@ -656,7 +660,6 @@ namespace PixiJS
 #endif
     }
 
-
     // Creates a directory. If the directory already exists or is successfully created, success
     // is returned; otherwise an error code is returned.
     FCM::Result Utils::CreateDir(const std::string& path, FCM::PIFCMCallback pCallback)
@@ -667,7 +670,7 @@ namespace PixiJS
         BOOL ret;
         FCM::StringRep16 pFullPath;
 
-        pFullPath = Utils::ToString16(path, pCallback);
+        pFullPath = Utils::ToString16(FixSlashes(path), pCallback);
         ASSERT(pFullPath);
 
         ret = ::CreateDirectory((LPCWSTR)pFullPath, NULL);
@@ -754,7 +757,7 @@ namespace PixiJS
     {
  
 #ifdef _WINDOWS
-        FCM::StringRep16 pFilePath = Utils::ToString16(outputFile, pCallback);
+        FCM::StringRep16 pFilePath = Utils::ToString16(FixSlashes(outputFile), pCallback);
 
         file.open(pFilePath,mode);
 
@@ -813,7 +816,6 @@ namespace PixiJS
         return exists;
     }
 
-
     // Removes the folder all its contents
     FCM::Result Utils::Remove(const std::string& folder, FCM::PIFCMCallback pCallback)
     {
@@ -828,9 +830,9 @@ namespace PixiJS
         sf.hwnd = NULL;
         sf.wFunc = FO_DELETE;
         sf.fFlags = FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI | FOF_SILENT;
-        FCM::StringRep16 folderStr = Utils::ToString16(folder, pCallback);;
+        FCM::StringRep16 folderStr = Utils::ToString16(FixSlashes(folder), pCallback);;
         wstr = std::wstring((const wchar_t *)folderStr);;
-        wstr.append(1, '\0');
+        wstr.append(2, '\0');
         sf.pFrom = wstr.c_str();
         sf.pTo = NULL;
 
@@ -870,12 +872,12 @@ namespace PixiJS
         sf.wFunc = FO_COPY;
         sf.fFlags = FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI | FOF_SILENT;
 
-        FCM::StringRep16 srcFolderStr = Utils::ToString16(srcFolder, pCallback);
+        FCM::StringRep16 srcFolderStr = Utils::ToString16(FixSlashes(srcFolder), pCallback);
         srcWstr = std::wstring((const wchar_t *)srcFolderStr);
         srcWstr.append(2, '\0');
         sf.pFrom = srcWstr.c_str();
 
-        FCM::StringRep16 dstFolderStr = Utils::ToString16(dstFolder, pCallback);
+        FCM::StringRep16 dstFolderStr = Utils::ToString16(FixSlashes(dstFolder), pCallback);
         dstWstr = std::wstring((const wchar_t *)dstFolderStr);
         dstWstr.append(2, '\0');
         sf.pFrom = srcWstr.c_str();
@@ -908,13 +910,13 @@ namespace PixiJS
         std::wstring srcWstr;
         std::wstring dstWstr;
 
-        FCM::StringRep16 srcFileStr = Utils::ToString16(srcFile, pCallback);
+        FCM::StringRep16 srcFileStr = Utils::ToString16(FixSlashes(srcFile), pCallback);
         srcWstr = std::wstring((const wchar_t *)srcFileStr);
-        srcWstr.append(1, '\0');
+        srcWstr.append(2, '\0');
 
-        FCM::StringRep16 dstFolderStr = Utils::ToString16(dstFolder, pCallback);
+        FCM::StringRep16 dstFolderStr = Utils::ToString16(FixSlashes(dstFolder), pCallback);
         dstWstr = std::wstring((const wchar_t *)dstFolderStr);
-        dstWstr.append(1, '\0');
+        dstWstr.append(2, '\0');
 
         ::CopyFile(srcWstr.c_str(), dstWstr.c_str(), false);
 
