@@ -9,7 +9,7 @@
 * the property of Adobe Systems Incorporated and its suppliers,
 * if any.  The intellectual and technical concepts contained
 * herein are proprietary to Adobe Systems Incorporated and its
-* suppliers and are protected by all applicable intellectual 
+* suppliers and are protected by all applicable intellectual
 * property laws, including trade secret and copyright laws.
 * Dissemination of this information or reproduction of this material
 * is strictly forbidden unless prior written permission is obtained
@@ -37,22 +37,22 @@
 #include <string>
 #include "PluginConfiguration.h"
 
-/* -------------------------------------------------- Forward Decl */
+ /* -------------------------------------------------- Forward Decl */
 
 using namespace FCM;
 using namespace DocType;
 
 namespace PixiJS
 {
-    class CDocType;
-    class FeatureMatrix;
-    class Value;
-    class Property;
-    class Feature;
-    class FeatureDocumentHandler;
+	class CDocType;
+	class FeatureMatrix;
+	class Value;
+	class Property;
+	class Feature;
+	class FeatureDocumentHandler;
 }
 
- 
+
 /* -------------------------------------------------- Enums */
 
 
@@ -63,9 +63,9 @@ namespace PixiJS
 
 namespace PixiJS
 {
-    typedef std::map<std::string, Value*> StrValueMap;
-    typedef std::map<std::string, Property*> StrPropertyMap;
-    typedef std::map<std::string, Feature*> StrFeatureMap;
+	typedef std::map<std::string, Value*> StrValueMap;
+	typedef std::map<std::string, Property*> StrPropertyMap;
+	typedef std::map<std::string, Feature*> StrFeatureMap;
 };
 
 
@@ -73,152 +73,152 @@ namespace PixiJS
 
 namespace PixiJS
 {
-    class CDocType : public DocType::IDocType, public FCM::FCMObjectBase
-    {
-        BEGIN_INTERFACE_MAP(CDocType, PIXIJS_PLUGIN_VERSION)
-            INTERFACE_ENTRY(IDocType)    
-        END_INTERFACE_MAP
-            
-    public:
+	class CDocType : public DocType::IDocType, public FCM::FCMObjectBase
+	{
+		BEGIN_INTERFACE_MAP(CDocType, PIXIJS_PLUGIN_VERSION)
+			INTERFACE_ENTRY(IDocType)
+		END_INTERFACE_MAP
 
-        virtual FCM::Result _FCMCALL GetFeatureMatrix(DocType::PIFeatureMatrix& pFeatureMatrix);
+	public:
 
-        CDocType();
+		virtual FCM::Result _FCMCALL GetFeatureMatrix(DocType::PIFeatureMatrix& pFeatureMatrix);
 
-        ~CDocType();
+		CDocType();
 
-    private:
+		~CDocType();
 
-        DocType::PIFeatureMatrix m_fm;
-    };
+	private:
 
-    
-    class FeatureMatrix : public DocType::IFeatureMatrix, public FCM::FCMObjectBase
-    {
-        BEGIN_MULTI_INTERFACE_MAP(FeatureMatrix, PIXIJS_PLUGIN_VERSION)
-            INTERFACE_ENTRY(IFeatureMatrix)
-        END_INTERFACE_MAP
-
-    public:
-
-        virtual FCM::Result _FCMCALL IsSupported(
-            CStringRep16 inFeatureName, 
-            FCM::Boolean& isSupported);
-
-        virtual FCM::Result _FCMCALL IsSupported(
-            CStringRep16 inFeatureName, 
-            CStringRep16 inPropName, 
-            FCM::Boolean& isSupported);
-
-        virtual FCM::Result _FCMCALL IsSupported(
-            CStringRep16 inFeatureName, 
-            CStringRep16 inPropName, 
-            CStringRep16 inValName, 
-            FCM::Boolean& isSupported);
-
-        virtual FCM::Result _FCMCALL GetDefaultValue(
-            CStringRep16 inFeatureName, 
-            CStringRep16 inPropName,
-            FCM::VARIANT& outDefVal);
-        
-        FeatureMatrix();
-
-        ~FeatureMatrix();
-
-        void Init(FCM::PIFCMCallback pCallback);
-
-    private:
-
-        FCM::Result StartElement(
-            const std::string name,
-            const std::map<std::string, std::string>& attrs);
-        
-        FCM::Result EndElement(const std::string name);            
-
-        Feature* FindFeature(const std::string& inFeatureName);
-
-        Feature* UpdateFeature(const std::map<std::string, std::string>& inAttrs);
-
-        Property* UpdateProperty(Feature* inFeature, const std::map<std::string,std::string>& inAttrs);
-
-        Value* UpdateValue(Property* inProperty, const std::map<std::string, std::string>& inAttrs);
-            
-    private:
-
-        StrFeatureMap mFeatures;
-
-        Feature* mCurrentFeature;
-
-        Property* mCurrentProperty;
-
-        FCM::U_Int32 m_appVersion;
-
-        bool m_bInited;
-        
-        friend class FeatureDocumentHandler;
-    };
+		DocType::PIFeatureMatrix m_fm;
+	};
 
 
-    class Value
-    {
-    public:
+	class FeatureMatrix : public DocType::IFeatureMatrix, public FCM::FCMObjectBase
+	{
+		BEGIN_MULTI_INTERFACE_MAP(FeatureMatrix, PIXIJS_PLUGIN_VERSION)
+			INTERFACE_ENTRY(IFeatureMatrix)
+		END_INTERFACE_MAP
 
-        Value(bool supported);
+	public:
 
-        ~Value();
+		virtual FCM::Result _FCMCALL IsSupported(
+			CStringRep16 inFeatureName,
+			FCM::Boolean& isSupported);
 
-        bool IsSupported();
+		virtual FCM::Result _FCMCALL IsSupported(
+			CStringRep16 inFeatureName,
+			CStringRep16 inPropName,
+			FCM::Boolean& isSupported);
 
-    private:
-        bool mbSupported;
-    };
+		virtual FCM::Result _FCMCALL IsSupported(
+			CStringRep16 inFeatureName,
+			CStringRep16 inPropName,
+			CStringRep16 inValName,
+			FCM::Boolean& isSupported);
+
+		virtual FCM::Result _FCMCALL GetDefaultValue(
+			CStringRep16 inFeatureName,
+			CStringRep16 inPropName,
+			FCM::VARIANT& outDefVal);
+
+		FeatureMatrix();
+
+		~FeatureMatrix();
+
+		void Init(FCM::PIFCMCallback pCallback);
+
+	private:
+
+		FCM::Result StartElement(
+			const std::string name,
+			const std::map<std::string, std::string>& attrs);
+
+		FCM::Result EndElement(const std::string name);
+
+		Feature* FindFeature(const std::string& inFeatureName);
+
+		Feature* UpdateFeature(const std::map<std::string, std::string>& inAttrs);
+
+		Property* UpdateProperty(Feature* inFeature, const std::map<std::string, std::string>& inAttrs);
+
+		Value* UpdateValue(Property* inProperty, const std::map<std::string, std::string>& inAttrs);
+
+	private:
+
+		StrFeatureMap mFeatures;
+
+		Feature* mCurrentFeature;
+
+		Property* mCurrentProperty;
+
+		FCM::U_Int32 m_appVersion;
+
+		bool m_bInited;
+
+		friend class FeatureDocumentHandler;
+	};
 
 
-    class Property
-    {
-    public:
-        Property(const std::string& def, bool supported);
+	class Value
+	{
+	public:
 
-        ~Property();
+		Value(bool supported);
 
-        Value* FindValue(const std::string& inValueName);
+		~Value();
 
-        bool AddValue(const std::string& valueName, Value* pValue);
+		bool IsSupported();
 
-        bool IsSupported();
-
-        std::string GetDefault();
-        
-    private:
-        std::string mDefault;
-        bool mbSupported;
-        StrValueMap mValues;
-    };
+	private:
+		bool mbSupported;
+	};
 
 
-    class Feature
-    {
+	class Property
+	{
+	public:
+		Property(const std::string& def, bool supported);
 
-    public:
+		~Property();
 
-        Feature(bool supported);
+		Value* FindValue(const std::string& inValueName);
 
-        ~Feature();
+		bool AddValue(const std::string& valueName, Value* pValue);
 
-        Property* FindProperty(const std::string& inPropertyName);
+		bool IsSupported();
 
-        bool AddProperty(const std::string& name, Property* pProperty);
+		std::string GetDefault();
 
-        bool IsSupported();
+	private:
+		std::string mDefault;
+		bool mbSupported;
+		StrValueMap mValues;
+	};
 
-    private:
 
-        bool mbSupported;
+	class Feature
+	{
 
-        StrPropertyMap mProperties;
-    };
+	public:
 
-    FCM::Result RegisterDocType(FCM::PIFCMDictionary pPlugins, const std::string& resPath);
+		Feature(bool supported);
+
+		~Feature();
+
+		Property* FindProperty(const std::string& inPropertyName);
+
+		bool AddProperty(const std::string& name, Property* pProperty);
+
+		bool IsSupported();
+
+	private:
+
+		bool mbSupported;
+
+		StrPropertyMap mProperties;
+	};
+
+	FCM::Result RegisterDocType(FCM::PIFCMDictionary pPlugins, const std::string& resPath);
 };
 
 

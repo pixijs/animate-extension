@@ -41,7 +41,7 @@ Go to Registry, `regedit` > `HKEY_CURRENT_USER/Software/Adobe/CSXS.6`, then add 
 #### OS X
 Add the entry `PlayerDebugMode` of type `"string"` with value set to `1` in the plist file `/Users/<username>/Library/Preferences/com.adobe.CSXS.6.plist`
 
-### Commands
+### Mac OS X Instructions
 
 To build and install to Animate CC directly, run the script. This will copy the plugin and then install in the CEP extension's folder (`/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate/`)
 
@@ -67,11 +67,17 @@ Or to ONLY build the plugin without building the rest of the extension.
 gulp plugin
 ```
 
-### Windows Instructions
+### Windows Instructions ###
 * Microsoft Windows 7 64-bit or higher required
 * Adobe Animate CC 2015 x64 w/ ZXP utility for windows
 * Microsoft Visual Studio 2015 Community or higher
 * Latest NodeJS
+
+**Notice: When switching visual studio from 14 (2015) to a different version, do the following**
+
+* Update path in vsvars.js to the newly selected toolset
+* Change the vs2015 variable name in the javascript source, if desired
+* Update the solution and project files (You probably cannot downgrade these files without rebuilding them from scratch)
 
 Update your npm first
 ```
@@ -93,5 +99,4 @@ Build plugin and install plugin
 gulp --plugin --install
 ```
 
-
-Use the ZXP utility for windows to install the PixiAnimate.zxp plugin for Adobe Animate CC 2015, make sure to remove the existing plugin before install
+Now use the ZXP utility for windows to install the PixiAnimate.zxp plugin for Adobe Animate CC 2015, make sure to remove the existing plugin before install
