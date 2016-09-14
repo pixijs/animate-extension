@@ -45,15 +45,22 @@ p.render = function(renderer)
         duration: this.totalFrames,
         framerate: this.framerate
     };
-    const labels = this.getLabels();
 
     if (!renderer.loopTimeline) {
         options.loop = false;
     }
 
+    const labels = this.getLabels();
     let hasLabels = !!Object.keys(labels).length;
     if (hasLabels) {
         options.labels = labels;
+    }
+
+    const sounds = this.getSounds();
+    const hasSounds = !!Object.keys(sounds).length;
+    if (hasSounds)
+    {
+        this.assets = Object.assign(this.assets, sounds);
     }
 
     return renderer.template(renderer.compress ? 'stage-tiny': 'stage', {
