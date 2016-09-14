@@ -56,13 +56,6 @@ p.render = function(renderer)
         options.labels = labels;
     }
 
-    const sounds = this.getSounds();
-    const hasSounds = !!Object.keys(sounds).length;
-    if (hasSounds)
-    {
-        this.assets = Object.assign(this.assets, sounds);
-    }
-
     return renderer.template(renderer.compress ? 'stage-tiny': 'stage', {
         id: this.name,
         options: options,

@@ -66,10 +66,10 @@ let Publisher = function(dataFile, compress, debug, assetsPath)
 let p = Publisher.prototype;
 
 /**
- * Export the graphics
- * @method exportImages
+ * Export the assets
+ * @method exportAssets
  */
-p.exportImages = function(done)
+p.exportAssets = function(done)
 {
     let assetsToLoad = this.library.stage.assets;
 
@@ -77,6 +77,12 @@ p.exportImages = function(done)
     this.library.bitmaps.forEach(function(bitmap)
     {
         assetsToLoad[bitmap.name] = bitmap.src;
+    });
+
+    // Get the sounds to export
+    this.library.sounds.forEach(function(sound)
+    {
+        assetsToLoad[sound.name] = sound.src;
     });
 
     const shapes = this.library.shapes;
@@ -175,7 +181,7 @@ p.destroy = function()
 p.run = function(done)
 {
     try {
-        this.exportImages(() => {
+        this.exportAssets(() => {
             try {
                 const buffer = this.publish();
                 this.destroy();

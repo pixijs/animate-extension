@@ -234,11 +234,11 @@ p.getFrameScripts = function(renderer)
                     const {name, src} = libraryItem;
                     const data = DataUtils.stringifySimple({name, src, loop});
                     return {
-    					"frame" : f.frame,
-    					"scripts" : [
-    						`this.emit('sound', ${data});`
-    					]
-    				};
+                        "frame": f.frame,
+                        "scripts": [
+                            `this.emit('sound', ${data});`
+                        ]
+                    };
                 });
 
             scriptFrames.push(...sounds);
