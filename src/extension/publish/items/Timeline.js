@@ -1,7 +1,6 @@
 "use strict";
 
 const util = require('util');
-const DataUtils = require('../utils/DataUtils');
 const Container = require('./Container');
 const TimelineInstance = require('../instances/TimelineInstance');
 const Instance = require('../instances/Instance');
@@ -231,12 +230,11 @@ p.getFrameScripts = function(renderer)
                 .map((command) => {
                     const sound = library.createInstance(command.assetId, command.instanceId);
                     const {libraryItem, loop} = sound;
-                    const {name, src} = libraryItem;
-                    const data = DataUtils.stringifySimple({name, src, loop});
+                    const {name} = libraryItem;
                     return {
                         "frame": f.frame,
                         "scripts": [
-                            `this.emit('sound', ${data});`
+                            `this.playSound('${name}', ${loop}, this);`
                         ]
                     };
                 });
