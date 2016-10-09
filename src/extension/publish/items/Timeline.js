@@ -225,6 +225,8 @@ p.getFrameScripts = function(renderer)
 
         if (f.commands && f.commands.length)
         {
+            let playSound = renderer.compress ? 'ps' : 'playSound';
+
             const sounds = f.commands
                 .filter((command) => command.type === 'SoundPlace')
                 .map((command) => {
@@ -234,7 +236,7 @@ p.getFrameScripts = function(renderer)
                     return {
                         "frame": f.frame,
                         "scripts": [
-                            `this.playSound('${name}', ${loop}, this);`
+                            `this.${playSound}('${name}'${loop ? ', true' : ''});`
                         ]
                     };
                 });
