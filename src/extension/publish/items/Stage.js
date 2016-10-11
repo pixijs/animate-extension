@@ -45,12 +45,12 @@ p.render = function(renderer)
         duration: this.totalFrames,
         framerate: this.framerate
     };
-    const labels = this.getLabels();
 
     if (!renderer.loopTimeline) {
         options.loop = false;
     }
 
+    const labels = this.getLabels();
     let hasLabels = !!Object.keys(labels).length;
     if (hasLabels) {
         options.labels = labels;

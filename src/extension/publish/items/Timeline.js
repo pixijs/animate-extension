@@ -207,18 +207,41 @@ p.getMaskFrames = function(instance)
 
 /**
  * Get all the frame scripts
- * @method getFrameScripts 
+ * @method getFrameScripts
  * @param {Renderer} renderer
  * @return {string} buffer
  */
 p.getFrameScripts = function(renderer)
 {
+    const library = this.library;
     let scriptFrames = [];
+
     this.frames.forEach(function(f)
     {
         if (f.scripts)
         {
             scriptFrames.push(f);
+        }
+
+        if (f.commands && f.commands.length)
+        {
+            let playSound = renderer.compress ? 'ps' : 'playSound';
+
+            const sounds = f.commands
+                .filter((command) => command.type === 'SoundPlace')
+                .map((command) => {
+                    const sound = library.createInstance(command.assetId, command.instanceId);
+                    const {libraryItem, loop} = sound;
+                    const {name} = libraryItem;
+                    return {
+                        "frame": f.frame,
+                        "scripts": [
+                            `this.${playSound}('${name}'${loop ? ', true' : ''});`
+                        ]
+                    };
+                });
+
+            scriptFrames.push(...sounds);
         }
     });
 
@@ -256,6 +279,31 @@ p.getLabels = function()
             {
                 result[label] = frame.frame;
             });
+        }
+    });
+    return result;
+};
+
+/**
+ * Get the collection of sounds
+ * @method getSounds
+ * @return {object} The sound objects
+ */
+p.getSounds = function()
+{
+    const library = this.library;
+    let result = {};
+
+    this.frames.forEach(function(f)
+    {
+        if (f.commands) {
+            f.commands
+                .filter((cmd) => cmd.type === 'SoundPlace')
+                .forEach((cmd) => {
+                    const instance = library.createInstance(cmd.assetId, cmd.instanceId);
+                    const {name, src} = instance.libraryItem;
+                    result[name] = src;
+                });
         }
     });
     return result;
