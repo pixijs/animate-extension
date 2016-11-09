@@ -1,10 +1,16 @@
 var gulp = require('gulp');
+var process = require('process');
+
+/* This flag is used to detect windows systems */
+var isWin = /^win/.test(process.platform);
 
 // Options for the load-gulp-tasks
 var options = {
 
     // Name
     name: 'PixiAnimate',
+
+    isWin: isWin,
 
     // Pattern for loading tasks
     pattern: ['build/tasks/*.js'],
@@ -15,19 +21,24 @@ var options = {
     // XCode project for building the plugin
     xcodeproj: 'project/mac/PixiAnimate.mp.xcodeproj',
 
+    // VS2015 Solution file for building the win32 plugin
+    vs2015: './project/win/pixi-animate-vs2015',
+
     // Temporary build target
-    pluginTempDebug:'src/PixiAnimate/lib/mac/debug/PixiAnimate.fcm.plugin',
-    pluginTempRelease: 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin',
-    
+    pluginTempDebug: !isWin ? 'src/PixiAnimate/lib/mac/debug/PixiAnimate.fcm.plugin' : 'src/PixiAnimate/lib/win/debug/PixiAnimate.fcm',
+    pluginTempRelease: !isWin ? 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin' : 'src/PixiAnimate/lib/win/release/PixiAnimate.fcm',
+
     // The target location for the plugin
-    pluginFile: 'com.jibo.PixiAnimate/plugin/lib/mac/PixiAnimate.fcm.plugin',
-    
+    pluginFile: !isWin ?
+        'com.jibo.PixiAnimate/plugin/lib/mac/PixiAnimate.fcm.plugin' :
+        'com.jibo.PixiAnimate/plugin/lib/win/PixiAnimate.fcm',
+
     // Temporary staging folder
     bundleId: 'com.jibo.PixiAnimate',
-    
+
     // Local location to install the plugin for Adobe CEP
-    installFolder: '/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate',
-    
+    installFolder: !isWin ? '/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate' : 'C:\\Program Files\\Common Files\\Adobe\\CEP\\extensions\\com.jibo.PixiAnimate',
+
     // The name of the ZXP file
     outputName: 'PixiAnimate.zxp',
 
@@ -37,9 +48,9 @@ var options = {
     // Remote debugging for panels in Flash
     remoteDebug: 'build/debug.xml',
     remoteDebugOutput: '.debug',
-    
+
     // ZXP plugin packaging options
-    packager: 'build/ZXPSignCmd',
+    packager: isWin ? '.\\build\\ZXPSignCmd.exe' : './build/ZXPSignCmd',
     packagerCert: 'build/certificate.p12',
     packagerPass: 'password',
 
@@ -66,7 +77,7 @@ var options = {
         '!extension/dialog/cep/**',
         '!extension/bin'
     ],
-    
+
     // The files to include for JS linting
     lintFiles: [
         'build/**/*.js',
@@ -120,6 +131,7 @@ var plugins = {
     strip: require('gulp-strip-comments'),
     whitespace: require('gulp-whitespace'),
     source: require('vinyl-source-stream'),
+    msbuild: require('gulp-msbuild'),
     build: function(gulp, options, plugins) {
         return plugins.browserify({
                 entries: options.src, //'./src/extension/publish/index.js',

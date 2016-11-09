@@ -9,7 +9,7 @@ module.exports = function(gulp, options, plugins) {
         plugins.gutil.log("|    PixiAnimate    |".green);
         plugins.gutil.log("+-------------------+".green);
         plugins.gutil.log("Mode: ".gray, (debug ? "Debug" : "Release").yellow);
-        
+
         var tasks = [];
 
         if (plugin) {
@@ -17,10 +17,15 @@ module.exports = function(gulp, options, plugins) {
         }
 
         tasks.push(
-            'clean', 
+            'clean',
             'lint',
             'stage'
         );
+
+        /* For windows, copy the dll into the stage folder, very important */
+        if (options.isWin) {
+            tasks.push('dllcopy');
+        }
 
         // Turn on remote debugging
         if (debug) {
@@ -40,7 +45,6 @@ module.exports = function(gulp, options, plugins) {
             'clean-stage'
         );
 
-
         if (install)
         {
             tasks.push(
@@ -54,5 +58,5 @@ module.exports = function(gulp, options, plugins) {
         tasks.push(done);
 
         plugins.sequence.apply(plugins.sequence, tasks);
-    });  
+    });
 };

@@ -9,7 +9,7 @@
 * the property of Adobe Systems Incorporated and its suppliers,
 * if any.  The intellectual and technical concepts contained
 * herein are proprietary to Adobe Systems Incorporated and its
-* suppliers and are protected by all applicable intellectual 
+* suppliers and are protected by all applicable intellectual
 * property laws, including trade secret and copyright laws.
 * Dissemination of this information or reproduction of this material
 * is strictly forbidden unless prior written permission is obtained
@@ -27,59 +27,59 @@
 
 
 
-/* -------------------------------------------------- Forward Decl */
+ /* -------------------------------------------------- Forward Decl */
 
 
-/* -------------------------------------------------- Enums */
+ /* -------------------------------------------------- Enums */
 
 
-/* -------------------------------------------------- Macros / Constants */
+ /* -------------------------------------------------- Macros / Constants */
 
-/**
-     * @def   PIXIJS_PLUGIN_VERSION_MAJOR
-     *
-     * @brief Major version of the plugin
-     */
-    #define PIXIJS_PLUGIN_VERSION_MAJOR                 0x01
-    
+ /**
+	  * @def   PIXIJS_PLUGIN_VERSION_MAJOR
+	  *
+	  * @brief Major version of the plugin
+	  */
+#define PIXIJS_PLUGIN_VERSION_MAJOR                 0x01
 
-    /**
-     * @def   PIXIJS_PLUGIN_VERSION_MINOR
-     *
-     * @brief Minor version of the plugin
-     */
-    #define PIXIJS_PLUGIN_VERSION_MINOR                 0x01
-    
 
-    /**
-     * @def   PIXIJS_PLUGIN_VERSION_MAINTENANCE
-     *
-     * @brief Plugin version's maintenance number. 
-     */
-    #define PIXIJS_PLUGIN_VERSION_MAINTENANCE           0x04
-    
+	  /**
+	   * @def   PIXIJS_PLUGIN_VERSION_MINOR
+	   *
+	   * @brief Minor version of the plugin
+	   */
+#define PIXIJS_PLUGIN_VERSION_MINOR                 0x01
 
-    /**
-     * @def   PIXIJS_PLUGIN_VERSION_BUILD
-     *
-     * @brief Plugin version's build number. 
-     */
-    #define PIXIJS_PLUGIN_VERSION_BUILD                 0x00
 
-    
-    /**
-     * @def   PIXIJS_PLUGIN_VERSION
-     *
-     * @brief Complete plugin version.  
-     */
-    #define PIXIJS_PLUGIN_VERSION ( (PIXIJS_PLUGIN_VERSION_MAJOR << 24) | (PIXIJS_PLUGIN_VERSION_MINOR << 16) | \
+	   /**
+		* @def   PIXIJS_PLUGIN_VERSION_MAINTENANCE
+		*
+		* @brief Plugin version's maintenance number.
+		*/
+#define PIXIJS_PLUGIN_VERSION_MAINTENANCE           0x04
+
+
+		/**
+		 * @def   PIXIJS_PLUGIN_VERSION_BUILD
+		 *
+		 * @brief Plugin version's build number.
+		 */
+#define PIXIJS_PLUGIN_VERSION_BUILD                 0x00
+
+
+		 /**
+		  * @def   PIXIJS_PLUGIN_VERSION
+		  *
+		  * @brief Complete plugin version.
+		  */
+#define PIXIJS_PLUGIN_VERSION ( (PIXIJS_PLUGIN_VERSION_MAJOR << 24) | (PIXIJS_PLUGIN_VERSION_MINOR << 16) | \
                                     (PIXIJS_PLUGIN_VERSION_MAINTENANCE << 8) | (PIXIJS_PLUGIN_VERSION_BUILD) )
 
 
-/* -------------------------------------------------- Structs / Unions */
+		  /* -------------------------------------------------- Structs / Unions */
 
 
-/* -------------------------------------------------- Class Decl */
+		  /* -------------------------------------------------- Class Decl */
 
 
 #endif // VERSION_H_

@@ -1,0 +1,6 @@
+{
+    "rules": {
+        "no-unused-vars": [2, {"vars": "all", "args": "none"}]
+    },
+    "extends": "eslint:recommended"
+}
