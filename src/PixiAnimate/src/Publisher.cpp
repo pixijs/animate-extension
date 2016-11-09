@@ -226,6 +226,8 @@ namespace PixiJS
 		bool previewNeeded(false);
 		bool spritesheets(true);
 		int spritesheetSize(1024);
+		double spritesheetScale(1.0);
+
 		std::string htmlPath;
 		std::string stageName;
 		std::string libsPath("libs/");
@@ -255,6 +257,7 @@ namespace PixiJS
 		Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_NAMESPACE, nameSpace);
 		Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, stageName);
 		Utils::ReadStringToInt(publishSettings, (FCM::StringRep8)DICT_SPRITESHEET_SIZE, spritesheetSize);
+		Utils::ReadStringToFloat(publishSettings, (FCM::StringRep8)DICT_SPRITESHEET_SCALE, spritesheetScale);
 
 		// Filter the stagename
 		Utils::GetJavaScriptName(stageName, stageName);
@@ -315,7 +318,8 @@ namespace PixiJS
 			commonJS,
 			loopTimeline,
 			spritesheets,
-			spritesheetSize));
+			spritesheetSize,
+			spritesheetScale));
 
 		if (outputWriter.get() == NULL)
 		{

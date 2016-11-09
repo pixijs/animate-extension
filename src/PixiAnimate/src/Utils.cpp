@@ -972,6 +972,15 @@ namespace PixiJS
 		result = atoi(str.c_str());
 	}
 
+	void Utils::ReadStringToFloat(
+		const FCM::PIFCMDictionary pDict,
+		FCM::StringRep8 key,
+		double &result)
+	{
+		std::string str;
+		Utils::ReadString(pDict, key, str);
+		result = strtod(str.c_str(), NULL);
+	}
 	bool Utils::ReadStringToBool(
 		const FCM::PIFCMDictionary pDict,
 		FCM::StringRep8 key,

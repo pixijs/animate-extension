@@ -10,6 +10,7 @@ const BrowserWindow = electron.BrowserWindow;  // Native browser window
  * @param {Object} settings.assets
  * @param {String} settings.outputsize
  * @param {int} settings.size
+ * @param {Number} settings.scale
  * @param {Boolean} settings.debug
  * @param {Function} done
  */

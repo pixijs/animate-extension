@@ -35,6 +35,7 @@
     var $okButton = $("#okButton");
     var $spritesheets = $("#spritesheets");
     var $spritesheetSize = $("#spritesheetSize");
+    var $spritesheetScale = $("#spritesheetScale");
 
     // Execute JSFL scripts
     function exec(script, callback)
@@ -98,7 +99,8 @@
         return isValidInput($outputFile)
             && isValidInput($htmlPath)
             && isValidInput($namespace)
-            && isValidInput($stageName);
+            && isValidInput($stageName)
+            && isValidInput($spritesheetScale);
     }
 
     // The prepend name of the settings object keys
@@ -140,7 +142,8 @@
             $outputFile.value = data[SETTINGS + "OutputFile"];
             $stageName.value = data[SETTINGS + "StageName"];
             $spritesheetSize.value = data[SETTINGS + "SpritesheetSize"] || 1024;
-            
+            $spritesheetScale.value = data[SETTINGS + "SpritesheetScale"] || 1.0;
+
             // Global options
             $hiddenLayers.checked = data["PublishSettings.IncludeInvisibleLayer"] == "true";
         }

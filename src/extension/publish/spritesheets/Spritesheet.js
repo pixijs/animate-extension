@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const Atlas = require('atlaspack').Atlas;
 
-const Spritesheet = function(size, debug) {
+const Spritesheet = function(size, scale, debug) {
 
     /**
      * Writing images to canvas
@@ -17,6 +17,12 @@ const Spritesheet = function(size, debug) {
      * @property {Boolean} debug
      */
     this.debug = !!debug;
+
+    /**
+     * Scale of the spritesheet
+     * @property {Number} scale
+     */
+    this.scale = scale;
 
     this.size = size = size || 1024;
 
@@ -35,14 +41,14 @@ const Spritesheet = function(size, debug) {
      * @property {Object} data
      */
     this.data = {
-        frames: {},
+        textures: {},
         meta: {
-            // app: "PixiAnimate Extension",
-            // version: "1.0.0",
-            // format: "RGBA8888",
-            image: '',
-            size: {w: size, h: size},
-            scale: 1
+            app: "PixiAnimate",
+            scale: scale,
+            size: {
+                w: size,
+                h: size
+            }
         }
     };
 };
@@ -73,8 +79,7 @@ p.addImages = function(images)
         if (node !== false) {
             count++;
             images.splice(i, 1);
-            if (!this.debug)
-            {
+            if (!this.debug) {
                 fs.unlinkSync(img.dataset.src);
             }
         }
@@ -84,19 +89,12 @@ p.addImages = function(images)
     const uvs = this.atlas.uv();
 
     // Create data for images on this spritesheet
-    for(let id in uvs) {
-        let x = uvs[id][0][0] * this.size + Spritesheet.PADDING;
-        let y = uvs[id][0][1] * this.size + Spritesheet.PADDING;
-        let w = uvs[id][2][0] * this.size - x - Spritesheet.PADDING;
-        let h = uvs[id][2][1] * this.size - y - Spritesheet.PADDING;
-        this.data.frames[id] = {
-            frame: {x:x, y:y, w:w, h:h},
-            // rotate: false,
-            // trimmed: false,
-            // spriteSourceSize: {x:0, y:0, w:w, h:h},
-            sourceSize: {w:w, h:h}//,
-            // pivot: {x:0.5,y:0.5}
-        };
+    for(const id in uvs) {
+        const x = uvs[id][0][0] * this.size + Spritesheet.PADDING;
+        const y = uvs[id][0][1] * this.size + Spritesheet.PADDING;
+        const w = uvs[id][2][0] * this.size - x - Spritesheet.PADDING;
+        const h = uvs[id][2][1] * this.size - y - Spritesheet.PADDING;
+        this.data.textures[id] = { x:x, y:y, w:w, h:h };
     }
 };
 

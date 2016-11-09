@@ -141,6 +141,7 @@ namespace PixiJS
 			meta.push_back(JSONNode("imagesPath", m_imagesPath));
 			meta.push_back(JSONNode("spritesheets", m_spritesheets));
 			meta.push_back(JSONNode("spritesheetSize", m_spritesheetSize));
+			meta.push_back(JSONNode("spritesheetScale", m_spritesheetScale));
 		}
 
 		if (m_html)
@@ -1018,7 +1019,8 @@ namespace PixiJS
 		bool commonJS,
 		bool loopTimeline,
 		bool spritesheets,
-		int spritesheetSize)
+		int spritesheetSize,
+		double spritesheetScale)
 		: m_pCallback(pCallback),
 		m_outputFile(outputFile),
 		m_outputDataFile(basePath + outputFile + "on"),
@@ -1041,6 +1043,7 @@ namespace PixiJS
 		m_loopTimeline(loopTimeline),
 		m_spritesheets(spritesheets),
 		m_spritesheetSize(spritesheetSize),
+		m_spritesheetScale(spritesheetScale),
 		m_shapeElem(NULL),
 		m_pathArray(NULL),
 		m_pathElem(NULL),

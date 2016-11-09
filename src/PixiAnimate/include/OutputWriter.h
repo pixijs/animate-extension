@@ -188,7 +188,8 @@ namespace PixiJS
 			bool commonJS,
 			bool loopTimeline,
 			bool spritesheets,
-			int spritesheetSize);
+			int spritesheetSize,
+			double spritesheetScale);
 
 		virtual ~OutputWriter();
 
@@ -293,6 +294,8 @@ namespace PixiJS
 		std::map<std::string, std::string> m_substitutions;
 
 		int m_spritesheetSize;
+
+		double m_spritesheetScale;
 
 		bool m_spritesheets;
 
