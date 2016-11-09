@@ -9,7 +9,7 @@
 * the property of Adobe Systems Incorporated and its suppliers,
 * if any.  The intellectual and technical concepts contained
 * herein are proprietary to Adobe Systems Incorporated and its
-* suppliers and are protected by all applicable intellectual 
+* suppliers and are protected by all applicable intellectual
 * property laws, including trade secret and copyright laws.
 * Dissemination of this information or reproduction of this material
 * is strictly forbidden unless prior written permission is obtained
@@ -29,13 +29,13 @@
 #include "xercesc/parsers/SAXParser.hpp"
 #include "xercesc/sax/DocumentHandler.hpp"
 
-/* -------------------------------------------------- Forward Decl */
+ /* -------------------------------------------------- Forward Decl */
 
 using namespace xercesc;
 
 namespace PixiJS
 {
-    class FeatureMatrix;
+	class FeatureMatrix;
 }
 
 
@@ -52,24 +52,24 @@ namespace PixiJS
 
 namespace PixiJS
 {
-    class FeatureDocumentHandler : public DocumentHandler 
-    {
-    public:
-        FeatureDocumentHandler(PixiJS::FeatureMatrix *pFeatureMat);
-        
-        virtual void characters(const XMLCh* const chars, const XMLSize_t length) {}
-        virtual void startDocument() {}
-        virtual void resetDocument() {}
-        virtual void endDocument() {}
-        virtual void ignorableWhitespace(const XMLCh* const chars, const XMLSize_t length) {}
-        virtual void processingInstruction(const XMLCh* const target, const XMLCh* const data) {}
-        virtual void setDocumentLocator(const Locator* const locator) {}
-        virtual void startElement(const XMLCh* const name, AttributeList& attrs);
-        virtual void endElement(const XMLCh* const name);
+	class FeatureDocumentHandler : public DocumentHandler
+	{
+	public:
+		FeatureDocumentHandler(PixiJS::FeatureMatrix *pFeatureMat);
 
-    private:
-        PixiJS::FeatureMatrix *m_pFeatureMat;
-    };
+		virtual void characters(const XMLCh* const chars, const XMLSize_t length) {}
+		virtual void startDocument() {}
+		virtual void resetDocument() {}
+		virtual void endDocument() {}
+		virtual void ignorableWhitespace(const XMLCh* const chars, const XMLSize_t length) {}
+		virtual void processingInstruction(const XMLCh* const target, const XMLCh* const data) {}
+		virtual void setDocumentLocator(const Locator* const locator) {}
+		virtual void startElement(const XMLCh* const name, AttributeList& attrs);
+		virtual void endElement(const XMLCh* const name);
+
+	private:
+		PixiJS::FeatureMatrix *m_pFeatureMat;
+	};
 }
 
 #endif // MY_XML_PARSER_H_

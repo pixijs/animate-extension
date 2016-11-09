@@ -9,7 +9,7 @@
 * the property of Adobe Systems Incorporated and its suppliers,
 * if any.  The intellectual and technical concepts contained
 * herein are proprietary to Adobe Systems Incorporated and its
-* suppliers and are protected by all applicable intellectual 
+* suppliers and are protected by all applicable intellectual
 * property laws, including trade secret and copyright laws.
 * Dissemination of this information or reproduction of this material
 * is strictly forbidden unless prior written permission is obtained
@@ -44,7 +44,7 @@
 #include "TimelineWriter.h"
 #include "PluginConfiguration.h"
 
-/* -------------------------------------------------- Forward Decl */
+ /* -------------------------------------------------- Forward Decl */
 
 using namespace FCM;
 using namespace Publisher;
@@ -52,31 +52,31 @@ using namespace Exporter::Service;
 
 namespace Application
 {
-    namespace Service
-    {
-        class IOutputConsoleService;
-    }
+	namespace Service
+	{
+		class IOutputConsoleService;
+	}
 }
 
 namespace PixiJS
 {
-    class CPublisher;
-    class ResourcePalette;
-    class TimelineBuilder;
-    class TimelineBuilderFactory;
-    class IOutputWriter;
-    class ITimelineWriter;
+	class CPublisher;
+	class ResourcePalette;
+	class TimelineBuilder;
+	class TimelineBuilderFactory;
+	class IOutputWriter;
+	class ITimelineWriter;
 }
 
 namespace DOM
 {
-    namespace Service
-    {
-        namespace Shape
-        {
-            FORWARD_DECLARE_INTERFACE(IPath);
-        }
-    };
+	namespace Service
+	{
+		namespace Shape
+		{
+			FORWARD_DECLARE_INTERFACE(IPath);
+		}
+	};
 };
 
 
@@ -86,9 +86,9 @@ namespace DOM
 /* -------------------------------------------------- Macros / Constants */
 
 #ifdef USE_SWF_EXPORTER_SERVICE
-    #define OUTPUT_FILE_EXTENSION       "swf"
+#define OUTPUT_FILE_EXTENSION       "swf"
 #else
-    #define OUTPUT_FILE_EXTENSION       "js"
+#define OUTPUT_FILE_EXTENSION       "js"
 #endif
 
 /* -------------------------------------------------- Structs / Unions */
@@ -99,271 +99,271 @@ namespace DOM
 namespace PixiJS
 {
 
-    class CPublisher : public IPublisher, public FCMObjectBase
-    {
-        BEGIN_INTERFACE_MAP(CPublisher, PIXIJS_PLUGIN_VERSION)
-            INTERFACE_ENTRY(IPublisher)
-        END_INTERFACE_MAP
-        
-    public:
+	class CPublisher : public IPublisher, public FCMObjectBase
+	{
+		BEGIN_INTERFACE_MAP(CPublisher, PIXIJS_PLUGIN_VERSION)
+			INTERFACE_ENTRY(IPublisher)
+		END_INTERFACE_MAP
 
-        virtual FCM::Result _FCMCALL Publish(
-            DOM::PIFLADocument flaDocument, 
-            const PIFCMDictionary publishSettings, 
-            const PIFCMDictionary dictConfig);
+	public:
 
-        virtual FCM::Result _FCMCALL Publish(
-            DOM::PIFLADocument flaDocument, 
-            DOM::PITimeline timeline, 
-            const Exporter::Service::RANGE &frameRange, 
-            const PIFCMDictionary publishSettings, 
-            const PIFCMDictionary dictConfig);
-        
-        virtual FCM::Result _FCMCALL ClearCache();
+		virtual FCM::Result _FCMCALL Publish(
+			DOM::PIFLADocument flaDocument,
+			const PIFCMDictionary publishSettings,
+			const PIFCMDictionary dictConfig);
 
-        CPublisher();
+		virtual FCM::Result _FCMCALL Publish(
+			DOM::PIFLADocument flaDocument,
+			DOM::PITimeline timeline,
+			const Exporter::Service::RANGE &frameRange,
+			const PIFCMDictionary publishSettings,
+			const PIFCMDictionary dictConfig);
 
-        ~CPublisher();
+		virtual FCM::Result _FCMCALL ClearCache();
 
-    private:
+		CPublisher();
 
-        FCM::Result GetOutputFileName(        
-            DOM::PIFLADocument flaDocument, 
-            DOM::PITimeline pITimeline, 
-            const PIFCMDictionary publishSettings,
-            std::string& basePath,
-            std::string& outFile);
+		~CPublisher();
 
-        FCM::Result Export(
-            DOM::PIFLADocument flaDocument, 
-            DOM::PITimeline timeline, 
-            const Exporter::Service::RANGE* pFrameRange, 
-            const PIFCMDictionary publishSettings, 
-            const PIFCMDictionary dictConfig);
+	private:
 
-        FCM::Result Init();
-        
-        FCM::Result ExportLibraryItems(FCM::FCMListPtr pLibraryItemList);
+		FCM::Result GetOutputFileName(
+			DOM::PIFLADocument flaDocument,
+			DOM::PITimeline pITimeline,
+			const PIFCMDictionary publishSettings,
+			std::string& basePath,
+			std::string& outFile);
 
-        FCM::Result CopyRuntime(const std::string& outputFolder, const bool& compressJS);
+		FCM::Result Export(
+			DOM::PIFLADocument flaDocument,
+			DOM::PITimeline timeline,
+			const Exporter::Service::RANGE* pFrameRange,
+			const PIFCMDictionary publishSettings,
+			const PIFCMDictionary dictConfig);
 
-    private:
+		FCM::Result Init();
 
-        AutoPtr<IFrameCommandGenerator> m_frameCmdGeneratorService;
-        AutoPtr<IResourcePalette> m_pResourcePalette;
-    };
+		FCM::Result ExportLibraryItems(FCM::FCMListPtr pLibraryItemList);
 
+		FCM::Result CopyRuntime(const std::string& outputFolder, const bool& compressJS);
 
-    class ResourcePalette : public IResourcePalette, public FCMObjectBase
-    {
-    public:
+	private:
 
-        BEGIN_INTERFACE_MAP(ResourcePalette, PIXIJS_PLUGIN_VERSION)    
-            INTERFACE_ENTRY(IResourcePalette)            
-        END_INTERFACE_MAP    
+		AutoPtr<IFrameCommandGenerator> m_frameCmdGeneratorService;
+		AutoPtr<IResourcePalette> m_pResourcePalette;
+	};
 
-        virtual FCM::Result _FCMCALL AddSymbol(
-            FCM::U_Int32 resourceId, 
-            FCM::StringRep16 pName, 
-            Exporter::Service::PITimelineBuilder timelineBuilder);
 
-        virtual FCM::Result _FCMCALL AddShape(
-            FCM::U_Int32 resourceId, 
-            DOM::FrameElement::PIShape pShape);
+	class ResourcePalette : public IResourcePalette, public FCMObjectBase
+	{
+	public:
 
-        virtual FCM::Result _FCMCALL AddSound(
-            FCM::U_Int32 resourceId, 
-            DOM::LibraryItem::PIMediaItem pLibItem);
+		BEGIN_INTERFACE_MAP(ResourcePalette, PIXIJS_PLUGIN_VERSION)
+			INTERFACE_ENTRY(IResourcePalette)
+		END_INTERFACE_MAP
 
-        virtual FCM::Result _FCMCALL AddBitmap(
-            FCM::U_Int32 resourceId, 
-            DOM::LibraryItem::PIMediaItem pLibItem);
+		virtual FCM::Result _FCMCALL AddSymbol(
+			FCM::U_Int32 resourceId,
+			FCM::StringRep16 pName,
+			Exporter::Service::PITimelineBuilder timelineBuilder);
 
-        virtual FCM::Result _FCMCALL AddClassicText(
-            FCM::U_Int32 resourceId, 
-            DOM::FrameElement::PIClassicText pClassicText);
+		virtual FCM::Result _FCMCALL AddShape(
+			FCM::U_Int32 resourceId,
+			DOM::FrameElement::PIShape pShape);
 
-        virtual FCM::Result _FCMCALL HasResource(
-            FCM::U_Int32 resourceId, 
-            FCM::Boolean& hasResource);
+		virtual FCM::Result _FCMCALL AddSound(
+			FCM::U_Int32 resourceId,
+			DOM::LibraryItem::PIMediaItem pLibItem);
 
-        ResourcePalette();
+		virtual FCM::Result _FCMCALL AddBitmap(
+			FCM::U_Int32 resourceId,
+			DOM::LibraryItem::PIMediaItem pLibItem);
 
-        ~ResourcePalette();
+		virtual FCM::Result _FCMCALL AddClassicText(
+			FCM::U_Int32 resourceId,
+			DOM::FrameElement::PIClassicText pClassicText);
 
-        void Init(IOutputWriter* outputWriter);
+		virtual FCM::Result _FCMCALL HasResource(
+			FCM::U_Int32 resourceId,
+			FCM::Boolean& hasResource);
 
-        void Clear();
+		ResourcePalette();
 
-        FCM::Result HasResource(
-            const std::string& name, 
-            FCM::Boolean& hasResource);
+		~ResourcePalette();
 
-    private:
+		void Init(IOutputWriter* outputWriter);
 
-        FCM::Result ExportFill(DOM::FrameElement::PIShape pIShape);
+		void Clear();
 
-        FCM::Result ExportStroke(DOM::FrameElement::PIShape pIShape);
+		FCM::Result HasResource(
+			const std::string& name,
+			FCM::Boolean& hasResource);
 
-        FCM::Result ExportStrokeStyle(FCM::PIFCMUnknown pStrokeStyle);
+	private:
 
-        FCM::Result ExportSolidStrokeStyle(DOM::StrokeStyle::ISolidStrokeStyle* pSolidStrokeStyle);
+		FCM::Result ExportFill(DOM::FrameElement::PIShape pIShape);
 
-        FCM::Result ExportFillStyle(FCM::PIFCMUnknown pFillStyle);
+		FCM::Result ExportStroke(DOM::FrameElement::PIShape pIShape);
 
-        FCM::Result ExportFillBoundary(DOM::Service::Shape::PIPath pPath);
+		FCM::Result ExportStrokeStyle(FCM::PIFCMUnknown pStrokeStyle);
 
-        FCM::Result ExportHole(DOM::Service::Shape::PIPath pPath);
+		FCM::Result ExportSolidStrokeStyle(DOM::StrokeStyle::ISolidStrokeStyle* pSolidStrokeStyle);
 
-        FCM::Result ExportPath(DOM::Service::Shape::PIPath pPath);
+		FCM::Result ExportFillStyle(FCM::PIFCMUnknown pFillStyle);
 
-        FCM::Result ExportSolidFillStyle(
-            DOM::FillStyle::ISolidFillStyle* pSolidFillStyle);
+		FCM::Result ExportFillBoundary(DOM::Service::Shape::PIPath pPath);
 
-        FCM::Result ExportRadialGradientFillStyle(
-            DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
+		FCM::Result ExportHole(DOM::Service::Shape::PIPath pPath);
 
-        FCM::Result ExportLinearGradientFillStyle(
-            DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
+		FCM::Result ExportPath(DOM::Service::Shape::PIPath pPath);
 
-        FCM::Result ExportBitmapFillStyle(
-            DOM::FillStyle::IBitmapFillStyle* pBitmapFillStyle);
+		FCM::Result ExportSolidFillStyle(
+			DOM::FillStyle::ISolidFillStyle* pSolidFillStyle);
 
-        FCM::Result GetTextStyle(DOM::FrameElement::ITextStyle* pTextStyleItem, TEXT_STYLE& textStyle);
+		FCM::Result ExportRadialGradientFillStyle(
+			DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
 
-        FCM::Result HasFancyStrokes(DOM::FrameElement::PIShape pShape, FCM::Boolean& hasFancy); 
+		FCM::Result ExportLinearGradientFillStyle(
+			DOM::FillStyle::IGradientFillStyle* pGradientFillStyle);
 
-        FCM::Result ConvertStrokeToFill(
-            DOM::FrameElement::PIShape pShape,
-            DOM::FrameElement::PIShape& pNewShape);
+		FCM::Result ExportBitmapFillStyle(
+			DOM::FillStyle::IBitmapFillStyle* pBitmapFillStyle);
 
-        FCM::Result GetTextBehaviour(DOM::FrameElement::ITextBehaviour* pTextBehaviour, TEXT_BEHAVIOUR& textBehaviour);
+		FCM::Result GetTextStyle(DOM::FrameElement::ITextStyle* pTextStyleItem, TEXT_STYLE& textStyle);
 
-    private:
+		FCM::Result HasFancyStrokes(DOM::FrameElement::PIShape pShape, FCM::Boolean& hasFancy);
 
-        IOutputWriter* m_outputWriter;
+		FCM::Result ConvertStrokeToFill(
+			DOM::FrameElement::PIShape pShape,
+			DOM::FrameElement::PIShape& pNewShape);
 
-        std::vector<FCM::U_Int32> m_resourceList;
+		FCM::Result GetTextBehaviour(DOM::FrameElement::ITextBehaviour* pTextBehaviour, TEXT_BEHAVIOUR& textBehaviour);
 
-        std::vector<std::string> m_resourceNames;
-    };
+	private:
 
+		IOutputWriter* m_outputWriter;
 
-    class TimelineBuilder : public ITimelineBuilder2, public FCMObjectBase
-    {
-    public:
+		std::vector<FCM::U_Int32> m_resourceList;
 
-        BEGIN_INTERFACE_MAP(TimelineBuilder, PIXIJS_PLUGIN_VERSION)    
-            INTERFACE_ENTRY(ITimelineBuilder2)            
-        END_INTERFACE_MAP    
+		std::vector<std::string> m_resourceNames;
+	};
 
-        virtual FCM::Result _FCMCALL AddShape(
-            FCM::U_Int32 objectId, 
-            SHAPE_INFO* pShapeInfo);
 
-        virtual FCM::Result _FCMCALL AddClassicText(
-            FCM::U_Int32 objectId, 
-            CLASSIC_TEXT_INFO* pClassicTextInfo);
-            
-        virtual FCM::Result _FCMCALL AddBitmap(
-            FCM::U_Int32 objectId, 
-            BITMAP_INFO* pBitmapInfo);
-            
-        virtual FCM::Result _FCMCALL AddMovieClip(
-            FCM::U_Int32 objectId, 
-            MOVIE_CLIP_INFO* pMovieClipInfo, 
-            DOM::FrameElement::PIMovieClip pMovieClip);
-            
-        virtual FCM::Result _FCMCALL AddGraphic(
-            FCM::U_Int32 objectId, 
-            GRAPHIC_INFO* pGraphicInfo);
+	class TimelineBuilder : public ITimelineBuilder2, public FCMObjectBase
+	{
+	public:
 
-        virtual FCM::Result _FCMCALL AddSound(
-            FCM::U_Int32 objectId, 
-            SOUND_INFO* pSoundInfo, 
-            DOM::FrameElement::PISound pSound);
+		BEGIN_INTERFACE_MAP(TimelineBuilder, PIXIJS_PLUGIN_VERSION)
+			INTERFACE_ENTRY(ITimelineBuilder2)
+		END_INTERFACE_MAP
 
-        virtual FCM::Result _FCMCALL UpdateZOrder(
-            FCM::U_Int32 objectId, 
-            FCM::U_Int32 placeAfterObjectId);
+		virtual FCM::Result _FCMCALL AddShape(
+			FCM::U_Int32 objectId,
+			SHAPE_INFO* pShapeInfo);
 
-        virtual FCM::Result UpdateMask(
-            FCM::U_Int32 objectId,
-            FCM::U_Int32 maskTillObjectId);
+		virtual FCM::Result _FCMCALL AddClassicText(
+			FCM::U_Int32 objectId,
+			CLASSIC_TEXT_INFO* pClassicTextInfo);
 
-        virtual FCM::Result _FCMCALL Remove(FCM::U_Int32 objectId);
-            
-        virtual FCM::Result _FCMCALL UpdateBlendMode(
-            FCM::U_Int32 objectId, 
-            DOM::FrameElement::BlendMode blendMode);
+		virtual FCM::Result _FCMCALL AddBitmap(
+			FCM::U_Int32 objectId,
+			BITMAP_INFO* pBitmapInfo);
 
-        virtual FCM::Result _FCMCALL UpdateVisibility(
-            FCM::U_Int32 objectId, 
-            FCM::Boolean visible);
+		virtual FCM::Result _FCMCALL AddMovieClip(
+			FCM::U_Int32 objectId,
+			MOVIE_CLIP_INFO* pMovieClipInfo,
+			DOM::FrameElement::PIMovieClip pMovieClip);
 
-        virtual FCM::Result _FCMCALL UpdateGraphicFilter(
-            FCM::U_Int32 objectId, 
-            PIFCMList pFilterable);
-            
-        virtual FCM::Result _FCMCALL UpdateDisplayTransform(
-            FCM::U_Int32 objectId, 
-            const DOM::Utils::MATRIX2D& matrix);
-            
-        virtual FCM::Result _FCMCALL UpdateColorTransform(
-            FCM::U_Int32 objectId, 
-            const DOM::Utils::COLOR_MATRIX& colorMatrix);
+		virtual FCM::Result _FCMCALL AddGraphic(
+			FCM::U_Int32 objectId,
+			GRAPHIC_INFO* pGraphicInfo);
 
-        virtual FCM::Result _FCMCALL ShowFrame();        
+		virtual FCM::Result _FCMCALL AddSound(
+			FCM::U_Int32 objectId,
+			SOUND_INFO* pSoundInfo,
+			DOM::FrameElement::PISound pSound);
 
-        virtual FCM::Result _FCMCALL AddFrameScript(FCM::CStringRep16 pScript, FCM::U_Int32 layerNum);
+		virtual FCM::Result _FCMCALL UpdateZOrder(
+			FCM::U_Int32 objectId,
+			FCM::U_Int32 placeAfterObjectId);
 
-        virtual FCM::Result _FCMCALL RemoveFrameScript(FCM::U_Int32 layerNum);
+		virtual FCM::Result UpdateMask(
+			FCM::U_Int32 objectId,
+			FCM::U_Int32 maskTillObjectId);
 
-        virtual FCM::Result _FCMCALL SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType);
+		virtual FCM::Result _FCMCALL Remove(FCM::U_Int32 objectId);
 
-        TimelineBuilder();
+		virtual FCM::Result _FCMCALL UpdateBlendMode(
+			FCM::U_Int32 objectId,
+			DOM::FrameElement::BlendMode blendMode);
 
-        ~TimelineBuilder();
+		virtual FCM::Result _FCMCALL UpdateVisibility(
+			FCM::U_Int32 objectId,
+			FCM::Boolean visible);
 
-        virtual FCM::Result Build(
-            FCM::U_Int32 resourceId, 
-            FCM::StringRep16 name,
-            ITimelineWriter** timelineWriter);
+		virtual FCM::Result _FCMCALL UpdateGraphicFilter(
+			FCM::U_Int32 objectId,
+			PIFCMList pFilterable);
 
-        void Init(IOutputWriter* outputWriter);
+		virtual FCM::Result _FCMCALL UpdateDisplayTransform(
+			FCM::U_Int32 objectId,
+			const DOM::Utils::MATRIX2D& matrix);
 
-    private:
+		virtual FCM::Result _FCMCALL UpdateColorTransform(
+			FCM::U_Int32 objectId,
+			const DOM::Utils::COLOR_MATRIX& colorMatrix);
 
-        IOutputWriter* m_outputWriter;
+		virtual FCM::Result _FCMCALL ShowFrame();
 
-        ITimelineWriter* m_timelineWriter;
+		virtual FCM::Result _FCMCALL AddFrameScript(FCM::CStringRep16 pScript, FCM::U_Int32 layerNum);
 
-        FCM::U_Int32 m_frameIndex;
-    };
+		virtual FCM::Result _FCMCALL RemoveFrameScript(FCM::U_Int32 layerNum);
 
+		virtual FCM::Result _FCMCALL SetFrameLabel(FCM::StringRep16 pLabel, DOM::KeyFrameLabelType labelType);
 
-    class TimelineBuilderFactory : public ITimelineBuilderFactory, public FCMObjectBase
-    {
-    public:
+		TimelineBuilder();
 
-        BEGIN_INTERFACE_MAP(TimelineBuilderFactory, PIXIJS_PLUGIN_VERSION)    
-            INTERFACE_ENTRY(ITimelineBuilderFactory)            
-        END_INTERFACE_MAP    
+		~TimelineBuilder();
 
-        virtual FCM::Result _FCMCALL CreateTimelineBuilder(PITimelineBuilder& timelineBuilder);
+		virtual FCM::Result Build(
+			FCM::U_Int32 resourceId,
+			FCM::StringRep16 name,
+			ITimelineWriter** timelineWriter);
 
-        TimelineBuilderFactory();
+		void Init(IOutputWriter* outputWriter);
 
-        ~TimelineBuilderFactory();
+	private:
 
-        void Init(IOutputWriter* outputWriter);
+		IOutputWriter* m_outputWriter;
 
-    private:
+		ITimelineWriter* m_timelineWriter;
 
-        IOutputWriter* m_outputWriter;
-    };
+		FCM::U_Int32 m_frameIndex;
+	};
 
-    FCM::Result RegisterPublisher(PIFCMDictionary pPlugins, FCM::FCMCLSID docId);
+
+	class TimelineBuilderFactory : public ITimelineBuilderFactory, public FCMObjectBase
+	{
+	public:
+
+		BEGIN_INTERFACE_MAP(TimelineBuilderFactory, PIXIJS_PLUGIN_VERSION)
+			INTERFACE_ENTRY(ITimelineBuilderFactory)
+		END_INTERFACE_MAP
+
+		virtual FCM::Result _FCMCALL CreateTimelineBuilder(PITimelineBuilder& timelineBuilder);
+
+		TimelineBuilderFactory();
+
+		~TimelineBuilderFactory();
+
+		void Init(IOutputWriter* outputWriter);
+
+	private:
+
+		IOutputWriter* m_outputWriter;
+	};
+
+	FCM::Result RegisterPublisher(PIFCMDictionary pPlugins, FCM::FCMCLSID docId);
 };
 
 #endif // PUBLISHER_H_
