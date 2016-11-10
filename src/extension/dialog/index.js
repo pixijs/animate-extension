@@ -185,6 +185,7 @@
         data[SETTINGS + "Namespace"] = $namespace.value.toString();
         data[SETTINGS + "StageName"] = $stageName.value.toString();
         data[SETTINGS + "SpritesheetSize"] = $spritesheetSize.value.toString();
+        data[SETTINGS + "SpritesheetScale"] = $spritesheetScale.value.toString();
 
         // Global options
         data["PublishSettings.IncludeInvisibleLayer"] = $hiddenLayers.checked.toString();
