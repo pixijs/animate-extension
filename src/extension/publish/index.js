@@ -2,9 +2,18 @@
 
 const electron = require('electron');
 const app = electron.app;
-const argv = require('yargs').argv;
+const minimist = require('minimist');
 const path = require('path');
 const semver = require('semver');
+const argv = minimist(process.argv.slice(2), {
+    boolean: ['debug', 'compress', 'perf'],
+    string: ['assets', 'src'],
+    default: {
+        debug: false,
+        compress: false,
+        perf: false
+    }
+});
 
 app.on('ready', function() {
 

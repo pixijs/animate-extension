@@ -1,7 +1,7 @@
 "use strict";
 
 // Arguments: src, width, height, background, title
-const argv = require('yargs').argv;
+const minimist = require('minimist');
 const menu = require('./menu');
 const electron = require('electron');
 const storage = require('electron-json-storage');
@@ -9,6 +9,15 @@ const app = electron.app;
 const ipc = electron.ipcMain;
 const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
+const argv = minimist(process.argv.slice(2), {
+    string: ['src', 'title', 'background'],
+    boolean: ['devTools'],
+    default: {
+        devTools: false,
+        title: 'Preview',
+        background: 'fff'
+    }
+});
 
 // Window to preview in
 let mainWindow = null;
@@ -37,7 +46,7 @@ app.on('ready', function() {
         alwaysOnTop: true,
         skipTaskbar: true,
         show: false,
-        title: argv.title || "Preview"
+        title: argv.title
     });
 
     // Set the configuration
@@ -46,7 +55,7 @@ app.on('ready', function() {
             src: argv.src,
             height: argv.height,
             width: argv.width,
-            background: argv.background || "fff"
+            background: argv.background
         };
     });
 

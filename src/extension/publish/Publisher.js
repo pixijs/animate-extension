@@ -187,7 +187,9 @@ p.run = function(done)
                 const buffer = this.publish();
                 this.destroy();
                 if (this.debug) {
-                    console.log(buffer);
+                    buffer.split('\n').forEach((line) => {
+                        console.log(line);
+                    });
                 }
                 done();
             }
