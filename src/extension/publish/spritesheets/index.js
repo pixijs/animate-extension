@@ -42,6 +42,8 @@ ipc.on('settings', (ev, data) => {
         canvas.height = dHeight + pad;
         canvas.id = id;
         canvas.dataset.src = src;
+        canvas.dataset.width = img.width;
+        canvas.dataset.height = img.height;
 
         const ctx = canvas.getContext('2d');
         ctx.drawImage(
