@@ -58,12 +58,12 @@ var options = {
     runtimeOutput: 'com.jibo.PixiAnimate/runtime',
     runtimeDebugOutput: 'com.jibo.PixiAnimate/runtime-debug',
     runtimeResources: [
-        'node_modules/pixi-animate/dist/pixi.min.js',
+        'node_modules/pixi.js/dist/pixi.min.js',
         'node_modules/pixi-animate/dist/pixi-animate.min.js'
     ],
     runtimeDebugResources: [
-        'node_modules/pixi-animate/dist/pixi.js',
-        'node_modules/pixi-animate/dist/pixi.js.map',
+        'node_modules/pixi.js/dist/pixi.js',
+        'node_modules/pixi.js/dist/pixi.js.map',
         'node_modules/pixi-animate/dist/pixi-animate.js',
         'node_modules/pixi-animate/dist/pixi-animate.js.map'
     ],
