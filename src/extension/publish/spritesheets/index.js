@@ -13,6 +13,7 @@ ipc.on('settings', (ev, data) => {
     const assets = response.assets;
     const size = response.size;
     const debug = response.debug;
+    const scale = response.scale;
 
     for(let id in assets) {
 
@@ -25,29 +26,36 @@ ipc.on('settings', (ev, data) => {
         }
 
         const img = new Image();
+        const pad = Spritesheet.PADDING * 2;
         img.src = "data:image/png;base64," + fs.readFileSync(src, 'base64');
-        const width = img.width + Spritesheet.PADDING * 2;
-        const height = img.height + Spritesheet.PADDING * 2;
+        const dWidth = Math.ceil(img.width * scale);
+        const dHeight = Math.ceil(img.height * scale);
 
         // Ignore oversized images
-        if (width > size || height > size) {
+        if (dWidth + pad > size || dHeight + pad > size) {
             results[id] = src;
             continue;
         }
 
         const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = dWidth + pad;
+        canvas.height = dHeight + pad;
         canvas.id = id;
         canvas.dataset.src = src;
+        canvas.dataset.width = img.width;
+        canvas.dataset.height = img.height;
 
         const ctx = canvas.getContext('2d');
         ctx.drawImage(
-            img, 
-            Spritesheet.PADDING,
-            Spritesheet.PADDING,
-            img.width,
-            img.height
+            img, // source image
+            0, // source x
+            0, // source y
+            img.width, // source width
+            img.height, // source height
+            Spritesheet.PADDING, // dest x
+            Spritesheet.PADDING, // dest y
+            dWidth, // dest x
+            dHeight // dest y
         );
         images.push(canvas);
     }
@@ -58,7 +66,7 @@ ipc.on('settings', (ev, data) => {
     while(images.length) {
 
         let output = response.output + (++current);
-        let atlas = new Spritesheet(size, debug);
+        let atlas = new Spritesheet(size, scale, debug);
         atlas.addImages(images);
         atlas.save(output);
         atlas.destroy();

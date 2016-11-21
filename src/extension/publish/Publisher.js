@@ -140,6 +140,7 @@ p.exportAssets = function(done)
                 assets: assetsToLoad,
                 output: meta.imagesPath + meta.stageName + '_atlas_',
                 size: meta.spritesheetSize,
+                scale: meta.spritesheetScale || 1,
                 debug: this.debug
             },
             this.assetsPath,
@@ -186,7 +187,9 @@ p.run = function(done)
                 const buffer = this.publish();
                 this.destroy();
                 if (this.debug) {
-                    console.log(buffer);
+                    buffer.split('\n').forEach((line) => {
+                        console.log(line);
+                    });
                 }
                 done();
             }

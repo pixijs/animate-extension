@@ -226,6 +226,8 @@ namespace PixiJS
 		bool previewNeeded(false);
 		bool spritesheets(true);
 		int spritesheetSize(1024);
+		double spritesheetScale(1.0);
+
 		std::string htmlPath;
 		std::string stageName;
 		std::string libsPath("libs/");
@@ -255,6 +257,7 @@ namespace PixiJS
 		Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_NAMESPACE, nameSpace);
 		Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, stageName);
 		Utils::ReadStringToInt(publishSettings, (FCM::StringRep8)DICT_SPRITESHEET_SIZE, spritesheetSize);
+		Utils::ReadStringToFloat(publishSettings, (FCM::StringRep8)DICT_SPRITESHEET_SCALE, spritesheetScale);
 
 		// Filter the stagename
 		Utils::GetJavaScriptName(stageName, stageName);
@@ -268,23 +271,24 @@ namespace PixiJS
 		Utils::Trace(GetCallback(), " -> Compress JS : %s\n", Utils::ToString(compressJS).c_str());
 		Utils::Trace(GetCallback(), " -> Common JS : %s\n", Utils::ToString(commonJS).c_str());
 		Utils::Trace(GetCallback(), " -> Loop Timeline : %s\n", Utils::ToString(loopTimeline).c_str());
-		if (html)
-		{
-			Utils::Trace(GetCallback(), " -> HTML path : %s\n", htmlPath.c_str());
-			Utils::Trace(GetCallback(), " -> Export HTML: %s\n", Utils::ToString(html).c_str());
-		}
-		if (libs)
-		{
-			Utils::Trace(GetCallback(), " -> Libraries path : %s\n", libsPath.c_str());
-			Utils::Trace(GetCallback(), " -> Export Libraries : %s\n", Utils::ToString(libs).c_str());
-		}
-		if (images)
-		{
-			Utils::Trace(GetCallback(), " -> Images path : %s\n", imagesPath.c_str());
-			Utils::Trace(GetCallback(), " -> Export Images : %s\n", Utils::ToString(images).c_str());
-			if (spritesheets)
-			{
-				Utils::Trace(GetCallback(), " -> Spritesheet size : %s\n", Utils::ToString(spritesheetSize).c_str());
+        if (html)
+        {
+            Utils::Trace(GetCallback(), " -> HTML path : %s\n", htmlPath.c_str());
+            Utils::Trace(GetCallback(), " -> Export HTML: %s\n", Utils::ToString(html).c_str());
+        }
+        if (libs)
+        {
+            Utils::Trace(GetCallback(), " -> Libraries path : %s\n", libsPath.c_str());
+            Utils::Trace(GetCallback(), " -> Export Libraries : %s\n", Utils::ToString(libs).c_str());
+        }
+        if (images)
+        {
+            Utils::Trace(GetCallback(), " -> Images path : %s\n", imagesPath.c_str());
+            Utils::Trace(GetCallback(), " -> Export Images : %s\n", Utils::ToString(images).c_str());
+            if (spritesheets)
+            {
+                Utils::Trace(GetCallback(), " -> Spritesheet size : %s\n", Utils::ToString(spritesheetSize).c_str());
+        		Utils::Trace(GetCallback(), " -> Spritesheet scale: %f\n", spritesheetScale);
 			}
 		}
 		if (sounds)
@@ -315,7 +319,8 @@ namespace PixiJS
 			commonJS,
 			loopTimeline,
 			spritesheets,
-			spritesheetSize));
+			spritesheetSize,
+			spritesheetScale));
 
 		if (outputWriter.get() == NULL)
 		{
