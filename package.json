@@ -13,7 +13,8 @@
     "js-beautify": "^1.6.2",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
-    "pixi-animate": "^0.5.3",
+    "pixi-animate": "^1.0.0",
+    "pixi.js": "^4.2.2",
     "semver": "^5.1.0",
     "uglify-js": "^2.6.1"
   },
