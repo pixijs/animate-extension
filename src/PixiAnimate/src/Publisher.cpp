@@ -225,8 +225,8 @@ namespace PixiJS
 		bool loopTimeline(true);
 		bool previewNeeded(false);
 		bool spritesheets(true);
-		int spritesheetSize(1024);
-		double spritesheetScale(1.0);
+		int spritesheetSize;
+		double spritesheetScale;
 
 		std::string htmlPath;
 		std::string stageName;
@@ -258,6 +258,16 @@ namespace PixiJS
 		Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_STAGE_NAME, stageName);
 		Utils::ReadStringToInt(publishSettings, (FCM::StringRep8)DICT_SPRITESHEET_SIZE, spritesheetSize);
 		Utils::ReadStringToFloat(publishSettings, (FCM::StringRep8)DICT_SPRITESHEET_SCALE, spritesheetScale);
+
+		if (spritesheetScale == 0.0)
+		{
+			spritesheetScale = 1.0;
+		}
+
+		if (spritesheetSize == 0)
+		{
+			spritesheetSize = 1024;
+		}
 
 		// Filter the stagename
 		Utils::GetJavaScriptName(stageName, stageName);
