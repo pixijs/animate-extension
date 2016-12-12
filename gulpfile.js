@@ -1,118 +1,28 @@
 var gulp = require('gulp');
-var process = require('process');
 
-/* This flag is used to detect windows systems */
-var isWin = /^win/.test(process.platform);
+// Mixin the platform specific options
+var platformOptions;
 
-// Options for the load-gulp-tasks
-var options = {
+// Window-specific configuration
+if (/^win/.test(process.platform)) {
+    platformOptions = require('./build/config/win');
+}
+// Mac-specific configuration
+else if (/^darwin/.test(process.platform)) {
+    platformOptions = require('./build/config/mac');
+}
+else {
+    console.log('Platform is not supported');
+    process.exit(1);
+}
 
-    // Name
-    name: 'PixiAnimate',
+// Merge the platform options into the default
+var options = Object.assign(
+    require('./build/config'),
+    platformOptions
+);
 
-    isWin: isWin,
-
-    // Pattern for loading tasks
-    pattern: ['build/tasks/*.js'],
-
-    // Contains the project folder
-    projectContent: ['extension/**/*'],
-
-    // XCode project for building the plugin
-    xcodeproj: 'project/mac/PixiAnimate.mp.xcodeproj',
-
-    // VS2015 Solution file for building the win32 plugin
-    vs2015: './project/win/pixi-animate-vs2015',
-
-    // Temporary build target
-    pluginTempDebug: !isWin ? 'src/PixiAnimate/lib/mac/debug/PixiAnimate.fcm.plugin' : 'src/PixiAnimate/lib/win/debug/PixiAnimate.fcm',
-    pluginTempRelease: !isWin ? 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin' : 'src/PixiAnimate/lib/win/release/PixiAnimate.fcm',
-
-    // The target location for the plugin
-    pluginFile: !isWin ?
-        'com.jibo.PixiAnimate/plugin/lib/mac/PixiAnimate.fcm.plugin' :
-        'com.jibo.PixiAnimate/plugin/lib/win/PixiAnimate.fcm',
-
-    // Temporary staging folder
-    bundleId: 'com.jibo.PixiAnimate',
-
-    // Local location to install the plugin for Adobe CEP
-    installFolder: !isWin ? '/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate' : 'C:\\Program Files\\Common Files\\Adobe\\CEP\\extensions\\com.jibo.PixiAnimate',
-
-    // The name of the ZXP file
-    outputName: 'PixiAnimate.zxp',
-
-    // The name of the ZXP file
-    outputDebugName: 'PixiAnimate.debug.zxp',
-
-    // Remote debugging for panels in Flash
-    remoteDebug: 'build/debug.xml',
-    remoteDebugOutput: '.debug',
-
-    // ZXP plugin packaging options
-    packager: isWin ? '.\\build\\ZXPSignCmd.exe' : './build/ZXPSignCmd',
-    packagerCert: 'build/certificate.p12',
-    packagerPass: 'password',
-
-    // Vendor release for the runtime
-    runtimeOutput: 'com.jibo.PixiAnimate/runtime',
-    runtimeDebugOutput: 'com.jibo.PixiAnimate/runtime-debug',
-    runtimeResources: [
-        'node_modules/pixi.js/dist/pixi.min.js',
-        'node_modules/pixi-animate/dist/pixi-animate.min.js'
-    ],
-    runtimeDebugResources: [
-        'node_modules/pixi.js/dist/pixi.js',
-        'node_modules/pixi.js/dist/pixi.js.map',
-        'node_modules/pixi-animate/dist/pixi-animate.js',
-        'node_modules/pixi-animate/dist/pixi-animate.js.map'
-    ],
-
-    // The files to source when running watch
-    watchFiles: [
-        './**/*.*',
-        '!node_modules/**',
-        '!extension/node_modules/**',
-        '!com.jibo.PixiAnimate',
-        '!extension/dialog/cep/**',
-        '!extension/bin'
-    ],
-
-    // The files to include for JS linting
-    lintFiles: [
-        'build/**/*.js',
-        'src/extension/**/*.js',
-        'gulpfile.js'
-    ],
-
-    buildPublish: {
-        src: 'src/extension/publish',
-        dest: 'com.jibo.PixiAnimate/publish'
-    },
-
-    buildSpritesheets: {
-        src: 'src/extension/publish/spritesheets/',
-        name: 'spritesheets.js',
-        dest: 'com.jibo.PixiAnimate/publish'
-    },
-
-    buildPreview: {
-        src: 'src/extension/preview/preview.js',
-        name: 'preview.js',
-        dest: 'com.jibo.PixiAnimate/preview'
-    },
-
-    buildPreviewApp: {
-        src: 'src/extension/preview',
-        dest: 'com.jibo.PixiAnimate/preview'
-    },
-
-    buildDialog: {
-        src: 'src/extension/dialog',
-        name: 'main.js',
-        dest: 'com.jibo.PixiAnimate/dialog'
-    }
-};
+console.log(options);
 
 // Gulp plugins for tasks to use
 var plugins = {
@@ -132,25 +42,7 @@ var plugins = {
     whitespace: require('gulp-whitespace'),
     source: require('vinyl-source-stream'),
     msbuild: require('gulp-msbuild'),
-    build: function(gulp, options, plugins) {
-        return plugins.browserify({
-                entries: options.src, //'./src/extension/publish/index.js',
-                ignoreMissing: true,
-                detectGlobals: false,
-                bare: true,
-                debug: false,
-                builtins: false
-            })
-            .bundle()
-            .pipe(plugins.source(options.name || 'index.js'))
-            .pipe(plugins.buffer())
-            .pipe(plugins.strip())
-            .pipe(plugins.whitespace({
-                removeLeading: true,
-                removeTrailing: true
-            }))
-            .pipe(gulp.dest(options.dest));
-    }
+    build: require('./build/bundle')
 };
 
 require('load-gulp-tasks')(gulp, options, plugins);

@@ -22,9 +22,8 @@ module.exports = function(gulp, options, plugins) {
             'stage'
         );
 
-        /* For windows, copy the dll into the stage folder, very important */
-        if (options.isWin) {
-            tasks.push('dllcopy');
+        if (options.postStage) {
+            tasks.push(options.postStage);
         }
 
         // Turn on remote debugging
@@ -45,15 +44,13 @@ module.exports = function(gulp, options, plugins) {
             'clean-stage'
         );
 
-        if (install)
-        {
+        if (install) {
             tasks.push(
                 'uninstall',
                 'pre-install',
                 'install'
             );
         }
-
 
         tasks.push(done);
 
