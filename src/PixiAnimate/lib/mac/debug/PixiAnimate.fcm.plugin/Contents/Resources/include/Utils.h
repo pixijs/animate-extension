@@ -129,6 +129,7 @@ namespace PixiJS
 #define DICT_NAMESPACE        "PublishSettings.PixiJS.Namespace" 
 #define DICT_STAGE_NAME       "PublishSettings.PixiJS.StageName"
 #define DICT_SPRITESHEET_SIZE "PublishSettings.PixiJS.SpritesheetSize"
+#define DICT_SPRITESHEET_SCALE "PublishSettings.PixiJS.SpritesheetScale"
 
 #define DICT_SPRITESHEETS     "PublishSettings.PixiJS.Spritesheets"
 #define DICT_COMPACT_SHAPES   "PublishSettings.PixiJS.CompactShapes"
@@ -269,6 +270,11 @@ namespace PixiJS
 			const FCM::PIFCMDictionary pDict,
 			FCM::StringRep8 key,
 			int &result);
+
+		static void ReadStringToFloat(
+			const FCM::PIFCMDictionary pDict,
+			FCM::StringRep8 key,
+			double &result);
 
 		static bool ReadStringToBool(
 			const FCM::PIFCMDictionary pDict,
