@@ -22,8 +22,6 @@ var options = Object.assign(
     platformOptions
 );
 
-console.log(options);
-
 // Gulp plugins for tasks to use
 var plugins = {
     del: require('del'),
