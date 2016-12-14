@@ -63,8 +63,14 @@ gulp --debug --install --plugin
 
 Or to ONLY build the plugin without building the rest of the extension.
 
+For release:
 ```bash
-gulp plugin
+gulp --plugin
+```
+
+For debug:
+```bash
+gulp --debug --plugin
 ```
 
 ### Windows Instructions ###
