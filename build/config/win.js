@@ -11,7 +11,7 @@ module.exports = {
     vs2015: './project/win/pixi-animate-vs2015',
 
     // Command to uncompress to local install folder
-    installCmd: '.\\build\\bin\\7za.exe x -y -bb0 -o "${installFolder}" "${output}"',
+    installCmd: '.\\build\\bin\\7za.exe x -y -bb0 -o"${installFolder}" "${output}"',
 
     // List of gulp task to run when creating plugins
     pluginTasks: ['vsvars', 'plugin-win-debug', 'plugin-win']
