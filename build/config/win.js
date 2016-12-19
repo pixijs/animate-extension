@@ -9,10 +9,15 @@ module.exports = {
 
     // VS2015 Solution file for building the win32 plugin
     vs2015: './project/win/pixi-animate-vs2015',
+    projectFile: '.\\project\\win\\pixi-animate-vs2015\\pixi-animate-vs2015.sln',
+    
+    // This path only works for Visual Studio 2015 (VS14), 
+    // so this must be updated accordingly with VS studio switch
+    VCTargetsPath: "C:\\Program Files (x86)\\MSBuild\\Microsoft.Cpp\\v4.0\\V140",
 
     // Command to uncompress to local install folder
     installCmd: '.\\build\\bin\\7za.exe x -y -bb0 -o"${installFolder}" "${output}"',
 
     // List of gulp task to run when creating plugins
-    pluginTasks: ['vsvars', 'plugin-win-debug', 'plugin-win']
+    pluginTasks: ['plugin-win-debug', 'plugin-win']
 };

@@ -1,6 +1,6 @@
 module.exports = function(gulp, options, plugins) {
     gulp.task('plugin-win-debug', function() {
-        return gulp.src(options.vs2015 + "\\pixi-animate-vs2015.sln")
+        return gulp.src(options.projectFile)
             .pipe(plugins.msbuild({
                 targets: ['Clean', 'Build'],
                 properties: { Configuration: 'Debug' },
