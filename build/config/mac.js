@@ -1,13 +1,11 @@
 module.exports = {
-    pluginTempDebug: 'src/PixiAnimate/lib/mac/debug/PixiAnimate.fcm.plugin',
-    pluginTempRelease: 'src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin',
+    pluginTempDebug: 'project/mac/lib/debug/PixiAnimate.fcm.plugin',
+    pluginTempRelease: 'project/mac/lib/release/PixiAnimate.fcm.plugin',
     pluginFile: 'com.jibo.PixiAnimate/plugin/lib/mac/PixiAnimate.fcm.plugin',
     installFolder: '/Library/Application Support/Adobe/CEP/extensions/com.jibo.PixiAnimate',
-    outputName: 'PixiAnimate-mac.zxp',
-    outputDebugName: 'PixiAnimate-mac-debug.zxp',
     
     // ZXP plugin packaging options
-    packager: './build/ZXPSignCmd',
+    packager: './build/bin/ZXPSignCmd',
 
     // XCode project for building the plugin
     xcodeproj: 'project/mac/PixiAnimate.mp.xcodeproj',

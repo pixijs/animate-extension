@@ -10,7 +10,11 @@ module.exports = {
     projectContent: ['extension/**/*'],
 
     // Temporary staging folder
-    bundleId: 'com.jibo.PixiAnimate',    
+    bundleId: 'com.jibo.PixiAnimate',
+
+    // Output file name
+    outputName: 'PixiAnimate.zxp',
+    outputDebugName: 'PixiAnimate-debug.zxp',
 
     // Remote debugging for panels in Flash
     remoteDebug: 'build/debug.xml',
@@ -76,5 +80,7 @@ module.exports = {
         src: 'src/extension/dialog',
         name: 'main.js',
         dest: 'com.jibo.PixiAnimate/dialog'
-    }
+    },
+    mac: require('./mac'),
+    win: require('./win')
 };
