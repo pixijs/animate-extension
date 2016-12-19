@@ -1090,25 +1090,31 @@ namespace PixiJS
 	FCM::Result OutputWriter::StartPreview(FCM::PIFCMCallback pCallback)
 	{
 		FCM::Result res = FCM_SUCCESS;
-
-#ifdef _WINDOWS
-		// currently this operation is not supported on windows!
-		Utils::Trace(pCallback, "ERROR: Previewing an Electron project is currently not supported under Windows");
-#else
+		std::string cmd;
 		std::string extensionPath;
 		Utils::GetExtensionPath(extensionPath, m_pCallback);
-		std::string preview = extensionPath + PREVIEW_APP;
-		std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + preview +
-			"' --src='" + m_basePath + m_htmlPath +
-			"' --title='" + m_stageName +
-			"' --width=" + m_substitutions["width"] +
-			" --height=" + m_substitutions["height"] +
-			" --background=" + m_substitutions["background"];
+		std::string preview = "\"";
+		preview += extensionPath + PREVIEW_APP;
+		preview += "\"";
+		preview += " --src=\"" + m_basePath;
+		preview += m_htmlPath + "\"";
+		preview += " --title=\"" + m_stageName + "\"";
+		preview += " --width=" + m_substitutions["width"];
+		preview += " --height=" + m_substitutions["height"];
+		preview += " --background=" + m_substitutions["background"];
+
 #ifdef _DEBUG
-		cmd += " --devTools";
+		preview += " --devTools";
+		//Utils::Trace(m_pCallback, preview.c_str());
 #endif
+
+#ifdef _WINDOWS
+		cmd = "electron " + preview;
+		system(cmd.c_str());
+#else
+		cmd = "/usr/local/bin/node /usr/local/bin/electron " + preview;
 		popen(cmd.c_str(), "r");
-#endif // _WINDOWS
+#endif
 		return res;
 	}
 
@@ -1132,7 +1138,6 @@ namespace PixiJS
 #endif // _WINDOWS 
 		return res;
 	}
-
 
 	FCM::Boolean OutputWriter::GetImageExportFileName(const std::string& libPathName, std::string& name)
 	{
