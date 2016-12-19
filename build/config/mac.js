@@ -8,7 +8,7 @@ module.exports = {
     packager: './build/bin/ZXPSignCmd',
 
     // XCode project for building the plugin
-    xcodeproj: 'project/mac/PixiAnimate.mp.xcodeproj',
+    projectFile: 'project/mac/PixiAnimate.mp.xcodeproj',
 
     // Command to uncompress to local install folder
     installCmd: 'tar -xzf "${output}" -C "${installFolder}"',

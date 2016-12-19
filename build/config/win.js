@@ -8,7 +8,6 @@ module.exports = {
     packager: '.\\build\\bin\\ZXPSignCmd.exe',
 
     // VS2015 Solution file for building the win32 plugin
-    vs2015: './project/win/pixi-animate-vs2015',
     projectFile: '.\\project\\win\\pixi-animate-vs2015\\pixi-animate-vs2015.sln',
     
     // This path only works for Visual Studio 2015 (VS14), 
