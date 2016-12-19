@@ -20,7 +20,6 @@ project/win/pixi-animate-vs2015/Debug/statLibJson.lib
 project/win/pixi-animate-vs2015/Debug/statLibJson.pdb
 *.obj
 *.tlog
-*.exe
 *.log
 *.iobj
 *.pdb
