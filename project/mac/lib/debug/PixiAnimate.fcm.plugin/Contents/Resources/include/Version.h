@@ -48,7 +48,7 @@
 	   *
 	   * @brief Minor version of the plugin
 	   */
-#define PIXIJS_PLUGIN_VERSION_MINOR                 0x02
+#define PIXIJS_PLUGIN_VERSION_MINOR                 0x03
 
 
 	   /**
