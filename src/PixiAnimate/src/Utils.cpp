@@ -1076,10 +1076,14 @@ namespace PixiJS
 		// Wait until child process exits.
 		WaitForSingleObject(pi.hProcess, INFINITE);
 
+		// Get the exit code
+		DWORD exit_code;
+		GetExitCodeProcess(pi.hProcess, &exit_code);
+
 		// Close process and thread handles. 
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
-		return 0;
+		return exit_code;
 	}
 
 
