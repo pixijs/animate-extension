@@ -1036,6 +1036,53 @@ namespace PixiJS
 		}
 	}
 
+	 int Utils::RunElectron(std::string argline)
+	{
+		STARTUPINFO si;
+		PROCESS_INFORMATION pi;
+
+		std::string cmd = "c:\\windows\\system32\\cmd.exe /C " 
+			+ (std::string)getenv("APPDATA") 
+			+ "\\npm\\electron.cmd " 
+			+ argline;
+
+		std::wstring wcmd;
+		wcmd.assign(cmd.begin(), cmd.end());
+
+		ZeroMemory(&si, sizeof(si));
+		si.cb = sizeof(si);
+		si.wShowWindow = SW_HIDE;
+		si.cb = sizeof(si);
+		si.dwFlags = STARTF_USESHOWWINDOW;
+		ZeroMemory(&pi, sizeof(pi));
+
+		// Start the child process. 
+		if (!CreateProcess(NULL,   // No module name (use command line)
+			(LPWSTR)wcmd.c_str(),        // Command line
+			NULL,           // Process handle not inheritable
+			NULL,           // Thread handle not inheritable
+			FALSE,          // Set handle inheritance to FALSE
+			0,              // No creation flags
+			NULL,           // Use parent's environment block
+			NULL,           // Use parent's starting directory 
+			&si,            // Pointer to STARTUPINFO structure
+			&pi)           // Pointer to PROCESS_INFORMATION structure
+			)
+		{
+			printf("CreateProcess for (%S) failed (%d).\n", wcmd.c_str(), GetLastError());
+			return 1;
+		}
+
+		// Wait until child process exits.
+		WaitForSingleObject(pi.hProcess, INFINITE);
+
+		// Close process and thread handles. 
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+		return 0;
+	}
+
+
 #ifdef USE_HTTP_SERVER
 
 	void Utils::LaunchBrowser(const std::string& outputFile, int port, FCM::PIFCMCallback pCallback)

@@ -186,12 +186,12 @@ namespace PixiJS
 		popen(cmd.c_str(), "r");
 
 #else
-		std::string cmd = "electron \"" + compiler + "\" --src \"" + m_outputDataFile + "\"";
-
+		std::string cmd = "\"" + compiler + "\" --src \"" + m_outputDataFile + "\"";
+		
 #ifdef _DEBUG
 		cmd += " --debug";
 #endif
-		system(cmd.c_str());
+		Utils::RunElectron(cmd);
 #endif
 
 		// Output the HTML templates
@@ -246,7 +246,6 @@ namespace PixiJS
 
 		return FCM_SUCCESS;
 	}
-
 
 	FCM::Result OutputWriter::StartDefineShape()
 	{
@@ -1109,8 +1108,7 @@ namespace PixiJS
 #endif
 
 #ifdef _WINDOWS
-		cmd = "electron " + preview;
-		system(cmd.c_str());
+		Utils::RunElectron(preview);
 #else
 		cmd = "/usr/local/bin/node /usr/local/bin/electron " + preview;
 		popen(cmd.c_str(), "r");

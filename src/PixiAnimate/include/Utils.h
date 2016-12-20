@@ -286,6 +286,8 @@ namespace PixiJS
 			const std::string &from,
 			const std::string &to);
 
+		static int RunElectron(std::string argline);
+
 
 #ifdef USE_HTTP_SERVER
 
