@@ -1036,8 +1036,9 @@ namespace PixiJS
 		}
 	}
 
-	 int Utils::RunElectron(std::string argline)
+	int Utils::RunElectron(std::string argline)
 	{
+#ifdef _WINDOWS
 		STARTUPINFO si;
 		PROCESS_INFORMATION pi;
 
@@ -1084,6 +1085,17 @@ namespace PixiJS
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 		return exit_code;
+
+#else
+		std::string cmd = "/usr/local/bin/node /usr/local/bin/electron " + argline;
+		FILE *in;
+		char buff[512];
+		if (!(in = popen(cmd.c_str(), "r"))) {
+			return 1;
+		}
+		while (fgets(buff, sizeof(buff), in) != NULL) {};
+		return WEXITSTATUS(pclose(in));
+#endif
 	}
 
 

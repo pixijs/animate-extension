@@ -173,26 +173,12 @@ namespace PixiJS
 		std::string extensionPath;
 		Utils::GetExtensionPath(extensionPath, m_pCallback);
 		std::string compiler = extensionPath + NODE_COMPILER;
-
-
-#ifndef _WINDOWS
-		std::string cmd = "/usr/local/bin/node /usr/local/bin/electron '" + compiler + "'"
-			+ " --src '" + m_outputDataFile + "'";
-#ifdef _DEBUG
-		cmd += " --debug";
-#endif
-
-
-		popen(cmd.c_str(), "r");
-
-#else
-		std::string cmd = "\"" + compiler + "\" --src \"" + m_outputDataFile + "\"";
+		std::string publish = "\"" + compiler + "\" --src \"" + m_outputDataFile + "\"";
 		
 #ifdef _DEBUG
-		cmd += " --debug";
+		publish += " --debug";
 #endif
-		Utils::RunElectron(cmd);
-#endif
+		Utils::RunElectron(publish);
 
 		// Output the HTML templates
 		if (m_html)
@@ -1104,15 +1090,8 @@ namespace PixiJS
 
 #ifdef _DEBUG
 		preview += " --devTools";
-		//Utils::Trace(m_pCallback, preview.c_str());
 #endif
-
-#ifdef _WINDOWS
 		Utils::RunElectron(preview);
-#else
-		cmd = "/usr/local/bin/node /usr/local/bin/electron " + preview;
-		popen(cmd.c_str(), "r");
-#endif
 		return res;
 	}
 
