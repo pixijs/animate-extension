@@ -1094,7 +1094,8 @@ namespace PixiJS
 			return 1;
 		}
 		while (fgets(buff, sizeof(buff), in) != NULL) {};
-		return WEXITSTATUS(pclose(in));
+		int a = pclose(in);
+		return WEXITSTATUS(a);
 #endif
 	}
 
