@@ -34,11 +34,11 @@ var plugins = {
     install: require('gulp-install'),
     browserify: require('browserify'),
     buffer: require('vinyl-buffer'),
-    strip: require('gulp-strip-comments'),
-    whitespace: require('gulp-whitespace'),
     source: require('vinyl-source-stream'),
     msbuild: require('gulp-msbuild'),
-    build: require('./build/bundle')
+    build: require('./build/bundle'),
+    uglify: require('gulp-uglify-harmony'),
+    gulpif: require('gulp-if')
 };
 
 require('load-gulp-tasks')(gulp, options, plugins);
