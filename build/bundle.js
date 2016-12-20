@@ -1,19 +1,15 @@
-module.exports = function(gulp, options, plugins) {
+module.exports = function(gulp, options, plugins, debug) {
     return plugins.browserify({
             entries: options.src,
             ignoreMissing: true,
             detectGlobals: false,
             bare: true,
-            debug: false,
+            debug: !!debug,
             builtins: false
         })
         .bundle()
         .pipe(plugins.source(options.name || 'index.js'))
         .pipe(plugins.buffer())
-        .pipe(plugins.strip())
-        .pipe(plugins.whitespace({
-            removeLeading: true,
-            removeTrailing: true
-        }))
+        .pipe(plugins.gulpif(!debug, plugins.uglify()))
         .pipe(gulp.dest(options.dest));
 };

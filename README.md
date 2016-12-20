@@ -65,24 +65,18 @@ Or to ONLY build the plugin without building the rest of the extension.
 
 For release:
 ```bash
-gulp --plugin
-```
-
-For debug:
-```bash
-gulp --debug --plugin
+gulp plugin
 ```
 
 ### Windows Instructions ###
 * Microsoft Windows 7 64-bit or higher required
-* Adobe Animate CC 2015 x64 w/ ZXP utility for windows
+* Adobe Animate CC 2015 x64 w/ ZXP utility for Windows
 * Microsoft Visual Studio 2015 Community or higher
 * Latest NodeJS
 
 **Notice: When switching visual studio from 14 (2015) to a different version, do the following**
 
-* Update path in vsvars.js to the newly selected toolset
-* Change the vs2015 variable name in the javascript source, if desired
+* Update `projectFile` and `VCTargetsPath` in **build/config/win.js** to the newly selected toolset
 * Update the solution and project files (You probably cannot downgrade these files without rebuilding them from scratch)
 
 Update your npm first
@@ -105,4 +99,4 @@ Build plugin and install plugin
 gulp --plugin --install
 ```
 
-Now use the ZXP utility for windows to install the PixiAnimate-win.zxp plugin for Adobe Animate CC 2015, make sure to remove the existing plugin before install
+Now use the ZXP utility for windows to install the **PixiAnimate.zxp** plugin for Adobe Animate CC 2015, make sure to remove the existing plugin before install

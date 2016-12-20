@@ -3,7 +3,7 @@
 .idea/
 *.zxp
 temp/
-src/PixiAnimate/lib/mac/release/PixiAnimate.fcm.plugin.dSYM
+project/mac/lib/release/PixiAnimate.fcm.plugin.dSYM
 project/mac/PixiAnimate.mp.xcodeproj/xcuserdata/
 project/mac/PixiAnimate.mp.xcodeproj/project.xcworkspace/xcuserdata/
 node_modules
@@ -15,12 +15,12 @@ com.jibo.PixiAnimate
 *.opendb
 *.suo
 src/ThirdParty/libjson_7.6.1/libjson/Debug/
-project/win/pixi-animate-vs2015/pixi-animate-vs2015/x64/Debug/
-project/win/pixi-animate-vs2015/Debug/statLibJson.lib
-project/win/pixi-animate-vs2015/Debug/statLibJson.pdb
+project/win/pixi-animate-vs2015/x64/*/*.lib
+project/win/pixi-animate-vs2015/x64/*/*.pdb
+project/win/pixi-animate-vs2015/x64/*/*.exp
+project/win/pixi-animate-vs2015/pixi-animate-vs2015/x64/*/*.idb
 *.obj
 *.tlog
-*.exe
 *.log
 *.iobj
 *.pdb
@@ -31,5 +31,4 @@ project/win/pixi-animate-vs2015/Debug/statLibJson.pdb
 *.res
 src/PixiAnimate/lib/win32/PixiAnimate.fcm.plugin
 src/ThirdParty/xerces/win/xerces-c-3.1.1/Build/
-project/win/pixi-animate-vs2015/x64/
 tests/

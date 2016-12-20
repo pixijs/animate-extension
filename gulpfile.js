@@ -1,15 +1,16 @@
 var gulp = require('gulp');
 
 // Mixin the platform specific options
+var options = require('./build/config');
 var platformOptions;
 
 // Window-specific configuration
 if (/^win/.test(process.platform)) {
-    platformOptions = require('./build/config/win');
+    platformOptions = options.win;
 }
 // Mac-specific configuration
 else if (/^darwin/.test(process.platform)) {
-    platformOptions = require('./build/config/mac');
+    platformOptions = options.mac;
 }
 else {
     console.log('Platform is not supported');
@@ -17,10 +18,7 @@ else {
 }
 
 // Merge the platform options into the default
-var options = Object.assign(
-    require('./build/config'),
-    platformOptions
-);
+Object.assign(options, platformOptions);
 
 // Gulp plugins for tasks to use
 var plugins = {
@@ -36,11 +34,11 @@ var plugins = {
     install: require('gulp-install'),
     browserify: require('browserify'),
     buffer: require('vinyl-buffer'),
-    strip: require('gulp-strip-comments'),
-    whitespace: require('gulp-whitespace'),
     source: require('vinyl-source-stream'),
     msbuild: require('gulp-msbuild'),
-    build: require('./build/bundle')
+    build: require('./build/bundle'),
+    uglify: require('gulp-uglify-harmony'),
+    gulpif: require('gulp-if')
 };
 
 require('load-gulp-tasks')(gulp, options, plugins);

@@ -188,7 +188,7 @@ namespace PixiJS
 
 #ifdef _WINDOWS
 
-		if (system("electron --version") != 0)
+		if (Utils::RunElectron("--version") != 0)
 		{
 			Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed in your global NPM package repository. Install by running the following from a commandline:\n\n\tnpm install electron-prebuilt -g");
 			return FCM_GENERAL_ERROR;

@@ -22,10 +22,6 @@ module.exports = function(gulp, options, plugins) {
             'stage'
         );
 
-        if (options.postStage) {
-            tasks.push(options.postStage);
-        }
-
         // Turn on remote debugging
         if (debug) {
             tasks.push('remote-debug');
@@ -39,7 +35,8 @@ module.exports = function(gulp, options, plugins) {
             'build-spritesheets',
             'runtime-copy',
             'runtime-copy-debug',
-            'move',
+            'plugin-copy-mac',
+            'plugin-copy-win',
             'package',
             'clean-stage'
         );
