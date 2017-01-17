@@ -225,23 +225,21 @@ p.getFrameScripts = function(renderer)
 
         if (f.commands && f.commands.length)
         {
-            let playSound = renderer.compress ? 'ps' : 'playSound';
+            const playSound = renderer.compress ? 'ps' : 'playSound';
 
-            const sounds = f.commands
-                .filter((command) => command.type === 'SoundPlace')
-                .map((command) => {
-                    const sound = library.createInstance(command.assetId, command.instanceId);
-                    const {libraryItem, loop} = sound;
-                    const {name} = libraryItem;
-                    return {
-                        "frame": f.frame,
-                        "scripts": [
-                            `this.${playSound}('${name}'${loop ? ', true' : ''});`
+            f.commands.filter((command) => command.type === 'SoundPlace')
+                .forEach((command) => {
+                    const sound = library.createInstance(
+                        command.assetId,
+                        command.instanceId
+                    );
+                    scriptFrames.push({
+                        frame: f.frame,
+                        scripts: [
+                            `this.${playSound}('${sound.libraryItem.name}'${sound.loop ? ', true' : ''});`
                         ]
-                    };
+                    });
                 });
-
-            scriptFrames.push(...sounds);
         }
     });
 
