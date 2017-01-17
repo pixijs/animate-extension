@@ -13,18 +13,12 @@
         <script src="${libsPath}pixi-animate.min.js"></script>
         <script src="${outputFile}"></script>
         <script>
-            var renderer = new PIXI.autoDetectRenderer(${width}, ${height}, {
+            var scene = new PIXI.animate.Scene(${width}, ${height}, {
                 view: document.getElementById("stage"),
                 backgroundColor: 0x${background},
                 antialias: true
             });
-            var stage = new PIXI.Container();
-            PIXI.animate.load(${nameSpace}.${stageName}, stage);
-            function update() {
-                renderer.render(stage);
-                requestAnimationFrame(update);
-            }
-            update();
+            scene.load(${nameSpace}.${stageName});
         </script>
     </body>
 </html>
