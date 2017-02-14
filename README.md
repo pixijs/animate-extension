@@ -14,7 +14,7 @@ The following dependencies are required in order to publishing FLA document crea
 * Adobe Flash CC 2015+ or Adobe Animate CC
 * Mac OS X or Windows x64
 * [Node & NPM](http://nodejs.org)
-* [Electron](http://electron.atom.io/) `npm install -g electron-prebuilt`
+* [Electron](http://electron.atom.io/) `npm install -g electron`
 
 ## Installation
 
@@ -72,6 +72,7 @@ gulp plugin
 * Microsoft Windows 7 64-bit or higher required
 * Adobe Animate CC 2015 x64 w/ ZXP utility for Windows
 * Microsoft Visual Studio 2015 Community or higher
+  * Common Tools for Visual C++ 2015
 * Latest NodeJS
 
 **Notice: When switching visual studio from 14 (2015) to a different version, do the following**
@@ -86,7 +87,7 @@ npm install -g npm
 
 Install global npm packages
 ```
-npm install -g electron-prebuilt gulp-cli
+npm install -g electron gulp-cli
 ```
 
 Install or restore local packages

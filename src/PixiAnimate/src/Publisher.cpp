@@ -190,7 +190,7 @@ namespace PixiJS
 
 		if (Utils::RunElectron("--version") != 0)
 		{
-			Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed in your global NPM package repository. Install by running the following from a commandline:\n\n\tnpm install electron-prebuilt -g");
+			Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed in your global NPM package repository. Install by running the following from a commandline:\n\n\tnpm install electron -g");
 			return FCM_GENERAL_ERROR;
 		}
 
@@ -198,7 +198,7 @@ namespace PixiJS
 
 		if (!Utils::Exists("/usr/local/bin/electron"))
 		{
-			Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed at /usr/local/bin/electron\nInstall by running the following from a commandline:\n\n\tnpm install electron-prebuilt -g");
+			Utils::Trace(GetCallback(), "ERROR: Electron is required to be installed at /usr/local/bin/electron\nInstall by running the following from a commandline:\n\n\tnpm install electron -g");
 			return FCM_GENERAL_ERROR;
 		}
 

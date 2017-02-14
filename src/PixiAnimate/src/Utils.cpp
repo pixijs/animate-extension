@@ -1042,10 +1042,7 @@ namespace PixiJS
 		STARTUPINFO si;
 		PROCESS_INFORMATION pi;
 
-		std::string cmd = "c:\\windows\\system32\\cmd.exe /C " 
-			+ (std::string)getenv("APPDATA") 
-			+ "\\npm\\electron.cmd " 
-			+ argline;
+		std::string cmd = "C:\\Windows\\System32\\cmd.exe /C electron " + argline;
 
 		std::wstring wcmd;
 		wcmd.assign(cmd.begin(), cmd.end());
