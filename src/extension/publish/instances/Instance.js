@@ -319,18 +319,8 @@ function equals(a, b)
  */
 p.renderBegin = function()
 {
-    let buffer = "";
-    let instanceName = this.localName;
-
-    // We have an instance name for this, probably movieclip
-    if (this.instanceName)
-    {
-        instanceName += ` = this.${this.instanceName}`;
-    }
-
     // Add the instance name line
-    buffer += `var ${instanceName} = `;
-    return buffer;
+    return `var ${this.localName} = `;
 };
 
 /**
@@ -384,6 +374,13 @@ p.render = function(renderer, mask)
     {
         const func = renderer.compress ? 'ma' : 'setMask';
         buffer += `.${func}(${mask})`;
+    }
+
+    // Add the instance name
+    if (this.instanceName)
+    {
+        buffer += `; ${this.localName}.name = "${this.instanceName}"`;
+        buffer += `; this[${this.localName}.name] = ${this.localName}`;
     }
     return `${buffer};`;
 };
