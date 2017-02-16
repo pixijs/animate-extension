@@ -379,8 +379,7 @@ p.render = function(renderer, mask)
     // Add the instance name
     if (this.instanceName)
     {
-        buffer += `; ${this.localName}.name = "${this.instanceName}"`;
-        buffer += `; this[${this.localName}.name] = ${this.localName}`;
+        buffer += `; this[${this.localName}.name = "${this.instanceName}"] = ${this.localName}`;
     }
     return `${buffer};`;
 };
