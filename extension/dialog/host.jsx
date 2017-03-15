@@ -30,4 +30,15 @@ function browseOutputFile() {
     return null;
 }
 
+function getPublishSettings() {
+    var profile = fl.getDocumentDOM().exportPublishProfileString();
+    var settings = /Property name\=\"(PublishSettings\.[^\"]+)\"\>([^\<]+)\<\/Property/g;
+    var result = "";
+    var match = null;
+    while(match = settings.exec(profile)) { // eslint-disable-line no-cond-assign
+        result += '"' + match[1] + '":"' + match[2] + '",';
+    }
+    return '{"data":{' + result.slice(0, -1) + '}}';
+}
+
 /*eslint-enable no-unused-vars */

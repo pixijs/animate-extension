@@ -189,14 +189,12 @@
 
         // Global options
         data["PublishSettings.IncludeInvisibleLayer"] = $hiddenLayers.checked.toString();
-        
-        console.log(data);
 
         var event = new CSEvent();
         event.scope = "APPLICATION";
         event.type = "com.adobe.events.flash.extension.savestate";
         event.data = JSON.stringify(data);
-        event.extensionId = "com.jibo.PixiAnimate.PublishSettings";
+        event.extensionId = csInterface.getExtensionID();
         csInterface.dispatchEvent(event);
     }
 
@@ -274,6 +272,7 @@
     } 
 
     csInterface = new CSInterface();
+    csInterface.setWindowTitle('PixiAnimate Publish Settings');
 
     // Gets the style information such as color info from the skinInfo, 
     // and redraw all UI controls of your extension according to the style info.
@@ -290,14 +289,11 @@
             parentPath = path.dirname(parentPath);
         }
 
-        // Restory the state from the saved settings
+        // Handle set state from the saved settings
         csInterface.addEventListener("com.adobe.events.flash.extension.setstate", restoreState);
-        var event = new CSEvent();
-        event.scope = "APPLICATION";
-        event.type = "com.adobe.events.flash.extensionLoaded";
-        event.data = "Test Event";
-        event.extensionId = "com.jibo.PixiAnimate.PublishSettings";
-        csInterface.dispatchEvent(event);
+        
+        // Restore from publish settings
+        exec('getPublishSettings', restoreState);
     });
 
 }(document, window.__adobe_cep__));
