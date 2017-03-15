@@ -36,7 +36,7 @@
 #include <sstream>
 #include <string>
 #include <iterator>
-#include <experimental\filesystem>
+
 #include "FlashFCMPublicIDs.h"
 #include "FCMPluginInterface.h"
 #include "libjson.h"
@@ -57,9 +57,9 @@
 #include <math.h>
 #include "TimelineWriter.h"
 
-namespace fs = std::experimental::filesystem;
-
 #ifdef _WINDOWS
+#include <experimental\filesystem>
+namespace fs = std::experimental::filesystem;
 #include "Windows.h"
 #endif
 
@@ -343,8 +343,12 @@ namespace PixiJS
 		if (m_images && bitmapExportService)
 		{
 			FCM::AutoPtr<FCM::IFCMCalloc> pCalloc;
+#ifdef _WINDOWS
 			fs::path exportPath(bitmapExportPath);
 			FCM::StringRep16 pFilePath = Utils::ToString16(fs::canonical(exportPath).string(), m_pCallback);
+#else
+			FCM::StringRep16 pFilePath = Utils::ToString16(bitmapExportPath, m_pCallback);
+#endif
 			res = bitmapExportService->ExportToFile(pMediaItem, pFilePath, 100);
 			ASSERT(FCM_SUCCESS_CODE(res));
 
@@ -750,9 +754,12 @@ namespace PixiJS
 		if (m_images && bitmapExportService)
 		{
 			FCM::AutoPtr<FCM::IFCMCalloc> pCalloc;
+#ifdef _WINDOWS
 			fs::path exportPath(bitmapExportPath);
 			FCM::StringRep16 pFilePath = Utils::ToString16(fs::canonical(exportPath).string(), m_pCallback);
-
+#else
+			FCM::StringRep16 pFilePath = Utils::ToString16(bitmapExportPath, m_pCallback);
+#endif
 			res = bitmapExportService->ExportToFile(pMediaItem, pFilePath, 100);
 			ASSERT(FCM_SUCCESS_CODE(res));
 
@@ -975,8 +982,12 @@ namespace PixiJS
 		if (soundExportService)
 		{
 			FCM::AutoPtr<FCM::IFCMCalloc> pCalloc;
+#ifdef _WINDOWS
 			fs::path exportPath(soundExportPath);
 			FCM::StringRep16 pFilePath = Utils::ToString16(fs::canonical(exportPath).string(), m_pCallback);
+#else
+			FCM::StringRep16 pFilePath = Utils::ToString16(soundExportPath, m_pCallback);
+#endif
 			res = soundExportService->ExportToFile(pMediaItem, pFilePath);
 			ASSERT(FCM_SUCCESS_CODE(res));
 			pCalloc = Utils::GetCallocService(m_pCallback);
