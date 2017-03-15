@@ -855,6 +855,7 @@ namespace PixiJS
 	FCM::Result TimelineWriter::AddFrameScript(FCM::CStringRep16 pScript, FCM::U_Int32 layerNum)
 	{
 		std::string script = Utils::ToString(pScript, m_pCallback);
+		Utils::ReplaceAll(script, "\r", "");
 		Utils::ReplaceAll(script, "\n", "\\n");
 		Utils::ReplaceAll(script, "\t", "");
 
@@ -962,4 +963,3 @@ namespace PixiJS
 		m_pTimelineElement->push_back(*m_pFrameArray);
 	}
 };
-

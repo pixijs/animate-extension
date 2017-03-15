@@ -2,7 +2,7 @@ module.exports = {
     pluginTempDebug: 'project/win/pixi-animate-vs2015/x64/Debug/pixi-animate-vs2015.dll',
     pluginTempRelease: 'project/win/pixi-animate-vs2015/x64/Release/pixi-animate-vs2015.dll',
     pluginFile: 'com.jibo.PixiAnimate/plugin/lib/win/PixiAnimate.fcm',
-    installFolder: 'C:\\Program Files\\Common Files\\Adobe\\CEP\\extensions\\com.jibo.PixiAnimate',
+    installFolder: 'C:\\Program Files (x86)\\Common Files\\Adobe\\CEP\\extensions\\com.jibo.PixiAnimate',
     
     // ZXP plugin packaging options
     packager: '.\\build\\bin\\ZXPSignCmd.exe',
