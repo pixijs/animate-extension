@@ -177,7 +177,7 @@
         data[SETTINGS + "Spritesheets"] = $spritesheets.checked.toString();
 
         // Strings
-        data[SETTINGS + "OutputFile"] = $outputFile.value.toString();
+        data[SETTINGS + "OutputFile"] = winPathToURI( $outputFile.value.toString() );
         data[SETTINGS + "HTMLPath"] = $htmlPath.value.toString();
         data[SETTINGS + "LibsPath"] = $libsPath.value.toString();
         data[SETTINGS + "ImagesPath"] = $imagesPath.value.toString();
@@ -224,6 +224,13 @@
     function close()
     {
         csInterface.closeExtension();
+    }
+    
+    function winPathToURI( path ) {
+        while( path.indexOf("\\") > -1 ) {
+            path = path.replace("\\", "/");
+        }
+        return path;
     }
 
     $publishButton.onclick = function()
