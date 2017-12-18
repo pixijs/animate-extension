@@ -157,8 +157,54 @@ p.getContents = function(renderer)
     let preBuffer = this.renderChildrenMasks(renderer);
     let buffer = this.renderChildren(renderer);
     let postBuffer = this.renderAddChildren(renderer);
+    let scriptBuffer = this.getFrameScripts(renderer);
 
-    return preBuffer + buffer + postBuffer;
+    return preBuffer + buffer + postBuffer + scriptBuffer;
+};
+
+p.getFrameScripts = function (renderer) {
+    const library = this.library;
+    let scriptFrames = [];
+
+    this.frames.forEach(function (f) {
+        if (f.scripts) {
+            scriptFrames.push(f);
+        }
+
+        if (f.commands && f.commands.length) {
+            const playSound = renderer.compress ? 'ps' : 'playSound';
+
+            f.commands.filter((command) => command.type === 'SoundPlace')
+                .forEach((command) => {
+                    const sound = library.createInstance(
+                        command.assetId,
+                        command.instanceId
+                    );
+                    scriptFrames.push({
+                        frame: f.frame,
+                        scripts: [
+                            `this.${playSound}('${sound.libraryItem.name}'${sound.loop ? ', true' : ''});`
+                        ]
+                    });
+                });
+        }
+    });
+
+    let buffer = [];
+    if (scriptFrames.length) {
+        let addAction = renderer.compress ? 'aa' : 'addAction';
+
+        for (let i = 0; i < scriptFrames.length; i++) {
+            let frame = scriptFrames[i];
+            let scripts = frame.scripts;
+            for (let j = 0; j < scripts.length; j++) {
+                let script = scripts[j].replace(/\\n/g, "\n");
+                buffer.push(`this.${addAction}(function(){\n${script}}, ${frame.frame});`);
+            }
+        }
+    }
+    
+    return buffer.join('\n');
 };
 
 p.renderAddChildren = function(renderer)
