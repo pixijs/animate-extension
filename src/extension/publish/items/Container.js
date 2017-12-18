@@ -160,7 +160,7 @@ p.getContents = function(renderer)
     let output = preBuffer + buffer + postBuffer;
 
     //Support Container frame script
-    if (this instanceof Container) {
+    if (!this._isTimeline) {
         let script = this.frames[0].scripts && this.frames[0].scripts[0];
         if (script) {
             script = script.replace(/\\n/g, "\n");

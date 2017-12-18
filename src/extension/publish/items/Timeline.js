@@ -23,6 +23,8 @@ const Timeline = function(library, data)
      * @private
      */
     this.postBuffer = '';
+
+    this._isTimeline = true;
 };
 
 // Reference to the prototype
