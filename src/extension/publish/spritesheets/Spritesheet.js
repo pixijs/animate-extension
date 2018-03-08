@@ -71,8 +71,6 @@ Spritesheet.PADDING = 1;
  */
 p.addImages = function(images)
 {
-    let count = 0;
-
     const map = {};
 
     // Got in reverse order so we can splice off images
@@ -81,7 +79,6 @@ p.addImages = function(images)
         map[img.id] = img;
         const node = this.atlas.pack(img);
         if (node !== false) {
-            count++;
             images.splice(i, 1);
             if (!this.debug) {
                 fs.unlinkSync(img.dataset.src);

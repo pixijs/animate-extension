@@ -27,6 +27,7 @@ ipc.on('settings', async (ev, data) => {
         const img = new Image();
         const pad = Spritesheet.PADDING * 2;
         img.src = "data:image/png;base64," + fs.readFileSync(src, 'base64');
+        //setting img.src is always an async operation
         await new Promise((res) => {
             img.onload = res;
         });
