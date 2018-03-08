@@ -17,7 +17,7 @@ const argv = minimist(process.argv.slice(2), {
 
 app.on('ready', function() {
 
-    if (!semver.gt(process.versions.electron, '1.8.2'))
+    if (!semver.gte(process.versions.electron, '1.8.2'))
     {
         alert("Must use Electron v1.8.2 or greater. Install using 'npm install -g electron-prebuilt'");
         quit();
