@@ -5,8 +5,7 @@ const path = require('path');
 const Spritesheet = require('./Spritesheet');
 const ipc = require('electron').ipcRenderer;
 
-ipc.on('settings', (ev, data) => {
-
+ipc.on('settings', async (ev, data) => {
     const images = [];
     const results = {};
     const response = JSON.parse(data);
@@ -28,6 +27,9 @@ ipc.on('settings', (ev, data) => {
         const img = new Image();
         const pad = Spritesheet.PADDING * 2;
         img.src = "data:image/png;base64," + fs.readFileSync(src, 'base64');
+        await new Promise((res) => {
+            img.onload = res;
+        });
         const dWidth = Math.ceil(img.width * scale);
         const dHeight = Math.ceil(img.height * scale);
 
@@ -73,6 +75,6 @@ ipc.on('settings', (ev, data) => {
         let json = output + '.json';
         results[path.parse(json).name] = json;
     }
-    
+
     ipc.sendSync('done', JSON.stringify(results));
 });
