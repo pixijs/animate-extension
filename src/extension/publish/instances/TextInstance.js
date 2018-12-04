@@ -90,7 +90,8 @@ p.renderContent = function(renderer, undefined)
     if (style.letterSpacing)
         options.letterSpacing = style.letterSpacing;
 
-    if (this.libraryItem.behaviour.lineMode === 'multi'){
+    if (this.libraryItem.behaviour.lineMode === 'multi')
+    {
         options.wordWrap = true;
         options.wordWrapWidth = this.initFrame.bounds.width;
     }
