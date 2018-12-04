@@ -24,6 +24,14 @@ const Timeline = function(library, data)
      */
     this.postBuffer = '';
 
+    /**
+     * Used to detect if this is a timeline and has multiple frames, or else
+     * we'll simply use a MovieClip/Container.
+     * @property {boolean} 
+     * @private
+     * @readonly
+     * @default true
+     */
     this._isTimeline = true;
 };
 
