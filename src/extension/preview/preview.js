@@ -40,6 +40,10 @@ preview.addEventListener('did-finish-load', function() {
 
     // Show after reload
     preview.style.display = "flex";
+    
+    if (config.devTools) {
+        preview.openDevTools();
+    }
 });
 
 // Auto-show the dev-tools if console error
