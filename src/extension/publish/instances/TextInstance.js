@@ -90,6 +90,12 @@ p.renderContent = function(renderer, undefined)
     if (style.letterSpacing)
         options.letterSpacing = style.letterSpacing;
 
+    if (this.libraryItem.behaviour.lineMode === 'multi')
+    {
+        options.wordWrap = true;
+        options.wordWrapWidth = this.initFrame.bounds.width;
+    }
+
     // Replace the long names with the shortened names
     if (compress)
     {
