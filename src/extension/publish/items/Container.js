@@ -157,8 +157,20 @@ p.getContents = function(renderer)
     let preBuffer = this.renderChildrenMasks(renderer);
     let buffer = this.renderChildren(renderer);
     let postBuffer = this.renderAddChildren(renderer);
+    let output = preBuffer + buffer + postBuffer;
 
-    return preBuffer + buffer + postBuffer;
+    //Support Container frame script
+    if (!this._isTimeline)
+    {
+        let script = this.frames[0].scripts && this.frames[0].scripts[0];
+        if (script)
+        {
+            script = script.replace(/\\n/g, "\n");
+            output += script;
+        }
+    }    
+
+    return output;
 };
 
 p.renderAddChildren = function(renderer)
