@@ -226,8 +226,10 @@
         csInterface.closeExtension();
     }
     
-    function winPathToURI( path ) {
-        while( path.indexOf("\\") > -1 ) {
+    function winPathToURI(path)
+    {
+        while (path.indexOf("\\") > -1)
+        {
             path = path.replace("\\", "/");
         }
         return path;
