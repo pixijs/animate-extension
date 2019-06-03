@@ -62,8 +62,12 @@ ipc.on('settings', async (ev, data) => {
         );
         images.push(canvas);
     }
-
-    images.reverse();
+    // pack images with largest dimensions first, then fill in the gaps with smaller images later.
+    images.sort((a,b)=>{
+        const aMax = a.width > a.height ? a.width : a.height;
+        const bMax = b.width > b.height ? b.width : b.height;
+        return aMax - bMax;
+    });
 
     let current = 0;
     while(images.length) {
