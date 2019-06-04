@@ -90,6 +90,10 @@ p.renderContent = function(renderer, undefined)
     if (style.letterSpacing)
         options.letterSpacing = style.letterSpacing;
 
+    // Add leading if specified
+    if(this.paragraph.linespacing)
+        options.leading = this.paragraph.linespacing;
+
     if (this.libraryItem.behaviour.lineMode === 'multi')
     {
         options.wordWrap = true;
