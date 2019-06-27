@@ -46,7 +46,11 @@ app.on('ready', function() {
         alwaysOnTop: true,
         skipTaskbar: true,
         show: false,
-        title: argv.title
+        title: argv.title,
+        webPreferences: {
+            nodeIntegration: true,
+            webviewTag:true
+        }
     });
 
     // Set the configuration

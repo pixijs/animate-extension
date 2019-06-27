@@ -19,7 +19,10 @@ const SpritesheetBuilder = function(settings, assetsPath, done)
     let renderer = new BrowserWindow({
         width: 800,
         height: 600,
-        show: false
+        show: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
     renderer.loadURL('file://' + assetsPath + '/spritesheets.html');
