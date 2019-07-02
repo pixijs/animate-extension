@@ -21,7 +21,7 @@ The following dependencies are required in order to publishing FLA document crea
 If you are trying to install with Adobe Animate CC 2015, you **cannot** install the ZXP with Adobe Extension Manager CC (this not longer is supported in CC 2015). There are two ways to install:
 
 * [Enable syncing](https://www.adobeexchange.com/resources/19) in your Adobe CC desktop application (**recommended**); or
-* Use the [Manage Extension utility](http://blogs.adobe.com/animate/installing-zxp-extensions-using-the-manage-extensions-utility/) to manually install.
+* Use [Anastasiy’s Extension Manager](https://install.anastasiy.com/) to manually install.
 
 ## Building
 
