@@ -4,7 +4,7 @@ module.exports = function(gulp, options, plugins) {
             gulp,
             options.buildSpritesheets,
             plugins, 
-            options.argv.debug
+            options.argv.buildDebug
         );
     });
 };

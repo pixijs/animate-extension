@@ -1,7 +1,7 @@
 module.exports = function(gulp, options, plugins) {
     gulp.task('default', function(done){
 
-        var debug = options.argv.debug;
+        var debug = options.argv.buildDebug;
         var plugin = options.argv.plugin;
         var install = options.argv.install;
 

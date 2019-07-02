@@ -1,5 +1,5 @@
 module.exports = function(gulp, options) {
-    var src = options.argv.debug ? 
+    var src = options.argv.buildDebug ? 
         options.mac.pluginTempDebug :
         options.mac.pluginTempRelease;
 
