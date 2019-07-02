@@ -1,6 +1,6 @@
 var path = require('path');
 module.exports = function(gulp, options, plugins) {
-    var src = options.argv.debug ? 
+    var src = options.argv.buildDebug ? 
         options.win.pluginTempDebug :
         options.win.pluginTempRelease;
 

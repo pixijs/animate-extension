@@ -52,13 +52,13 @@ gulp --install
 To build the extension in debug mode and allow for remote debugging, run this command. Navigate to http://localhost:8008 to get the DevTools for the Publish Settings dialog.
 
 ```bash
-gulp --debug --install
+gulp --buildDebug --install
 ```
 
 To rebuild the C++ code on the current platform, use the `--plugin` flag. This will build the plugin for both debug and release.
 
 ```bash
-gulp --debug --install --plugin
+gulp --buildDebug --install --plugin
 ```
 
 Or to ONLY build the plugin without building the rest of the extension.

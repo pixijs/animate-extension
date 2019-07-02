@@ -4,7 +4,7 @@ module.exports = function(gulp, options, plugins) {
             gulp,
             options.buildPreviewApp,
             plugins, 
-            options.argv.debug
+            options.argv.buildDebug
         );
     });
 };

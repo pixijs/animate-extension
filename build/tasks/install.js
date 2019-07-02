@@ -1,5 +1,5 @@
 module.exports = function(gulp, options, plugins) {
-    var output = options.argv.debug ? 
+    var output = options.argv.buildDebug ? 
         options.outputDebugName :
         options.outputName;
     
@@ -8,6 +8,6 @@ module.exports = function(gulp, options, plugins) {
         .replace('${output}', output);
 
     gulp.task('install', plugins.shell.task([cmd],  {
-        'quiet': !options.argv.debug
+        'quiet': !options.argv.buildDebug
     }));
 };
