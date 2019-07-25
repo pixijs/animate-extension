@@ -8,6 +8,9 @@
  */
 const LibraryItem = function(library, data)
 {
+    if(data.name){
+        data.name = data.name.replace(/[^A-Za-z 0-9_]/g, '_');
+    }
     // Add the data to this object
     Object.assign(this, data);
 
