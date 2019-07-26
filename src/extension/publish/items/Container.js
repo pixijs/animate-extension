@@ -160,7 +160,7 @@ p.getContents = function(renderer)
     let output = preBuffer + buffer + postBuffer;
 
     //Support Container frame script
-    if (!this._isTimeline)
+    if (!this._isTimeline && this.frames && this.frames[0])
     {
         let script = this.frames[0].scripts && this.frames[0].scripts[0];
         if (script)
