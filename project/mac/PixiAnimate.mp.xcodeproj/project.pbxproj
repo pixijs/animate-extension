@@ -44,7 +44,7 @@
 		"a667ac45-a68a-3e4c-b8f0-e54bfac215bd" /* JSONMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "3cdca8a2-9ab8-3515-bea5-e404f7131120" /* JSONMemory.cpp */; };
 		"ac0a0f9d-96dd-3620-ace9-4e86f0332be8" /* Publisher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "a2b84e18-8788-39bf-9148-f0dbf764f142" /* Publisher.cpp */; };
 		"ac2e8f32-a38e-3738-ac31-7f1a20406449" /* JSONChildren.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "18b8044a-5909-32aa-9155-c8c1788376b5" /* JSONChildren.cpp */; };
-		"adc7cb1b-bd71-375d-a874-f828ac2630b7" /* libxerces-c-3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = "51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.1.dylib */; };
+		"adc7cb1b-bd71-375d-a874-f828ac2630b7" /* libxerces-c-3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = "51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.2.dylib */; };
 		"b56f3c1f-3389-398f-9deb-68998a4a4751" /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "12cad407-b42b-3fd9-afb2-7703a0006994" /* Utils.cpp */; };
 		"b7e8a811-7e36-342f-8708-052b28c8b199" /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "f3f52c21-85e0-3b05-9855-54fac0cf8db4" /* Foundation.framework */; };
 		"bb389afd-b9f6-373a-8e5d-202573dff338" /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */; };
@@ -57,7 +57,7 @@
 		"d212091d-c484-34e7-9eb3-cacbe6eecf87" /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "f3f52c21-85e0-3b05-9855-54fac0cf8db4" /* Foundation.framework */; };
 		"d26de6fc-3954-384c-a0cb-033a23fa21af" /* JSONStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "72093546-f441-3bed-8ee2-78acd3cf688d" /* JSONStream.cpp */; };
 		"da95733a-774c-306e-867b-6f491e3c38e4" /* JSONNode_Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "7aa76593-b10f-3f2e-bbea-7a3e63e1a65b" /* JSONNode_Mutex.cpp */; };
-		"e3baba51-14f0-34cf-9a21-fc11518dd9b7" /* libxerces-c-3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = "51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.1.dylib */; };
+		"e3baba51-14f0-34cf-9a21-fc11518dd9b7" /* libxerces-c-3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = "51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.2.dylib */; };
 		"edc34217-9b25-3023-abd8-c258d3afcdcc" /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */; };
 		"eee6a0c3-402c-3020-a9fb-1487b7a25bf0" /* DocType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "37ac9b87-549b-3c4b-935a-8ff607750468" /* DocType.cpp */; };
 		"f77fdb47-d483-3c03-8a74-4c0138c180d6" /* MyXmlParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "41c6aa0c-3abc-3913-a79f-2072c1b28322" /* MyXmlParser.cpp */; };
@@ -78,7 +78,7 @@
 		"459c7060-1b49-3a88-86f6-61f76eb39315" /* JSONAllocator.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONAllocator.cpp; sourceTree = "<group>"; };
 		"474ed136-b062-30a7-9d9b-ab0938ef331d" /* JSONWorker.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONWorker.cpp; sourceTree = "<group>"; };
 		"50c17538-91dd-3883-a5bc-315c0739acf4" /* JSONDebug.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONDebug.cpp; sourceTree = "<group>"; };
-		"51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.1.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = "libxerces-c-3.1.dylib"; sourceTree = "<group>"; };
+		"51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.2.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = "libxerces-c-3.2.dylib"; sourceTree = "<group>"; };
 		"72093546-f441-3bed-8ee2-78acd3cf688d" /* JSONStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONStream.cpp; sourceTree = "<group>"; };
 		"7423f597-956e-32d5-b016-7153947a675d" /* AppKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppKit.framework; sourceTree = "<group>"; };
 		75FD74531C6255BD00042B73 /* OutputWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OutputWriter.cpp; sourceTree = "<group>"; };
@@ -109,7 +109,7 @@
 				"a605f5ea-9b2f-3782-aca6-f5a8c586b668" /* ApplicationServices.framework in Frameworks */,
 				"d212091d-c484-34e7-9eb3-cacbe6eecf87" /* Foundation.framework in Frameworks */,
 				"9a4a5e32-90e2-3a86-be56-054e9f4842dd" /* AppKit.framework in Frameworks */,
-				"adc7cb1b-bd71-375d-a874-f828ac2630b7" /* libxerces-c-3.1.dylib in Frameworks */,
+				"adc7cb1b-bd71-375d-a874-f828ac2630b7" /* libxerces-c-3.2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,7 +121,7 @@
 				"4acf8c4b-efb4-370e-a74a-01714f9a1a73" /* ApplicationServices.framework in Frameworks */,
 				"b7e8a811-7e36-342f-8708-052b28c8b199" /* Foundation.framework in Frameworks */,
 				"edc34217-9b25-3023-abd8-c258d3afcdcc" /* AppKit.framework in Frameworks */,
-				"e3baba51-14f0-34cf-9a21-fc11518dd9b7" /* libxerces-c-3.1.dylib in Frameworks */,
+				"e3baba51-14f0-34cf-9a21-fc11518dd9b7" /* libxerces-c-3.2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,18 +155,18 @@
 		811C721C097349F9007B1073 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				"94f58f66-908b-3a77-857a-3508edde47ad" /* ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release */,
+				"94f58f66-908b-3a77-857a-3508edde47ad" /* ThirdParty/xerces/mac/xerces-c-3.2.2/Build/Mac/Release */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
 		};
-		"94f58f66-908b-3a77-857a-3508edde47ad" /* ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release */ = {
+		"94f58f66-908b-3a77-857a-3508edde47ad" /* ThirdParty/xerces/mac/xerces-c-3.2.2/Build/Mac/Release */ = {
 			isa = PBXGroup;
 			children = (
-				"51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.1.dylib */,
+				"51d58417-2688-33d6-a149-37ad1e68e8fa" /* libxerces-c-3.2.dylib */,
 			);
-			name = "ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
-			path = "../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+			name = "ThirdParty/xerces/mac/xerces-c-3.2.2/Build/Mac/Release";
+			path = "../../src/ThirdParty/xerces/mac/xerces-c-3.2.2/Build/Mac/Release";
 			sourceTree = SOURCE_ROOT;
 		};
 		F5977F0909B7D3970058A43E /* PixiAnimate.xcconfigs */ = {
@@ -469,11 +469,11 @@
 					../../src/SDK/app/include/interfaces,
 					../../src/SDK/app/include/interfaces/DOM,
 					../../src/ThirdParty/libjson_7.6.1/libjson,
-					"../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
+					"../../src/ThirdParty/xerces/mac/xerces-c-3.2.2/src",
 					../../src/SDK/app/include/interfaces/Exporter,
 					../../src/PixiAnimate/include,
 				);
-				LIBRARY_SEARCH_PATHS = "../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+				LIBRARY_SEARCH_PATHS = "../../src/ThirdParty/xerces/mac/xerces-c-3.2.2/Build/Mac/Release";
 				PRODUCT_BUNDLE_IDENTIFIER = "${DVA_BUNDLE_IDENTIFIER}";
 				PRODUCT_NAME = PixiAnimate;
 			};
@@ -506,7 +506,7 @@
 					../../src/SDK/app/include/interfaces,
 					../../src/SDK/app/include/interfaces/DOM,
 					../../src/ThirdParty/libjson_7.6.1/libjson,
-					"../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
+					"../../src/ThirdParty/xerces/mac/xerces-c-3.2.2/src",
 					../../src/SDK/app/include/interfaces/Exporter,
 					../../src/PixiAnimate/include,
 				);
@@ -529,11 +529,11 @@
 					../../src/SDK/app/include/interfaces,
 					../../src/SDK/app/include/interfaces/DOM,
 					../../src/ThirdParty/libjson_7.6.1/libjson,
-					"../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/src",
+					"../../src/ThirdParty/xerces/mac/xerces-c-3.2.2/src",
 					../../src/SDK/app/include/interfaces/Exporter,
 					../../src/PixiAnimate/include,
 				);
-				LIBRARY_SEARCH_PATHS = "../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release";
+				LIBRARY_SEARCH_PATHS = "../../src/ThirdParty/xerces/mac/xerces-c-3.2.2/Build/Mac/Release";
 				PRODUCT_BUNDLE_IDENTIFIER = "${DVA_BUNDLE_IDENTIFIER}";
 				PRODUCT_NAME = PixiAnimate;
 			};

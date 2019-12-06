@@ -8,7 +8,7 @@ project/mac/PixiAnimate.mp.xcodeproj/xcuserdata/
 project/mac/PixiAnimate.mp.xcodeproj/project.xcworkspace/xcuserdata/
 node_modules
 project/mac/build
-project/libxerces-c-3.1.dylib
+project/libxerces-c-3.2.dylib
 com.jibo.PixiAnimate
 *.user
 *.db
@@ -30,5 +30,5 @@ project/win/pixi-animate-vs2015/pixi-animate-vs2015/x64/*/*.idb
 *.fullpdb
 *.res
 src/PixiAnimate/lib/win32/PixiAnimate.fcm.plugin
-src/ThirdParty/xerces/win/xerces-c-3.1.1/Build/
+src/ThirdParty/xerces/win/xerces-c-3.2.2/Build/
 tests/
