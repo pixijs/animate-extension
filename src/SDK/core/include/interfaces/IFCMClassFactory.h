@@ -74,7 +74,7 @@ namespace FCM
          *         Otherwise, this parameter must be NULL.
          *
          * @param  pCallback (IN)
-         *         Pointer to callback function. 
+         *         pointer to callback function. 
          *
          * @param  iid (IN)
          *         Reference to the identifier interface.
