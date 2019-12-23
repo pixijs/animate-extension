@@ -114,13 +114,23 @@ const Library = function(data)
     });
 
     let self = this;
+    let timelineNames = data.Timelines.map(timelineData => timelineData.name);
+    let graphics = 0;
     for(let timelineData of data.Timelines){
         if(timelineData.frames && timelineData.frames.length){
             for(let frame of timelineData.frames){
                 if(frame.commands && frame.commands.length){
                     for(let command of frame.commands){
                         if(command.type === 'Place' && command.isGraphic){
-                            data.Timelines.find(data => data.assetId === command.assetId).type = 'graphic';
+                            let asset = data.Timelines.find(data => data.assetId === command.assetId);
+                            if(asset.type !== 'graphic'){
+                                asset.type = 'graphic';
+                                let name = `Graphic${++graphics}`;
+                                while(timelineNames.includes(name)){
+                                    name = `Graphic${++graphics}`;
+                                }
+                                asset.name = name;
+                            }
                         }
                     }
                 }
