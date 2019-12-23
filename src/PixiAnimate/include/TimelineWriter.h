@@ -35,7 +35,8 @@ namespace PixiJS
 			const DOM::Utils::MATRIX2D* pMatrix,
 			bool loop,
 			std::string instanceName,
-			FCM::PIFCMUnknown pUnknown);
+			FCM::PIFCMUnknown pUnknown,
+			bool isGraphic);
 
 		virtual FCM::Result PlaceObject(
 			FCM::U_Int32 resId,

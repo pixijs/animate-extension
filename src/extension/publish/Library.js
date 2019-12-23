@@ -114,6 +114,19 @@ const Library = function(data)
     });
 
     let self = this;
+    for(let timelineData of data.Timelines){
+        if(timelineData.frames && timelineData.frames.length){
+            for(let frame of timelineData.frames){
+                if(frame.commands && frame.commands.length){
+                    for(let command of frame.commands){
+                        if(command.type === 'Place' && command.isGraphic){
+                            data.Timelines.find(data => data.assetId === command.assetId).type = 'graphic';
+                        }
+                    }
+                }
+            }
+        }
+    }
     data.Timelines.forEach(function(timelineData)
     {
         let timeline;
