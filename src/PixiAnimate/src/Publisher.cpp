@@ -1925,7 +1925,8 @@ namespace PixiJS
 			&pMovieClipInfo->matrix,
 			true,
 			instanceName,
-			pUnknown);
+			pUnknown,
+			false);
 
 		return res;
 	}
@@ -1947,7 +1948,8 @@ namespace PixiJS
 			&pGraphicInfo->matrix,
 			false,
 			"",
-			NULL);
+			NULL,
+			true);
 
 		return res;
 	}
