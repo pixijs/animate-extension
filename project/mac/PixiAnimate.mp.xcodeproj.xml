@@ -233,21 +233,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>41c6aa0c-3abc-3913-a79f-2072c1b28322</key>
-		<dict>
-			<key>explicitFileType</key>
-			<string>sourcecode.cpp.objcpp</string>
-			<key>fileEncoding</key>
-			<string>30</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>MyXmlParser.cpp</string>
-			<key>path</key>
-			<string>MyXmlParser.cpp</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>459c7060-1b49-3a88-86f6-61f76eb39315</key>
 		<dict>
 			<key>explicitFileType</key>
@@ -319,19 +304,6 @@
 			<string>JSONDebug.cpp</string>
 			<key>path</key>
 			<string>JSONDebug.cpp</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>51d58417-2688-33d6-a149-37ad1e68e8fa</key>
-		<dict>
-			<key>explicitFileType</key>
-			<string>compiled.mach-o.dylib</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>libxerces-c-3.1.dylib</string>
-			<key>path</key>
-			<string>libxerces-c-3.1.dylib</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -509,21 +481,6 @@
 			<string>a47eaabc-0062-3299-b91c-06037678b948</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>94f58f66-908b-3a77-857a-3508edde47ad</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>51d58417-2688-33d6-a149-37ad1e68e8fa</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release</string>
-			<key>path</key>
-			<string>../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release</string>
-			<key>sourceTree</key>
-			<string>SOURCE_ROOT</string>
 		</dict>
 		<key>960c8d89-d632-3678-815d-49888c76392b</key>
 		<dict>
