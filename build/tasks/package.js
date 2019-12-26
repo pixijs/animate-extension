@@ -7,7 +7,7 @@ module.exports = function(gulp, options, plugins) {
         '"' + output + '" ' +
         '"' + options.packagerCert + '" ' +
         '"' + options.packagerPass + '" ' +
-        '-tsa \"http://sha256timestamp.ws.symantec.com/sha256/timestamp\"';
+        '-tsa \"http://sha1timestamp.ws.symantec.com/sha1/timestamp\"';
     gulp.task('package', plugins.shell.task([cmd], {
         quiet: false
     }));
