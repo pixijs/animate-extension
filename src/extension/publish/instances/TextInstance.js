@@ -114,7 +114,7 @@ p.renderContent = function(renderer, undefined)
     }
 
     let buffer = renderer.template('text-instance', {
-        text: this.libraryItem.txt || ""
+        text: (this.libraryItem.txt || "").replace(/"/g, "\\\"")
     });
 
     // Add the style setter
