@@ -81,12 +81,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src\xercesc\xinclude;..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\..\..\src\SDK\app\include\common;..\..\..\..\src\SDK\core\include\common;..\..\..\..\src\SDK\app\include\interfaces;..\..\..\..\src\SDK\core\include\interfaces;..\..\..\..\src\PixiAnimate\include;..\..\..\..\src\SDK\app\include\interfaces\DOM;..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source;..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\..\..\src\SDK\app\include\common;..\..\..\..\src\SDK\core\include\common;..\..\..\..\src\SDK\app\include\interfaces;..\..\..\..\src\SDK\core\include\interfaces;..\..\..\..\src\PixiAnimate\include;..\..\..\..\src\SDK\app\include\interfaces\DOM;..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\Build\Win64\VC10\Debug\xerces-c_3_1D.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
     <PostBuildEvent>
       <Command>
       </Command>
@@ -113,13 +110,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src\xercesc\xinclude;..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\..\..\src\SDK\app\include\common;..\..\..\..\src\SDK\core\include\common;..\..\..\..\src\SDK\app\include\interfaces;..\..\..\..\src\SDK\core\include\interfaces;..\..\..\..\src\PixiAnimate\include;..\..\..\..\src\SDK\app\include\interfaces\DOM;..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source;..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson;..\..\..\..\src\SDK\app\include\common;..\..\..\..\src\SDK\core\include\common;..\..\..\..\src\SDK\app\include\interfaces;..\..\..\..\src\SDK\core\include\interfaces;..\..\..\..\src\PixiAnimate\include;..\..\..\..\src\SDK\app\include\interfaces\DOM;..\..\..\..\src\ThirdParty\libjson_7.6.1\libjson\_internal\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>..\..\..\..\src\ThirdParty\xerces\win\xerces-c-3.1.1\Build\Win64\VC10\Release\xerces-c_3_1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
     <PostBuildEvent>
       <Command>
       </Command>
@@ -128,7 +120,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\PixiAnimate\include\DocType.h" />
     <ClInclude Include="..\..\..\..\src\PixiAnimate\include\IOutputWriter.h" />
-    <ClInclude Include="..\..\..\..\src\PixiAnimate\include\MyXmlParser.h" />
     <ClInclude Include="..\..\..\..\src\PixiAnimate\include\OutputWriter.h" />
     <ClInclude Include="..\..\..\..\src\PixiAnimate\include\PluginConfiguration.h" />
     <ClInclude Include="..\..\..\..\src\PixiAnimate\include\Publisher.h" />
@@ -164,7 +155,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\src\PixiAnimate\src\DocType.cpp" />
     <ClCompile Include="..\..\..\..\src\PixiAnimate\src\Main.cpp" />
-    <ClCompile Include="..\..\..\..\src\PixiAnimate\src\MyXmlParser.cpp" />
     <ClCompile Include="..\..\..\..\src\PixiAnimate\src\OutputWriter.cpp" />
     <ClCompile Include="..\..\..\..\src\PixiAnimate\src\Publisher.cpp" />
     <ClCompile Include="..\..\..\..\src\PixiAnimate\src\TimelineWriter.cpp" />

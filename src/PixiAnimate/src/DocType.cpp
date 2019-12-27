@@ -18,8 +18,6 @@
 
 #include "DocType.h"
 #include "Utils.h"
-#include "MyXmlParser.h"
-#include "xercesc/framework/MemBufInputSource.hpp"
 #include <fstream>
 #include <sstream>
 
@@ -140,22 +138,6 @@ namespace PixiJS
 		}
 		xmlFile.close();
 
-		try {
-			XMLPlatformUtils::Initialize();
-			FeatureDocumentHandler featureXmlDocHandler(this);
-			SAXParser *parser = new SAXParser();
-			parser->setDocumentHandler(&featureXmlDocHandler);
-
-			XERCES_CPP_NAMESPACE::MemBufInputSource    *memInput = new XERCES_CPP_NAMESPACE::MemBufInputSource((const XMLByte*)buffer, length, "dummy", false);
-			m_bInited = true;
-			parser->parse(*memInput);
-			delete parser;
-			delete memInput;
-			XMLPlatformUtils::Terminate();
-		}
-		catch (...) {
-			ASSERT(0);
-		}
 		delete[] buffer;
 	}
 

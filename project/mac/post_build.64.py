@@ -87,17 +87,6 @@ def do_copy(source_filepath, dest_directory):
 			do_copy_file(source_item, dest_filepath)
 
 #-----------------------------------------------------
-def copy_files_main(options):
-	print ' Copying files...'
-
-	if options.config == 'Debug':
-		do_copy(r'../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release/libxerces-c-3.1.dylib',r'../')
-
-	if options.config == 'Release':
-		do_copy(r'../../src/ThirdParty/xerces/mac/xerces-c-3.1.1/Build/Mac/Release/libxerces-c-3.1.dylib',r'../')
-
-
-#-----------------------------------------------------
 def option_parser():
 	parser = OptionParser()
 	parser.add_option('-c' , '--config', type='string', dest='config', help='the configuration = $(ConfigurationName)')
@@ -213,14 +202,6 @@ def main(args):
 	full_path = os.path.normpath(os.path.abspath(__file__))
 	print '  ' + full_path
 	print ''
-
-	#	Skip doing the normal build copies if the this script is
-	#	always being run (skipping the normal 'build if the project changed')
-	#	behavior.  We're skipping because these scripts and copies could
-	#	potentially take a while and because in the case where the project
-	#	changed, they will be run again as a post build step on the project.
-	if not options.alwaysrun:
-		copy_files_main(options)
 
 	try:
 		run_any_product_specific_scripts(options)
