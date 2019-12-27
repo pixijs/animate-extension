@@ -62,7 +62,8 @@ namespace PixiJS
 		const DOM::Utils::MATRIX2D* pMatrix,
 		bool loop,
 		std::string instanceName,
-		FCM::PIFCMUnknown pUnknown)
+		FCM::PIFCMUnknown pUnknown,
+		bool isGraphic)
 	{
 		JSONNode commandElement(JSON_NODE);
 
@@ -82,6 +83,7 @@ namespace PixiJS
 		}
 
 		commandElement.push_back(JSONNode("loop", (bool)loop));
+		commandElement.push_back(JSONNode("isGraphic", (bool)isGraphic));
 		m_pCommandArray->push_back(commandElement);
 
 		return FCM_SUCCESS;
