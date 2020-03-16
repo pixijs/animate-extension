@@ -31,7 +31,7 @@ const Renderer = function(library)
      */
     this.compress = library.meta.compressJS;
 
-    /** 
+    /**
      * The namespace for the javascript
      * @property {String} nameSpace
      */
@@ -49,13 +49,13 @@ const Renderer = function(library)
      */
     this.commonJS = library.meta.commonJS;
 
-    /** 
+    /**
      * If the main stage should loop
      * @property {Boolean} loopTimeline
      */
     this.loopTimeline = library.meta.loopTimeline;
 
-    /** 
+    /**
      * Override to the snippets folder
      * @property {String} snippetsPath
      */
@@ -128,7 +128,7 @@ p.getHeader = function()
     if (this.library.bitmaps.length)
     {
         classes += "var Sprite = PIXI.Sprite;\n";
-        classes += "var fromFrame = PIXI.Texture.fromFrame;\n";
+        classes += "var from = PIXI.Texture.from;\n";
     }
 
     if (this.library.texts.length)

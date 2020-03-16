@@ -1,1 +1,1 @@
-new Sprite(fromFrame("${content}"))
+new Sprite(from("${content}"))
