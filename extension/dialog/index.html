@@ -9,6 +9,11 @@
         <div class="dialog">
             <h2>JavaScript Options</h2>
             <div class="dialog-row">
+                <div class="side">Output Version</div>
+                <select class="select editable setting-dependency" id="outputVersion">
+                    <option value="2.0">2.0 (PixiAnimate 2.X, PixiJS 5.X)</option>
+                    <option value="1.0" selected>1.0 (PixiAnimate 1.X, PixiJS 4.X)</option>
+                </select>
                 <div class="side">Output File</div>
                 <input type="text" id="outputFile" class="text" data-validate=".+\.js$" data-error="Output file must be an JavaScript file.">
                 <button class="button icon-open" id="browseButton">
@@ -22,7 +27,7 @@
                 <div class="side">Stage Name</div>
                 <input type="text" class="text editable" id="stageName" data-validate="^[a-zA-Z_][a-zA-Z0-9_]*$" data-error="Stage name is not valid, can only contain a-z, A-Z, 0-9, _ characters and cannot start with a number">
                 <div class="side">Namespace</div>
-                <input type="text" class="text editable" value="lib" id="namespace" data-validate="^[a-zA-Z_][a-zA-Z0-9_]*$" data-error="Namespace is not valid, can only contain a-z, A-Z, 0-9, _ characters and cannot start with a number">
+                <input type="text" class="text editable setting-dependent" data-dependency="outputVersion" data-when="1.0" value="lib" id="namespace" data-validate="^[a-zA-Z_][a-zA-Z0-9_]*$" data-error="Namespace is not valid, can only contain a-z, A-Z, 0-9, _ characters and cannot start with a number">
                 <div class="indent">
                     <div class="checkbox">
                         <input type="checkbox" checked="true" id="loopTimeline" />
@@ -67,13 +72,13 @@
                 <input type="text" id="imagesPath" class="text editable" value="images/">
                 <div class="indent">
                     <div class="checkbox">
-                        <input type="checkbox" checked="true" class="toggle" data-toggle="#spritesheetSize" id="spritesheets" />
+                        <input type="checkbox" checked="true" class="toggle setting-dependency" id="spritesheets" />
                         <label for="spritesheets"></label>
                     </div>
                     <label for="spritesheets">Export as Spritesheets</label>
                     <br>
                     <div class="sub-options">
-                        Spritesheet Size: <select class="small select editable" id="spritesheetSize">
+                        Spritesheet Size: <select class="small select editable setting-dependent" id="spritesheetSize" data-dependency="spritesheets" data-when="checked">
                             <option>4096</option>
                             <option>2048</option>
                             <option selected>1024</option>
@@ -81,24 +86,7 @@
                             <option>256</option>
                         </select>
                         <br>
-                        Spritesheet Scale: <input type="text" value="1.0" class="small text editable" id="spritesheetScale" data-validate="^[0-9]+\.?[0-9]*?$" data-error="Spritesheet scale must be a number.">
-                        <!--<br>
-                        Scales variants
-                        <div class="checkbox">
-                            <input type="checkbox" id="variant2" />
-                            <label for="variant2"></label>
-                        </div>
-                        <label for="variant2">&times;2</label>&nbsp;
-                        <div class="checkbox">
-                            <input type="checkbox" id="variantHalf" />
-                            <label for="variantHalf"></label>
-                        </div>
-                        <label for="variantHalf">&times;&frac12;</label>&nbsp;
-                        <div class="checkbox">
-                            <input type="checkbox" id="variantCustom" />
-                            <label for="variantCustom"></label>
-                        </div>
-                        <label for="variantCustom">&times;&frac14;</label>-->
+                        Spritesheet Scale: <input type="text" value="1.0" class="small text editable setting-dependent" id="spritesheetScale" data-dependency="spritesheets" data-when="checked" data-validate="^[0-9]+\.?[0-9]*?$" data-error="Spritesheet scale must be a number.">
                     </div>
                 </div>
             </div>
@@ -129,6 +117,12 @@
                         <label for="commonJS"></label>
                     </div>
                     <label for="commonJS">CommonJS Compatible Output</label>
+                    <br>
+                    <div class="checkbox setting-dependent" data-dependency="outputVersion" data-when="!1.0">
+                        <input type="checkbox" id="autoSetup" class="setting-dependent" data-dependency="outputVersion" data-when="!1.0" />
+                        <label for="autoSetup"></label>
+                    </div>
+                    <label for="autoSetup">Asset auto-imports runs setup</label>
                 </div>
             </div>
             <hr>

@@ -17,6 +17,7 @@ module.exports = {
     // Command to uncompress to local install folder
     // installCmd: '.\\build\\bin\\7za.exe x -y -bb0 -o"${installFolder}" "${output}"',
     installCmd: '.\\ExManCmd_win\\ExManCmd.exe /install "${output}"',
+    uninstallCmd: '.\\ExManCmd_win\\ExManCmd.exe /remove "com.jibo.PixiAnimate"',
 
     // List of gulp task to run when creating plugins
     pluginTasks: ['plugin-win-debug', 'plugin-win']
