@@ -6,6 +6,7 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const Library = require('./Library');
 const Renderer = require('./Renderer');
+const RendererLegacy = require('./RendererLegacy');
 const DataUtils = require('./utils/DataUtils');
 const SpritesheetBuilder = require('./SpritesheetBuilder');
 
@@ -24,7 +25,7 @@ let Publisher = function(dataFile, compress, debug, assetsPath)
      */
     this._dataFile = dataFile;
 
-    /** 
+    /**
      * The data published from Flash
      * @property {Object} _data
      * @private
@@ -47,7 +48,7 @@ let Publisher = function(dataFile, compress, debug, assetsPath)
      * The composer to render output
      * @property {Renderer} composer
      */
-    this.renderer = new Renderer(this.library);
+    this.renderer = this._data._meta.outputVersion == '1.0' ? new RendererLegacy(this.library) : new Renderer(this.library);
 
     /**
      * If we are running in debug mode
@@ -219,7 +220,7 @@ p.publish = function()
         // Run through uglify
         const UglifyJS = require('uglify-js');
         let result = UglifyJS.minify(buffer, {
-            fromString: true 
+            fromString: true
         });
         buffer = result.code;
     }
@@ -227,7 +228,7 @@ p.publish = function()
     {
         // Run through js beautifier
         const beautify = require('js-beautify').js_beautify;
-        buffer = beautify(buffer, { 
+        buffer = beautify(buffer, {
             indent_size: 4,
             preserve_newlines: true,
             space_after_anon_function: true,

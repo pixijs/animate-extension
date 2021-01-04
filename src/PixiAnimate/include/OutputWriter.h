@@ -179,6 +179,7 @@ namespace PixiJS
 			std::string& libsPath,
 			std::string& stageName,
 			std::string& nameSpace,
+			std::string& outputVersion,
 			bool html,
 			bool libs,
 			bool images,
@@ -186,6 +187,7 @@ namespace PixiJS
 			bool compactShapes,
 			bool compressJS,
 			bool commonJS,
+			bool autoRun,
 			bool loopTimeline,
 			bool spritesheets,
 			int spritesheetSize,
@@ -196,7 +198,7 @@ namespace PixiJS
 		// Start of a path
 		virtual FCM::Result StartDefinePath();
 
-		// End of a path 
+		// End of a path
 		virtual FCM::Result EndDefinePath();
 
 		// Start a preview for the output content for this writer
@@ -285,6 +287,8 @@ namespace PixiJS
 
 		std::string m_outputFile;
 
+		std::string m_outputVersion;
+
 		std::string m_outputDataFile;
 
 		std::string m_outputImageFolder;
@@ -312,6 +316,8 @@ namespace PixiJS
 		bool m_compressJS;
 
 		bool m_commonJS;
+
+		bool m_autoRun;
 
 		bool m_loopTimeline;
 	};

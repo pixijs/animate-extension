@@ -3,7 +3,6 @@
 const path = require('path');
 const fs = require('fs');
 const DataUtils = require('./utils/DataUtils');
-// const LibraryItem = require('./items/LibraryItem');
 
 /**
  * Buffer our the javascript
@@ -33,6 +32,12 @@ const Renderer = function(library)
     this.compress = library.meta.compressJS;
 
     /**
+     * The namespace for the javascript
+     * @property {String} nameSpace
+     */
+    this.nameSpace = library.meta.nameSpace;
+
+    /**
      * The name of the stage item
      * @property {String} stageName
      */
@@ -43,12 +48,6 @@ const Renderer = function(library)
      * @property {Boolean} commonJS
      */
     this.commonJS = library.meta.commonJS;
-
-    /**
-     * If the (ES6) output should automatically import and run setup.
-     * @property {Boolean} autoRun
-     */
-    this.autoRun = library.meta.autoRun;
 
     /**
      * If the main stage should loop
@@ -80,7 +79,7 @@ p.template = function(type, subs)
     if (!buffer)
     {
         // Load the snippet from the file system
-        buffer = fs.readFileSync(path.join(this.snippetsPath, '2.0', type + '.txt'), 'utf8');
+        buffer = fs.readFileSync(path.join(this.snippetsPath, '1.0', type + '.txt'), 'utf8');
         this._snippets[type] = buffer;
     }
 
@@ -123,38 +122,28 @@ p.getHeader = function()
 
     if (this.library.hasContainer)
     {
-        classes += "const Container = animate.Container;\n";
+        classes += "var Container = PIXI.Container;\n";
     }
 
     if (this.library.bitmaps.length)
     {
-        classes += "const Sprite = animate.Sprite;\n";
+        classes += "var Sprite = PIXI.Sprite;\n";
+        classes += "var fromFrame = PIXI.Texture.fromFrame;\n";
     }
 
     if (this.library.texts.length)
     {
-        classes += "const Text = animate.Text;\n";
+        classes += "var Text = PIXI.Text;\n";
     }
 
     if (this.library.shapes.length)
     {
-        classes += "const Graphics = animate.Graphics;\n";
+        classes += "var Graphics = PIXI.Graphics;\n";
+        classes += "var shapes = PIXI.animate.ShapesCache;\n"
     }
 
-    const meta = this.library.meta;
     // Get the header
-    return this.template('header', {
-        version: 2.0,
-        stageName: meta.stageName,
-        width: meta.width,
-        height: meta.height,
-        framerate: meta.framerate,
-        totalFrames: this.library.stage.totalFrames,
-        background: "0x" + meta.background,
-        classes: classes,
-        import: (this.autoRun && !this.commonJS) ? "import animate from 'pixi-animate';\n" : '',
-        assets: JSON.stringify(this.library.stage.assets, null, '\t')
-    });
+    return this.template('header', classes);
 };
 
 /**
@@ -183,7 +172,7 @@ p.getTimelines = function()
  */
 p.getFooter = function()
 {
-    return this.template('footer', {stageName: this.library.meta.stageName});
+    return this.template('footer', this.nameSpace);
 };
 
 /**
@@ -193,27 +182,21 @@ p.getFooter = function()
  */
 p.render = function()
 {
+    const meta = this.library.meta;
     let buffer = "";
     buffer += this.getHeader();
     buffer += this.getTimelines();
     buffer += this.getFooter();
     if (this.commonJS) {
-        buffer += this.template('commonjs');
-    }
-    else
-    {
-        let content = "";
-        if (this.autoRun) {
-            // run setup, export results
-            content = "data.setup(animate);\n";
-            for (const id in this.library._mapById) {
-                const item = this.library._mapById[id];
-                if (item.name) {// && item instanceof LibraryItem) {
-                    content += "const " + item.name + " = data.lib." + item.name + ";\nexport {" + item.name + "};\n";
-                }
-            }
-        }
-        buffer += this.template('module', content);
+        buffer += this.template('commonjs', {
+            nameSpace: this.nameSpace,
+            stageName: meta.stageName,
+            width: meta.width,
+            height: meta.height,
+            framerate: meta.framerate,
+            totalFrames: this.library.stage.totalFrames,
+            background: "0x" + meta.background
+        });
     }
     return buffer;
 };

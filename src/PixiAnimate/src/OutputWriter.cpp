@@ -69,8 +69,9 @@ namespace PixiJS
 	static const std::string moveTo = "m";
 	static const std::string lineTo = "l";
 	static const std::string quadraticCurveTo = "q";
-	static const std::string closePath = "c";
-	static const std::string addHole = "h";
+	static const std::string closePath = "cp";
+	static const std::string beginHole = "bh";
+	static const std::string endHole = "eh";
 
 	// Template
 	static const std::string html = "index.html";
@@ -128,9 +129,11 @@ namespace PixiJS
 		JSONNode meta(JSON_NODE);
 		meta.set_name("_meta");
 		meta.push_back(JSONNode("outputFile", m_outputFile));
+		meta.push_back(JSONNode("outputVersion", m_outputVersion));
 		meta.push_back(JSONNode("stageName", m_stageName));
 		meta.push_back(JSONNode("compressJS", m_compressJS));
 		meta.push_back(JSONNode("commonJS", m_commonJS));
+		meta.push_back(JSONNode("autoRun", m_autoRun));
 		meta.push_back(JSONNode("compactShapes", m_compactShapes));
 		meta.push_back(JSONNode("nameSpace", m_nameSpace));
 		meta.push_back(JSONNode("loopTimeline", m_loopTimeline));
@@ -177,7 +180,7 @@ namespace PixiJS
 		Utils::GetExtensionPath(extensionPath, m_pCallback);
 		std::string compiler = extensionPath + NODE_COMPILER;
 		std::string publish = "\"" + compiler + "\" --src \"" + m_outputDataFile + "\"";
-		
+
 #ifdef _DEBUG
 		publish += " --debug";
 #endif
@@ -543,13 +546,14 @@ namespace PixiJS
 	// Start of fill region hole
 	FCM::Result OutputWriter::StartDefineHole()
 	{
+		m_pathCmdArray->push_back(JSONNode("", beginHole));
 		return StartDefinePath();
 	}
 
 	// End of fill region hole
 	FCM::Result OutputWriter::EndDefineHole()
 	{
-		m_pathCmdArray->push_back(JSONNode("", addHole));
+		m_pathCmdArray->push_back(JSONNode("", endHole));
 		return FCM_SUCCESS;
 	}
 
@@ -1013,6 +1017,7 @@ namespace PixiJS
 		std::string& libsPath,
 		std::string& stageName,
 		std::string& nameSpace,
+		std::string& outputVersion,
 		bool html,
 		bool libs,
 		bool images,
@@ -1020,12 +1025,14 @@ namespace PixiJS
 		bool compactShapes,
 		bool compressJS,
 		bool commonJS,
+		bool autoRun,
 		bool loopTimeline,
 		bool spritesheets,
 		int spritesheetSize,
 		double spritesheetScale)
 		: m_pCallback(pCallback),
 		m_outputFile(outputFile),
+		m_outputVersion(outputVersion),
 		m_outputDataFile(basePath + outputFile + "on"),
 		m_outputImageFolder(basePath + imagesPath),
 		m_outputSoundFolder(basePath + soundsPath),
@@ -1043,6 +1050,7 @@ namespace PixiJS
 		m_compactShapes(compactShapes),
 		m_compressJS(compressJS),
 		m_commonJS(commonJS),
+		m_autoRun(autoRun),
 		m_loopTimeline(loopTimeline),
 		m_spritesheets(spritesheets),
 		m_spritesheetSize(spritesheetSize),
@@ -1130,7 +1138,7 @@ namespace PixiJS
 		std::string preview = extensionPath + PREVIEW_APP;
 		std::string cmd = "kill $(ps aux | grep '\\<.*[e]lectron.*\\> " + preview + "' | awk '{print $2}')";
 		popen(cmd.c_str(), "r");
-#endif // _WINDOWS 
+#endif // _WINDOWS
 		return res;
 	}
 

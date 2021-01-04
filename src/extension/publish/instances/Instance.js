@@ -22,13 +22,13 @@ const Instance = function(libraryItem, id)
      */
     this.id = id;
 
-    /** 
+    /**
      * The name of the item
      * @property {string} name
      */
     this.localName = "instance" + id;
 
-    /** 
+    /**
      * The instance name, if named
      * @property {string} instanceName
      */
@@ -54,13 +54,13 @@ const Instance = function(libraryItem, id)
      */
     this.libraryItem = libraryItem;
 
-    /** 
+    /**
      * Initially place the item
      * @property {Frame} initFrame
      */
     this.initFrame = null;
 
-    /** 
+    /**
      * Instance id to place after
      * @property {int} placeAfter
      */
@@ -86,7 +86,7 @@ const Instance = function(libraryItem, id)
      */
     this.renderable = true;
 
-    /** 
+    /**
      * If this instance is animated
      * @property {Boolean} isAnimated
      * @default false
@@ -143,7 +143,7 @@ p.addToFrame = function(frameIndex, command)
     frame.addCommand(command);
 
     // Remove empty frames
-    if (!Object.keys(frame).length) 
+    if (!Object.keys(frame).length)
     {
         delete this.frames[frameIndex];
     }
@@ -167,8 +167,8 @@ p.addToFrame = function(frameIndex, command)
  */
 p.getDuration = function(totalFrames)
 {
-    return this.endFrame > 0 ? 
-        this.endFrame - this.startFrame : 
+    return this.endFrame > 0 ?
+        this.endFrame - this.startFrame :
         totalFrames - this.startFrame;
 };
 
@@ -196,7 +196,7 @@ p.getFrames = function(compress)
     {
         let frame = this.frames[index];
         let cloneFrame = Object.assign({}, prevFrame, frame.toJSON());
-        
+
         // Don't touch the first frame
         if (!firstFrame)
         {
@@ -216,11 +216,11 @@ p.getFrames = function(compress)
         }
 
         // De-duplicate the animated properties
-        for (let i = 0, len = allKeys.length; i < len; i++) 
+        for (let i = 0, len = allKeys.length; i < len; i++)
         {
             let k = allKeys[i];
 
-            if (equals(prevFrame[k], frame[k])) 
+            if (equals(prevFrame[k], frame[k]))
             {
                 frame[k] = null;
             }
@@ -231,7 +231,7 @@ p.getFrames = function(compress)
         if (!keys.length)
         {
             delete this.frames[index];
-        } 
+        }
         else
         {
             // Add the animated keys
@@ -270,10 +270,10 @@ p.getFrames = function(compress)
         }
         return `"${result.join(' ')}"`;
     }
-    else 
+    else
     {
         return DataUtils.stringifySimple(this.frames);
-    }    
+    }
 };
 
 /**
@@ -320,7 +320,8 @@ function equals(a, b)
 p.renderBegin = function()
 {
     // Add the instance name line
-    return `var ${this.localName} = `;
+    const varWord = this.libraryItem.library.meta.outputVersion === "1.0" ? "var" : "const";
+    return `${varWord} ${this.localName} = `;
 };
 
 /**
@@ -342,7 +343,7 @@ p.renderEnd = function(renderer)
         buffer += this.initFrame.render(renderer);
     }
     return buffer;
-};  
+};
 
 /**
  * Render the object as a string
@@ -370,7 +371,7 @@ p.render = function(renderer, mask)
     buffer += this.renderEnd(renderer);
 
     // Add a single frame mask
-    if (mask) 
+    if (mask)
     {
         const func = renderer.compress ? 'ma' : 'setMask';
         buffer += `.${func}(${mask})`;

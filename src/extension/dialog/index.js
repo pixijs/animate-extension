@@ -22,7 +22,7 @@
     var $compactShapes = $("#compactShapes");
     var $compressJS = $("#compressJS");
     var $commonJS = $("#commonJS");
-    var $autoSetup = $("#autoSetup");
+    var $autoRun = $("#autoRun");
     var $namespace = $("#namespace");
     var $stageName = $("#stageName");
     var $html = $("#html");
@@ -123,7 +123,7 @@
             $compactShapes.checked = ifBoolOr(data[SETTINGS + "CompactShapes"], true);
             $compressJS.checked = ifBoolOr(data[SETTINGS + "CompressJS"], true);
             $commonJS.checked = ifBoolOr(data[SETTINGS + "CommonJS"], false);
-            $autoSetup.checked = ifBoolOr(data[SETTINGS + "AutoSetup"], false);
+            $autoRun.checked = ifBoolOr(data[SETTINGS + "AutoRun"], false);
             $html.checked = ifBoolOr(data[SETTINGS + "HTML"], true);
             $libs.checked = ifBoolOr(data[SETTINGS + "Libs"], true);
             $images.checked = ifBoolOr(data[SETTINGS + "Images"], true);
@@ -179,7 +179,7 @@
         data[SETTINGS + "CompactShapes"] = $compactShapes.checked.toString();
         data[SETTINGS + "CompressJS"] = $compressJS.checked.toString();
         data[SETTINGS + "CommonJS"] = $commonJS.checked.toString();
-        data[SETTINGS + "AutoSetup"] = $autoSetup.value.toString();
+        data[SETTINGS + "AutoRun"] = $autoRun.checked.toString();
         data[SETTINGS + "HTML"] = $html.checked.toString();
         data[SETTINGS + "Libs"] = $libs.checked.toString();
         data[SETTINGS + "Images"] = $images.checked.toString();
