@@ -3,5 +3,5 @@
 				super({ mode: mode, duration: ${duration}, loop: false });
 				${contents}
 			}
-		});
+		};
 
