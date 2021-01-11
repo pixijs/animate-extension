@@ -500,7 +500,7 @@ namespace PixiJS
 		if (libs)
 		{
 			// We are now going to copy the runtime from the zxp package to the output folder.
-			CopyRuntime(basePath + libsPath, compressJS);
+			CopyRuntime(basePath + libsPath, compressJS, outputVersion);
 		}
 
 		if (previewNeeded)
@@ -753,7 +753,7 @@ namespace PixiJS
 	}
 
 
-	FCM::Result CPublisher::CopyRuntime(const std::string& outputFolder, const bool& compressJS)
+	FCM::Result CPublisher::CopyRuntime(const std::string& outputFolder, const bool& compressJS, const std::string& outputVersion)
 	{
 		FCM::Result res;
 		std::string runtimeFolder;
@@ -768,11 +768,25 @@ namespace PixiJS
 		// Copy the runtime folder
 		if (!compressJS)
 		{
-			runtimeFolder = RUNTIME_ROOT_FOLDER_NAME_DEBUG;
+			if (outputVersion == "1.0")
+			{
+				runtimeFolder = RUNTIME_ROOT_FOLDER_NAME_DEBUG_LEGACY;
+			}
+			else
+			{
+				runtimeFolder = RUNTIME_ROOT_FOLDER_NAME_DEBUG;
+			}
 		}
 		else
 		{
-			runtimeFolder = RUNTIME_ROOT_FOLDER_NAME;
+			if (outputVersion == "1.0")
+			{
+				runtimeFolder = RUNTIME_ROOT_FOLDER_NAME_LEGACY;
+			}
+			else
+			{
+				runtimeFolder = RUNTIME_ROOT_FOLDER_NAME;
+			}
 		}
 		res = Utils::CopyDir(sourceFolder + runtimeFolder, outputFolder, GetCallback());
 

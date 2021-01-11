@@ -32,6 +32,9 @@ let Publisher = function(dataFile, compress, debug, assetsPath)
      */
     this._data = JSON.parse(fs.readFileSync(dataFile, "utf8"));
 
+    let outputFile = path.join(process.cwd(), this._data._meta.outputFile + 'on');
+    fs.writeFileSync(outputFile, JSON.stringify(this._data, null, 4));
+
     // override the compress
     if (compress)
     {

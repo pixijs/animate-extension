@@ -11,14 +11,17 @@
         <canvas id="stage" width="${width}" height="${height}"></canvas>
         <script src="${libsPath}pixi.min.js"></script>
         <script src="${libsPath}pixi-animate.min.js"></script>
-        <script src="${outputFile}"></script>
-        <script>
-            var scene = new PIXI.animate.Scene(${width}, ${height}, {
+        <script type="module">
+            import data from './${outputFile}';
+            var scene = new PIXI.animate.Scene({
                 view: document.getElementById("stage"),
+                width: ${width},
+                height: ${height},
                 backgroundColor: 0x${background},
                 antialias: true
             });
-            scene.load(${nameSpace}.${stageName});
+            data.setup(PIXI.animate);
+            scene.load(data);
         </script>
     </body>
 </html>

@@ -27,14 +27,20 @@ module.exports = {
     runtimeOutput: 'com.jibo.PixiAnimate/runtime',
     runtimeDebugOutput: 'com.jibo.PixiAnimate/runtime-debug',
     runtimeResources: [
-        'node_modules/pixi.js/dist/pixi.min.js',
-        'node_modules/pixi-animate/dist/pixi-animate.min.js'
+        'node_modules/pixi.js-4/dist/pixi.min.js',
+        'node_modules/pixi-animate-1/dist/pixi-animate.min.js',
+        'node_modules/pixi.js-6/dist/browser/pixi.min.js',
+        'node_modules/pixi-animate-2/dist/pixi-animate.min.js'
     ],
     runtimeDebugResources: [
-        'node_modules/pixi.js/dist/pixi.js',
-        'node_modules/pixi.js/dist/pixi.js.map',
-        'node_modules/pixi-animate/dist/pixi-animate.js',
-        'node_modules/pixi-animate/dist/pixi-animate.js.map'
+        'node_modules/pixi.js-4/dist/pixi.js',
+        'node_modules/pixi.js-4/dist/pixi.js.map',
+        'node_modules/pixi-animate-1/dist/pixi-animate.js',
+        'node_modules/pixi-animate-1/dist/pixi-animate.js.map',
+        'node_modules/pixi.js-6/dist/browser/pixi.js',
+        'node_modules/pixi.js-6/dist/browser/pixi.js.map',
+        'node_modules/pixi-animate-2/dist/pixi-animate.js',
+        'node_modules/pixi-animate-2/dist/pixi-animate.js.map'
     ],
 
     // The files to source when running watch
