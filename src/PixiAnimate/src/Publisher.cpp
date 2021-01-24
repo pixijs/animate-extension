@@ -75,6 +75,10 @@
 #include <algorithm>
 #include "PluginConfiguration.h"
 
+#include "IFrame.h"
+#include "ILayer.h"
+#include "DOM/Service/Tween/ITweenInfoService.h"
+
 namespace PixiJS
 {
 
@@ -423,11 +427,53 @@ namespace PixiJS
 			// Generate frame commands for each timeline
 			for (FCM::U_Int32 i = 0; i < timelineCount; i++)
 			{
+
 				Exporter::Service::RANGE range;
 				AutoPtr<ITimelineBuilder> timelineBuilder;
 				ITimelineWriter* timelineWriter;
 
 				AutoPtr<DOM::ITimeline> timeline = timelineList[i];
+
+				//declare the service and dictionary
+				FCM::PIFCMList pTweenInfoList;
+				FCM::AutoPtr<DOM::Service::Tween::ITweenInfoService> pTweenInfoService;
+				FCMListPtr pLayerList;
+				timeline->GetLayers(pLayerList.m_Ptr);
+				AutoPtr<DOM::ILayer> firstLayer = pLayerList[0];
+				AutoPtr<FCM::IFCMUnknown> pLayerType;
+				firstLayer->GetLayerType(pLayerType.m_Ptr);
+				AutoPtr<DOM::Layer::ILayerNormal> normalLayer = pLayerType;
+				FCMListPtr pKeyFrameList;
+				normalLayer->GetKeyFrames(pKeyFrameList.m_Ptr);
+				AutoPtr<DOM::IFrame> firstFrame = pKeyFrameList[0];
+				// Get the tweenInfo service.
+				FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
+				res = GetCallback()->GetService(DOM::Service::Tween::TWEENINFO_SERVICE, pUnk.m_Ptr);
+				if (FCM_FAILURE_CODE(res))
+				{
+					Utils::Trace(GetCallback(), "Failed to get Tween service");
+					return res;
+				}
+				pTweenInfoService = pUnk;
+				//call GetFrameTweenInfo method on pTweenInfoService to get the tween info
+				//dictionary
+				FCM:U_Int32 duration;
+				firstFrame->GetDuration(duration);
+				Utils::Trace(GetCallback(), "first frame duration? %s\n", Utils::ToString(spritesheetSize).c_str());
+				res = pTweenInfoService->GetFrameTweenInfo(firstFrame, pTweenInfoList);
+				if (FCM_FAILURE_CODE(res))
+				{
+					Utils::Trace(GetCallback(), "Failed to get FrameTweenInfo");
+				}
+				else
+				{
+					// get the dictionary from the list
+					FCM::AutoPtr<IFCMDictionary> pTweenDictionary;
+					pTweenDictionary = (*pTweenInfoList)[0];
+					std::string tweenType;
+					Utils::ReadString(pTweenDictionary, kTweenKey_TweenType, tweenType);
+					Utils::Trace(GetCallback(), "TWEEN TYPE: %s\n", tweenType.c_str());
+				}
 
 				range.min = 0;
 				res = timeline->GetMaxFrameCount(range.max);

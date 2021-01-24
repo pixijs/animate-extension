@@ -168,7 +168,7 @@ p.destroy = function()
 {
     if (!this.debug)
     {
-        fs.unlinkSync(this._dataFile);
+        // fs.unlinkSync(this._dataFile);
     }
     this._data = null;
 
