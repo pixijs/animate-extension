@@ -1,7 +1,15 @@
+body, html {
+    height: 100%;
+}
+
 .dialog {
-    width:360px;
-    margin:15px auto 0;
+    height: calc(100% - 30px);
+    width: 380px;
+    margin: 15px 0 0 20px;
     text-align:left;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .dialog-row {
@@ -11,6 +19,7 @@
 
 .dialog-row.right {
     text-align:right;
+    margin-right: 20px;
 }
 
 .dialog-row .side {
@@ -110,6 +119,11 @@ html * {
     user-select: none;
 }
 
+.scrollable {
+    overflow-y: auto;
+    flex-shrink: 1;
+    flex-grow: 1;
+}
 
 .text, .select {
     border:1px solid rgba(0,0,0,0.9);
@@ -144,6 +158,10 @@ body.dark .select {
 body.light .text,
 body.light .select {
     background-color:#ebeaea;
+}
+
+.hidden {
+    display: none !important;
 }
 
 .text.disabled,

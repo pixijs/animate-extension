@@ -13,7 +13,7 @@
 			<Locale Code="All" />
 		</LocaleList>
 		<RequiredRuntimeList>
-			<RequiredRuntime Name="CSXS" Version="6.0" />
+			<RequiredRuntime Name="CSXS" Version="9.0" />
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
@@ -34,7 +34,7 @@
 					<Type>ModalDialog</Type>
 					<Geometry>
 						<Size>
-							<Height>640</Height>
+							<Height>580</Height>
 							<Width>400</Width>
 						</Size>
 					</Geometry>
