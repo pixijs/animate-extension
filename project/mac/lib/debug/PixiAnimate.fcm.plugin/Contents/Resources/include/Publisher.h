@@ -145,7 +145,7 @@ namespace PixiJS
 
 		FCM::Result ExportLibraryItems(FCM::FCMListPtr pLibraryItemList);
 
-		FCM::Result CopyRuntime(const std::string& outputFolder, const bool& compressJS);
+		FCM::Result CopyRuntime(const std::string& outputFolder, const bool& compressJS, const std::string& outputVersion);
 
 	private:
 
