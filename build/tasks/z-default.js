@@ -39,7 +39,11 @@ module.exports = function(gulp, options, plugins) {
         'plugin-copy-mac',
         'plugin-copy-win',
         'package',
-        'clean-stage'
+        'clean-stage',
+        // now that the custom plugin has been built, package it further with some JSFL scripts
+        'stage2',
+        'package2',
+        'clean-stage',
     );
 
     if (install) {
