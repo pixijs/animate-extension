@@ -147,7 +147,7 @@
             $spritesheetSize.value = data[SETTINGS + "SpritesheetSize"] || 1024;
             $spritesheetScale.value = data[SETTINGS + "SpritesheetScale"] || 1.0;
 
-            $outputVersion.value = data[SETTINGS + "OutputVersion"] || "1.0";
+            $outputVersion.value = data[SETTINGS + "OutputVersion"] || "2.0";
 
             var dependencies = $$('.setting-dependency');
             for (var i = 0, len = dependencies.length; i < len; i++) {
@@ -230,6 +230,7 @@
     function handleChanges()
     {
         var dependents = $$('.setting-dependent');
+        var disabled;
         for (var i = 0, len = dependents.length; i < len; i++) {
             var dependent = dependents[i];
             if (dependent.dataset.dependency !== this.id) {
@@ -237,18 +238,17 @@
             }
             var when = dependent.dataset.when;
             if (when === 'checked') {
-                dependent.disabled = !this.checked;
-                dependent.className = dependent.className.replace('disabled', '');
-                if (dependent.disabled) {
-                    dependent.className += " disabled";
+                disabled = !this.checked;
+                dependent.className = dependent.className.replace('hidden', '');
+                if (disabled) {
+                    dependent.className += " hidden";
                 }
             }
             else {
-                console.log('when:', when, 'substring', when.substring(1));
-                dependent.disabled = when.indexOf('!') === 0 ? this.value === when.substring(1) : this.value !== when;
-                dependent.className = dependent.className.replace('disabled', '');
-                if (dependent.disabled) {
-                    dependent.className += " disabled";
+                disabled = when.indexOf('!') === 0 ? this.value === when.substring(1) : this.value !== when;
+                dependent.className = dependent.className.replace('hidden', '');
+                if (disabled) {
+                    dependent.className += " hidden";
                 }
             }
         }

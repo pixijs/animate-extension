@@ -102,3 +102,5 @@ gulp --plugin --install
 ```
 
 Now use the ZXP utility for windows to install the **PixiAnimate.zxp** plugin for Adobe Animate CC 2015, make sure to remove the existing plugin before install
+
+### Note on JSFL scripts - they are taken from [Springroll's Flash Toolkit](https://github.com/SpringRoll/FlashToolkit), as the used scripts are very relevant for optimization of Pixi Animate content.

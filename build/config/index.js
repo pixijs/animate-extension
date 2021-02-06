@@ -7,7 +7,8 @@ module.exports = {
     pattern: ['build/tasks/*.js'],
 
     // Contains the project folder
-    projectContent: ['extension/**/*'],
+    projectContent: ['extension/plugin/**/*'],
+    projectContent2: ['extension/hybrid/**/*', 'assets/logo.png'],
 
     // Temporary staging folder
     bundleId: 'com.jibo.PixiAnimate',
@@ -47,10 +48,10 @@ module.exports = {
     watchFiles: [
         './**/*.*',
         '!node_modules/**',
-        '!extension/node_modules/**',
+        '!extension/plugin/node_modules/**',
         '!com.jibo.PixiAnimate',
-        '!extension/dialog/cep/**',
-        '!extension/bin'
+        '!extension/plugin/dialog/cep/**',
+        '!extension/plugin/bin'
     ],
 
     // The files to include for JS linting
