@@ -459,7 +459,7 @@ namespace PixiJS
 				//dictionary
 				FCM:U_Int32 duration;
 				firstFrame->GetDuration(duration);
-				Utils::Trace(GetCallback(), "first frame duration? %s\n", Utils::ToString(spritesheetSize).c_str());
+				Utils::Trace(GetCallback(), "first frame duration? %s\n", Utils::ToString(duration).c_str());
 				res = pTweenInfoService->GetFrameTweenInfo(firstFrame, pTweenInfoList);
 				if (FCM_FAILURE_CODE(res))
 				{
