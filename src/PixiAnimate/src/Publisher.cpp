@@ -435,7 +435,6 @@ namespace PixiJS
 				AutoPtr<DOM::ITimeline> timeline = timelineList[i];
 
 				//declare the service and dictionary
-				FCM::PIFCMList pTweenInfoList;
 				FCM::AutoPtr<DOM::Service::Tween::ITweenInfoService> pTweenInfoService;
 				FCMListPtr pLayerList;
 				timeline->GetLayers(pLayerList.m_Ptr);
@@ -460,19 +459,31 @@ namespace PixiJS
 				FCM:U_Int32 duration;
 				firstFrame->GetDuration(duration);
 				Utils::Trace(GetCallback(), "first frame duration? %s\n", Utils::ToString(duration).c_str());
-				res = pTweenInfoService->GetFrameTweenInfo(firstFrame, pTweenInfoList);
+				FCM::PIFCMList frameElements;
+				res = firstFrame->GetFrameElements(frameElements);
 				if (FCM_FAILURE_CODE(res))
 				{
-					Utils::Trace(GetCallback(), "Failed to get FrameTweenInfo");
+					Utils::Trace(GetCallback(), "Failed to get frame elements: %i", res);
 				}
 				else
 				{
-					// get the dictionary from the list
-					FCM::AutoPtr<IFCMDictionary> pTweenDictionary;
-					pTweenDictionary = (*pTweenInfoList)[0];
-					std::string tweenType;
-					Utils::ReadString(pTweenDictionary, kTweenKey_TweenType, tweenType);
-					Utils::Trace(GetCallback(), "TWEEN TYPE: %s\n", tweenType.c_str());
+					AutoPtr<FCM::IFCMList> pTweenInfoList;
+					FCM::PIFCMUnknown unknownElement = (*frameElements)[0];
+					DOM::FrameElement::PIFrameDisplayElement element = (DOM::FrameElement::PIFrameDisplayElement)unknownElement;
+					res = pTweenInfoService->GetElementTweenInfo(GetCallback(), element, pTweenInfoList.m_Ptr);
+					if (FCM_FAILURE_CODE(res))
+					{
+						Utils::Trace(GetCallback(), "Failed to get FrameTweenInfo: %i", res);
+					}
+					else
+					{
+						// get the dictionary from the list
+						FCM::AutoPtr<IFCMDictionary> pTweenDictionary;
+						pTweenDictionary = (*pTweenInfoList)[0];
+						std::string tweenType;
+						Utils::ReadString(pTweenDictionary, kTweenKey_TweenType, tweenType);
+						Utils::Trace(GetCallback(), "TWEEN TYPE: %s\n", tweenType.c_str());
+					}
 				}
 
 				range.min = 0;
