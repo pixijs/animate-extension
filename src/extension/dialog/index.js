@@ -21,8 +21,7 @@
     var $libsPath = $("#libsPath");
     var $compactShapes = $("#compactShapes");
     var $compressJS = $("#compressJS");
-    var $commonJS = $("#commonJS");
-    var $autoRun = $("#autoRun");
+    var $outputFormat = $("#outputFormat");
     var $namespace = $("#namespace");
     var $stageName = $("#stageName");
     var $html = $("#html");
@@ -122,8 +121,6 @@
             // Booleans options
             $compactShapes.checked = ifBoolOr(data[SETTINGS + "CompactShapes"], true);
             $compressJS.checked = ifBoolOr(data[SETTINGS + "CompressJS"], true);
-            $commonJS.checked = ifBoolOr(data[SETTINGS + "CommonJS"], false);
-            $autoRun.checked = ifBoolOr(data[SETTINGS + "AutoRun"], false);
             $html.checked = ifBoolOr(data[SETTINGS + "HTML"], true);
             $libs.checked = ifBoolOr(data[SETTINGS + "Libs"], true);
             $images.checked = ifBoolOr(data[SETTINGS + "Images"], true);
@@ -148,6 +145,14 @@
             $spritesheetScale.value = data[SETTINGS + "SpritesheetScale"] || 1.0;
 
             $outputVersion.value = data[SETTINGS + "OutputVersion"] || "2.0";
+
+            var outputFormat = data[SETTINGS + "OutputFormat"];
+            var oldCommonJS = ifBoolOr(data[SETTINGS + "CommonJS"], false);
+            if (!outputFormat)
+            {
+                outputFormat = oldCommonJS ? 'cjs' : 'es6';
+            }
+            $outputFormat.value = outputFormat;
 
             var dependencies = $$('.setting-dependency');
             for (var i = 0, len = dependencies.length; i < len; i++) {
@@ -178,8 +183,6 @@
         // Booleans
         data[SETTINGS + "CompactShapes"] = $compactShapes.checked.toString();
         data[SETTINGS + "CompressJS"] = $compressJS.checked.toString();
-        data[SETTINGS + "CommonJS"] = $commonJS.checked.toString();
-        data[SETTINGS + "AutoRun"] = $autoRun.checked.toString();
         data[SETTINGS + "HTML"] = $html.checked.toString();
         data[SETTINGS + "Libs"] = $libs.checked.toString();
         data[SETTINGS + "Images"] = $images.checked.toString();
@@ -199,6 +202,7 @@
         data[SETTINGS + "SpritesheetScale"] = $spritesheetScale.value.toString();
 
         data[SETTINGS + "OutputVersion"] = $outputVersion.value.toString();
+        data[SETTINGS + "OutputFormat"] = $outputFormat.value.toString();
 
         // Global options
         data["PublishSettings.IncludeInvisibleLayer"] = $hiddenLayers.checked.toString();
@@ -250,6 +254,17 @@
                 if (disabled) {
                     dependent.className += " hidden";
                 }
+            }
+        }
+        // do a quick check for output format, because it is complicated
+        if ($outputVersion.value === '1.0') {
+            if ($outputFormat.value.indexOf('es6') > -1) {
+                $outputFormat.value = 'es5';
+            }
+        }
+        else {
+            if ($outputFormat.value === 'es5') {
+                $outputFormat.value = 'es6';
             }
         }
     }

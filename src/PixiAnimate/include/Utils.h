@@ -123,6 +123,7 @@ namespace PixiJS
 
 #define DICT_OUTPUT_FILE      "PublishSettings.PixiJS.OutputFile"
 #define DICT_VERSION          "PublishSettings.PixiJS.OutputVersion"
+#define DICT_OUTPUT_FORMAT    "PublishSettings.PixiJS.OutputFormat"
 #define DICT_HTML_PATH        "PublishSettings.PixiJS.HTMLPath"
 #define DICT_LIBS_PATH        "PublishSettings.PixiJS.LibsPath"
 #define DICT_IMAGES_PATH      "PublishSettings.PixiJS.ImagesPath"
@@ -135,8 +136,6 @@ namespace PixiJS
 #define DICT_SPRITESHEETS     "PublishSettings.PixiJS.Spritesheets"
 #define DICT_COMPACT_SHAPES   "PublishSettings.PixiJS.CompactShapes"
 #define DICT_COMPRESS_JS      "PublishSettings.PixiJS.CompressJS"
-#define DICT_COMMON_JS        "PublishSettings.PixiJS.CommonJS"
-#define DICT_AUTORUN          "PublishSettings.PixiJS.AutoRun"
 #define DICT_HTML             "PublishSettings.PixiJS.HTML"
 #define DICT_LIBS             "PublishSettings.PixiJS.Libs"
 #define DICT_IMAGES           "PublishSettings.PixiJS.Images"
