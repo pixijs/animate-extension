@@ -483,6 +483,64 @@ namespace PixiJS
 						std::string tweenType;
 						Utils::ReadString(pTweenDictionary, kTweenKey_TweenType, tweenType);
 						Utils::Trace(GetCallback(), "TWEEN TYPE: %s\n", tweenType.c_str());
+						if (tweenType == "geometric")
+						{
+							DOM::PIFCMDictionary xProp = NULL;
+							FCM::U_Int32 len = sizeof(DOM::PIFCMDictionary);
+							FCM::FCMDictRecTypeID type = kFCMDictType_Dict;
+							/*res = pTweenDictionary->GetInfo("Position_X", type, len);
+							if (FCM_FAILURE_CODE(res))
+							{
+								Utils::Trace(GetCallback(), "Failed to get X position info: %i\n", res);
+							}
+							else
+							{
+								Utils::Trace(GetCallback(), "Got x position info!\n");
+							}*/
+							res = pTweenDictionary->Get("Position_X", type, (FCM::PVoid)&xProp, len);
+							if (FCM_FAILURE_CODE(res))
+							{
+								Utils::Trace(GetCallback(), "Failed to get X movement: %i\n", res);
+							}
+							else
+							{
+								Utils::Trace(GetCallback(), "Got x position!\n");
+								FCM::U_Int32 floatSize = sizeof(FCM::Float);
+
+								DOM::PIFCMDictionary xStates = NULL;
+								res = xProp->Get("States", kFCMDictType_Dict, (FCM::PVoid)&xStates, len);
+								if (FCM_FAILURE_CODE(res))
+								{
+									Utils::Trace(GetCallback(), "Failed to get X states: %i\n", res);
+								}
+								else
+								{
+									FCM::Float start;
+									xStates->Get("Start", kFCMDictType_Float, (FCM::PVoid)&start, floatSize);
+									Utils::Trace(GetCallback(), "Start X: %d\n", start);
+									FCM::Float end;
+									xStates->Get("Start", kFCMDictType_Float, (FCM::PVoid)&end, floatSize);
+									Utils::Trace(GetCallback(), "End X: %d\n", end);
+								}
+
+								DOM::PIFCMDictionary xEase = NULL;
+								res = xProp->Get("Easing", kFCMDictType_Dict, (FCM::PVoid)&xEase, len);
+								if (FCM_FAILURE_CODE(res))
+								{
+									Utils::Trace(GetCallback(), "Failed to get X easing: %i\n", res);
+								}
+								else
+								{
+									std::string easeType;
+									Utils::ReadString(pTweenDictionary, "Type", easeType);
+									Utils::Trace(GetCallback(), "TWEEN TYPE: %s\n", tweenType.c_str());
+
+									FCM::Float strength;
+									xStates->Get("Strength", kFCMDictType_Float, (FCM::PVoid)&strength, floatSize);
+									Utils::Trace(GetCallback(), "Tween strength: %d\n", strength);
+								}
+							}
+						}
 					}
 				}
 

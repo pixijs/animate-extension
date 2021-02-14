@@ -127,6 +127,7 @@ namespace PixiJS
 		m_pRootNode->push_back(*m_pSoundArray);
 		m_pRootNode->push_back(*m_pTextArray);
 		m_pRootNode->push_back(*m_pTimelineArray);
+		m_pRootNode->push_back(*m_pTweenArray);
 
 		JSONNode meta(JSON_NODE);
 		meta.set_name("_meta");
@@ -1102,6 +1103,10 @@ namespace PixiJS
 		ASSERT(m_pSoundArray);
 		m_pSoundArray->set_name("Sounds");
 		m_strokeStyle.type = INVALID_STROKE_STYLE_TYPE;
+
+		m_pTweenArray = new JSONNode(JSON_ARRAY);
+		ASSERT(m_pTweenArray);
+		m_pTweenArray->set_name("Tweens");
 	}
 
 	OutputWriter::~OutputWriter()
@@ -1112,6 +1117,7 @@ namespace PixiJS
 		delete m_pShapeArray;
 		delete m_pTextArray;
 		delete m_pRootNode;
+		delete m_pTweenArray;
 	}
 
 	FCM::Result OutputWriter::StartPreview(FCM::PIFCMCallback pCallback)

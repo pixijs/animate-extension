@@ -229,6 +229,8 @@ namespace PixiJS
 
 		JSONNode* m_pTextArray;
 
+		JSONNode* m_pTweenArray;
+
 		JSONNode*  m_shapeElem;
 
 		JSONNode*  m_pathArray;
