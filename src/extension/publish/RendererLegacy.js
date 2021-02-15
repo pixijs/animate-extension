@@ -47,7 +47,7 @@ const Renderer = function(library)
      * If the output should be Common JavaScript compatible
      * @property {Boolean} commonJS
      */
-    this.commonJS = library.meta.commonJS;
+    this.commonJS = library.meta.outputVersion === 'cjs';
 
     /**
      * If the main stage should loop

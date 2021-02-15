@@ -36,6 +36,15 @@
                         </div>
                         <label for="loopTimeline">Loop timeline</label>
                     </div>
+                    <div class="side">Output Format</div>
+                    <select class="select editable" id="outputFormat">
+                        <option value="es5" class="setting-dependent" data-dependency="outputVersion" data-when="1.0">Without CommonJS
+                            export</option>
+                        <option value="cjs">CommonJS</option>
+                        <option value="es6" class="setting-dependent" data-dependency="outputVersion" data-when="!1.0" selected>ES6</option>
+                        <option value="es6a" class="setting-dependent" data-dependency="outputVersion" data-when="!1.0">ES6 with autorun &
+                            class exports</option>
+                    </select>
                 </div>
                 <h2>Asset Export Options</h2>
                 <div class="dialog-row">
@@ -112,18 +121,6 @@
                             <label for="compressJS"></label>
                         </div>
                         <label for="compressJS">Compress Output JavaScript</label>
-                        <br>
-                        <div class="checkbox">
-                            <input type="checkbox" id="commonJS" />
-                            <label for="commonJS"></label>
-                        </div>
-                        <label for="commonJS">CommonJS Compatible Output</label>
-                        <br>
-                        <div class="checkbox setting-dependent" data-dependency="outputVersion" data-when="!1.0">
-                            <input type="checkbox" id="autoRun" />
-                            <label for="autoRun"></label>
-                        </div>
-                        <label for="autoRun" class="setting-dependent" data-dependency="outputVersion" data-when="!1.0">Asset auto-imports and runs setup</label>
                     </div>
                 </div>
             </div>

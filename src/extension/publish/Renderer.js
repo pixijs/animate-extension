@@ -39,16 +39,10 @@ const Renderer = function(library)
     this.stageName = library.meta.stageName;
 
     /**
-     * If the output should be Common JavaScript compatible
-     * @property {Boolean} commonJS
+     * How the output should be handled.
+     * @property {string} outputFormat
      */
-    this.commonJS = library.meta.commonJS;
-
-    /**
-     * If the (ES6) output should automatically import and run setup.
-     * @property {Boolean} autoRun
-     */
-    this.autoRun = library.meta.autoRun;
+    this.outputFormat = library.meta.outputFormat;
 
     /**
      * If the main stage should loop
@@ -152,7 +146,7 @@ p.getHeader = function()
         totalFrames: this.library.stage.totalFrames,
         background: "0x" + meta.background,
         classes: classes,
-        import: (this.autoRun && !this.commonJS) ? "import animate from 'pixi-animate';\n" : '',
+        import: this.outputFormat === 'es6a' ? "import animate from 'pixi-animate';\n" : '',
         assets: JSON.stringify(this.library.stage.assets, null, '\t')
     });
 };
@@ -197,13 +191,13 @@ p.render = function()
     buffer += this.getHeader();
     buffer += this.getTimelines();
     buffer += this.getFooter();
-    if (this.commonJS) {
+    if (this.outputFormat === 'cjs') {
         buffer += this.template('commonjs');
     }
     else
     {
         let content = "";
-        if (this.autoRun) {
+        if (this.outputFormat === 'es6a') {
             // run setup, export results
             content = "data.setup(animate);\n";
             for (const id in this.library._mapById) {

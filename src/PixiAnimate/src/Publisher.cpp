@@ -225,8 +225,6 @@ namespace PixiJS
 		bool sounds(true);
 		bool compactShapes(true);
 		bool compressJS(true);
-		bool commonJS(false);
-		bool autoRun(false);
 		bool loopTimeline(true);
 		bool previewNeeded(false);
 		bool spritesheets(true);
@@ -240,6 +238,7 @@ namespace PixiJS
 		std::string imagesPath("images/");
 		std::string soundsPath("sounds/");
 		std::string outputVersion;
+		std::string outputFormat("es6");
 
 		// Sanitize the stage name for JavaScript
 		Utils::GetJavaScriptName(outputFile, stageName);
@@ -253,11 +252,10 @@ namespace PixiJS
 		Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_SOUNDS, sounds);
 		Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPACT_SHAPES, compactShapes);
 		Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMPRESS_JS, compressJS);
-		Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_COMMON_JS, commonJS);
-		Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_AUTORUN, autoRun);
 		Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_LOOP_TIMELINE, loopTimeline);
 		Utils::ReadStringToBool(publishSettings, (FCM::StringRep8)DICT_SPRITESHEETS, spritesheets);
 		Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_VERSION, outputVersion);
+		Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_OUTPUT_FORMAT, outputFormat);
 		Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_LIBS_PATH, libsPath);
 		Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_IMAGES_PATH, imagesPath);
 		Utils::ReadString(publishSettings, (FCM::StringRep8)DICT_SOUNDS_PATH, soundsPath);
@@ -284,12 +282,11 @@ namespace PixiJS
 		Utils::Trace(GetCallback(), "Export relative to %s\n", basePath.c_str());
 		Utils::Trace(GetCallback(), " -> Output file : %s\n", outputFile.c_str());
 		Utils::Trace(GetCallback(), " -> Output Version : %s\n", outputVersion.c_str());
+		Utils::Trace(GetCallback(), " -> Output Format : %s\n", outputFormat.c_str());
 		Utils::Trace(GetCallback(), " -> Namespace : %s\n", nameSpace.c_str());
 		Utils::Trace(GetCallback(), " -> Stage Name : %s\n", stageName.c_str());
 		Utils::Trace(GetCallback(), " -> Compact Shapes : %s\n", Utils::ToString(compactShapes).c_str());
 		Utils::Trace(GetCallback(), " -> Compress JS : %s\n", Utils::ToString(compressJS).c_str());
-		Utils::Trace(GetCallback(), " -> Common JS : %s\n", Utils::ToString(commonJS).c_str());
-		Utils::Trace(GetCallback(), " -> Auto Run : %s\n", Utils::ToString(autoRun).c_str());
 		Utils::Trace(GetCallback(), " -> Loop Timeline : %s\n", Utils::ToString(loopTimeline).c_str());
         if (html)
         {
@@ -331,14 +328,13 @@ namespace PixiJS
 			stageName,
 			nameSpace,
 			outputVersion,
+			outputFormat,
 			html,
 			libs,
 			images,
 			sounds,
 			compactShapes,
 			compressJS,
-			commonJS,
-			autoRun,
 			loopTimeline,
 			spritesheets,
 			spritesheetSize,
