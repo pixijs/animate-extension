@@ -452,7 +452,7 @@ namespace PixiJS
 
 				((TimelineBuilder*)timelineBuilder.m_Ptr)->Build(0, NULL, &timelineWriter);
 
-				m_pTweenWriter->ReadTimeline(timeline.m_Ptr, "__STAGE");
+				m_pTweenWriter->ReadTimeline(timeline.m_Ptr, stageName);
 			}
 
 			outputWriter->AddTweens(m_pTweenWriter->GetRoot());

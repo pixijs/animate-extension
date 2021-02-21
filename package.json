@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "gulp --plugin",
-    "buildAndInstall": "gulp --plugin --install",
+    "buildAndInstall": "gulp --plugin --install"
   },
   "license": "UNLICENSED",
   "dependencies": {
