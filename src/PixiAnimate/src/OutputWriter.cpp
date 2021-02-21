@@ -120,6 +120,11 @@ namespace PixiJS
 		return FCM_SUCCESS;
 	}
 
+	void OutputWriter::AddTweens(JSONNode* tweens)
+	{
+		m_pTweenArray = tweens;
+	}
+
 	FCM::Result OutputWriter::EndDocument()
 	{
 		m_pRootNode->push_back(*m_pShapeArray);
@@ -1100,10 +1105,6 @@ namespace PixiJS
 		ASSERT(m_pSoundArray);
 		m_pSoundArray->set_name("Sounds");
 		m_strokeStyle.type = INVALID_STROKE_STYLE_TYPE;
-
-		m_pTweenArray = new JSONNode(JSON_ARRAY);
-		ASSERT(m_pTweenArray);
-		m_pTweenArray->set_name("Tweens");
 	}
 
 	OutputWriter::~OutputWriter()

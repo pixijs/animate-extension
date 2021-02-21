@@ -75,10 +75,6 @@
 #include <algorithm>
 #include "PluginConfiguration.h"
 
-#include "IFrame.h"
-#include "ILayer.h"
-#include "DOM/Service/Tween/ITweenInfoService.h"
-
 namespace PixiJS
 {
 
@@ -86,12 +82,11 @@ namespace PixiJS
 
 	CPublisher::CPublisher()
 	{
-
 	}
 
 	CPublisher::~CPublisher()
 	{
-
+		delete m_pTweenWriter;
 	}
 
 
@@ -131,6 +126,8 @@ namespace PixiJS
 		FCM::AutoPtr<FCM::IFCMCalloc> pCalloc;
 
 		Init();
+
+		m_pTweenWriter = new PixiJS::TweenWriter(GetCallback());
 
 		pCalloc = PixiJS::Utils::GetCallocService(GetCallback());
 		ASSERT(pCalloc.m_Ptr != NULL);
@@ -430,116 +427,6 @@ namespace PixiJS
 
 				AutoPtr<DOM::ITimeline> timeline = timelineList[i];
 
-				//declare the service and dictionary
-				FCM::AutoPtr<DOM::Service::Tween::ITweenInfoService> pTweenInfoService;
-				FCMListPtr pLayerList;
-				timeline->GetLayers(pLayerList.m_Ptr);
-				AutoPtr<DOM::ILayer> firstLayer = pLayerList[0];
-				AutoPtr<FCM::IFCMUnknown> pLayerType;
-				firstLayer->GetLayerType(pLayerType.m_Ptr);
-				AutoPtr<DOM::Layer::ILayerNormal> normalLayer = pLayerType;
-				FCMListPtr pKeyFrameList;
-				normalLayer->GetKeyFrames(pKeyFrameList.m_Ptr);
-				AutoPtr<DOM::IFrame> firstFrame = pKeyFrameList[0];
-				// Get the tweenInfo service.
-				FCM::AutoPtr<FCM::IFCMUnknown> pUnk;
-				res = GetCallback()->GetService(DOM::Service::Tween::TWEENINFO_SERVICE, pUnk.m_Ptr);
-				if (FCM_FAILURE_CODE(res))
-				{
-					Utils::Trace(GetCallback(), "Failed to get Tween service");
-					return res;
-				}
-				pTweenInfoService = pUnk;
-				//call GetFrameTweenInfo method on pTweenInfoService to get the tween info
-				//dictionary
-				FCM:U_Int32 duration;
-				firstFrame->GetDuration(duration);
-				Utils::Trace(GetCallback(), "first frame duration? %s\n", Utils::ToString(duration).c_str());
-				FCM::PIFCMList frameElements;
-				res = firstFrame->GetFrameElements(frameElements);
-				if (FCM_FAILURE_CODE(res))
-				{
-					Utils::Trace(GetCallback(), "Failed to get frame elements: %i", res);
-				}
-				else
-				{
-					AutoPtr<FCM::IFCMList> pTweenInfoList;
-					FCM::PIFCMUnknown unknownElement = (*frameElements)[0];
-					DOM::FrameElement::PIFrameDisplayElement element = (DOM::FrameElement::PIFrameDisplayElement)unknownElement;
-					res = pTweenInfoService->GetElementTweenInfo(GetCallback(), element, pTweenInfoList.m_Ptr);
-					if (FCM_FAILURE_CODE(res))
-					{
-						Utils::Trace(GetCallback(), "Failed to get FrameTweenInfo: %i", res);
-					}
-					else
-					{
-						// get the dictionary from the list
-						FCM::AutoPtr<IFCMDictionary> pTweenDictionary;
-						pTweenDictionary = (*pTweenInfoList)[0];
-						std::string tweenType;
-						Utils::ReadString(pTweenDictionary, kTweenKey_TweenType, tweenType);
-						Utils::Trace(GetCallback(), "TWEEN TYPE: %s\n", tweenType.c_str());
-						if (tweenType == "geometric")
-						{
-							DOM::PIFCMDictionary xProp = NULL;
-							FCM::U_Int32 len = sizeof(DOM::PIFCMDictionary);
-							FCM::FCMDictRecTypeID type = kFCMDictType_Dict;
-							/*res = pTweenDictionary->GetInfo("Position_X", type, len);
-							if (FCM_FAILURE_CODE(res))
-							{
-								Utils::Trace(GetCallback(), "Failed to get X position info: %i\n", res);
-							}
-							else
-							{
-								Utils::Trace(GetCallback(), "Got x position info!\n");
-							}*/
-							res = pTweenDictionary->Get("Position_X", type, (FCM::PVoid)&xProp, len);
-							if (FCM_FAILURE_CODE(res))
-							{
-								Utils::Trace(GetCallback(), "Failed to get X movement: %i\n", res);
-							}
-							else
-							{
-								Utils::Trace(GetCallback(), "Got x position!\n");
-								FCM::U_Int32 floatSize = sizeof(FCM::Float);
-
-								DOM::PIFCMDictionary xStates = NULL;
-								res = xProp->Get("States", kFCMDictType_Dict, (FCM::PVoid)&xStates, len);
-								if (FCM_FAILURE_CODE(res))
-								{
-									Utils::Trace(GetCallback(), "Failed to get X states: %i\n", res);
-								}
-								else
-								{
-									FCM::Float start;
-									xStates->Get("Start", kFCMDictType_Float, (FCM::PVoid)&start, floatSize);
-									Utils::Trace(GetCallback(), "Start X: %d\n", start);
-									FCM::Float end;
-									xStates->Get("Start", kFCMDictType_Float, (FCM::PVoid)&end, floatSize);
-									Utils::Trace(GetCallback(), "End X: %d\n", end);
-								}
-
-								DOM::PIFCMDictionary xEase = NULL;
-								res = xProp->Get("Easing", kFCMDictType_Dict, (FCM::PVoid)&xEase, len);
-								if (FCM_FAILURE_CODE(res))
-								{
-									Utils::Trace(GetCallback(), "Failed to get X easing: %i\n", res);
-								}
-								else
-								{
-									std::string easeType;
-									Utils::ReadString(pTweenDictionary, "Type", easeType);
-									Utils::Trace(GetCallback(), "TWEEN TYPE: %s\n", tweenType.c_str());
-
-									FCM::Float strength;
-									xStates->Get("Strength", kFCMDictType_Float, (FCM::PVoid)&strength, floatSize);
-									Utils::Trace(GetCallback(), "Tween strength: %d\n", strength);
-								}
-							}
-						}
-					}
-				}
-
 				range.min = 0;
 				res = timeline->GetMaxFrameCount(range.max);
 				if (FCM_FAILURE_CODE(res))
@@ -564,8 +451,11 @@ namespace PixiJS
 				}
 
 				((TimelineBuilder*)timelineBuilder.m_Ptr)->Build(0, NULL, &timelineWriter);
+
+				m_pTweenWriter->ReadTimeline(timeline.m_Ptr, "__STAGE");
 			}
 
+			outputWriter->AddTweens(m_pTweenWriter->GetRoot());
 			res = outputWriter->EndDocument();
 			ASSERT(FCM_SUCCESS_CODE(res));
 
