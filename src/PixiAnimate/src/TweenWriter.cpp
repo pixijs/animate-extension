@@ -90,7 +90,7 @@ namespace PixiJS
 	{
 		m_pTweenArray = new JSONNode(JSON_ARRAY);
 		ASSERT(m_pTweenArray);
-		m_pTweenArray->set_name("tweens");
+		m_pTweenArray->set_name("Tweens");
 
 		// Get the tweenInfo service.
 		AutoPtr<IFCMUnknown> pUnk;
