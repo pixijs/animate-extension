@@ -159,6 +159,16 @@ p.addToFrame = function(frameIndex, command)
     }
 };
 
+p.startTween = function(frameIndex, tween)
+{
+    let frame = this.frames[frameIndex];
+    if (!frame) {
+        frame = this.frames[frameIndex] = new Frame();
+    }
+    frame.addTween(tween);
+    this.isAnimated = true;
+};
+
 /**
  * Get the duration of this item on the stage
  * @method getDuration
@@ -212,6 +222,11 @@ p.getFrames = function(compress)
                 }
             });
             prevFrame = cloneFrame;
+            if (frame.tween)
+            {
+                Object.assign(prevFrame, prevFrame.tw.p);
+                delete prevFrame.tw;
+            }
             continue;
         }
 
@@ -228,7 +243,7 @@ p.getFrames = function(compress)
 
         // Remove frames with no properties
         let keys = frame.validKeys;
-        if (!keys.length)
+        if (!keys.length && !frame.tween)
         {
             delete this.frames[index];
         }
@@ -247,6 +262,11 @@ p.getFrames = function(compress)
 
         // Property remember all the values of the current frame
         prevFrame = cloneFrame;
+        if (frame.tween)
+        {
+            Object.assign(prevFrame, prevFrame.tw.p);
+            delete prevFrame.tw;
+        }
     }
 
     // Clean props that we don't use
@@ -266,6 +286,7 @@ p.getFrames = function(compress)
         let result = [];
         for (let i in this.frames)
         {
+            // TODO: serialize() has to account for tween?
             result.push(i + this.frames[i].serialize());
         }
         return `"${result.join(' ')}"`;

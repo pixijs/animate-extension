@@ -19,12 +19,15 @@ const Frame = function()
     this.r = null; // rotation value
     this.v = null; // visibility
     this.bounds = null; // bounds
+
+    // can't be animated, but is attached to frames to make implementation easier
+    this.tween = null;
 };
 
 // Extends the prototype
 const p = Frame.prototype;
 
-/** 
+/**
  * The map of local keys to global keys, used when serializing
  * @property {Object} GLOBAL_MAP
  * @static
@@ -44,7 +47,7 @@ const GLOBAL_MAP = {
     v: 'V'
 };
 
-/** 
+/**
  * The default values for all frames
  * @property {Object} defaultValues
  * @static
@@ -73,13 +76,18 @@ p.addCommand = function(command)
     command.toFrame(this);
 };
 
+p.addTween = function(tween)
+{
+    this.tween = tween;
+}
+
 /**
  * If the frame has set values
  * @property {Boolean} hasValues
  */
-Object.defineProperty(p, 'hasValues', 
+Object.defineProperty(p, 'hasValues',
 {
-    get: function() 
+    get: function()
     {
         for (let k in GLOBAL_MAP)
         {
@@ -93,14 +101,14 @@ Object.defineProperty(p, 'hasValues',
  * If the frame has set values
  * @property {Array} hasValues
  */
-Object.defineProperty(p, 'validKeys', 
+Object.defineProperty(p, 'validKeys',
 {
-    get: function() 
+    get: function()
     {
         let validKeys = [];
         for (let k in GLOBAL_MAP)
         {
-            if (this[k] !== null) 
+            if (this[k] !== null)
             {
                 validKeys.push(k);
             }
@@ -115,7 +123,7 @@ Object.defineProperty(p, 'validKeys',
  * @param {Array<String>} usedProperties
  */
 p.clean = function(usedProperties)
-{    
+{
     // Update the initial frame with all the properites that are animated
     for (let k in GLOBAL_MAP)
     {
@@ -140,13 +148,13 @@ p.render = function(renderer)
     if (args.length)
     {
         const func = compress ? 't' : 'setTransform';
-        buffer += `.${func}(${args.join(', ')})`; 
+        buffer += `.${func}(${args.join(', ')})`;
     }
 
     if (this.a !== null && this.a < 1)
     {
         const func = compress ? 'a' : 'setAlpha';
-        buffer += `.${func}(${this.a})`;        
+        buffer += `.${func}(${this.a})`;
     }
     if (this.t !== null && this.t != "#fff")
     {
@@ -156,7 +164,7 @@ p.render = function(renderer)
     else if (this.c && !isDefaultColorTransform(this.c))
     {
         const func = compress ? 'c': 'setColorTransform';
-        buffer += `.${func}(${this.c.join(',')})`;  
+        buffer += `.${func}(${this.c.join(',')})`;
     }
     return buffer;
 };
@@ -209,7 +217,7 @@ p.toTransform = function()
         }
         break;
     }
-    
+
     // Remove the default arguments
     if (toRemove > 0 && toRemove <= args.length)
     {
@@ -233,7 +241,7 @@ p.serialize = function()
             buffer += GLOBAL_MAP[k] + this[k];
         }
     }
-    return buffer.replace(/([a-z])(\-)?0\./g, "$1$2.") // remove 0 from floats 0.12 => .12   
+    return buffer.replace(/([a-z])(\-)?0\./g, "$1$2.") // remove 0 from floats 0.12 => .12
 };
 
 /**
@@ -249,6 +257,10 @@ p.toJSON = function()
         {
             result[k] = this[k];
         }
+    }
+    if (this.tween)
+    {
+        result.tw = this.tween.toJSON();
     }
     return result;
 };
