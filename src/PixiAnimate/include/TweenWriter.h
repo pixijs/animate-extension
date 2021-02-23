@@ -26,9 +26,9 @@ namespace PixiJS
 		JSONNode* GetRoot();
 
 	private:
-		bool ReadTween(DOM::FrameElement::PIFrameDisplayElement element, JSONNode tweensArray, FCM::U_Int32 start, FCM::U_Int32 end);
+		bool ReadTween(DOM::FrameElement::PIFrameDisplayElement element, JSONNode &tweensArray, FCM::U_Int32 start, FCM::U_Int32 end);
 
-		bool ReadProp(FCM::PIFCMDictionary tweenDict, JSONNode propNode, const std::string propertyName);
+		bool ReadProp(FCM::PIFCMDictionary tweenDict, JSONNode &propNode, const std::string propertyName);
 
 		JSONNode* m_pTweenArray;
 		

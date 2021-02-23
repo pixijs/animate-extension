@@ -71,7 +71,6 @@ namespace PixiJS
 					// read potential tween, if there was a tween note that so that we can know any tween was present in this timeline
 					if (ReadTween(element, tweensArray, startFrameIndex, endFrameIndex))
 					{
-						Utils::Trace(m_pCallback, "Found a tween!\n");
 						hadTween = true;
 					}
 				}
@@ -79,7 +78,6 @@ namespace PixiJS
 		}
 		if (hadTween)
 		{
-			Utils::Trace(m_pCallback, "A tween happened, adding the tweens array to the timeline element!\n");
 			timelineElement.push_back(tweensArray);
 			m_pTweenArray->push_back(timelineElement);
 		}
@@ -117,7 +115,7 @@ namespace PixiJS
 		return m_pTweenArray;
 	}
 
-	bool TweenWriter::ReadTween(DOM::FrameElement::PIFrameDisplayElement element, JSONNode tweensArray, FCM::U_Int32 start, FCM::U_Int32 end)
+	bool TweenWriter::ReadTween(DOM::FrameElement::PIFrameDisplayElement element, JSONNode &tweensArray, FCM::U_Int32 start, FCM::U_Int32 end)
 	{
 		AutoPtr<IFCMList> pTweenInfoList;
 		FCM::Result res = m_pTweenInfoService->GetElementTweenInfo(m_pCallback, element, pTweenInfoList.m_Ptr);
@@ -194,13 +192,12 @@ namespace PixiJS
 
 		if (tweenedAnyProp)
 		{
-			Utils::Trace(m_pCallback, "Tweened a prop, pushed back the node\n");
 			tweensArray.push_back(tweenNode);
 		}
 		return tweenedAnyProp;
 	}
 
-	bool TweenWriter::ReadProp(FCM::PIFCMDictionary tweenDict, JSONNode propNode, const std::string propertyName)
+	bool TweenWriter::ReadProp(FCM::PIFCMDictionary tweenDict, JSONNode &propNode, const std::string propertyName)
 	{
 		double startValue = 0;
 		double endValue = 0;
