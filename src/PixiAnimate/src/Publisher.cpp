@@ -455,10 +455,6 @@ namespace PixiJS
 				m_pTweenWriter->ReadTimeline(timeline.m_Ptr, stageName);
 			}
 
-			outputWriter->AddTweens(m_pTweenWriter->GetRoot());
-			res = outputWriter->EndDocument();
-			ASSERT(FCM_SUCCESS_CODE(res));
-
 			// Export the library items with linkages
 			FCM::FCMListPtr pLibraryItemList;
 			res = flaDocument->GetLibraryItems(pLibraryItemList.m_Ptr);
@@ -468,6 +464,10 @@ namespace PixiJS
 			}
 
 			ExportLibraryItems(pLibraryItemList);
+
+			outputWriter->AddTweens(m_pTweenWriter->GetRoot());
+			res = outputWriter->EndDocument();
+			ASSERT(FCM_SUCCESS_CODE(res));
 		}
 		else
 		{
@@ -698,6 +698,17 @@ namespace PixiJS
 				AutoPtr<DOM::LibraryItem::ISymbolItem> pSymbolItem = pLibItem;
 				AutoPtr<DOM::LibraryItem::IMediaItem> pMediaItem = pLibItem;
 
+				if (pSymbolItem)
+				{
+					DOM::ITimeline* timeline;
+					res = pSymbolItem->GetTimeLine(timeline);
+					if (FCM_FAILURE_CODE(res))
+					{
+						Utils::Trace(GetCallback(), "Unable to get timeline for %s: %i\n", libItemName, res);
+					}
+					m_pTweenWriter->ReadTimeline(timeline, libItemName);
+				}
+
 				res = pLibItem->GetProperties(pDict.m_Ptr);
 				ASSERT(FCM_SUCCESS_CODE(res));
 
@@ -706,6 +717,7 @@ namespace PixiJS
 
 				if (FCM_SUCCESS_CODE(res))
 				{
+					Utils::Trace(GetCallback(), "Succeeded at getting info on linkage class key\n");
 					FCM::Boolean hasResource;
 					ResourcePalette* pResPalette = static_cast<ResourcePalette*>(m_pResourcePalette.m_Ptr);
 

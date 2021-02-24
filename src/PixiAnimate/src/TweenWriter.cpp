@@ -13,7 +13,7 @@ namespace PixiJS
 		timelineElement.push_back(JSONNode("timelineName", timelineName));
 		JSONNode tweensArray(JSON_ARRAY);
 		tweensArray.set_name("tweens");
-		bool hadTween;
+		bool hadTween = false;
 		Result res;
 		FCMListPtr pLayerList;
 		pTimeline->GetLayers(pLayerList.m_Ptr);
@@ -54,7 +54,7 @@ namespace PixiJS
 				res = frame->GetFrameElements(frameElements);
 				if (FCM_FAILURE_CODE(res))
 				{
-					Utils::Trace(m_pCallback, "Failed to get frame elements: %i", res);
+					Utils::Trace(m_pCallback, "Failed to get frame elements: %i\n", res);
 					return res;
 				}
 				U_Int32 elementCount;
@@ -96,7 +96,7 @@ namespace PixiJS
 		res = m_pCallback->GetService(DOM::Service::Tween::TWEENINFO_SERVICE, pUnk.m_Ptr);
 		if (FCM_FAILURE_CODE(res))
 		{
-			Utils::Trace(m_pCallback, "Failed to get Tween service");
+			Utils::Trace(m_pCallback, "Failed to get Tween service\n");
 			m_pTweenInfoService = NULL;
 		}
 		else
@@ -121,73 +121,86 @@ namespace PixiJS
 		FCM::Result res = m_pTweenInfoService->GetElementTweenInfo(m_pCallback, element, pTweenInfoList.m_Ptr);
 		if (FCM_FAILURE_CODE(res))
 		{
-			Utils::Trace(m_pCallback, "Failed to get element FrameTweenInfo: %i", res);
+			Utils::Trace(m_pCallback, "Failed to get element FrameTweenInfo: %i\n", res);
 			return false;
 		}
 		bool tweenedAnyProp = false;
-		// get the dictionary from the list
-		FCM::AutoPtr<IFCMDictionary> pTweenDictionary;
-		pTweenDictionary = (*pTweenInfoList)[0];
-		std::string tweenType;
-		Utils::ReadString(pTweenDictionary, kTweenKey_TweenType, tweenType);
-		// confirm that it is a geometric tween, otherwise we are going to ignore it for now
-		if (tweenType != "geometric")
-		{
-			return false;
-		}
-
 		JSONNode tweenNode(JSON_NODE);
 		tweenNode.push_back(JSONNode("start", start));
 		tweenNode.push_back(JSONNode("end", end));
 
-		JSONNode posX(JSON_NODE);
-		posX.set_name("x");
-		if (ReadProp(pTweenDictionary, posX, "Position_X"))
+		U_Int32 tweenCount;
+		pTweenInfoList->Count(tweenCount);
+		for (U_Int32 i = 0; i < tweenCount; ++i)
 		{
-			tweenNode.push_back(posX);
-			tweenedAnyProp = true;
-		}
-		JSONNode posY(JSON_NODE);
-		posY.set_name("y");
-		if (ReadProp(pTweenDictionary, posY, "Position_Y"))
-		{
-			tweenNode.push_back(posY);
-			tweenedAnyProp = true;
-		}
-		JSONNode scaleX(JSON_NODE);
-		scaleX.set_name("scaleX");
-		if (ReadProp(pTweenDictionary, scaleX, "Scale_X"))
-		{
-			tweenNode.push_back(scaleX);
-			tweenedAnyProp = true;
-		}
-		JSONNode scaleY(JSON_NODE);
-		scaleY.set_name("scaleY");
-		if (ReadProp(pTweenDictionary, scaleX, "Scale_Y"))
-		{
-			tweenNode.push_back(scaleY);
-			tweenedAnyProp = true;
-		}
-		JSONNode rotation(JSON_NODE);
-		rotation.set_name("rotation");
-		if (ReadProp(pTweenDictionary, rotation, "Rotation_Z"))
-		{
-			tweenNode.push_back(rotation);
-			tweenedAnyProp = true;
-		}
-		JSONNode skewX(JSON_NODE);
-		skewX.set_name("skewX");
-		if (ReadProp(pTweenDictionary, skewX, "Skew_X"))
-		{
-			tweenNode.push_back(skewX);
-			tweenedAnyProp = true;
-		}
-		JSONNode skewY(JSON_NODE);
-		skewY.set_name("skewY");
-		if (ReadProp(pTweenDictionary, skewY, "Skew_Y"))
-		{
-			tweenNode.push_back(skewY);
-			tweenedAnyProp = true;
+			// get the dictionary from the list
+			FCM::AutoPtr<IFCMDictionary> pTweenDictionary;
+			pTweenDictionary = (*pTweenInfoList)[0];
+			std::string tweenType;
+			Utils::ReadString(pTweenDictionary, kTweenKey_TweenType, tweenType);
+			// confirm that it is a geometric tween, otherwise we are going to ignore it for now
+			if (tweenType == "geometric")
+			{
+				JSONNode posX(JSON_NODE);
+				posX.set_name("x");
+				if (ReadProp(pTweenDictionary, posX, "Position_X"))
+				{
+					tweenNode.push_back(posX);
+					tweenedAnyProp = true;
+				}
+				JSONNode posY(JSON_NODE);
+				posY.set_name("y");
+				if (ReadProp(pTweenDictionary, posY, "Position_Y"))
+				{
+					tweenNode.push_back(posY);
+					tweenedAnyProp = true;
+				}
+				JSONNode scaleX(JSON_NODE);
+				scaleX.set_name("scaleX");
+				if (ReadProp(pTweenDictionary, scaleX, "Scale_X"))
+				{
+					tweenNode.push_back(scaleX);
+					tweenedAnyProp = true;
+				}
+				JSONNode scaleY(JSON_NODE);
+				scaleY.set_name("scaleY");
+				if (ReadProp(pTweenDictionary, scaleX, "Scale_Y"))
+				{
+					tweenNode.push_back(scaleY);
+					tweenedAnyProp = true;
+				}
+				JSONNode rotation(JSON_NODE);
+				rotation.set_name("rotation");
+				if (ReadProp(pTweenDictionary, rotation, "Rotation_Z"))
+				{
+					tweenNode.push_back(rotation);
+					tweenedAnyProp = true;
+				}
+				JSONNode skewX(JSON_NODE);
+				skewX.set_name("skewX");
+				if (ReadProp(pTweenDictionary, skewX, "Skew_X"))
+				{
+					tweenNode.push_back(skewX);
+					tweenedAnyProp = true;
+				}
+				JSONNode skewY(JSON_NODE);
+				skewY.set_name("skewY");
+				if (ReadProp(pTweenDictionary, skewY, "Skew_Y"))
+				{
+					tweenNode.push_back(skewY);
+					tweenedAnyProp = true;
+				}
+				
+				// TODO: should this be here on the geometric tween? Even with an alpha change with a position change,
+				// pTweenInfoList ends up with a count of 1
+				JSONNode alpha(JSON_NODE);
+				alpha.set_name("alpha");
+				if (ReadProp(pTweenDictionary, alpha, "Alpha_Amount"))
+				{
+					tweenNode.push_back(alpha);
+					tweenedAnyProp = true;
+				}
+			}
 		}
 
 		if (tweenedAnyProp)
