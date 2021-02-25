@@ -1,6 +1,7 @@
 "use strict";
 
 const DataUtils = require('../utils/DataUtils');
+const Frame = require('../instances/Frame');
 
 const TweenProp = function(data)
 {
@@ -29,6 +30,12 @@ const Tween = function (tween) {
      * @property {number} endFrame
      */
     this.endFrame = tween.end;
+
+    /**
+     * Format TBD, depending on what we get out of Animate
+     * @property {Object} ease
+     */
+    this.ease = null;
 
     /**
      * The x position tween data
@@ -93,6 +100,22 @@ p.toJSON = function()
     if (this.skewY) output.p.ky = this.skewY.end;
     return output;
 };
+
+/**
+ * Serialize the tween properties
+ * @method serialize
+ * @return {string} buffer out
+ */
+p.serialize = function()
+{
+    let buffer = 'WD' + (this.endFrame - this.startFrame);
+    if (this.ease)
+    {
+        // TODO:
+    }
+    buffer += Frame.prototype.serialize.call(this.toJSON().p);
+    return buffer;
+}
 
 /**
  * Checks if a transform matches the start of the tween.

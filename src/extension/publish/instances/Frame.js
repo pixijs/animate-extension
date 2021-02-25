@@ -241,7 +241,11 @@ p.serialize = function()
             buffer += GLOBAL_MAP[k] + this[k];
         }
     }
-    return buffer.replace(/([a-z])(\-)?0\./g, "$1$2.") // remove 0 from floats 0.12 => .12
+    if (this.tween)
+    {
+        buffer += this.tween.serialize();
+    }
+    return buffer.replace(/([A-Z])(\-)?0\./g, "$1$2.") // remove 0 from floats 0.12 => .12
 };
 
 /**
