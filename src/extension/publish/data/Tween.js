@@ -3,10 +3,24 @@
 const DataUtils = require('../utils/DataUtils');
 const Frame = require('../instances/Frame');
 
-const TweenProp = function(data)
+const TweenProp = function(data, degToRad, invert)
 {
-    this.start = round(data.start);
-    this.end = round(data.end);
+    if (degToRad)
+    {
+        this.start = round(data.start * Math.PI / 180);
+        this.end = round(data.end * Math.PI / 180);
+    }
+    else
+    {
+        this.start = round(data.start);
+        this.end = round(data.end);
+    }
+    // it seems that to convert the skewX values, we need to make it negative
+    if (invert)
+    {
+        this.start = -this.start;
+        this.end = -this.end;
+    }
     this.easeType = data.easeType;
     this.easeStrength = data.easeStrength;
 }
@@ -65,19 +79,19 @@ const Tween = function (tween) {
      * The skewX tween data
      * @property {Object} skewX
      */
-    this.skewX = tween.skewX ? new TweenProp(tween.skewX) : null;
+    this.skewX = tween.skewX ? new TweenProp(tween.skewX, true, true) : null;
 
     /**
      * The skewY tween data
      * @property {Object} skewY
      */
-    this.skewY = tween.skewY ? new TweenProp(tween.skewY) : null;
+    this.skewY = tween.skewY ? new TweenProp(tween.skewY, true) : null;
 
     /**
      * The rotation tween data
      * @property {Object} rotation
      */
-    this.rotation = tween.rotation ? new TweenProp(tween.rotation) : null;
+    this.rotation = tween.rotation ? new TweenProp(tween.rotation, true) : null;
 };
 
 // Extends the prototype

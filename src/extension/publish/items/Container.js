@@ -141,7 +141,7 @@ p.getChildren = function()
 
             // if there is a tween being processed for the given instance ignore the command and
             // look at the tween
-            if (activeTweenInstances[command.instanceId])
+            if ((command.type === 'Move' || command.type === 'Place') && activeTweenInstances[command.instanceId])
             {
                 // if the current frame is the end frame of the active tween, we can call off that tween
                 if (frame.frame === activeTweenInstances[command.instanceId])

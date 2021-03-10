@@ -121,7 +121,8 @@ namespace PixiJS
 		FCM::Result res = m_pTweenInfoService->GetElementTweenInfo(m_pCallback, element, pTweenInfoList.m_Ptr);
 		if (FCM_FAILURE_CODE(res))
 		{
-			Utils::Trace(m_pCallback, "Failed to get element FrameTweenInfo: %i\n", res);
+			// probably no tweens attached
+			// Utils::Trace(m_pCallback, "Failed to get element FrameTweenInfo: %i\n", res);
 			return false;
 		}
 		bool tweenedAnyProp = false;
@@ -131,26 +132,28 @@ namespace PixiJS
 
 		U_Int32 tweenCount;
 		pTweenInfoList->Count(tweenCount);
+		// Utils::Trace(m_pCallback, "Number of tweens?: %i\n", tweenCount);
 		for (U_Int32 i = 0; i < tweenCount; ++i)
 		{
 			// get the dictionary from the list
 			FCM::AutoPtr<IFCMDictionary> pTweenDictionary;
-			pTweenDictionary = (*pTweenInfoList)[0];
+			pTweenDictionary = (*pTweenInfoList)[i];
 			std::string tweenType;
 			Utils::ReadString(pTweenDictionary, kTweenKey_TweenType, tweenType);
 			// confirm that it is a geometric tween, otherwise we are going to ignore it for now
 			if (tweenType == "geometric")
 			{
+				// ListProps(pTweenDictionary);
 				JSONNode posX(JSON_NODE);
 				posX.set_name("x");
-				if (ReadProp(pTweenDictionary, posX, "Position_X"))
+				if (ReadTranslateProp(pTweenDictionary, posX, "Motion_XY", "Pos_X"))
 				{
 					tweenNode.push_back(posX);
 					tweenedAnyProp = true;
 				}
 				JSONNode posY(JSON_NODE);
 				posY.set_name("y");
-				if (ReadProp(pTweenDictionary, posY, "Position_Y"))
+				if (ReadTranslateProp(pTweenDictionary, posY, "Motion_XY", "Pos_Y"))
 				{
 					tweenNode.push_back(posY);
 					tweenedAnyProp = true;
@@ -164,7 +167,7 @@ namespace PixiJS
 				}
 				JSONNode scaleY(JSON_NODE);
 				scaleY.set_name("scaleY");
-				if (ReadProp(pTweenDictionary, scaleX, "Scale_Y"))
+				if (ReadProp(pTweenDictionary, scaleY, "Scale_Y"))
 				{
 					tweenNode.push_back(scaleY);
 					tweenedAnyProp = true;
@@ -190,7 +193,7 @@ namespace PixiJS
 					tweenNode.push_back(skewY);
 					tweenedAnyProp = true;
 				}
-				
+
 				// TODO: should this be here on the geometric tween? Even with an alpha change with a position change,
 				// pTweenInfoList ends up with a count of 1
 				JSONNode alpha(JSON_NODE);
@@ -201,6 +204,12 @@ namespace PixiJS
 					tweenedAnyProp = true;
 				}
 			}
+			else
+			{
+				// useful, but disabling for now so that we don't spam anyone's publishing
+				// Utils::Trace(m_pCallback, "Found tween of unhandled type: %s\n", tweenType);
+				// ListProps(pTweenDictionary.m_Ptr);
+			}
 		}
 
 		if (tweenedAnyProp)
@@ -208,6 +217,30 @@ namespace PixiJS
 			tweensArray.push_back(tweenNode);
 		}
 		return tweenedAnyProp;
+	}
+
+	void TweenWriter::ListProps(FCM::PIFCMDictionary dict)
+	{
+		U_Int32 itemCount;
+		dict->Count(itemCount);
+		FCM::StringRep8 key;
+		// length of value in dictionary (reused for each call)
+		FCM::U_Int32 valueLen;
+		// type of value in dictionary (reused for each call)
+		FCM::FCMDictRecTypeID type;
+		FCM::Result res;
+		for (U_Int32 i = 0; i < itemCount; ++i)
+		{
+			res = dict->GetNth(i, key, type, valueLen);
+			if (FCM_FAILURE_CODE(res))
+			{
+				Utils::Trace(m_pCallback, "Failed to get property info for %i: %i\n", i, res);
+			}
+			else
+			{
+				Utils::Trace(m_pCallback, "Property in dict: %s\n", key);
+			}
+		}
 	}
 
 	bool TweenWriter::ReadProp(FCM::PIFCMDictionary tweenDict, JSONNode &propNode, const std::string propertyName)
@@ -226,7 +259,8 @@ namespace PixiJS
 		res = tweenDict->Get((const FCM::StringRep8)propertyName.c_str(), type, (FCM::PVoid)&propertyDict, valueLen);
 		if (FCM_FAILURE_CODE(res))
 		{
-			Utils::Trace(m_pCallback, "Failed to get property dictionary for %s: %i\n", propertyName, res);
+			// property isn't present, probably because it is not being tweened (or never exists on the tween data?)
+			// Utils::Trace(m_pCallback, "Failed to get property dictionary for %s: %i\n", propertyName, res);
 			return false;
 		}
 		// has property start/end states - "Start_Value" and "End_Value"
@@ -235,21 +269,24 @@ namespace PixiJS
 		res = propertyDict->Get("Property_States", type, (FCM::PVoid)&propertyStates, valueLen);
 		if (FCM_FAILURE_CODE(res))
 		{
-			Utils::Trace(m_pCallback, "Failed to get property states for %s: %i\n", propertyName, res);
+			// shouldn't fail, but to reduce potential noise don't trace
+			// Utils::Trace(m_pCallback, "Failed to get property states for %s: %i\n", propertyName, res);
 			return false;
 		}
 		// read the start & end values
-		res = propertyDict->GetInfo("Start_Value", type, valueLen);
-		res = propertyDict->Get("Start_Value", type, (FCM::PVoid)&startValue, valueLen);
+		res = propertyStates->GetInfo("Start_Value", type, valueLen);
+		res = propertyStates->Get("Start_Value", type, (FCM::PVoid)&startValue, valueLen);
 		if (FCM_FAILURE_CODE(res))
 		{
-			Utils::Trace(m_pCallback, "Failed to get start value for %s: %i\n", propertyName, res);
+			// shouldn't fail, but to reduce potential noise don't trace
+			// Utils::Trace(m_pCallback, "Failed to get start value for %s: %i\n", propertyName, res);
 		}
-		res = propertyDict->GetInfo("End_Value", type, valueLen);
-		res = propertyDict->Get("End_Value", type, (FCM::PVoid)&endValue, valueLen);
+		res = propertyStates->GetInfo("End_Value", type, valueLen);
+		res = propertyStates->Get("End_Value", type, (FCM::PVoid)&endValue, valueLen);
 		if (FCM_FAILURE_CODE(res))
 		{
-			Utils::Trace(m_pCallback, "Failed to get end value for %s: %i\n", propertyName, res);
+			// shouldn't fail, but to reduce potential noise don't trace
+			// Utils::Trace(m_pCallback, "Failed to get end value for %s: %i\n", propertyName, res);
 		}
 		// if values are unchanged, bail
 		if (startValue == endValue)
@@ -266,7 +303,8 @@ namespace PixiJS
 		res = propertyDict->Get("Property_Ease", type, (FCM::PVoid)&propertyEase, valueLen);
 		if (FCM_FAILURE_CODE(res))
 		{
-			Utils::Trace(m_pCallback, "Failed to get property ease for %s: %i\n", propertyName, res);
+			// shouldn't fail, but to reduce potential noise don't trace
+			// Utils::Trace(m_pCallback, "Failed to get property ease for %s: %i\n", propertyName, res);
 			// at least we got the values out of it
 			return true;
 		}
@@ -280,7 +318,115 @@ namespace PixiJS
 		res = propertyEase->Get("Ease_Type", type, (FCM::PVoid)(&buffer_1[0]), valueLen);
 		if (FCM_FAILURE_CODE(res))
 		{
-			Utils::Trace(m_pCallback, "Failed to get ease type for %s: %i\n", propertyName, res);
+			// shouldn't fail, but to reduce potential noise don't trace
+			// Utils::Trace(m_pCallback, "Failed to get ease type for %s: %i\n", propertyName, res);
+			// at least we got the values out of it
+			return true;
+		}
+		easeType = (char*)(&buffer_1[0]);
+		// record ease values
+		propNode.push_back(JSONNode("easeType", easeType));
+		propNode.push_back(JSONNode("easeStrength", easeStrength));
+		return true;
+	}
+
+	bool TweenWriter::ReadTranslateProp(FCM::PIFCMDictionary tweenDict, JSONNode &propNode, const std::string propertyName, const std::string subPropertyName)
+	{
+		double startValue = 0;
+		double endValue = 0;
+		// length of value in dictionary (reused for each call)
+		FCM::U_Int32 valueLen;
+		// type of value in dictionary (reused for each call)
+		FCM::FCMDictRecTypeID type;
+		// call result (reused for each call)
+		FCM::Result res;
+		// dictionary for the property - contains "Property_States" and "Property_Ease"
+		PIFCMDictionary propertyDict;
+		res = tweenDict->GetInfo((const FCM::StringRep8)propertyName.c_str(), type, valueLen);
+		res = tweenDict->Get((const FCM::StringRep8)propertyName.c_str(), type, (FCM::PVoid)&propertyDict, valueLen);
+		if (FCM_FAILURE_CODE(res))
+		{
+			// property isn't present, probably because it is not being tweened (or never exists on the tween data?)
+			// Utils::Trace(m_pCallback, "Failed to get property dictionary for %s: %i\n", propertyName, res);
+			return false;
+		}
+		// has dictionary start/end states - "Start_Value" and "End_Value"
+		PIFCMDictionary propertyStates;
+		res = propertyDict->GetInfo("Property_States", type, valueLen);
+		res = propertyDict->Get("Property_States", type, (FCM::PVoid)&propertyStates, valueLen);
+		if (FCM_FAILURE_CODE(res))
+		{
+			// shouldn't fail, but to reduce potential noise don't trace
+			// Utils::Trace(m_pCallback, "Failed to get property states for %s: %i\n", propertyName, res);
+			return false;
+		}
+
+		// has start states - "Pos_X" and "Pos_Y"
+		PIFCMDictionary startXY;
+		res = propertyStates->GetInfo("Start_Value", type, valueLen);
+		res = propertyStates->Get("Start_Value", type, (FCM::PVoid)&startXY, valueLen);
+		if(FCM_FAILURE_CODE(res))
+		{
+			//trace error
+			return false;
+		}
+		//read the start value
+		res = startXY->GetInfo((const FCM::StringRep8)subPropertyName.c_str(), type, valueLen);
+		res = startXY->Get((const FCM::StringRep8)subPropertyName.c_str(), type, (FCM::PVoid)&startValue, valueLen);
+		if(FCM_FAILURE_CODE(res))
+		{
+			//trace error
+		}
+		// has end states - "Pos_X" and "Pos_Y"
+		PIFCMDictionary endXY;
+		res = propertyStates->GetInfo("End_Value", type, valueLen);
+		res = propertyStates->Get("End_Value", type, (FCM::PVoid)&endXY, valueLen);
+		if (FCM_FAILURE_CODE(res))
+		{
+			//trace error
+			return false;
+		}
+		//read the end value
+		res = endXY->GetInfo((const FCM::StringRep8)subPropertyName.c_str(), type, valueLen);
+		res = endXY->Get((const FCM::StringRep8)subPropertyName.c_str(), type, (FCM::PVoid)&endValue, valueLen);
+		if (FCM_FAILURE_CODE(res))
+		{
+			//trace error
+		}
+
+		// if values are unchanged, bail
+		if (startValue == endValue)
+		{
+			// Utils::Trace(m_pCallback, "Start and end was the same for %s, %d vs %d\n", propertyName, startValue, endValue);
+			return false;
+		}
+
+		// record the start and end values - at this point, we could use these even if we can't get ease data and at least have something
+		propNode.push_back(JSONNode("start", startValue));
+		propNode.push_back(JSONNode("end", endValue));
+		// has property ease data - "Ease_Strength" and "Ease_Type"
+		PIFCMDictionary propertyEase;
+		res = propertyDict->GetInfo("Property_Ease", type, valueLen);
+		res = propertyDict->Get("Property_Ease", type, (FCM::PVoid)&propertyEase, valueLen);
+		if (FCM_FAILURE_CODE(res))
+		{
+			// shouldn't fail, but to reduce potential noise don't trace
+			// Utils::Trace(m_pCallback, "Failed to get property ease for %s: %i\n", propertyName, res);
+			// at least we got the values out of it
+			return true;
+		}
+		double easeStrength = 0;
+		res = propertyEase->GetInfo("Ease_Strength", type, valueLen);
+		res = propertyEase->Get("Ease_Strength", type, (FCM::PVoid)&easeStrength, valueLen);
+
+		res = propertyEase->GetInfo("Ease_Type", type, valueLen);
+		std::vector<FCM::Byte> buffer_1(valueLen);
+		std::string easeType;
+		res = propertyEase->Get("Ease_Type", type, (FCM::PVoid)(&buffer_1[0]), valueLen);
+		if (FCM_FAILURE_CODE(res))
+		{
+			// shouldn't fail, but to reduce potential noise don't trace
+			// Utils::Trace(m_pCallback, "Failed to get ease type for %s: %i\n", propertyName, res);
 			// at least we got the values out of it
 			return true;
 		}

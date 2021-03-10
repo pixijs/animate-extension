@@ -17,21 +17,24 @@ namespace PixiJS
 	class TweenWriter
 	{
 	public:
-		FCM::Result ReadTimeline(DOM::ITimeline* pTimeline, const std::string timelineName);
+		FCM::Result ReadTimeline(DOM::ITimeline *pTimeline, const std::string timelineName);
 
 		TweenWriter(FCM::PIFCMCallback pCallback);
 
 		~TweenWriter();
 
-		JSONNode* GetRoot();
+		JSONNode *GetRoot();
 
 	private:
 		bool ReadTween(DOM::FrameElement::PIFrameDisplayElement element, JSONNode &tweensArray, FCM::U_Int32 start, FCM::U_Int32 end);
 
 		bool ReadProp(FCM::PIFCMDictionary tweenDict, JSONNode &propNode, const std::string propertyName);
+		bool ReadTranslateProp(FCM::PIFCMDictionary tweenDict, JSONNode &propNode, const std::string propertyName, const std::string subPropertyName);
 
-		JSONNode* m_pTweenArray;
-		
+		void ListProps(FCM::PIFCMDictionary dict);
+
+		JSONNode *m_pTweenArray;
+
 		FCM::PIFCMCallback m_pCallback;
 
 		FCM::AutoPtr<DOM::Service::Tween::ITweenInfoService> m_pTweenInfoService;
