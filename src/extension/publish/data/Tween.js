@@ -100,7 +100,7 @@ const Tween = function (tween) {
     this.rotation = tween.rotation ? new TweenProp(tween.rotation, true) : null;
 
     /**
-     * Ease object with type and strength properties.
+     * Ease object with name and strength properties.
      * @property {Object} ease
      */
     this.ease = this.getFirstEase();
@@ -114,7 +114,7 @@ p.toJSON = function()
     const output = {
         d: this.endFrame - this.startFrame,
         p: {},
-        e: this.ease || undefined,
+        e: this.ease ? {n: this.ease.name, s: this.ease.strength} : undefined,
     };
     if (this.x) output.p.x = this.x.end;
     if (this.y) output.p.y = this.y.end;
@@ -136,7 +136,7 @@ p.serialize = function()
     let buffer = 'WD' + (this.endFrame - this.startFrame);
     if (this.ease)
     {
-        buffer += 'E' + this.ease.strength + this.ease.type;
+        buffer += 'E' + this.ease.strength + this.ease.name;
     }
     buffer += Frame.prototype.serialize.call(this.toJSON().p);
     return buffer;
@@ -151,15 +151,15 @@ p.serialize = function()
 p.getFirstEase = function()
 {
     let out = null;
-    if (this.x) out = {type: this.x.easeType, strength: this.x.easeStrength};
-    else if (this.y) out = {type: this.y.easeType, strength: this.y.easeStrength};
-    else if (this.scaleX) out = {type: this.scaleX.easeType, strength: this.scaleX.easeStrength};
-    else if (this.scaleY) out = {type: this.scaleY.easeType, strength: this.scaleY.easeStrength};
-    else if (this.rotation) out = {type: this.rotation.easeType, strength: this.rotation.easeStrength};
-    else if (this.skewX) out = {type: this.skewX.easeType, strength: this.skewX.easeStrength};
-    else if (this.skewY) out = {type: this.skewY.easeType, strength: this.skewY.easeStrength};
+    if (this.x) out = {name: this.x.easeType, strength: this.x.easeStrength};
+    else if (this.y) out = {name: this.y.easeType, strength: this.y.easeStrength};
+    else if (this.scaleX) out = {name: this.scaleX.easeType, strength: this.scaleX.easeStrength};
+    else if (this.scaleY) out = {name: this.scaleY.easeType, strength: this.scaleY.easeStrength};
+    else if (this.rotation) out = {name: this.rotation.easeType, strength: this.rotation.easeStrength};
+    else if (this.skewX) out = {name: this.skewX.easeType, strength: this.skewX.easeStrength};
+    else if (this.skewY) out = {name: this.skewY.easeType, strength: this.skewY.easeStrength};
     // if using classic easing and 0 strength, it is linear and we can save
-    if (out && out.type == 'classic' && out.strength == 0)
+    if (out && out.name == 'classic' && out.strength == 0)
         return null;
     return out;
 }
