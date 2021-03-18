@@ -2,6 +2,9 @@
 #include "ApplicationFCMPublicIDs.h"
 #include "FCMTypes.h"
 #include "FCMPluginInterface.h"
+#include "FrameElement/IInstance.h"
+#include "FrameElement/IMovieClip.h"
+#include "ILibraryItem.h"
 
 using namespace FCM;
 
@@ -129,6 +132,58 @@ namespace PixiJS
 		JSONNode tweenNode(JSON_NODE);
 		tweenNode.push_back(JSONNode("start", start));
 		tweenNode.push_back(JSONNode("end", end));
+		DOM::Utils::MATRIX2D matrix;
+		element->GetMatrix(matrix);
+		tweenNode.push_back(Utils::ToJSON("startTransform", matrix));
+		// Block of code disabled due to throwing errors for unknown reason (see comments inside block)
+		/*DOM::FrameElement::PIInstance asInstance = (DOM::FrameElement::PIInstance)element;
+		if (asInstance != NULL)
+		{
+			Utils::Trace(m_pCallback, "Was an instance\n");
+			DOM::PILibraryItem libItem;
+			if (FCM_SUCCESS_CODE(asInstance->GetLibraryItem(libItem)))
+			{
+				Utils::Trace(m_pCallback, "Got library item\n");
+				// unfortunately libItem here is null, even though we know it is attached to a library item
+				if (libItem == NULL)
+				{
+					Utils::Trace(m_pCallback, "But library item was null\n");
+				}
+				else
+				{
+					FCM::StringRep16 pLibItemName = NULL;
+					std::string libItemName;
+					if (FCM_FAILURE_CODE(libItem->GetName(&pLibItemName)))
+					{
+						Utils::Trace(m_pCallback, "Failed to get name\n");
+					}
+					else
+					{
+						libItemName = Utils::ToString(pLibItemName, m_pCallback);
+						Utils::Trace(m_pCallback, "Name: %s\n", libItemName);
+						tweenNode.push_back(JSONNode("library", libItemName));
+					}
+				}
+			}
+		}
+		DOM::FrameElement::PIMovieClip asMovieClip = (DOM::FrameElement::PIMovieClip)element;
+		if (asMovieClip != NULL)
+		{
+			Utils::Trace(m_pCallback, "Was a clip\n");
+			FCM::StringRep16 pInstanceName = NULL;
+			std::string instanceName;
+			// and unfortunately just calling GetName() here throws some sort of error
+			asMovieClip->GetName(&pInstanceName);
+			if (pInstanceName == NULL)
+			{
+				Utils::Trace(m_pCallback, "Failed to get name\n");
+			}
+			else
+			{
+				instanceName = Utils::ToString(pInstanceName, m_pCallback);
+				tweenNode.push_back(JSONNode("instanceName", instanceName));
+			}
+		}*/
 
 		U_Int32 tweenCount;
 		pTweenInfoList->Count(tweenCount);

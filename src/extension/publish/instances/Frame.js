@@ -89,6 +89,7 @@ Object.defineProperty(p, 'hasValues',
 {
     get: function()
     {
+        if (this.tween) return true;
         for (let k in GLOBAL_MAP)
         {
             if (this[k] !== null) return true;

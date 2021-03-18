@@ -2,6 +2,7 @@
 
 const DataUtils = require('../utils/DataUtils');
 const Frame = require('../instances/Frame');
+const Matrix = require('./Matrix');
 
 const TweenProp = function(data, degToRad, invert)
 {
@@ -34,6 +35,11 @@ const TweenProp = function(data, degToRad, invert)
 const Tween = function (tween) {
 
     /**
+     * If this tween has been used by an instance. If so, it can't be matched with another one
+     * (to ensure that tweens with duplicate start/end positions are treated separately)
+     */
+    this.used = false;
+    /**
      * The start frame for the tween
      * @property {number} startFrame
      */
@@ -46,10 +52,10 @@ const Tween = function (tween) {
     this.endFrame = tween.end;
 
     /**
-     * Format TBD, depending on what we get out of Animate
-     * @property {Object} ease
+     * Transformation matrix for the start frame of the tween, used for matching up tweens and display objects.
+     * @property {Matrix} startTransform
      */
-    this.ease = null;
+    this.startTransform = new Matrix(tween.startTransform);
 
     /**
      * The x position tween data
@@ -92,6 +98,12 @@ const Tween = function (tween) {
      * @property {Object} rotation
      */
     this.rotation = tween.rotation ? new TweenProp(tween.rotation, true) : null;
+
+    /**
+     * Ease object with type and strength properties.
+     * @property {Object} ease
+     */
+    this.ease = this.getFirstEase();
 };
 
 // Extends the prototype
@@ -102,8 +114,7 @@ p.toJSON = function()
     const output = {
         d: this.endFrame - this.startFrame,
         p: {},
-        // TODO: set up this
-        e: null,
+        e: this.ease || undefined,
     };
     if (this.x) output.p.x = this.x.end;
     if (this.y) output.p.y = this.y.end;
@@ -125,10 +136,32 @@ p.serialize = function()
     let buffer = 'WD' + (this.endFrame - this.startFrame);
     if (this.ease)
     {
-        // TODO:
+        buffer += 'E' + this.ease.strength + this.ease.type;
     }
     buffer += Frame.prototype.serialize.call(this.toJSON().p);
     return buffer;
+}
+
+/**
+ * Gets the ease on the first property being tweened, as the runtime implementation currently
+ * does not handle per-property easing.
+ * @method getFirstEase
+ * @return {Object} Ease data with type and strength properties
+ */
+p.getFirstEase = function()
+{
+    let out = null;
+    if (this.x) out = {type: this.x.easeType, strength: this.x.easeStrength};
+    else if (this.y) out = {type: this.y.easeType, strength: this.y.easeStrength};
+    else if (this.scaleX) out = {type: this.scaleX.easeType, strength: this.scaleX.easeStrength};
+    else if (this.scaleY) out = {type: this.scaleY.easeType, strength: this.scaleY.easeStrength};
+    else if (this.rotation) out = {type: this.rotation.easeType, strength: this.rotation.easeStrength};
+    else if (this.skewX) out = {type: this.skewX.easeType, strength: this.skewX.easeStrength};
+    else if (this.skewY) out = {type: this.skewY.easeType, strength: this.skewY.easeStrength};
+    // if using classic easing and 0 strength, it is linear and we can save
+    if (out && out.type == 'classic' && out.strength == 0)
+        return null;
+    return out;
 }
 
 /**
@@ -139,13 +172,15 @@ p.serialize = function()
  */
 p.transformMatchesStart = function(frame)
 {
-    if (this.x && this.x.start !== frame.x) return false;
-    if (this.y && this.y.start !== frame.y) return false;
-    if (this.scaleX && this.scaleX.start !== frame.sx) return false;
-    if (this.scaleY && this.scaleY.start !== frame.sy) return false;
-    if (this.rotation && this.rotation.start !== frame.r) return false;
-    if (this.skewX && this.skewX.start !== frame.kx) return false;
-    if (this.skewY && this.skewY.start !== frame.ky) return false;
+    if (this.used) return false;
+
+    if (this.startTransform.x !== frame.x) return false;
+    if (this.startTransform.y !== frame.y) return false;
+    if (this.startTransform.scaleX !== frame.sx) return false;
+    if (this.startTransform.scaleY !== frame.sy) return false;
+    if (this.startTransform.rotation !== frame.r) return false;
+    if (this.startTransform.skewX !== frame.kx) return false;
+    if (this.startTransform.skewY !== frame.ky) return false;
     return true;
 };
 

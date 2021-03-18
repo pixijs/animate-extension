@@ -170,6 +170,8 @@ p.getChildren = function()
                         // that should be tweened
                         if (end)
                         {
+                            // consume the tween so that it can't be used by something else
+                            frameTweens[j].used = true;
                             activeTweenInstances[command.instanceId] = end;
                             // add the tween here
                             instance.startTween(frame.frame, frameTweens[j]);
@@ -198,7 +200,20 @@ p.getChildren = function()
 p.searchAheadForTweenEnd = function(instanceId, tween)
 {
     if (!this.frames[tween.endFrame]) return null;
-    const commands = this.frames[tween.endFrame].commands;
+    let commands = this.frames[tween.endFrame].commands;
+    for (let j = 0; j < commands.length; ++j)
+    {
+        if (commands[j].instanceId === instanceId && commands[j].type === 'Move')
+        {
+            const testMatrix = new Matrix(commands[j].transform);
+            if (tween.matrixMatchesEnd(testMatrix))
+            {
+                return tween.endFrame;
+            }
+        }
+    }
+    // because of easing, check the previous frame too
+    commands = this.frames[tween.endFrame - 1].commands;
     for (let j = 0; j < commands.length; ++j)
     {
         if (commands[j].instanceId === instanceId && commands[j].type === 'Move')
