@@ -5,6 +5,9 @@
 #include "FrameElement/IInstance.h"
 #include "FrameElement/IMovieClip.h"
 #include "ILibraryItem.h"
+#include "DOM/Service/Shape/IPath.h"
+#include "DOM/Service/Shape/IEdge.h"
+#include "DOM/Utils/DOMTypes.h"
 
 using namespace FCM;
 
@@ -352,36 +355,9 @@ namespace PixiJS
 		// record the start and end values - at this point, we could use these even if we can't get ease data and at least have something
 		propNode.push_back(JSONNode("start", startValue));
 		propNode.push_back(JSONNode("end", endValue));
-		// has property ease data - "Ease_Strength" and "Ease_Type"
-		PIFCMDictionary propertyEase;
-		res = propertyDict->GetInfo("Property_Ease", type, valueLen);
-		res = propertyDict->Get("Property_Ease", type, (FCM::PVoid)&propertyEase, valueLen);
-		if (FCM_FAILURE_CODE(res))
-		{
-			// shouldn't fail, but to reduce potential noise don't trace
-			// Utils::Trace(m_pCallback, "Failed to get property ease for %s: %i\n", propertyName, res);
-			// at least we got the values out of it
-			return true;
-		}
-		double easeStrength = 0;
-		res = propertyEase->GetInfo("Ease_Strength", type, valueLen);
-		res = propertyEase->Get("Ease_Strength", type, (FCM::PVoid)&easeStrength, valueLen);
+		
+		ReadEase(propertyDict, propNode);
 
-		res = propertyEase->GetInfo("Ease_Type", type, valueLen);
-		std::vector<FCM::Byte> buffer_1(valueLen);
-		std::string easeType;
-		res = propertyEase->Get("Ease_Type", type, (FCM::PVoid)(&buffer_1[0]), valueLen);
-		if (FCM_FAILURE_CODE(res))
-		{
-			// shouldn't fail, but to reduce potential noise don't trace
-			// Utils::Trace(m_pCallback, "Failed to get ease type for %s: %i\n", propertyName, res);
-			// at least we got the values out of it
-			return true;
-		}
-		easeType = (char*)(&buffer_1[0]);
-		// record ease values
-		propNode.push_back(JSONNode("easeType", easeType));
-		propNode.push_back(JSONNode("easeStrength", easeStrength));
 		return true;
 	}
 
@@ -459,6 +435,20 @@ namespace PixiJS
 		// record the start and end values - at this point, we could use these even if we can't get ease data and at least have something
 		propNode.push_back(JSONNode("start", startValue));
 		propNode.push_back(JSONNode("end", endValue));
+		
+		ReadEase(propertyDict, propNode);
+
+		return true;
+	}
+
+	bool TweenWriter::ReadEase(FCM::PIFCMDictionary propertyDict, JSONNode& propNode)
+	{
+		// length of value in dictionary (reused for each call)
+		FCM::U_Int32 valueLen;
+		// type of value in dictionary (reused for each call)
+		FCM::FCMDictRecTypeID type;
+		// call result (reused for each call)
+		FCM::Result res;
 		// has property ease data - "Ease_Strength" and "Ease_Type"
 		PIFCMDictionary propertyEase;
 		res = propertyDict->GetInfo("Property_Ease", type, valueLen);
@@ -467,8 +457,7 @@ namespace PixiJS
 		{
 			// shouldn't fail, but to reduce potential noise don't trace
 			// Utils::Trace(m_pCallback, "Failed to get property ease for %s: %i\n", propertyName, res);
-			// at least we got the values out of it
-			return true;
+			return false;
 		}
 		double easeStrength = 0;
 		res = propertyEase->GetInfo("Ease_Strength", type, valueLen);
@@ -482,13 +471,77 @@ namespace PixiJS
 		{
 			// shouldn't fail, but to reduce potential noise don't trace
 			// Utils::Trace(m_pCallback, "Failed to get ease type for %s: %i\n", propertyName, res);
-			// at least we got the values out of it
-			return true;
+			return false;
 		}
 		easeType = (char*)(&buffer_1[0]);
 		// record ease values
 		propNode.push_back(JSONNode("easeType", easeType));
 		propNode.push_back(JSONNode("easeStrength", easeStrength));
+		// TODO: custom path reading isn't working correctly: segments that definitely should be curved were
+		// saying that they were Line segments with positions of 0
+		/*
+		if (easeType == "custom")
+		{
+			ReadCustomEase(propertyEase, propNode);
+		}
+		*/
 		return true;
+	}
+
+	bool TweenWriter::ReadCustomEase(FCM::PIFCMDictionary easeDict, JSONNode& propNode)
+	{
+		// length of value in dictionary (reused for each call)
+		FCM::U_Int32 valueLen;
+		// type of value in dictionary (reused for each call)
+		FCM::FCMDictRecTypeID type;
+		// call result (reused for each call)
+		FCM::Result res;
+
+		DOM::Service::Shape::PIPath path;
+		res = easeDict->GetInfo("Ease_Path", type, valueLen);
+		res = easeDict->Get("Ease_Path", type, (FCM::PVoid)&path, valueLen);
+		if (FCM_FAILURE_CODE(res))
+		{
+			// shouldn't fail, but to reduce potential noise don't trace
+			Utils::Trace(m_pCallback, "Failed to get ease path: %i\n", res);
+			return false;
+		}
+		FCM::PIFCMList edgeList;
+		res = path->GetEdges(edgeList);
+		if (FCM_FAILURE_CODE(res))
+		{
+			// shouldn't fail, but to reduce potential noise don't trace
+			Utils::Trace(m_pCallback, "Failed to get edge list: %i\n", res);
+			return false;
+		}
+		JSONNode pathNode(JSON_ARRAY);
+		pathNode.set_name("easePath");
+		U_Int32 edgeCount;
+		edgeList->Count(edgeCount);
+		for (U_Int32 e = 0; e < edgeCount; ++e)
+		{
+			DOM::Service::Shape::PIEdge edge = (DOM::Service::Shape::PIEdge)(*edgeList)[0];
+			DOM::Utils::SEGMENT segment;
+			edge->GetSegment(segment);
+			JSONNode segmentNode(JSON_NODE);
+			if (segment.segmentType == DOM::Utils::LINE_SEGMENT)
+			{
+				segmentNode.push_back(JSONNode("lineStartX", segment.line.endPoint1.x));
+				segmentNode.push_back(JSONNode("lineStartY", segment.line.endPoint1.y));
+				segmentNode.push_back(JSONNode("lineEndX", segment.line.endPoint2.x));
+				segmentNode.push_back(JSONNode("lineEndY", segment.line.endPoint2.y));
+			}
+			else if (segment.segmentType == DOM::Utils::QUAD_BEZIER_SEGMENT)
+			{
+				segmentNode.push_back(JSONNode("anchor1X", segment.quadBezierCurve.anchor1.x));
+				segmentNode.push_back(JSONNode("anchor1Y", segment.quadBezierCurve.anchor1.y));
+				segmentNode.push_back(JSONNode("anchor2X", segment.quadBezierCurve.anchor2.x));
+				segmentNode.push_back(JSONNode("anchor2Y", segment.quadBezierCurve.anchor2.y));
+				segmentNode.push_back(JSONNode("controlX", segment.quadBezierCurve.control.x));
+				segmentNode.push_back(JSONNode("controlY", segment.quadBezierCurve.control.y));
+			}
+			pathNode.push_back(segmentNode);
+		}
+		propNode.push_back(pathNode);
 	}
 }

@@ -30,6 +30,8 @@ namespace PixiJS
 
 		bool ReadProp(FCM::PIFCMDictionary tweenDict, JSONNode &propNode, const std::string propertyName);
 		bool ReadTranslateProp(FCM::PIFCMDictionary tweenDict, JSONNode &propNode, const std::string propertyName, const std::string subPropertyName);
+		bool ReadEase(FCM::PIFCMDictionary propertyDict, JSONNode& propNode);
+		bool ReadCustomEase(FCM::PIFCMDictionary easeDict, JSONNode& propNode);
 
 		void ListProps(FCM::PIFCMDictionary dict);
 

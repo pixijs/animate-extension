@@ -114,7 +114,7 @@ p.toJSON = function()
     const output = {
         d: this.endFrame - this.startFrame,
         p: {},
-        e: this.ease ? {n: this.ease.name, s: this.ease.strength} : undefined,
+        e: this.ease ? {n: this.ease.name, s: this.ease.name === 'classic' ? this.ease.strength : undefined} : undefined,
     };
     if (this.x) output.p.x = this.x.end;
     if (this.y) output.p.y = this.y.end;
@@ -136,7 +136,7 @@ p.serialize = function()
     let buffer = 'WD' + (this.endFrame - this.startFrame);
     if (this.ease)
     {
-        buffer += 'E' + this.ease.strength + this.ease.name;
+        buffer += 'E' + (this.ease.name === 'classic' ? this.ease.strength : '') + this.ease.name;
     }
     buffer += Frame.prototype.serialize.call(this.toJSON().p);
     return buffer;
