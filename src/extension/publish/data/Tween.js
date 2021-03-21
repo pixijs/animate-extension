@@ -136,7 +136,7 @@ p.serialize = function()
     let buffer = 'WD' + (this.endFrame - this.startFrame);
     if (this.ease)
     {
-        buffer += 'E' + (this.ease.name === 'classic' ? this.ease.strength : '') + this.ease.name;
+        buffer += 'E' + (this.ease.name === 'classic' ? this.ease.strength : '') + this.ease.name + ';';
     }
     buffer += 'P' + Frame.prototype.serialize.call(this.toJSON().p);
     return buffer;
