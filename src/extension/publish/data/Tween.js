@@ -138,7 +138,7 @@ p.serialize = function()
     {
         buffer += 'E' + (this.ease.name === 'classic' ? this.ease.strength : '') + this.ease.name;
     }
-    buffer += Frame.prototype.serialize.call(this.toJSON().p);
+    buffer += 'P' + Frame.prototype.serialize.call(this.toJSON().p);
     return buffer;
 }
 
