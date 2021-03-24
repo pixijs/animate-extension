@@ -33,6 +33,8 @@ namespace PixiJS
 			FCM::U_Int32 stageWidth,
 			FCM::U_Int32 fps);
 
+		virtual void AddTweens(JSONNode* tweens);
+
 		// Marks the end of the Document
 		virtual FCM::Result EndDocument();
 
@@ -227,6 +229,8 @@ namespace PixiJS
 		JSONNode* m_pSoundArray;
 
 		JSONNode* m_pTextArray;
+
+		JSONNode* m_pTweenArray;
 
 		JSONNode*  m_shapeElem;
 

@@ -6,6 +6,10 @@
     "url": "https://github.com/jiborobot/pixi-animate-extension",
     "type": "git"
   },
+  "scripts": {
+    "build": "gulp --plugin",
+    "buildAndInstall": "gulp --plugin --install"
+  },
   "license": "UNLICENSED",
   "dependencies": {
     "atlaspack": "^1.0.0",
@@ -18,7 +22,7 @@
     "pixi-animate-2": "npm:pixi-animate@^2.0.0-rc8",
     "pixi.js-6": "npm:pixi.js@^6.0.0-rc.3",
     "semver": "^5.1.0",
-    "uglify-js": "^2.6.1"
+    "terser": "^5.5.1"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",

@@ -168,7 +168,7 @@ p.destroy = function()
 {
     if (!this.debug)
     {
-        fs.unlinkSync(this._dataFile);
+        // fs.unlinkSync(this._dataFile);
     }
     this._data = null;
 
@@ -188,14 +188,18 @@ p.run = function(done)
     try {
         this.exportAssets(() => {
             try {
-                const buffer = this.publish();
-                this.destroy();
-                if (this.debug) {
-                    buffer.split('\n').forEach((line) => {
-                        console.log(line);
-                    });
-                }
-                done();
+                this.publish((err, buffer) => {
+                    if (err) {
+                        return done(err);
+                    }
+                    this.destroy();
+                    if (this.debug) {
+                        buffer.split('\n').forEach((line) => {
+                            console.log(line);
+                        });
+                    }
+                    done();
+                });
             }
             catch(e) {
                 done(e);
@@ -211,21 +215,39 @@ p.run = function(done)
  * Save the output stream
  * @method publish
  */
-p.publish = function()
+p.publish = function(done)
 {
     const meta = this._data._meta;
 
     // Get the javascript buffer
     let buffer = this.renderer.render();
 
+    const write = function()
+    {
+        // Save the output file
+        let outputFile = path.join(process.cwd(), meta.outputFile);
+        fs.writeFileSync(outputFile, buffer);
+
+        done(null, buffer);
+    }
+
     if (meta.compressJS)
     {
         // Run through uglify
-        const UglifyJS = require('uglify-js');
-        let result = UglifyJS.minify(buffer, {
-            fromString: true
-        });
-        buffer = result.code;
+        const Terser = require('terser');
+        Terser.minify(buffer, {module: meta.outputVersion !== '1.0', ecma: meta.outputVersion === '1.0' ? 5 : 2015})
+        .then((result) => {
+            if (result.error)
+            {
+                done(result.error);
+            }
+            else
+            {
+                buffer = result.code;
+                write();
+            }
+        })
+        .catch(done);
     }
     else
     {
@@ -238,13 +260,8 @@ p.publish = function()
             brace_style: "collapse-preserve-inline",
             break_chained_methods: true
         });
+        write();
     }
-
-    // Save the output file
-    let outputFile = path.join(process.cwd(), meta.outputFile);
-    fs.writeFileSync(outputFile, buffer);
-
-    return buffer;
 };
 
 module.exports = Publisher;

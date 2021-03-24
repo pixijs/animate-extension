@@ -18,6 +18,10 @@ const Renderer = function(library)
      */
     this.library = library;
 
+    // because the older PixiAnimate code doesn't handle the tween exports, so clear out anything
+    // there and the feature will be ignored
+    library.timelineTweensById = {};
+
     /**
      * The map of snippets already loaded
      * @property {Object} _snippets

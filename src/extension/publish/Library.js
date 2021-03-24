@@ -8,6 +8,7 @@ const Container = require('./items/Container');
 const Stage = require('./items/Stage');
 const Graphic = require('./items/Graphic');
 const Sound = require('./items/Sound');
+const TimelineTween = require('./data/TimelineTweens');
 
 /**
  * Handle the converting of data assets to typed objects
@@ -44,6 +45,12 @@ const Library = function(data)
      * @property {Array} timelines
      */
     const timelines = this.timelines = [];
+
+    /**
+     * The look-up of the asset by ID
+     * @property {Object} timelineTweensById
+     */
+    this.timelineTweensById = {};
 
     /**
      * The look-up of the asset by ID
@@ -113,6 +120,13 @@ const Library = function(data)
         map[text.assetId] = text;
     });
 
+    // Sort the tweens
+    for (const timeline of data.Tweens)
+    {
+        const tween = new TimelineTween(timeline);
+        this.timelineTweensById[tween.name] = tween;
+    }
+
     let self = this;
     let timelineNames = data.Timelines.map(timelineData => timelineData.name);
     let graphics = 0;
@@ -140,7 +154,7 @@ const Library = function(data)
     data.Timelines.forEach(function(timelineData)
     {
         let timeline;
-        
+
         if (timelineData.totalFrames <= 1 && timelineData.type != Timeline.STAGE)
         {
             self.hasContainer = true;
@@ -154,7 +168,7 @@ const Library = function(data)
         {
             self.stage = timeline = new Stage(library, timelineData, data._meta.framerate);
         }
-        else 
+        else
         {
             timeline = new Timeline(library, timelineData);
         }
@@ -169,7 +183,7 @@ const Library = function(data)
             let name = timeline.name;
 
             // See if timeline exists or if name is the same as stage
-            while(names[name] || name == data._meta.stageName) 
+            while(names[name] || name == data._meta.stageName)
             {
                 let version;
 
@@ -222,7 +236,7 @@ p.destroy = function()
 
     this.bitmaps.length = 0;
     this.bitmaps = null;
-    
+
     this._mapById = null;
 };
 

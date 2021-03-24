@@ -161,10 +161,10 @@ p.getTimelines = function()
 {
     let buffer = "";
     const renderer = this;
-    this.library.timelines.forEach(function(timeline)
+    for (const timeline of this.library.timelines)
     {
         buffer += timeline.render(renderer);
-    });
+    }
     return buffer;
 };
 

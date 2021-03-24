@@ -82,12 +82,11 @@ namespace PixiJS
 
 	CPublisher::CPublisher()
 	{
-
 	}
 
 	CPublisher::~CPublisher()
 	{
-
+		delete m_pTweenWriter;
 	}
 
 
@@ -127,6 +126,8 @@ namespace PixiJS
 		FCM::AutoPtr<FCM::IFCMCalloc> pCalloc;
 
 		Init();
+
+		m_pTweenWriter = new PixiJS::TweenWriter(GetCallback());
 
 		pCalloc = PixiJS::Utils::GetCallocService(GetCallback());
 		ASSERT(pCalloc.m_Ptr != NULL);
@@ -419,6 +420,7 @@ namespace PixiJS
 			// Generate frame commands for each timeline
 			for (FCM::U_Int32 i = 0; i < timelineCount; i++)
 			{
+
 				Exporter::Service::RANGE range;
 				AutoPtr<ITimelineBuilder> timelineBuilder;
 				ITimelineWriter* timelineWriter;
@@ -449,10 +451,9 @@ namespace PixiJS
 				}
 
 				((TimelineBuilder*)timelineBuilder.m_Ptr)->Build(0, NULL, &timelineWriter);
-			}
 
-			res = outputWriter->EndDocument();
-			ASSERT(FCM_SUCCESS_CODE(res));
+				m_pTweenWriter->ReadTimeline(timeline.m_Ptr, stageName);
+			}
 
 			// Export the library items with linkages
 			FCM::FCMListPtr pLibraryItemList;
@@ -463,6 +464,10 @@ namespace PixiJS
 			}
 
 			ExportLibraryItems(pLibraryItemList);
+
+			outputWriter->AddTweens(m_pTweenWriter->GetRoot());
+			res = outputWriter->EndDocument();
+			ASSERT(FCM_SUCCESS_CODE(res));
 		}
 		else
 		{
@@ -693,6 +698,17 @@ namespace PixiJS
 				AutoPtr<DOM::LibraryItem::ISymbolItem> pSymbolItem = pLibItem;
 				AutoPtr<DOM::LibraryItem::IMediaItem> pMediaItem = pLibItem;
 
+				if (pSymbolItem)
+				{
+					DOM::ITimeline* timeline;
+					res = pSymbolItem->GetTimeLine(timeline);
+					if (FCM_FAILURE_CODE(res))
+					{
+						Utils::Trace(GetCallback(), "Unable to get timeline for %s: %i\n", libItemName, res);
+					}
+					m_pTweenWriter->ReadTimeline(timeline, libItemName);
+				}
+
 				res = pLibItem->GetProperties(pDict.m_Ptr);
 				ASSERT(FCM_SUCCESS_CODE(res));
 
@@ -701,6 +717,7 @@ namespace PixiJS
 
 				if (FCM_SUCCESS_CODE(res))
 				{
+					Utils::Trace(GetCallback(), "Succeeded at getting info on linkage class key\n");
 					FCM::Boolean hasResource;
 					ResourcePalette* pResPalette = static_cast<ResourcePalette*>(m_pResourcePalette.m_Ptr);
 

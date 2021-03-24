@@ -120,6 +120,11 @@ namespace PixiJS
 		return FCM_SUCCESS;
 	}
 
+	void OutputWriter::AddTweens(JSONNode* tweens)
+	{
+		m_pTweenArray = tweens;
+	}
+
 	FCM::Result OutputWriter::EndDocument()
 	{
 		m_pRootNode->push_back(*m_pShapeArray);
@@ -127,6 +132,7 @@ namespace PixiJS
 		m_pRootNode->push_back(*m_pSoundArray);
 		m_pRootNode->push_back(*m_pTextArray);
 		m_pRootNode->push_back(*m_pTimelineArray);
+		m_pRootNode->push_back(*m_pTweenArray);
 
 		JSONNode meta(JSON_NODE);
 		meta.set_name("_meta");
@@ -1109,6 +1115,7 @@ namespace PixiJS
 		delete m_pShapeArray;
 		delete m_pTextArray;
 		delete m_pRootNode;
+		delete m_pTweenArray;
 	}
 
 	FCM::Result OutputWriter::StartPreview(FCM::PIFCMCallback pCallback)
