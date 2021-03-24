@@ -76,8 +76,8 @@ var DataUtils = {
         {
             const max = 255;
             const r = Math.round(arr[0] * max);
-            const b = Math.round(arr[2] * max);
-            const g = Math.round(arr[4] * max);
+            const g = Math.round(arr[2] * max);
+            const b = Math.round(arr[4] * max);
             const hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
             return this.compressColors(hex);
         }
