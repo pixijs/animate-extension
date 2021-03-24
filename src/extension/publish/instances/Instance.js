@@ -169,6 +169,23 @@ p.startTween = function(frameIndex, tween)
     this.isAnimated = true;
 };
 
+p.getTweenEndingOnFrame = function(frameIndex)
+{
+    if (!frameIndex) return null;
+
+    for (let i = 0; i < frameIndex; ++i)
+    {
+        const frame = this.frames[i];
+        if (!frame) continue;
+
+        if (frame.tween && frame.tween.endFrame === frameIndex)
+        {
+            return frame.tween;
+        }
+    }
+    return null;
+}
+
 /**
  * Get the duration of this item on the stage
  * @method getDuration
@@ -216,13 +233,13 @@ p.getFrames = function(compress)
             // animation properties
             frame.validKeys.forEach(function(k)
             {
-                if (!equals(prevFrame[k], frame[k]))
+                if (!equals(prevFrame[k], frame[k]) || (cloneFrame.tw && Object.prototype.hasOwnProperty.call(cloneFrame.tw.p, k)))
                 {
                     animProps.push(k);
                 }
             });
             prevFrame = cloneFrame;
-            if (frame.tween)
+            if (prevFrame.tw)
             {
                 Object.assign(prevFrame, prevFrame.tw.p);
                 delete prevFrame.tw;
@@ -262,7 +279,7 @@ p.getFrames = function(compress)
 
         // Property remember all the values of the current frame
         prevFrame = cloneFrame;
-        if (frame.tween)
+        if (prevFrame.tw)
         {
             Object.assign(prevFrame, prevFrame.tw.p);
             delete prevFrame.tw;
@@ -286,7 +303,6 @@ p.getFrames = function(compress)
         let result = [];
         for (let i in this.frames)
         {
-            // TODO: serialize() has to account for tween?
             result.push(i + this.frames[i].serialize());
         }
         return `"${result.join(' ')}"`;

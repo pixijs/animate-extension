@@ -4,23 +4,40 @@ const DataUtils = require('../utils/DataUtils');
 const Frame = require('../instances/Frame');
 const Matrix = require('./Matrix');
 
+function areArraysDifferent(arr1, arr2)
+{
+    for (let i = 0; i < arr1.length; ++i)
+    {
+        if (arr1[i] !== arr2[i]) return true;
+    }
+    return false;
+}
+
 const TweenProp = function(data, degToRad, invert)
 {
-    if (degToRad)
+    if (typeof data.start === "number")
     {
-        this.start = round(data.start * Math.PI / 180);
-        this.end = round(data.end * Math.PI / 180);
+        if (degToRad)
+        {
+            this.start = round(data.start * Math.PI / 180);
+            this.end = round(data.end * Math.PI / 180);
+        }
+        else
+        {
+            this.start = round(data.start);
+            this.end = round(data.end);
+        }
+        // it seems that to convert the skewX values, we need to make it negative
+        if (invert)
+        {
+            this.start = -this.start;
+            this.end = -this.end;
+        }
     }
     else
     {
-        this.start = round(data.start);
-        this.end = round(data.end);
-    }
-    // it seems that to convert the skewX values, we need to make it negative
-    if (invert)
-    {
-        this.start = -this.start;
-        this.end = -this.end;
+        this.start = data.start;
+        this.end = data.end;
     }
     this.easeType = data.easeType;
     this.easeStrength = data.easeStrength;
@@ -109,6 +126,35 @@ const Tween = function (tween) {
 // Extends the prototype
 const p = Tween.prototype;
 
+/**
+ * Adds color info for first & last frames, as they aren't included in the geometric tween data.
+ * @method addColors
+ * @param {object} startColor Object with "c" and "a" properties, as on a frame.
+ * @param {object} endColor Object with "c" and "a" properties, as on a frame.
+ */
+p.addColors = function(startColor, endColor)
+{
+    if (startColor.a !== endColor.a)
+    {
+        this.alpha = new TweenProp({start: startColor.a, end: endColor.a});
+    }
+    if (areArraysDifferent(startColor.c, endColor.c))
+    {
+        this.color = new TweenProp({start: startColor.c, end: endColor.c});
+    }
+}
+
+p.replaceColorWithTint = function(startTint, endTint)
+{
+    this.color = null;
+    this.tint = new TweenProp({start: startTint, end: endTint});
+}
+
+/**
+ * Outputs a simplified JSON output
+ * @method toJSON
+ * @return {object} JSON output
+ */
 p.toJSON = function()
 {
     const output = {
@@ -123,6 +169,9 @@ p.toJSON = function()
     if (this.rotation) output.p.r = this.rotation.end;
     if (this.skewX) output.p.kx = this.skewX.end;
     if (this.skewY) output.p.ky = this.skewY.end;
+    if (this.alpha) output.p.a = this.alpha.end;
+    if (this.color) output.p.c = this.color.end;
+    if (this.tint) output.p.t = this.tint.end;
     return output;
 };
 

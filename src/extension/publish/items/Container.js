@@ -5,6 +5,7 @@ const LibraryItem = require('./LibraryItem');
 const ContainerInstance = require('../instances/ContainerInstance');
 const SoundInstance = require('../instances/SoundInstance');
 const Matrix = require('../data/Matrix');
+const Command = require('../commands/Command');
 
 /**
  * The single frame timeline
@@ -152,8 +153,34 @@ p.getChildren = function()
             // otherwise handle the command normally
             else
             {
-                // Add to the list of commands for this instance
-                instance.addToFrame(frame.frame, command);
+                // do some extra work to add color transforms into tweens
+                if (command.type === 'ColorTransform')
+                {
+                    // get any tween ending on this frame, in case it already got cleaned up by the move
+                    // and is no longer in the activeTweenInstances dictionary
+                    // unfortunately, this is slow, but accurate since the colors are disconnected from any
+                    // tween data
+                    const activeTween = instance.getTweenEndingOnFrame(activeTweenInstances[command.instanceId]) || instance.getTweenEndingOnFrame(frame.frame);
+                    // if no tween active or this is the start frame of the tween, add to keyframe normally
+                    if (!activeTween || frame.frame === activeTween.startFrame)
+                    {
+                        // Add to the list of commands for this instance, will be added to the keyframe
+                        instance.addToFrame(frame.frame, command);
+                    }
+                    else if (frame.frame === activeTween.endFrame)
+                    {
+                        const colors = {};
+                        // record color data as it would be on the frame
+                        Command.create(command).toFrame(colors);
+                        // now add the start & end colors to the tween (if they are different)
+                        activeTween.addColors(instance.frames[activeTween.startFrame], colors);
+                    }
+                }
+                else
+                {
+                    // Add to the list of commands for this instance
+                    instance.addToFrame(frame.frame, command);
+                }
             }
 
             // check for the start of a new tween
