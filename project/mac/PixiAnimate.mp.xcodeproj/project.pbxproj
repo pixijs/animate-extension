@@ -16,6 +16,8 @@
 		"157ca6f8-2e54-371b-8649-bb34db8f2d63" /* internalJSONNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "a47eaabc-0062-3299-b91c-06037678b948" /* internalJSONNode.cpp */; };
 		"18fd347f-e3e6-39d6-871d-61dfdd6a372d" /* JSONWorker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "474ed136-b062-30a7-9d9b-ab0938ef331d" /* JSONWorker.cpp */; };
 		"1a74ed6f-1455-3f15-9f44-14bb8e20b635" /* JSONIterators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "9bbfd7be-ac57-384d-984e-1afc2e0ed3b2" /* JSONIterators.cpp */; };
+		21CE3984260BD9CD0038E2B5 /* TweenWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CE3983260BD9CD0038E2B5 /* TweenWriter.cpp */; };
+		21CE3985260BD9CD0038E2B5 /* TweenWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CE3983260BD9CD0038E2B5 /* TweenWriter.cpp */; };
 		"24fed128-bfa3-35fe-9403-2c37eed95a7d" /* libjson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "7bfcfcd8-dedc-3680-b9e1-95891cdfa343" /* libjson.cpp */; };
 		"35666a89-c77e-30b3-8294-49cb42bb3457" /* libjson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "7bfcfcd8-dedc-3680-b9e1-95891cdfa343" /* libjson.cpp */; };
 		"3d6b6be0-13dd-3221-921c-9cd8689e5891" /* JSONWorker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = "474ed136-b062-30a7-9d9b-ab0938ef331d" /* JSONWorker.cpp */; };
@@ -65,6 +67,7 @@
 		"12cad407-b42b-3fd9-afb2-7703a0006994" /* Utils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Utils.cpp; sourceTree = "<group>"; };
 		"18b8044a-5909-32aa-9155-c8c1788376b5" /* JSONChildren.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONChildren.cpp; sourceTree = "<group>"; };
 		"1f9d9071-e694-3006-9299-60f935a277f6" /* CoreServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreServices.framework; sourceTree = "<group>"; };
+		21CE3983260BD9CD0038E2B5 /* TweenWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TweenWriter.cpp; sourceTree = "<group>"; };
 		"242250eb-c22a-31fb-b531-b0b9cb9b75e8" /* ApplicationServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ApplicationServices.framework; sourceTree = "<group>"; };
 		"37ac9b87-549b-3c4b-935a-8ff607750468" /* DocType.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = DocType.cpp; sourceTree = "<group>"; };
 		"3cdca8a2-9ab8-3515-bea5-e404f7131120" /* JSONMemory.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = JSONMemory.cpp; sourceTree = "<group>"; };
@@ -133,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				75FD74531C6255BD00042B73 /* OutputWriter.cpp */,
+				21CE3983260BD9CD0038E2B5 /* TweenWriter.cpp */,
 				75FD74541C6255BD00042B73 /* TimelineWriter.cpp */,
 				"9f0688c3-3f04-3a69-a219-c79da92040db" /* Main.cpp */,
 				"37ac9b87-549b-3c4b-935a-8ff607750468" /* DocType.cpp */,
@@ -159,7 +163,6 @@
 				9A0112631BFB99D200E546CC /* include */,
 				F5977F0909B7D3970058A43E /* PixiAnimate.xcconfigs */,
 				F5D3576909491A7D008C36CA /* Frameworks */,
-				811C721C097349F9007B1073 /* Libraries */,
 				F5D3574E0948ECD5008C36CA /* Resources */,
 				F5D3574D0948ECCD008C36CA /* Sources */,
 				F5D357400948EBCB008C36CA /* Products */,
@@ -383,6 +386,7 @@
 				"4ebc8a76-6e5e-38d1-bd1e-a44ac9b6cf09" /* JSONDebug.cpp in Sources */,
 				"80eccaa8-142f-385a-a04f-942a76afb0bf" /* JSONIterators.cpp in Sources */,
 				"a667ac45-a68a-3e4c-b8f0-e54bfac215bd" /* JSONMemory.cpp in Sources */,
+				21CE3984260BD9CD0038E2B5 /* TweenWriter.cpp in Sources */,
 				"5a4158f3-d11a-3378-b5bb-b87611f2f747" /* JSONNode.cpp in Sources */,
 				"8ed2c99a-79c7-3e25-a978-d21041af1b50" /* JSONNode_Mutex.cpp in Sources */,
 				"411a4dda-fc45-3eaf-a9da-35ee6f8160a6" /* JSONPreparse.cpp in Sources */,
@@ -411,6 +415,7 @@
 				"d09e3c89-9e1e-31ad-a1e3-7b33bd5e56b5" /* JSONDebug.cpp in Sources */,
 				"1a74ed6f-1455-3f15-9f44-14bb8e20b635" /* JSONIterators.cpp in Sources */,
 				"cf030e3d-ea74-3c90-9ae4-541a93a2e770" /* JSONMemory.cpp in Sources */,
+				21CE3985260BD9CD0038E2B5 /* TweenWriter.cpp in Sources */,
 				"81e0cad2-705a-3d5e-a15a-311ce49f6b73" /* JSONNode.cpp in Sources */,
 				"da95733a-774c-306e-867b-6f491e3c38e4" /* JSONNode_Mutex.cpp in Sources */,
 				"60d764c0-8d8e-3118-8c39-d190f2851cab" /* JSONPreparse.cpp in Sources */,

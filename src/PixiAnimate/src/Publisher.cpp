@@ -704,7 +704,7 @@ namespace PixiJS
 					res = pSymbolItem->GetTimeLine(timeline);
 					if (FCM_FAILURE_CODE(res))
 					{
-						Utils::Trace(GetCallback(), "Unable to get timeline for %s: %i\n", libItemName, res);
+						Utils::Trace(GetCallback(), "Unable to get timeline for %s: %i\n", libItemName.c_str(), res);
 					}
 					m_pTweenWriter->ReadTimeline(timeline, libItemName);
 				}
