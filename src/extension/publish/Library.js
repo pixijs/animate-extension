@@ -14,7 +14,7 @@ const TimelineTween = require('./data/TimelineTweens');
  * Handle the converting of data assets to typed objects
  * @class Library
  */
-const Library = function(data)
+const Library = function(data, doTweens)
 {
     /**
      * The collection of Bitmap objects
@@ -121,10 +121,13 @@ const Library = function(data)
     });
 
     // Sort the tweens
-    for (const timeline of data.Tweens)
+    if (doTweens)
     {
-        const tween = new TimelineTween(timeline);
-        this.timelineTweensById[tween.name] = tween;
+        for (const timeline of data.Tweens)
+        {
+            const tween = new TimelineTween(timeline);
+            this.timelineTweensById[tween.name] = tween;
+        }
     }
 
     let self = this;

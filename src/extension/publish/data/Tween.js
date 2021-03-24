@@ -221,7 +221,7 @@ p.getFirstEase = function()
  */
 p.transformMatchesStart = function(frame)
 {
-    if (this.used) return false;
+    if (this.used || !this.startTransform || !frame) return false;
 
     if (this.startTransform.x !== frame.x) return false;
     if (this.startTransform.y !== frame.y) return false;

@@ -45,7 +45,7 @@ let Publisher = function(dataFile, compress, debug, assetsPath)
      * The library of assets to publish
      * @property {Library} library
      */
-    this.library = new Library(this._data);
+    this.library = new Library(this._data, this._data._meta.outputVersion != '1.0');
 
     /**
      * The composer to render output
@@ -168,7 +168,7 @@ p.destroy = function()
 {
     if (!this.debug)
     {
-        // fs.unlinkSync(this._dataFile);
+        fs.unlinkSync(this._dataFile);
     }
     this._data = null;
 
