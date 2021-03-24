@@ -33,6 +33,8 @@ namespace PixiJS
 			FCM::U_Int32 stageWidth,
 			FCM::U_Int32 fps);
 
+		virtual void AddTweens(JSONNode* tweens);
+
 		// Marks the end of the Document
 		virtual FCM::Result EndDocument();
 
@@ -171,23 +173,22 @@ namespace PixiJS
 
 		OutputWriter(
 			FCM::PIFCMCallback pCallback,
-			std::string& basePath,
-			std::string& outputFile,
-			std::string& imagesPath,
-			std::string& soundsPath,
-			std::string& htmlPath,
-			std::string& libsPath,
-			std::string& stageName,
-			std::string& nameSpace,
-			std::string& outputVersion,
+			std::string &basePath,
+			std::string &outputFile,
+			std::string &imagesPath,
+			std::string &soundsPath,
+			std::string &htmlPath,
+			std::string &libsPath,
+			std::string &stageName,
+			std::string &nameSpace,
+			std::string &outputVersion,
+			std::string &outputFormat,
 			bool html,
 			bool libs,
 			bool images,
 			bool sounds,
 			bool compactShapes,
 			bool compressJS,
-			bool commonJS,
-			bool autoRun,
 			bool loopTimeline,
 			bool spritesheets,
 			int spritesheetSize,
@@ -228,6 +229,8 @@ namespace PixiJS
 		JSONNode* m_pSoundArray;
 
 		JSONNode* m_pTextArray;
+
+		JSONNode* m_pTweenArray;
 
 		JSONNode*  m_shapeElem;
 
@@ -289,6 +292,8 @@ namespace PixiJS
 
 		std::string m_outputVersion;
 
+		std::string m_outputFormat;
+
 		std::string m_outputDataFile;
 
 		std::string m_outputImageFolder;
@@ -314,10 +319,6 @@ namespace PixiJS
 		bool m_compactShapes;
 
 		bool m_compressJS;
-
-		bool m_commonJS;
-
-		bool m_autoRun;
 
 		bool m_loopTimeline;
 	};

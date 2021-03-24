@@ -43,6 +43,7 @@
 #include "OutputWriter.h"
 #include "TimelineWriter.h"
 #include "PluginConfiguration.h"
+#include "TweenWriter.h"
 
  /* -------------------------------------------------- Forward Decl */
 
@@ -151,6 +152,7 @@ namespace PixiJS
 
 		AutoPtr<IFrameCommandGenerator> m_frameCmdGeneratorService;
 		AutoPtr<IResourcePalette> m_pResourcePalette;
+		PixiJS::TweenWriter* m_pTweenWriter;
 	};
 
 
