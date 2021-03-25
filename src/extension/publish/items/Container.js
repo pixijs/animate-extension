@@ -6,6 +6,7 @@ const ContainerInstance = require('../instances/ContainerInstance');
 const SoundInstance = require('../instances/SoundInstance');
 const Matrix = require('../data/Matrix');
 const Command = require('../commands/Command');
+// const globalLog = require('../globalLog');
 
 /**
  * The single frame timeline
@@ -125,7 +126,7 @@ p.getChildren = function()
         // Ignore frames without commands
         if (!frame.commands)
         {
-            return;
+            continue;
         }
         frame.commands.forEach((command) =>
         {
@@ -184,15 +185,16 @@ p.getChildren = function()
             }
 
             // check for the start of a new tween
-            if (tweens && (command.type === 'Move' || command.type === 'Place') && tweens.tweensByStartFrame[frame.frame])
+            if (tweens && tweens.tweensByStartFrame[frame.frame])
             {
-                const frameTweens = tweens.tweensByStartFrame[i];
+                const frameTweens = tweens.tweensByStartFrame[frame.frame];
+                const transform = instance.getTransformForFrame(frame.frame);
                 // go through each tween on this frame and see if this instance's geometry matches that of the tween
                 for (let j = 0; j < frameTweens.length; ++j)
                 {
-                    if (frameTweens[j].transformMatchesStart(instance.frames[frame.frame]))
+                    if (frameTweens[j].transformMatchesStart(transform))
                     {
-                        const end = this.searchAheadForTweenEnd(command.instanceId, frameTweens[j]);
+                        const end = this.searchAheadForTweenEnd(command.instanceId, frameTweens[j], i);
                         // if this instance matches the end geometry of the tween on the end frame, then assume this is the instance
                         // that should be tweened
                         if (end)
@@ -224,10 +226,26 @@ p.getChildren = function()
  * @param {Tween} tween
  * @private
  */
-p.searchAheadForTweenEnd = function(instanceId, tween)
+p.searchAheadForTweenEnd = function(instanceId, tween, startIndex)
 {
-    if (!this.frames[tween.endFrame]) return null;
-    let commands = this.frames[tween.endFrame].commands;
+    let index = -1;
+    for (let i = startIndex + 1; i < this.frames.length; ++i)
+    {
+        if (this.frames[i].frame === tween.endFrame)
+        {
+            index = i;
+            break;
+        }
+        else if (this.frames[i].frame > tween.endFrame)
+        {
+            break;
+        }
+    }
+    if (index === -1)
+    {
+        return null;
+    }
+    let commands = this.frames[index].commands;
     for (let j = 0; j < commands.length; ++j)
     {
         if (commands[j].instanceId === instanceId && commands[j].type === 'Move')
@@ -240,7 +258,7 @@ p.searchAheadForTweenEnd = function(instanceId, tween)
         }
     }
     // because of easing, check the previous frame too
-    commands = this.frames[tween.endFrame - 1].commands;
+    commands = this.frames[index - 1].commands;
     for (let j = 0; j < commands.length; ++j)
     {
         if (commands[j].instanceId === instanceId && commands[j].type === 'Move')

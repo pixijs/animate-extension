@@ -9,6 +9,7 @@ const Renderer = require('./Renderer');
 const RendererLegacy = require('./RendererLegacy');
 const DataUtils = require('./utils/DataUtils');
 const SpritesheetBuilder = require('./SpritesheetBuilder');
+const globalLog = require('./globalLog');
 
 /**
  * The application to publish the JSON data to JS output buffer
@@ -222,18 +223,25 @@ p.publish = function(done)
     // Get the javascript buffer
     let buffer = this.renderer.render();
 
+    const debug = this.debug;
+
     const write = function()
     {
         // Save the output file
         let outputFile = path.join(process.cwd(), meta.outputFile);
         fs.writeFileSync(outputFile, buffer);
 
+        if (debug && globalLog.length)
+        {
+            fs.writeFileSync(path.join(path.dirname(outputFile), 'log.txt'), globalLog.join('\n'));
+        }
+
         done(null, buffer);
     }
 
     if (meta.compressJS)
     {
-        // Run through uglify
+        // Run through terser
         const Terser = require('terser');
         Terser.minify(buffer, {module: meta.outputVersion !== '1.0', ecma: meta.outputVersion === '1.0' ? 5 : 2015})
         .then((result) => {

@@ -6,6 +6,9 @@ const Matrix = require('./Matrix');
 
 function areArraysDifferent(arr1, arr2)
 {
+    // if an array doesn't exist, something went wrong but we should not create a prop for it
+    if (!arr1 || !arr2) return false;
+
     for (let i = 0; i < arr1.length; ++i)
     {
         if (arr1[i] !== arr2[i]) return true;

@@ -169,6 +169,28 @@ p.startTween = function(frameIndex, tween)
     this.isAnimated = true;
 };
 
+/**
+ * Searches backwards to find the transformation values on a given frame.
+ */
+p.getTransformForFrame = function(frameIndex)
+{
+    let tweenResults = {};
+    for (let i = frameIndex; i >= 0; --i)
+    {
+        const frame = this.frames[i];
+        if (!frame) continue;
+
+        if (frame.tween)
+        {
+            // take into account any tweens we see along the way as they change the ending frame values
+            tweenResults = Object.assign({}, frame.tween.toJSON().p, tweenResults);
+        }
+        // if there is any transformation property, it has all of them and we just need to merge tween values
+        if (frame.x !== null) return Object.assign({}, frame, tweenResults);
+    }
+    return null;
+}
+
 p.getTweenEndingOnFrame = function(frameIndex)
 {
     if (!frameIndex) return null;
