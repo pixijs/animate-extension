@@ -311,7 +311,7 @@ namespace PixiJS
 
 		// Temporary
 		// return FCM_SUCCESS;
-		AutoPtr<PixiJS::TweenWriter> tweenWriter(new PixiJS::TweenWriter(GetCallback()));
+		std::auto_ptr<PixiJS::TweenWriter> tweenWriter(new PixiJS::TweenWriter(GetCallback()));
 
 		std::auto_ptr<OutputWriter> outputWriter(new OutputWriter(GetCallback(),
 			basePath,
@@ -461,7 +461,7 @@ namespace PixiJS
 				return res;
 			}
 
-			ExportLibraryItems(pLibraryItemList, tweenWriter);
+			ExportLibraryItems(pLibraryItemList, tweenWriter.get());
 
 			outputWriter->AddTweens(tweenWriter->GetRoot());
 			res = outputWriter->EndDocument();
