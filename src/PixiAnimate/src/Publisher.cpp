@@ -86,7 +86,6 @@ namespace PixiJS
 
 	CPublisher::~CPublisher()
 	{
-		delete m_pTweenWriter;
 	}
 
 
@@ -126,8 +125,6 @@ namespace PixiJS
 		FCM::AutoPtr<FCM::IFCMCalloc> pCalloc;
 
 		Init();
-
-		m_pTweenWriter = new PixiJS::TweenWriter(GetCallback());
 
 		pCalloc = PixiJS::Utils::GetCallocService(GetCallback());
 		ASSERT(pCalloc.m_Ptr != NULL);
@@ -314,6 +311,7 @@ namespace PixiJS
 
 		// Temporary
 		// return FCM_SUCCESS;
+		AutoPtr<PixiJS::TweenWriter> tweenWriter(new PixiJS::TweenWriter(GetCallback()));
 
 		std::auto_ptr<OutputWriter> outputWriter(new OutputWriter(GetCallback(),
 			basePath,
@@ -452,7 +450,7 @@ namespace PixiJS
 
 				((TimelineBuilder*)timelineBuilder.m_Ptr)->Build(0, NULL, &timelineWriter);
 
-				m_pTweenWriter->ReadTimeline(timeline.m_Ptr, stageName);
+				tweenWriter->ReadTimeline(timeline.m_Ptr, stageName);
 			}
 
 			// Export the library items with linkages
@@ -463,9 +461,9 @@ namespace PixiJS
 				return res;
 			}
 
-			ExportLibraryItems(pLibraryItemList);
+			ExportLibraryItems(pLibraryItemList, tweenWriter);
 
-			outputWriter->AddTweens(m_pTweenWriter->GetRoot());
+			outputWriter->AddTweens(tweenWriter->GetRoot());
 			res = outputWriter->EndDocument();
 			ASSERT(FCM_SUCCESS_CODE(res));
 		}
@@ -652,7 +650,7 @@ namespace PixiJS
 	// Note: This function is NOT completely implemented but provides guidelines
 	// on how this can be possibly done.
 	//
-	FCM::Result CPublisher::ExportLibraryItems(FCM::FCMListPtr pLibraryItemList)
+	FCM::Result CPublisher::ExportLibraryItems(FCM::FCMListPtr pLibraryItemList, PixiJS::TweenWriter *pTweenWriter)
 	{
 		FCM::U_Int32 count = 0;
 		FCM::Result res;
@@ -687,7 +685,7 @@ namespace PixiJS
 				ASSERT(FCM_SUCCESS_CODE(res));
 
 				// Export all its children
-				res = ExportLibraryItems(pChildren);
+				res = ExportLibraryItems(pChildren, pTweenWriter);
 				ASSERT(FCM_SUCCESS_CODE(res));
 			}
 			else
@@ -706,7 +704,7 @@ namespace PixiJS
 					{
 						Utils::Trace(GetCallback(), "Unable to get timeline for %s: %i\n", libItemName.c_str(), res);
 					}
-					m_pTweenWriter->ReadTimeline(timeline, libItemName);
+					pTweenWriter->ReadTimeline(timeline, libItemName);
 				}
 
 				res = pLibItem->GetProperties(pDict.m_Ptr);
