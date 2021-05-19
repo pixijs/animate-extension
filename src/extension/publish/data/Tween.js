@@ -242,7 +242,7 @@ p.getFirstEase = function()
     else if (this.skewX) shorthand = this.getEaseJSON(this.skewX);
     else if (this.skewY) shorthand = this.getEaseJSON(this.skewY);
     // if using classic easing and 0 strength, it is linear and we can save
-    if (shorthand)
+    if (!shorthand)
         return null;
     return {name: shorthand.n, strength: shorthand.s};
 }
