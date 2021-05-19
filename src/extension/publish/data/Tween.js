@@ -123,7 +123,7 @@ const Tween = function (tween) {
      * Ease object with name and strength properties.
      * @property {Object} ease
      */
-    this.ease = this.getFirstEase();
+    this.ease = this.isSharedEase() ? this.getFirstEase() : null;
 };
 
 // Extends the prototype
@@ -165,16 +165,32 @@ p.toJSON = function()
         p: {},
         e: this.ease ? {n: this.ease.name, s: this.ease.name === 'classic' ? this.ease.strength : undefined} : undefined,
     };
-    if (this.x) output.p.x = this.x.end;
-    if (this.y) output.p.y = this.y.end;
-    if (this.scaleX) output.p.sx = this.scaleX.end;
-    if (this.scaleY) output.p.sy = this.scaleY.end;
-    if (this.rotation) output.p.r = this.rotation.end;
-    if (this.skewX) output.p.kx = this.skewX.end;
-    if (this.skewY) output.p.ky = this.skewY.end;
-    if (this.alpha) output.p.a = this.alpha.end;
-    if (this.color) output.p.c = this.color.end;
-    if (this.tint) output.p.t = this.tint.end;
+    const propNames = {
+        x: 'x',
+        y: 'y',
+        scaleX: 'sx',
+        scaleY: 'sy',
+        rotation: 'r',
+        skewX: 'kx',
+        skewY: 'ky',
+        alpha: 'a',
+        color: 'c',
+        tint: 't',
+    };
+    for (const prop in propNames)
+    {
+        if (this[prop])
+        {
+            output.p[propNames[prop]] = this[prop].end;
+            if (this[prop].easeType)
+            {
+                const ease = this.getEaseJSON(this[prop]);
+                if (!ease) continue;
+                if (!output.p.e) output.p.e = {};
+                output.p.e[propNames[prop]] = ease;
+            }
+        }
+    }
     return output;
 };
 
@@ -190,7 +206,22 @@ p.serialize = function()
     {
         buffer += 'E' + (this.ease.name === 'classic' ? this.ease.strength : '') + this.ease.name + ';';
     }
-    buffer += 'P' + Frame.prototype.serialize.call(this.toJSON().p);
+    // start the property list
+    buffer += 'P';
+    const props = this.toJSON().p;
+    for (const name in props)
+    {
+        // don't serialize the property ease grouping
+        if (name == 'e') continue;
+        buffer += Frame.trimSerializedNumbers(Frame.serializeProperty(name, props[name]));
+        // after each property, serialize its ease if present
+        if (props.e && props.e[name])
+        {
+            const ease = props.e[name];
+            buffer += 'E' + (ease.n === 'classic' ? ease.s : '') + ease.n + ';';
+        }
+    }
+
     return buffer;
 }
 
@@ -202,18 +233,62 @@ p.serialize = function()
  */
 p.getFirstEase = function()
 {
-    let out = null;
-    if (this.x) out = {name: this.x.easeType, strength: this.x.easeStrength};
-    else if (this.y) out = {name: this.y.easeType, strength: this.y.easeStrength};
-    else if (this.scaleX) out = {name: this.scaleX.easeType, strength: this.scaleX.easeStrength};
-    else if (this.scaleY) out = {name: this.scaleY.easeType, strength: this.scaleY.easeStrength};
-    else if (this.rotation) out = {name: this.rotation.easeType, strength: this.rotation.easeStrength};
-    else if (this.skewX) out = {name: this.skewX.easeType, strength: this.skewX.easeStrength};
-    else if (this.skewY) out = {name: this.skewY.easeType, strength: this.skewY.easeStrength};
+    let shorthand = null;
+    if (this.x) shorthand = this.getEaseJSON(this.x);
+    else if (this.y) shorthand = this.getEaseJSON(this.y);
+    else if (this.scaleX) shorthand = this.getEaseJSON(this.scaleX);
+    else if (this.scaleY) shorthand = this.getEaseJSON(this.scaleY);
+    else if (this.rotation) shorthand = this.getEaseJSON(this.rotation);
+    else if (this.skewX) shorthand = this.getEaseJSON(this.skewX);
+    else if (this.skewY) shorthand = this.getEaseJSON(this.skewY);
     // if using classic easing and 0 strength, it is linear and we can save
-    if (out && out.name == 'classic' && out.strength == 0)
+    if (shorthand)
+        return null;
+    return {name: shorthand.n, strength: shorthand.s};
+}
+
+/**
+ * Gets JSON shorthand for an ease, if present.
+ * @method getEaseJSON
+ * @param {TweenProp} tweenProp The property to read the ease from.
+ * @return {Object|null} Object with 'n' and 's' properties for an ease.
+ */
+p.getEaseJSON = function(tweenProp)
+{
+    const out = {n: tweenProp.easeType, s: tweenProp.easeStrength};
+    if (out.n == 'classic' && out.s == 0)
         return null;
     return out;
+}
+
+/**
+ * Gets the ease on the first property being tweened, as the runtime implementation currently
+ * does not handle per-property easing.
+ * @method isSharedEase
+ * @return {boolean} If a single ease is shared among all properties.
+ */
+p.isSharedEase = function()
+{
+    let easeType = null;
+    let easeStrength = null;
+    const props = ['x', 'y', 'scaleX', 'scaleY', 'rotation', 'skewX', 'skewY'];
+    for (let i = 0; i < props.length; ++i)
+    {
+        if (!this[props[i]]) continue;
+        if (!easeType)
+        {
+            easeType = this[props[i]].easeType;
+            easeStrength = this[props[i]].easeStrength;
+        }
+        else
+        {
+            if (easeType !== this[props[i]].easeType || easeStrength !== this[props[i]].easeStrength)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 /**

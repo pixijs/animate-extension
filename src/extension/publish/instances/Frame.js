@@ -239,14 +239,14 @@ p.serialize = function()
     {
         if (this[k] !== null && this[k] !== undefined)
         {
-            buffer += GLOBAL_MAP[k] + this[k];
+            buffer += Frame.serializeProperty(k, this[k]);
         }
     }
     if (this.tween)
     {
         buffer += this.tween.serialize();
     }
-    return buffer.replace(/([A-Z])(\-)?0\./g, "$1$2.") // remove 0 from floats 0.12 => .12
+    return Frame.trimSerializedNumbers(buffer);
 };
 
 /**
@@ -279,6 +279,16 @@ p.toString = function()
 {
     return JSON.stringify(this.toJSON());
 };
+
+Frame.serializeProperty = function(name, value)
+{
+    return GLOBAL_MAP[name] + value;
+}
+
+Frame.trimSerializedNumbers = function(buffer)
+{
+    return buffer.replace(/([A-Z])(\-)?0\./g, "$1$2.") // remove 0 from floats 0.12 => .12
+}
 
 
 module.exports = Frame;
