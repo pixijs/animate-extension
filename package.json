@@ -19,8 +19,8 @@
     "mkdirp": "^0.5.1",
     "pixi-animate-1": "npm:pixi-animate@^1.3.5",
     "pixi.js-4": "npm:pixi.js@^4.8.9",
-    "pixi-animate-2": "npm:pixi-animate@^2.0.0-rc9",
-    "pixi.js-6": "npm:pixi.js@^6.0.1",
+    "pixi-animate-2": "npm:pixi-animate@2.0.0-rc10",
+    "pixi.js-6": "npm:pixi.js@^6.0.4",
     "semver": "^5.1.0",
     "terser": "^5.5.1"
   },

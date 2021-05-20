@@ -120,6 +120,7 @@ p.getChildren = function()
     const onMaskRemoved = this.onMaskRemoved.bind(this);
     const tweens = this.library.timelineTweensById[this.name];
     const activeTweenInstances = {};
+    const lastFrameReadForInstances = {};
     for (let i = 0; i < this.frames.length; ++i)
     {
         const frame = this.frames[i];
@@ -140,6 +141,52 @@ p.getChildren = function()
                 instance.on('maskAdded', onMaskAdded);
                 instance.on('maskRemoved', onMaskRemoved);
             }
+
+            // if we skipped frames, check to make sure we didn't need to start any tweens in the meantime
+            // (due to frames not getting exported because easing meant no movement)
+            if (lastFrameReadForInstances[command.instanceId] < frame.frame - 1)
+            {
+                // stop tracking any active tween that we skipped past the end of
+                if (activeTweenInstances[command.instanceId] < frame.frame)
+                {
+                    delete activeTweenInstances[command.instanceId];
+                }
+                // if we aren't currently doing a tween, we should see if we needed to start one on one of those skipped frames
+                if (!activeTweenInstances[command.instanceId])
+                {
+                    // save the transform on the last frame we did read (since we know it didn't change)
+                    const transform = instance.getTransformForFrame(lastFrameReadForInstances[command.instanceId] + 1);
+                    // go through each interim frame to see if there is a tween
+                    for (let f = lastFrameReadForInstances[command.instanceId] + 1; f < frame.frame; ++f)
+                    {
+                        // check for the start of a new tween
+                        if (tweens && tweens.tweensByStartFrame[f])
+                        {
+                            const frameTweens = tweens.tweensByStartFrame[f];
+                            // go through each tween on this frame and see if this instance's geometry matches that of the tween
+                            for (let j = 0; j < frameTweens.length; ++j)
+                            {
+                                if (frameTweens[j].transformMatchesStart(transform))
+                                {
+                                    const end = this.searchAheadForTweenEnd(command.instanceId, frameTweens[j], i);
+                                    // if this instance matches the end geometry of the tween on the end frame, then assume this is the instance
+                                    // that should be tweened
+                                    if (end)
+                                    {
+                                        // consume the tween so that it can't be used by something else
+                                        frameTweens[j].used = true;
+                                        activeTweenInstances[command.instanceId] = end;
+                                        // add the tween here
+                                        instance.startTween(f, frameTweens[j]);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            lastFrameReadForInstances[command.instanceId] = frame.frame;
 
             // if there is a tween being processed for the given instance ignore the command and
             // look at the tween
@@ -228,47 +275,38 @@ p.getChildren = function()
  */
 p.searchAheadForTweenEnd = function(instanceId, tween, startIndex)
 {
-    let index = -1;
+    let lastTransform = null;
     for (let i = startIndex + 1; i < this.frames.length; ++i)
     {
-        if (this.frames[i].frame === tween.endFrame)
+        // don't go past our target end frame
+        if (this.frames[i].frame > tween.endFrame)
         {
-            index = i;
             break;
         }
-        else if (this.frames[i].frame > tween.endFrame)
+        // get the last transform applied, in case our target frame isn't present, due to easing causing it to not
+        // be a change from previous frames
+        let commands = this.frames[i].commands;
+        for (let j = 0; j < commands.length; ++j)
+        {
+            if (commands[j].instanceId === instanceId && commands[j].type === 'Move')
+            {
+                lastTransform = commands[j].transform;
+            }
+        }
+        // continue to not go past our target end frame
+        if (this.frames[i].frame === tween.endFrame)
         {
             break;
         }
     }
-    if (index === -1)
+    if (!lastTransform)
     {
         return null;
     }
-    let commands = this.frames[index].commands;
-    for (let j = 0; j < commands.length; ++j)
+    const testMatrix = new Matrix(lastTransform);
+    if (tween.matrixMatchesEnd(testMatrix))
     {
-        if (commands[j].instanceId === instanceId && commands[j].type === 'Move')
-        {
-            const testMatrix = new Matrix(commands[j].transform);
-            if (tween.matrixMatchesEnd(testMatrix))
-            {
-                return tween.endFrame;
-            }
-        }
-    }
-    // because of easing, check the previous frame too
-    commands = this.frames[index - 1].commands;
-    for (let j = 0; j < commands.length; ++j)
-    {
-        if (commands[j].instanceId === instanceId && commands[j].type === 'Move')
-        {
-            const testMatrix = new Matrix(commands[j].transform);
-            if (tween.matrixMatchesEnd(testMatrix))
-            {
-                return tween.endFrame;
-            }
-        }
+        return tween.endFrame;
     }
     return null;
 }

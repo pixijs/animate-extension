@@ -182,7 +182,7 @@ p.toJSON = function()
         if (this[prop])
         {
             output.p[propNames[prop]] = this[prop].end;
-            if (this[prop].easeType)
+            if (!this.ease && this[prop].easeType)
             {
                 const ease = this.getEaseJSON(this[prop]);
                 if (!ease) continue;
