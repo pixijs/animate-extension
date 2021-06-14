@@ -40,7 +40,7 @@
     "gulp-msbuild": "^0.8.0",
     "gulp-rename": "^2.0.0",
     "gulp-shell": "^0.8.0",
-    "gulp-uglify-harmony": "jiborobot/gulp-uglify-harmony#master",
+    "gulp-terser": "^2.0.1",
     "load-gulp-tasks": "^0.1.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^2.0.0"

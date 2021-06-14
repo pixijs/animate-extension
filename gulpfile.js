@@ -35,7 +35,7 @@ var plugins = {
     source: require('vinyl-source-stream'),
     msbuild: require('gulp-msbuild'),
     build: require('./build/bundle'),
-    uglify: require('gulp-uglify-harmony'),
+    uglify: require('gulp-terser'),
     gulpif: require('gulp-if')
 };
 

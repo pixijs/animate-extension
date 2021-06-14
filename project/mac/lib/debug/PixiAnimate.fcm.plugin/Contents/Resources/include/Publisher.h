@@ -144,7 +144,7 @@ namespace PixiJS
 
 		FCM::Result Init();
 
-		FCM::Result ExportLibraryItems(FCM::FCMListPtr pLibraryItemList);
+		FCM::Result ExportLibraryItems(FCM::FCMListPtr pLibraryItemList, PixiJS::TweenWriter *pTweenWriter);
 
 		FCM::Result CopyRuntime(const std::string& outputFolder, const bool& compressJS, const std::string& outputVersion);
 
@@ -152,7 +152,6 @@ namespace PixiJS
 
 		AutoPtr<IFrameCommandGenerator> m_frameCmdGeneratorService;
 		AutoPtr<IResourcePalette> m_pResourcePalette;
-		PixiJS::TweenWriter* m_pTweenWriter;
 	};
 
 
