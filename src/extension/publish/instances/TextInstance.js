@@ -18,8 +18,11 @@ const TextInstance = function(libraryItem, id)
     Instance.call(this, libraryItem, id);
 
     this.paragraph = libraryItem.paras[0];
-    this.style = this.paragraph.textRun[0].style;
-    this.align = this.paragraph.alignment;
+    if (this.paragraph)
+    {
+        this.style = this.paragraph.textRun[0].style;
+        this.align = this.paragraph.alignment;
+    }
 
     /**
      * The name of the text instance
@@ -63,6 +66,10 @@ const STYLE_PROPS = {
  */
 p.renderContent = function(renderer)
 {
+    if (!this.paragraph) return renderer.template('text-instance', {
+        text: ''
+    });
+
     const style = this.style;
     const options = {};
     const compress = renderer.compress;
