@@ -202,6 +202,8 @@
 
         var scaleKey = 'copyLayersToBitmapScale';
 
+        var frameHistory = [];
+
         while (libraryItem) {
             // Go "up" a nested level
             doc.exitEditMode();
@@ -209,6 +211,10 @@
 
             // Get the new timeline
             timeline = doc.getTimeline();
+
+            // save the current layer & frame so we can correctly go back to where we were, instead of failing if the first
+            // frame was empty
+            frameHistory.push([timeline.currentLayer, timeline.currentFrame]);
 
             var element = doc.selection.length ? doc.selection[0] : null;
             if (element && element.libraryItem == libraryItem) {
@@ -244,6 +250,12 @@
         // Go back to where we started
         if (steps) {
             while (steps--) {
+                // select the layer & frame that we came out of
+                timeline = doc.getTimeline();
+                var frameStep = frameHistory.pop();
+                timeline.currentLayer = frameStep[0];
+                timeline.currentFrame = frameStep[1];
+                // check for content before editing in place, as that would be an error
                 if (doc.selection.length) {
                     doc.enterEditMode("inPlace");
                 }
