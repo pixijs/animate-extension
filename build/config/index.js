@@ -31,7 +31,7 @@ module.exports = {
         'node_modules/pixi.js-4/dist/pixi.min.js',
         'node_modules/pixi-animate-1/dist/pixi-animate.min.js',
         'node_modules/pixi.js-6/dist/browser/pixi.min.js',
-        'node_modules/pixi-animate-2/dist/pixi-animate.min.js'
+        'node_modules/pixi-animate-2/dist/animate.min.js'
     ],
     runtimeDebugResources: [
         'node_modules/pixi.js-4/dist/pixi.js',
@@ -40,8 +40,8 @@ module.exports = {
         'node_modules/pixi-animate-1/dist/pixi-animate.js.map',
         'node_modules/pixi.js-6/dist/browser/pixi.js',
         'node_modules/pixi.js-6/dist/browser/pixi.js.map',
-        'node_modules/pixi-animate-2/dist/pixi-animate.js',
-        'node_modules/pixi-animate-2/dist/pixi-animate.js.map'
+        'node_modules/pixi-animate-2/dist/animate.js',
+        'node_modules/pixi-animate-2/dist/animate.js.map'
     ],
 
     // The files to source when running watch

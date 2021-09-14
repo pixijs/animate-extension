@@ -146,7 +146,7 @@ p.getHeader = function()
         totalFrames: this.library.stage.totalFrames,
         background: "0x" + meta.background,
         classes: classes,
-        import: this.outputFormat === 'es6a' ? "import animate from 'pixi-animate';\n" : '',
+        import: this.outputFormat === 'es6a' ? "import animate from '@pixi/animate';\n" : '',
         assets: JSON.stringify(this.library.stage.assets, null, '\t')
     });
 };
