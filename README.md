@@ -1,10 +1,10 @@
-# PixiAnimate Extension
+# Pixi Animate Extension
 
 Creates a custom FLA document which support publishing to [PixiJS](http://pixijs.com) natively in Adobe Animate CC (formerly Flash CC 2015).
 
 ## Examples
 
-See [examples](https://github.com/jiborobot/pixi-animate-examples) for sample FLA document to test features of PixiAnimate.
+See [examples](https://github.com/pixijs/pixi-animate-examples) for sample FLA document to test features of PixiAnimate.
 
 
 ## Dependencies
@@ -25,10 +25,11 @@ If you are trying to install with Adobe Animate CC 2015, you **cannot** install 
 
 ## Building
 
-To get setup, please follow the instructions outlined from [Adobe's documentation](https://helpx.adobe.com/flash/using/enabling-support-custom-platforms.html#Building%20a%20Flash%20custom%20platform%20support%20plug-in). This will enable you to build the project itself and see the plugin exposed from Adobe Animate CC.  
+To get setup, please follow the instructions outlined from [Adobe's documentation](https://helpx.adobe.com/flash/using/enabling-support-custom-platforms.html#Building%20a%20Flash%20custom%20platform%20support%20plug-in). This will enable you to build the project itself and see the plugin exposed from Adobe Animate CC.
 
 - Some project / file names may be changed due to not wanting to produce a plugin named "SamplePlugin".
 - The certificate password is: `password`
+- If on Windows, in order to use the `--install` build option, you'll need to download [Adobe's extension utility](https://partners.adobe.com/exchangeprogram/creativecloud/support/exman-com-line-tool.html) and unzip it to the extension repository folder.
 
 ### CEP Debug Mode
 
@@ -101,3 +102,5 @@ gulp --plugin --install
 ```
 
 Now use the ZXP utility for windows to install the **PixiAnimate.zxp** plugin for Adobe Animate CC 2015, make sure to remove the existing plugin before install
+
+### Note on JSFL scripts - they are taken from [Springroll's Flash Toolkit](https://github.com/SpringRoll/FlashToolkit), as the used scripts are very relevant for optimization of Pixi Animate content.

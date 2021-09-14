@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionManifest Version="6.0" ExtensionBundleId="com.jibo.PixiAnimate" ExtensionBundleVersion="2.0.0"
+		ExtensionBundleName="PixiAnimate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ExtensionList>
+		<Extension Id="com.jibo.PixiAnimate.PublishSettings" Version="2.0.0" />
+		<Extension Id="com.jibo.PixiAnimate.Plugin" Version="2.0.0" />
+	</ExtensionList>
+	<ExecutionEnvironment>
+		<HostList>
+			<Host Name="FLPR" Version="20.0" />
+		</HostList>
+		<LocaleList>
+			<Locale Code="All" />
+		</LocaleList>
+		<RequiredRuntimeList>
+			<RequiredRuntime Name="CSXS" Version="9.0" />
+		</RequiredRuntimeList>
+	</ExecutionEnvironment>
+	<DispatchInfoList>
+		<Extension Id="com.jibo.PixiAnimate.PublishSettings">
+			<DispatchInfo>
+				<Resources>
+				<MainPath>./dialog/index.html</MainPath>
+					<ScriptPath>./dialog/host.jsx</ScriptPath>
+					<CEFCommandLine>
+						<Parameter>--enable-nodejs</Parameter>
+						<Parameter>--mixed-context</Parameter>
+					</CEFCommandLine>
+				</Resources>
+				<Lifecycle>
+					<AutoVisible>true</AutoVisible>
+				</Lifecycle>
+				<UI>
+					<Type>ModalDialog</Type>
+					<Geometry>
+						<Size>
+							<Height>580</Height>
+							<Width>400</Width>
+						</Size>
+					</Geometry>
+				</UI>
+			</DispatchInfo>
+		</Extension>
+		<Extension Id="com.jibo.PixiAnimate.Plugin">
+			<DispatchInfo>
+				<Resources>
+					<MainPath>./plugin/fcm.xml</MainPath>
+				</Resources>
+				<Lifecycle>
+					<AutoVisible>true</AutoVisible>
+				</Lifecycle>
+				<UI>
+					<Type>ModalDialog</Type>
+					<Menu>PixiAnimate</Menu>
+					<Geometry>
+						<Size>
+							<Height>200</Height>
+							<Width>200</Width>
+						</Size>
+					</Geometry>
+				</UI>
+			</DispatchInfo>
+		</Extension>
+	</DispatchInfoList>
+</ExtensionManifest>
