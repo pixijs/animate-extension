@@ -25,9 +25,6 @@
         // The collection of labels
         var labels = this.getLabels(timeline);
 
-        // The settings file
-        this.settingsFile = 'Commands/Utilities/AnimationEventLabel.json';
-
         // The sections selected
         var sections = sel.length / 3;
 
@@ -52,15 +49,7 @@
             if (settings.dismiss != "accept") return;
 
             var label = settings.label;
-            var underscore = this.isCanvas ? true : settings.underscore == "true";
-
-            // If we're not canvas save the underscore setting
-            // so we can reset next time
-            if (!this.isCanvas) {
-                this.saveSettings(this.settingsFile, underscore);
-            }
-
-            var action = (underscore ? "_" : " ") + settings.action;
+            var action = "_" + settings.action;
 
             // No label was provided
             if (!label) {
@@ -158,12 +147,6 @@
             .addRadioGroup("action", actions)
             .closeRow();
 
-        // Only give the javascript option
-        // if we are not the html canvas type fla
-        if (!this.isCanvas) {
-            var underscore = this.loadSettings(this.settingsFile);
-            dialog.addCheckbox("Javascript Compliant", "underscore", underscore);
-        }
         return dialog;
     };
 
