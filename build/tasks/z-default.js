@@ -42,6 +42,7 @@ module.exports = function(gulp, options, plugins) {
         'clean-stage',
         // now that the custom plugin has been built, package it further with some JSFL scripts
         'stage2',
+        'clean-output',
         'package2',
         'clean-stage',
     );
