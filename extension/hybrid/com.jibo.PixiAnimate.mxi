@@ -26,7 +26,6 @@
 		<file source="JSFLLibraries/XULWindow.jsfl" destination="$Flash/JSFLLibraries/" />
 
 		<file source="Commands/Timeline/Animation Event Label.jsfl" destination="$Flash/Commands/Timeline/" />
-		<file source="Commands/Timeline/AnimationEventLabel.json" destination="$Flash/Commands/Timeline/" />
 
 		<file source="Commands/Optimizing/Optimize Graphics.jsfl" destination="$Flash/Commands/Optimizing/" />
 		<file source="Commands/Optimizing/Optimize Keyframes.jsfl" destination="$Flash/Commands/Optimizing/" />
