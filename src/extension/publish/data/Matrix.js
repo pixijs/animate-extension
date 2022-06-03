@@ -54,7 +54,7 @@ const Matrix = function(matrix)
     this.rotation = 0;
 
     // if the skew x and y are the same, this is rotation
-    if (this.skewX + this.skewY === 0)
+    if (this.skewX === this.skewY)
     {
         this.rotation = this.skewY;
         this.skewX = 0;
