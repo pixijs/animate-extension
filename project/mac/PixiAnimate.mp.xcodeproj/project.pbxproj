@@ -387,7 +387,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "python post_build.64.py -c ${TARGET_NAME}\n";
+			shellScript = "python3 post_build.64.py -c ${TARGET_NAME}\n";
 			showEnvVarsInLog = 0;
 		};
 		CFF13CD89CC74746A4C4E757 /* ShellScript */ = {
@@ -401,7 +401,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "python post_build.64.py -c ${TARGET_NAME}\n";
+			shellScript = "python3 post_build.64.py -c ${TARGET_NAME}\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
