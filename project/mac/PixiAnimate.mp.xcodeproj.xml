@@ -569,7 +569,7 @@
 			<key>shellPath</key>
 			<string>/bin/bash</string>
 			<key>shellScript</key>
-			<string>python post_build.64.py -c ${TARGET_NAME}
+			<string>python3 post_build.64.py -c ${TARGET_NAME}
 </string>
 			<key>showEnvVarsInLog</key>
 			<string>0</string>
@@ -594,7 +594,7 @@
 			<key>shellPath</key>
 			<string>/bin/bash</string>
 			<key>shellScript</key>
-			<string>python post_build.64.py -c ${TARGET_NAME}
+			<string>python3 post_build.64.py -c ${TARGET_NAME}
 </string>
 			<key>showEnvVarsInLog</key>
 			<string>0</string>

@@ -22,13 +22,13 @@ def makedirs(path):
 def do_copy_file(source_filepath, dest_filepath):
 	dest_dir = os.path.split(dest_filepath)[0]
 	if not os.path.exists(dest_dir):
-		print 'The destination directory', dest_dir, ' does not yet exist!'
+		print('The destination directory', dest_dir, ' does not yet exist!')
 		os.error(-1)
 
 	if os.path.exists(dest_filepath) is True:
 		if filecmp.cmp(source_filepath, dest_filepath) is True:
 			return
-		os.chmod(dest_filepath, 0777)
+		os.chmod(dest_filepath, 0o777)
 		os.remove(dest_filepath)
 	shutil.copy2(source_filepath, os.path.split(dest_filepath)[0])
 
@@ -50,8 +50,8 @@ def copy_all_in_directory(directory_from, directory_to):
 			else:
 				makedirs(path_to)
 				copy_all_in_directory(path_from, path_to)
-		except (IOError, os.error), why:
-			print "buildcopy failure - Can't copy %s to %s: %s" % (`path_from`, `path_to`, str(why))
+		except (IOError, os.error) as why:
+			print("buildcopy failure - Can't copy %s to %s: %s" % (repr(path_from), repr(path_to), str(why)))
 
 #-----------------------------------------------------
 def do_copy(source_filepath, dest_directory):
@@ -59,12 +59,12 @@ def do_copy(source_filepath, dest_directory):
 	
 	if source_list == [ ]:
 		# [TODO] Change these to 'error:' to trigger Xcode build failurees.  Need more time to fix the failures - so warnings only now.
-		print '  warning: Files were specified to copy, but the files did not exist.'
-		print '  warning:   In script:'
-		print '  warning:      ' + os.path.normpath(os.path.abspath(__file__))
-		print '  warning:    Files that were not found:'
-		print '  warning:      ' + source_filepath
-		print ''
+		print('  warning: Files were specified to copy, but the files did not exist.')
+		print('  warning:   In script:')
+		print('  warning:      ' + os.path.normpath(os.path.abspath(__file__)))
+		print('  warning:    Files that were not found:')
+		print('  warning:      ' + source_filepath)
+		print('')
 		os.error(-1)
 	
 	for source_item in source_list:
@@ -79,7 +79,7 @@ def do_copy(source_filepath, dest_directory):
 			copy_all_in_directory(source_item, dest_directory_plus_leaf_dir)
 		else:
 			if not os.path.exists(source_item):
-					print 'Error copying file or directory', source_fullpath
+					print('Error copying file or directory', source_item)
 					os.error(-1)
 			makedirs(dest_directory)
 			source_filename = os.path.split(source_item)[1]
@@ -107,11 +107,11 @@ def fix_broken_symlinks(path, should_fix):
 				if (not os.path.exists(each_full_path)):
 					has_broken = True
 					if should_fix:
-						print 'WARNING!!! Deleting broken symlink:'
-						print os.remove(each_full_path)
+						print('WARNING!!! Deleting broken symlink:')
+						print(os.remove(each_full_path))
 					else:
-						print 'Broken symlink: '
-					print '  ' + str(each_full_path)
+						print('Broken symlink: ')
+					print('  ' + str(each_full_path))
 			elif os.path.isdir(each_full_path):
 				nested_was_broken = fix_broken_symlinks(each_full_path, should_fix)
 			if (not has_broken) and nested_was_broken:
@@ -127,7 +127,6 @@ def has_broken_symlinks(path):
 
 #-----------------------------------------------------
 def run_any_product_specific_scripts(options):
-	import dircache
 	thisDir = os.path.dirname(__file__)
 	project_specific_dir = os.path.join(thisDir, 'project_specific_scripts')
 	
@@ -139,7 +138,7 @@ def run_any_product_specific_scripts(options):
 		
 	if (os.path.exists(project_specific_dir)):
 		sys.path.append(project_specific_dir)
-		file_list = dircache.listdir(project_specific_dir)
+		file_list = os.listdir(project_specific_dir)
 	
 		for each_file in file_list:
 			(root, ext) = os.path.splitext(each_file)
@@ -159,28 +158,28 @@ def run_any_product_specific_scripts(options):
 						arg_spec = inspect.getargspec(obj)
 						# Verify that this function contains a 'config' argument.
 						if (arg_spec[0] and arg_spec[0][0] and arg_spec[0][0] == 'config'):
-							print 'Runing project specific copy script: '
-							print '  ' + os.path.normpath(full_path)
+							print('Runing project specific copy script: ')
+							print('  ' + os.path.normpath(full_path))
 							path_list = each_import.get_source_and_dest_copy_paths(options.config.upper())
 							for each_path in path_list:
 								copy_src = each_path[0]
-								print ' Copying:'
-								print '  ' + copy_src
-								print ' To:'
-								print '  ' + each_path[1]
+								print(' Copying:')
+								print('  ' + copy_src)
+								print(' To:')
+								print('  ' + each_path[1])
 								do_copy(copy_src, each_path[1])
 								(copy_src_root, ext) = os.path.splitext(copy_src)
 								copy_src_pdb = copy_src_root + '.pdb'
 								if (os.path.exists(copy_src_pdb)):
-									print ' Copying:'
-									print '  ' + copy_src_pdb
-									print ' To:'
-									print '  ' + each_path[1]
+									print(' Copying:')
+									print('  ' + copy_src_pdb)
+									print(' To:')
+									print('  ' + each_path[1])
 									do_copy(copy_src_pdb, each_path[1])
 								
 						else:
-							print '  WARNING! A project specific python file was found, but it does not contain the required function: ' + root + ext
-			print ''
+							print('  WARNING! A project specific python file was found, but it does not contain the required function: ' + root + ext)
+			print('')
 
 #-----------------------------------------------------
 def main(args):
@@ -198,10 +197,10 @@ def main(args):
 	splitConfig = options.config.split('.',1)
 	options.config = splitConfig[len(splitConfig) - 1]
 
-	print 'Running generated script: ' + time.strftime('%m/%d/%Y %I:%M:%S %p', time.localtime())
+	print('Running generated script: ' + time.strftime('%m/%d/%Y %I:%M:%S %p', time.localtime()))
 	full_path = os.path.normpath(os.path.abspath(__file__))
-	print '  ' + full_path
-	print ''
+	print('  ' + full_path)
+	print('')
 
 	try:
 		run_any_product_specific_scripts(options)
