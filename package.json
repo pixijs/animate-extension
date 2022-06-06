@@ -1,7 +1,7 @@
 {
   "name": "animate-extension",
   "private": true,
-  "version": "2.0.2",
+  "version": "2.0.3",
   "repository": {
     "url": "https://github.com/pixijs/animate-extension",
     "type": "git"
