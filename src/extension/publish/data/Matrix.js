@@ -35,17 +35,43 @@ const Matrix = function(matrix)
      */
     this.scaleY = round(Math.sqrt(matrix.c * matrix.c + matrix.d * matrix.d));
     
+    const rawSkewX = (Math.atan2(matrix.d, matrix.c) - Math.PI / 2) * -1
     /**
      * The skewX amount in radians
      * @property {Number} skewX
      */
-    this.skewX = round(Math.atan2(matrix.d, matrix.c) - Math.PI / 2) * -1;
-    
+    if (rawSkewX > Math.PI)
+    {
+        // Sometimes skew is published with values between 180° and 360°.
+        // Let's force them all to range -180° to 180°
+        this.skewX = round(rawSkewX - Math.PI * 2);
+    }
+    else if (rawSkewX < -Math.PI)
+    {
+        this.skewX = round(rawSkewX + Math.PI * 2);
+    }
+    else
+    {
+        this.skewX = round(rawSkewX);
+    }
+
+    const rawSkewY = Math.atan2(matrix.b, matrix.a);
     /**
      * The skewY amount in radians
      * @property {Number} skewY
      */
-    this.skewY = round(Math.atan2(matrix.b, matrix.a));
+    if (rawSkewY > Math.PI)
+    {
+        this.skewY = round(rawSkewY - Math.PI * 2);
+    }
+    else if (rawSkewY < -Math.PI)
+    {
+        this.skewY = round(rawSkewY + Math.PI * 2);
+    }
+    else
+    {
+        this.skewY = round(rawSkewY);
+    }
     
     /**
      * The rotation amount in radians
