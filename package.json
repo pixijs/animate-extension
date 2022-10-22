@@ -22,7 +22,7 @@
     "pixi-animate-2": "npm:@pixi/animate@^2.0.1",
     "pixi.js-6": "npm:pixi.js@^6.0.4",
     "semver": "^5.1.0",
-    "terser": "^5.5.1"
+    "terser": "^5.14.2"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
