@@ -21,7 +21,7 @@
     "pixi.js-4": "npm:pixi.js@^4.8.9",
     "pixi-animate-2": "npm:@pixi/animate@^2.0.3",
     "pixi.js-6": "npm:pixi.js@^6.0.4",
-    "semver": "^5.1.0",
+    "semver": "^7.5.2",
     "terser": "^5.14.2"
   },
   "devDependencies": {
